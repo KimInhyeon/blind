@@ -63,6 +63,11 @@
 	        <groupId>org.apache.tomcat.embed</groupId>
 	        <artifactId>tomcat-embed-jasper</artifactId>
 	    </dependency>
+        <dependency>
+          <groupId>org.apache.tiles</groupId>
+          <artifactId>tiles-jsp</artifactId>
+          <version>3.0.7</version>
+        </dependency>	    
 	</dependencies>
 
 	<build>
