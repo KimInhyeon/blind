@@ -9,5 +9,6 @@
 <body>
 <h2>KSINFOSYS BLIND PROJECT</h2>
 <div>${testMessage}</div>
+キムボソン　１５：１２
 </body>
 </html>
