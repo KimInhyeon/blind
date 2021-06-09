@@ -16,7 +16,7 @@ public class TestController {
 
 	@RequestMapping(value="test")
 	public ModelAndView test() throws Exception{
-		ModelAndView mav = new ModelAndView(); 
+		ModelAndView mav = new ModelAndView(); //ModelAndView : 모델->view(유저화면)으로 데이터를 이동
 		List<TestDto> testList = testService.findTestData(); 
 	
 		mav.addObject("testMessage", testList.get(0).getTest());
