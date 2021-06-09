@@ -1,5 +1,6 @@
 package com.ksinfo.blind.manage.company.contoller;
 
+import com.ksinfo.blind.manage.common.controller.ManageController;
 import com.ksinfo.blind.manage.company.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,13 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class CompanyController {
+public class CompanyController extends ManageController {
 	@Autowired
 	CompanyService companyService;
-
-	private boolean authCheck(HttpSession session) {
-		return session.getAttribute("auth").equals("SV");
-	}
 
 	@RequestMapping(value = "manage")
 	public String company() {
@@ -28,7 +25,7 @@ public class CompanyController {
 			mav.setViewName("manage/company");
 			mav.addObject("companyList", companyService.test());
 //		} else {
-//			mav.setViewName("main/test/test");
+			mav.setViewName(main);
 //		}
 		return mav;
 	}

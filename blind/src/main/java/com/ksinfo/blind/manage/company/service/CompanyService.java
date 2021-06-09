@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class CompanyService {
 	@Autowired
-	public CompanyMapper mapper;
+	CompanyMapper mapper;
 
 	public List<CompanyDto> test() {
 		return mapper.test();
