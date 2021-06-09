@@ -1,0 +1,6 @@
+/.git/
+/.idea/
+/default/
+/blind/target/
+/blind/src/test/
+.gitignore

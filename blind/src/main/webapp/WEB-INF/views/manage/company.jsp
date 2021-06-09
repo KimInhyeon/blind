@@ -38,8 +38,7 @@
 			<div class="column">company_name : ${company.companyName}</div>
 			<div class="column">business_type_code : ${company.businessTypeCode}</div>
 			<div class="column">company_address : ${company.companyAddress}</div>
-			<div class="column">founding_date : <fmt:formatDate value="${company.foundingDate}"
-																pattern="yyyy-MM-dd"/></div>
+			<div class="column">founding_date : <fmt:formatDate value="${company.foundingDate}"	pattern="yyyy-MM-dd"/></div>
 			<div class="column">workers_count : ${company.workersCount}</div>
 			<div class="column">app_date : <fmt:formatDate value="${company.appDate}" pattern="yyyy-MM-dd"/></div>
 			<div class="column">company_domain : ${company.companyDomain}</div>
@@ -54,6 +53,4 @@
 	</div>
 </div>
 </body>
-<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/dist/semantic.js"></script>
 </html>
