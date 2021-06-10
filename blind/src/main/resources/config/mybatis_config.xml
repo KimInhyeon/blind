@@ -5,7 +5,4 @@
 		<setting name="mapUnderscoreToCamelCase" value="true"/>
 		<setting name="jdbcTypeForNull" value="NULL"/>
 	</settings>
-	<typeAliases>
-		<typeAlias type="com.ksinfo.blind.manage.company.dto.CompanyDto" alias="company"/>
-	</typeAliases>
 </configuration>

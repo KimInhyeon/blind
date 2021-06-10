@@ -1,55 +1,63 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 	<meta charset="UTF-8">
-	<title></title>
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/dist/semantic.css"/>
+	<title>企業管理</title>
 </head>
 <body>
-<div class="ui grid container">
-	<div class="row">
-		<div class="left floated two wide column">
-			<h2>테스트</h2>
+<div class="ui container">
+	<div class="ui grid segments">
+		<div class="row segment">
+			<div class="four wide column">
+				<div class="ui grid center aligned">
+					<div class="two wide column"><input type="checkbox" class="ui checkbox"></div>
+					<div class="seven wide column">処理状態</div>
+					<div class="seven wide column">営業状況</div>
+				</div>
+			</div>
+			<div class="twelve wide column">
+				<div class="ui grid">
+					<div class="four wide column">企業名</div>
+					<div class="four wide column">業種</div>
+					<div class="three wide column">所在地</div>
+					<div class="two wide column center aligned">設立日</div>
+					<div class="three wide column">ドメイン名</div>
+				</div>
+			</div>
 		</div>
-		<div class="right floated four wide column">
-			<form action="${pageContext.request.contextPath}/manage/company" method="get">
-				<div class="ui selection dropdown">
-					<input type="hidden" name="gender">
-					<i class="dropdown icon"></i>
-					<div class="default text">Gender</div>
-					<div class="menu">
-						<div class="item" data-value="companyName">企業名</div>
-						<div class="item" data-value="businessType">業種</div>
-						<div class="item" data-value="ompanyAddress">所在地</div>
-						<div class="item" data-value="companyDomain">ドメイン</div>
+		<c:forEach items="${companyList}" var="company">
+			<div class="row segment">
+				<div class="four wide column">
+					<div class="ui grid center aligned">
+						<div class="two wide column"><input type="checkbox" class="ui checkbox"></div>
+						<div class="seven wide column">
+							<c:choose>
+								<c:when test="${company.verifyFlag eq '0'}">待機</c:when>
+								<c:when test="${company.verifyFlag eq '1'}">承認</c:when>
+								<c:otherwise>拒否</c:otherwise>
+							</c:choose>
+						</div>
+						<div class="seven wide column">
+							<c:choose>
+								<c:when test="${company.closingFlag eq '0'}">営業中</c:when>
+								<c:otherwise>廃業</c:otherwise>
+							</c:choose>
+						</div>
 					</div>
 				</div>
-				<%--				<div class="right floated three wide column"></div>--%>
-			</form>
-		</div>
-	</div>
-	<div class="row">
-		<c:forEach items="${companyList}" var="company">
-			<div class="column">company_id : ${company.companyId}</div>
-			<div class="column">user_id : ${company.userId}</div>
-			<div class="column">company_name : ${company.companyName}</div>
-			<div class="column">business_type_code : ${company.businessTypeCode}</div>
-			<div class="column">company_address : ${company.companyAddress}</div>
-			<div class="column">founding_date : <fmt:formatDate value="${company.foundingDate}"	pattern="yyyy-MM-dd"/></div>
-			<div class="column">workers_count : ${company.workersCount}</div>
-			<div class="column">app_date : <fmt:formatDate value="${company.appDate}" pattern="yyyy-MM-dd"/></div>
-			<div class="column">company_domain : ${company.companyDomain}</div>
-			<div class="column">company_homepage : ${company.companyHomepage}</div>
-			<div class="column">company_explain : ${company.companyExplain}</div>
-			<div class="column">verify_flag : ${company.verifyFlag}</div>
-			<div class="column">closing_flag : ${company.closingFlag}</div>
+				<div class="twelve wide column">
+					<div class="ui grid">
+						<div class="four wide column">${company.companyName}</div>
+						<div class="four wide column">${company.businessTypeName}</div>
+						<div class="three wide column">${company.companyAddress}</div>
+						<div class="two wide column center aligned">${company.foundingDate}</div>
+						<div class="three wide column">@${company.companyDomain}</div>
+					</div>
+				</div>
+			</div>
 		</c:forEach>
-	</div>
-	<div class="row">
-		페이지랑 버튼
 	</div>
 </div>
 </body>

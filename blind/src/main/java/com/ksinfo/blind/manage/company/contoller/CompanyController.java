@@ -23,9 +23,9 @@ public class CompanyController extends ManageController {
 	public ModelAndView company(HttpSession session, ModelAndView mav) {
 //		if (authCheck(session)) {
 			mav.setViewName("manage/company");
-			mav.addObject("companyList", companyService.test());
+			mav.addObject("companyList", companyService.getCompanyList());
 //		} else {
-			mav.setViewName(main);
+//			mav.setViewName(main);
 //		}
 		return mav;
 	}
