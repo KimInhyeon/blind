@@ -11,8 +11,9 @@
 </head>
 <body>
 	postgreSQL sample select<br/>
-	
-	movie test 13:54
-	<div>${testMessage}</div>
+	<P>  ID is ${ID}. </P>	
+	</body>
+
+</html>
 </body>
 </html>
