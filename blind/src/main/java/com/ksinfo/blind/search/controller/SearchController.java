@@ -2,13 +2,10 @@ package com.ksinfo.blind.search.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.ksinfo.blind.search.dto.SearchDto;
 import com.ksinfo.blind.search.service.SearchService;
-import com.ksinfo.blind.test.dto.TestDto;
 
 import java.util.List;
 
@@ -26,10 +23,23 @@ public class SearchController {
 	private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 
 	@RequestMapping("/search")
-	public String search() {
-		ModelAndView mav = new ModelAndView();		
-		logger.info("검색결과를 출력");
-	return "main/search";
+	public ModelAndView search(HttpSession session, ModelAndView mav) throws Exception{
+		logger.info("SearchController-search 시작");	
+		
+		
+		List<SearchDto> searchList_topic = searchService.getBoard_topic_name();
+		logger.info("List<SearchDto> searchList 선언");
+		//List<SearchDto> searchList_company = searchService.getBoard_topic_name();
+		//logger.info("List<SearchDto> searchList 선언");
+		
+		
+		mav.addObject("testMessage_searchList", searchList_topic.get(0).getBoardTopicName());
+		
+		mav.setViewName("main/search/search");
+		logger.info("검색결과 출력페이지로 이동");	
+		return mav;
+
+	
 	}
 
 	@RequestMapping("/test_sqlView")

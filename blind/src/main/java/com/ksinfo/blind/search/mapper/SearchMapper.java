@@ -10,5 +10,10 @@ import com.ksinfo.blind.search.dto.SearchDto;
 @Repository
 @Mapper 
 public interface SearchMapper {
+	List<SearchDto> getBoard_topic_name(); 
+
+	
+	
+	//정상출력확인용 
 	List<SearchDto> getBoard_topic_name_test(); 
 }
