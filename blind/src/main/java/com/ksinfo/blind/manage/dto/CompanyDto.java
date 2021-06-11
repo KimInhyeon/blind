@@ -1,4 +1,4 @@
-//package com.ksinfo.blind.manage.company.dto;
+//package com.ksinfo.blind.manage.dto;
 //
 //import java.util.Date;
 //

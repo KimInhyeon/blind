@@ -1,4 +1,4 @@
-package com.ksinfo.blind.manage.common.controller;
+package com.ksinfo.blind.manage.contoller;
 
 import javax.servlet.http.HttpSession;
 

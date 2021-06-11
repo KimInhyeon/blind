@@ -1,6 +1,6 @@
-package com.ksinfo.blind.manage.company.mapper;
+package com.ksinfo.blind.manage.mapper;
 
-import com.ksinfo.blind.manage.company.vo.CompanyVO;
+import com.ksinfo.blind.manage.vo.CompanyVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

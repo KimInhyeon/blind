@@ -16,7 +16,4 @@
 	<definition name="main/*/*/*" extends="main-layout">
 		<put-attribute name="body" value="/WEB-INF/views/main/body/{1}/{2}/{3}.jsp"/>
 	</definition>
-	<definition name="manage/*" extends="main-layout">
-		<put-attribute name="body" value="/WEB-INF/views/manage/{1}.jsp"/>
-	</definition>
 </tiles-definitions>

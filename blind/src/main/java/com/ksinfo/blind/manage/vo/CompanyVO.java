@@ -1,4 +1,4 @@
-package com.ksinfo.blind.manage.company.vo;
+package com.ksinfo.blind.manage.vo;
 
 public class CompanyVO {
 	private long companyID;
