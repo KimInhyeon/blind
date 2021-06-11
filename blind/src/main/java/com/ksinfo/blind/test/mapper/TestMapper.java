@@ -1,15 +1,13 @@
 package com.ksinfo.blind.test.mapper;
 
-import java.util.List;
-
+import com.ksinfo.blind.test.dto.TestDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-import com.ksinfo.blind.test.dto.TestDto;
+import java.util.List;
 
 @Repository
-@Mapper 
-public interface TestMapper { 
-	List<TestDto> findTestData(); 
+@Mapper
+public interface TestMapper {
+	List<TestDto> findTestData();
 }
-

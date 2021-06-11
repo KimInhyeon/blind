@@ -5,15 +5,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class MainController  {
+public class MainController {
 
 	@RequestMapping("/main")
-    public ModelAndView index() {
-
-        ModelAndView mv = new ModelAndView();
-        
-        
-        mv.setViewName("main/test/test");
-        return mv;
-    }
+	public ModelAndView index() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("main/test/test");
+		return mv;
+	}
 }
