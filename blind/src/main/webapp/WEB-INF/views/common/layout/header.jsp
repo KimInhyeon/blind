@@ -7,30 +7,8 @@
 	<meta http-equiv="Expires" content="0"/>
 	<meta http-equiv="Pragma" content="no-cache"/>
 
-<<<<<<< HEAD
-<script type="text/javascript"  src="/blind/resources/js/jquery.min.js"></script>
-<script type="text/javascript"  src="/blind/resources/js/jquery-ui.min.js"></script>
-<script type="text/javascript"  src="/blind/resources/js/common.js"></script>
-<script type="text/javascript"  src="/blind/resources/js/messageId.js"></script>
-<script type="text/javascript"  src="/blind/resources/dist/semantic.min.js"></script>
-<link rel="stylesheet" type="text/css"  href="/blind/resources/dist/semantic.min.css" />
-<script>
-$(document).ready(function(){
-    $('.ui.dropdown.item').dropdown();
-    
-    $('.message .close')
-    .on('click', function() {
-      $(this)
-        .closest('.message')
-        .transition('fade');
-    });
-    
-    $('.clickMenu').click(function(){
-        $(this).children('a').get(0).click();
-     });
-});
-</script>
-=======
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/common.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/messageId.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/dist/semantic.min.js"></script>
@@ -38,7 +16,6 @@ $(document).ready(function(){
 	<script>
         $(document).ready(function () {
             $('.ui.dropdown.item').dropdown();
->>>>>>> branch 'master' of https://github.com/KimInhyeon/blind.git
 
             $('.message .close')
                 .on('click', function () {

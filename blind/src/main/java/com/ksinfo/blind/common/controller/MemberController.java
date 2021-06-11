@@ -47,13 +47,10 @@ public class MemberController  {
     public ModelAndView loginSuccess() {
         ModelAndView mv = new ModelAndView();
         
-     // 시큐리티 컨텍스트 객체를 얻습니다. 
         SecurityContext context = SecurityContextHolder.getContext(); 
         
-        // 인증 객체를 얻습니다. 
         Authentication authentication = context.getAuthentication(); 
         
-        // 사용자가 가진 모든 롤 정보를 얻습니다. 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities(); 
         Iterator<? extends GrantedAuthority> iter = authorities.iterator(); 
         
