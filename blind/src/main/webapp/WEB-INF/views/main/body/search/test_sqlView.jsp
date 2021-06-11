@@ -2,18 +2,14 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <!DOCTYPE html>
 <html lang="jp">
-  <head>
+  	<head>
     <meta charset="UTF-8">
-<html lang="jp">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Insert title here</title>
+	</head>
+	
+   <body>
 	postgreSQL sample select<br/>
-	<P>  ID is ${ID}. </P>	
+	<div>${testMessage_searchList}</div>
 	</body>
-
-</html>
-</body>
 </html>
