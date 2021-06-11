@@ -9,6 +9,8 @@
 
 <script type="text/javascript"  src="/blind/resources/js/jquery.min.js"></script>
 <script type="text/javascript"  src="/blind/resources/js/jquery-ui.min.js"></script>
+<script type="text/javascript"  src="/blind/resources/js/common.js"></script>
+<script type="text/javascript"  src="/blind/resources/js/messageId.js"></script>
 <script type="text/javascript"  src="/blind/resources/dist/semantic.min.js"></script>
 <link rel="stylesheet" type="text/css"  href="/blind/resources/dist/semantic.min.css" />
 <script>

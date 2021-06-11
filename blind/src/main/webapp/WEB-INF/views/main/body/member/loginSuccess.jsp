@@ -7,8 +7,9 @@
 <title>KSINFOSYS BLIND</title>
 </head>
 <body>
-<h2>KSINFOSYS BLIND PROJECT</h2>
-<div>${testMessage}</div>
-キムボソン　１５：１２
+<div class="field" align="center">    
+<h2 class="card-title text-center" style="color: #113366;">LOGIN SUCCESS</h2>    
+${auth}
+</div>
 </body>
 </html>
