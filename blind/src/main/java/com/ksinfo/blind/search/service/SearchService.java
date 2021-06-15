@@ -10,21 +10,22 @@ import com.ksinfo.blind.search.mapper.SearchMapper;
 @Service 
 public class SearchService {
 
+	//��½� ����¡ ������ ���� �ʿ�.
+	private final int countPerPage = 10;
+	private final int pagePerGroup = 5;
+	
 	
 	@Autowired 
 	public SearchMapper mapper;  //SearchMapper.java
 	
 	
-	//테스트용으로 임시생성. 차훼 삭제할 것.
-	public List<SearchDto>  getBoard_topic_name() { 
-		return mapper.getBoard_topic_name();      //testMapper.xml의 <select id="id명" ~~~> 부분을 참고
+	public List<SearchDto>  getCompanyProfile() { 
+		return mapper.getCompanyProfile();     //searchMapper.java mapperȮ��
 	}
 	
-	
-	
-	//테스트용으로 임시생성. 차훼 삭제할 것.
+
 	public List<SearchDto>  getBoard_topic_name_test() { 
-		return mapper.getBoard_topic_name_test();      //testMapper.xml의 <select id="id명" ~~~> 부분을 참고
+		return mapper.getBoard_topic_name_test(); 
 	}
 }
 

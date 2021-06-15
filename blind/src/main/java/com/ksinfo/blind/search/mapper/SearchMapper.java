@@ -10,10 +10,12 @@ import com.ksinfo.blind.search.dto.SearchDto;
 @Repository
 @Mapper 
 public interface SearchMapper {
-	List<SearchDto> getBoard_topic_name(); 
-
-	
-	
-	//ì •ìƒì¶œë ¥í™•ì¸ìš© 
+	//(1)³ªÀÇ °æ¿ì   -> mapper¸¦ ÅëÇØ ½Ç½ÃÇÒ SQL¹®ÀÇ ÀÌ¸§À» ¼³Á¤.
+	List<SearchDto> getCompanyProfile();  //searchMapper.xml¿¡¼­ xmlÀÇ selectid¿Í ÅëÀÏ½ÃÅ²´Ù.
 	List<SearchDto> getBoard_topic_name_test(); 
+
+
+	//(2)Ã¢ÁÖ´Ô°æ¿ì ->ÆäÀÌÁö Ãâ·ÂÀ» ÆäÀÌÁö Ä«¿îÆ®
+	//int getTotalRecordsCount(CompanySearchVO companySearchVO); //CompanySearchVO.java¸¦ ÅëÇØ °´Ã¼ »ı¼º. ¹®Á¦´Â ³»¿ëÀ» ¸ğ¸£°Ú´Ù.
+	//List<CompanyVO>getCompanyList(RowBounds rowBounds, CompanySearchVO companySearchVO);
 }

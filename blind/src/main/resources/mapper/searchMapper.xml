@@ -5,7 +5,9 @@
     SELECT board_topic_name FROM blind.board_mgt; 
 </select>
 
-<select id="getBoard_topic_name" resultType="com.ksinfo.blind.search.dto.SearchDto"> 
+<select id="getCompanyProfile" resultType="com.ksinfo.blind.search.dto.SearchDto"> 
     SELECT board_topic_name FROM blind.board_mgt; 
+<!-- SELECT company_name FROM blind.company_mgt; -->    
 </select>
+
 </mapper>
