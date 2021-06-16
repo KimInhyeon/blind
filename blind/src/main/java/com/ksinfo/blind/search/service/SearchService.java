@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ksinfo.blind.search.dto.CompanyDto;
+import com.ksinfo.blind.search.dto.CompanyReviewDto;
 import com.ksinfo.blind.search.dto.PostDto;
 import com.ksinfo.blind.search.dto.SearchDto;
 import com.ksinfo.blind.search.mapper.SearchMapper;
@@ -25,6 +26,12 @@ public class SearchService {
 	public List<PostDto>  getSearchPosts() { 
 		return mapper.getSearchPosts();     //searchMapper.java mapper»Æ§∏
 	}
+	
+	public List<CompanyReviewDto> getCompanyReviews(){
+		return mapper.getCompanyReviews();
+	}
+
+	
 }
 
 

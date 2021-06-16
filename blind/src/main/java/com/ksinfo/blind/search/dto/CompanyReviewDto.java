@@ -8,6 +8,8 @@ public class CompanyReviewDto {
 	private String companyId;		//회사의id	//company_id bigint not null
 	private String jobGroupCode;	//직군코드		//job_group_code character(2) not null
 	private String allPoint;		//총점		//all_point numeric(2, 1) not null
+	private String simpleComment;  //한줄평 		// simple_comment character varying(60) not null
+	private String disadvantages;	//단점평가내용	// disadvantages character varying(400) not null	
 	
 	public String getUserId() {
 		return userId;
@@ -33,6 +35,19 @@ public class CompanyReviewDto {
 	public void setAllPoint(String allPoint) {
 		this.allPoint = allPoint;
 	}
+	
+	public String getSimpleComment() {
+		return simpleComment;
+	}
+	public void setSimpleComment(String simpleComment) {
+		this.simpleComment = simpleComment;
+	}
+	public String getDisadvantages() {
+		return disadvantages;
+	}
+	public void setDisadvantages(String disadvantages) {
+		this.disadvantages = disadvantages;
+	}
 
 	//나머지 기능들은 잠시 대기.
 	//career_point integer not null
@@ -42,16 +57,10 @@ public class CompanyReviewDto {
 	// head_point integer not null
 	// work_start_date date not null
 	// work_end_date date not null
-	// simple_comment character varying(60) not null
 	// resign_reason character varying(150) not null
 	// work_area character varying(50) not null
 	// advantages character varying(400) not null
-	// disadvantages character varying(400) not null
 	// verify_flag character(1) not null
 	// complete_flag character(1) not null
 	//logical_del_flag character(1) not null
-
-	
-	
-	
 }

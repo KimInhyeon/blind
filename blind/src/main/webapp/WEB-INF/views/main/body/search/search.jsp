@@ -27,12 +27,12 @@
 
 		<div class="search_company">
 			<div class="search_company_intro"> <!-- 회사이름,별점 안내 및  리뷰,게시글,연봉 버튼 생성 -->
-				<a href=""><!-- 회사의 안내페이지 링크 주도록 설정. -->
+				<a href="" style="font-color:000000; text-decoration:none"><!-- 회사의 안내페이지 링크 주도록 설정. -->
 					<img src="" width=40, height=40>	
-						${companyName}
+						${searchCompany[0].companyName}
 					<img src="">	
-						이미지-별점
-					${companyAddress}
+						★
+					$("4.5"}
 				</a>
 				<ul>
 					<a href="">리뷰</a>
@@ -42,27 +42,46 @@
 			</div>			
 
 			<div class="vote">
-				<p>(회사명)은(는) 일해보고 싶은 회사인가요?</p>
+				<p>${searchCompany[0].companyName}은(는) 일해보고 싶은 회사인가요?</p>
 				<div class="button_vote">
 				<button>good</button>
 				<button>bad</button>
 			</div>
 				
-			<div class="review" style="background-color:#03f8fc">
-				해당 기업에 대한 리뷰내역을 추가.
-			</div>
+			<a href="" class="review" style="background-color:#03f8fc">
+				<div>${companyReviews[0].allPoint}
+					<span>리뷰전체 보기</span>
+				</div> 
+				<div>${companyReviews[0].jobGroupCode}</div>
+				<div>${companyReviews[0].simpleComment}</div>
+				<div>${companyReviews[0].disadvantages}</div>
+	
+			</a>
 		</div>
    </div>
         
    
    <div class="search_topic">
+   		<div class="drop down button">
+	   		<select name="topics">
+	   			<option value="전체">전체(${countPostAll})</option>
+	   			<option value="토픽1">토픽1(${countPostofBoard1})</option>
+	   			<option value="토픽2">토픽2(${countPostofBoard2})</option>   		
+	   		</select>
+   		</div>
+   		
+   		
 	   <!-- 모든 토픽들에서 검색어와 관련되면 출력한다.. -->   
-	 	${searchPosts[0].postTitle} 
+	 	<!-- ${searchPosts[0].postTitle} 
 	 	${sample}
+	 	 -->
+	 	<br/><br/><br/>
  		<c:forEach items="${searchPosts}" var="posts">
-	 		${posts.postTitle}
+		   <div class="search_company"  style="white-space:nowrap; background-color:#0dd8fc">
+		 	  ${posts.postTitle}
+		   </div>
  		</c:forEach>
    </div>
-   
+      
   </body>
 </html>

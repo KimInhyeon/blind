@@ -7,11 +7,13 @@
     SELECT * FROM blind.company_mgt;  
 </select>
 
-
 <select id="getSearchPosts" resultType="com.ksinfo.blind.search.dto.PostDto"> 
     SELECT * FROM blind.post_mgt; 
 </select>
 
-
+<select id="getCompanyReviews" resultType="com.ksinfo.blind.search.dto.CompanyReviewDto"> 
+	SELECT * FROM blind.company_review_mgt;
+</select>
 
 </mapper>
+
