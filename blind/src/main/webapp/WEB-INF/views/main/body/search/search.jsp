@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html lang="jp">
   <head>
@@ -55,7 +57,12 @@
    
    <div class="search_topic">
 	   <!-- 모든 토픽들에서 검색어와 관련되면 출력한다.. -->   
-   </div><!-- <div class="search_topic_post"> -->
+	 	${searchPosts[0].postTitle} 
+	 	${sample}
+ 		<c:forEach items="${searchPosts}" var="posts">
+	 		${posts.postTitle}
+ 		</c:forEach>
+   </div>
    
   </body>
 </html>

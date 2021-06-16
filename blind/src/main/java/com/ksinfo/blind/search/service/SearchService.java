@@ -4,6 +4,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ksinfo.blind.search.dto.CompanyDto;
+import com.ksinfo.blind.search.dto.PostDto;
 import com.ksinfo.blind.search.dto.SearchDto;
 import com.ksinfo.blind.search.mapper.SearchMapper;
 
@@ -14,18 +16,14 @@ public class SearchService {
 	private final int countPerPage = 10;
 	private final int pagePerGroup = 5;
 	
-	
 	@Autowired 
 	public SearchMapper mapper;  //SearchMapper.java
 	
-	
-	public List<SearchDto>  getCompanyProfile() { 
-		return mapper.getCompanyProfile();     //searchMapper.java mapper»Æ§∏
+	public List<CompanyDto> getSearchCompany() { 
+		return mapper.getSearchCompany();     //searchMapper.java mapper»Æ§∏
 	}
-	
-
-	public List<SearchDto>  getBoard_topic_name_test() { 
-		return mapper.getBoard_topic_name_test(); 
+	public List<PostDto>  getSearchPosts() { 
+		return mapper.getSearchPosts();     //searchMapper.java mapper»Æ§∏
 	}
 }
 

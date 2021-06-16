@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ksinfo.blind.search.mapper.SearchMapper">
-<select id="getBoard_topic_name_test" resultType="com.ksinfo.blind.search.dto.SearchDto"> 
-    SELECT board_topic_name FROM blind.board_mgt; 
+
+
+<select id="getSearchCompany" resultType="com.ksinfo.blind.search.dto.CompanyDto"> 
+    SELECT * FROM blind.company_mgt;  
 </select>
 
-<select id="getCompanyProfile" resultType="com.ksinfo.blind.search.dto.SearchDto"> 
-    SELECT board_topic_name FROM blind.board_mgt; 
-<!-- SELECT company_name FROM blind.company_mgt; -->    
+
+<select id="getSearchPosts" resultType="com.ksinfo.blind.search.dto.PostDto"> 
+    SELECT * FROM blind.post_mgt; 
 </select>
+
+
 
 </mapper>
