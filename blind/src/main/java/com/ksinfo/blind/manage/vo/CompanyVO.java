@@ -2,9 +2,10 @@ package com.ksinfo.blind.manage.vo;
 
 public class CompanyVO {
 	private long companyID;
-	private char verifyFlag;
-	private char closingFlag;
+	private byte verifyFlag;
+	private byte closingFlag;
 	private String companyName;
+	private String businessTypeCode;
 	private String businessTypeName;
 	private String companyAddress;
 	private String foundingDate;
@@ -21,19 +22,19 @@ public class CompanyVO {
 		this.companyID = companyID;
 	}
 
-	public char getVerifyFlag() {
+	public byte getVerifyFlag() {
 		return verifyFlag;
 	}
 
-	public void setVerifyFlag(char verifyFlag) {
+	public void setVerifyFlag(byte verifyFlag) {
 		this.verifyFlag = verifyFlag;
 	}
 
-	public char getClosingFlag() {
+	public byte getClosingFlag() {
 		return closingFlag;
 	}
 
-	public void setClosingFlag(char closingFlag) {
+	public void setClosingFlag(byte closingFlag) {
 		this.closingFlag = closingFlag;
 	}
 
@@ -43,6 +44,14 @@ public class CompanyVO {
 
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+
+	public String getBusinessTypeCode() {
+		return businessTypeCode;
+	}
+
+	public void setBusinessTypeCode(String businessTypeCode) {
+		this.businessTypeCode = businessTypeCode;
 	}
 
 	public String getBusinessTypeName() {
