@@ -1,5 +1,6 @@
 package com.ksinfo.blind.config;
 
+import com.ksinfo.blind.security.CustomizeAuthenticationFailureHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,23 +21,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-//		http.authorizeRequests()
-//		.antMatchers("/companyMain/**", "/topicMain/**").hasRole("RM")
-//		.antMatchers("/companyMain/**", "/topicMain/**").hasRole("NM")
-//		.antMatchers("/", "/main", "/registMember").permitAll()
-//		.anyRequest().authenticated()
-//		.and().csrf().disable()
-//	.formLogin()
-//		.loginPage("/login")
-//		.defaultSuccessUrl("/loginSuccess")
-//		.failureHandler(new CustomizeAuthenticationFailureHandler())
-//		.permitAll()
-//		.and()
-//	.logout()
-//		.permitAll()
-//		.and()
-//	.exceptionHandling()
-//		.accessDeniedPage("/login");
+		http.authorizeRequests()
+		.antMatchers("/companyMain/**", "/topicMain/**").hasRole("RM")
+		.antMatchers("/companyMain/**", "/topicMain/**").hasRole("NM")
+		.antMatchers("/", "/main", "/registMember").permitAll()
+		.anyRequest().authenticated()
+		.and().csrf().disable()
+	.formLogin()
+		.loginPage("/login")
+		.defaultSuccessUrl("/loginSuccess")
+		.failureHandler(new CustomizeAuthenticationFailureHandler())
+		.permitAll()
+		.and()
+	.logout()
+		.permitAll()
+		.and()
+	.exceptionHandling()
+		.accessDeniedPage("/login");
 	}
 
 	@Bean
