@@ -14,9 +14,9 @@ import com.ksinfo.blind.search.dto.SearchDto;
 @Mapper 
 public interface SearchMapper {
 	//(1)나의 경우   -> mapper를 통해 실시할 SQL문의 이름을 설정.
-	List<CompanyDto>getSearchCompany();  //searchMapper.xml에서 xml의 selectid와 통일시킨다.	
-	List<PostDto> getSearchPosts(); 
-	List<CompanyReviewDto> getCompanyReviews();
+	List<CompanyDto>getSearchCompany(String searchKeyword);  //searchMapper.xml에서 xml의 selectid와 통일시킨다.	
+	List<PostDto> getSearchPosts(String searchKeyword); 
+	List<CompanyReviewDto> getCompanyReviews(String searchKeyword);
 
 	//(2)창주님경우 ->페이지 출력을 페이지 카운트
 	//int getTotalRecordsCount(CompanySearchVO companySearchVO); //CompanySearchVO.java를 통해 객체 생성. 문제는 내용을 모르겠다.

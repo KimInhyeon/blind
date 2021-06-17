@@ -20,16 +20,18 @@ public class SearchService {
 	@Autowired 
 	public SearchMapper mapper;  //SearchMapper.java
 	
-	public List<CompanyDto> getSearchCompany() { 
-		return mapper.getSearchCompany();     //searchMapper.java mapper확ㅈ
+	public List<CompanyDto> getSearchCompany(String searchKeyword) { 
+		return mapper.getSearchCompany(searchKeyword);     //searchMapper.java mapper확ㅈ
 	}
-	public List<PostDto>  getSearchPosts() { 
-		return mapper.getSearchPosts();     //searchMapper.java mapper확ㅈ
+
+	public List<CompanyReviewDto> getCompanyReviews(String searchKeyword){
+		return mapper.getCompanyReviews(searchKeyword);
+	}
+
+	public List<PostDto>  getSearchPosts(String searchKeyword){ 
+		return mapper.getSearchPosts(searchKeyword);     //searchMapper.java mapper확ㅈ
 	}
 	
-	public List<CompanyReviewDto> getCompanyReviews(){
-		return mapper.getCompanyReviews();
-	}
 
 	
 }

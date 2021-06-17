@@ -4,15 +4,19 @@
 
 
 <select id="getSearchCompany" resultType="com.ksinfo.blind.search.dto.CompanyDto"> 
-    SELECT * FROM blind.company_mgt;  
-</select>
-
-<select id="getSearchPosts" resultType="com.ksinfo.blind.search.dto.PostDto"> 
-    SELECT * FROM blind.post_mgt; 
+    SELECT * FROM blind.company_mgt
+    where company_name= #{searchKeyword};  
 </select>
 
 <select id="getCompanyReviews" resultType="com.ksinfo.blind.search.dto.CompanyReviewDto"> 
-	SELECT * FROM blind.company_review_mgt;
+	SELECT * FROM blind.company_review_mgt
+    INNER JOIN blind.company_mgt
+    ON blind.company_review_mgt.company_id = blind.company_mgt.company_id;
+</select>
+
+<select id="getSearchPosts" resultType="com.ksinfo.blind.search.dto.PostDto"> 
+    SELECT * FROM blind.post_mgt
+    where post_title like '%'|| #{searchKeyword} ||'%' ;  
 </select>
 
 </mapper>

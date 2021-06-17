@@ -11,11 +11,15 @@
    </head>
    
    <body>
-	<form name="searchText" method="post" action="search">
-    <input name="keyword" value="${map.keyword}">
-    <input type="submit" value="조회">
-</form>
+   <!-- 금요일(6/18)에 업로드될 공통레이아웃의 포맷에 따라 변경을 실시할 것. -->
 
+   <div class="inputSearchKeyword">    
+   		<form>
+   			<input type="text" prlaceholder="Search" 
+   				   name="searchKeyword" value=${pastSearchKeyword}> 
+   	 		<input type="submit" value="조회">
+		</form>
+   </div>
    <div class="main_contents">
 	    <!-- 검색어가 기업이 아닌경우 출력되지 않는다. -->      
 	    <div class="search_company_name">
@@ -29,10 +33,7 @@
 			<div class="search_company_intro"> <!-- 회사이름,별점 안내 및  리뷰,게시글,연봉 버튼 생성 -->
 				<a href="" style="font-color:000000; text-decoration:none"><!-- 회사의 안내페이지 링크 주도록 설정. -->
 					<img src="" width=40, height=40>	
-						${searchCompany[0].companyName}
-					<img src="">	
-						★
-					$("4.5"}
+						${searchResultCompany[0].companyName}
 				</a>
 				<ul>
 					<a href="">리뷰</a>
@@ -42,7 +43,7 @@
 			</div>			
 
 			<div class="vote">
-				<p>${searchCompany[0].companyName}은(는) 일해보고 싶은 회사인가요?</p>
+				<p>${searchResultCompany[0].companyName}은(는) 일해보고 싶은 회사인가요?</p>
 				<div class="button_vote">
 				<button>good</button>
 				<button>bad</button>
@@ -67,6 +68,8 @@
 	   			<option value="전체">전체(${countPostAll})</option>
 	   			<option value="토픽1">토픽1(${countPostofBoard1})</option>
 	   			<option value="토픽2">토픽2(${countPostofBoard2})</option>   		
+	   			<option value="토픽3">토픽3(${countPostofBoard3})</option>
+	   			<option value="토픽4">토픽4(${countPostofBoard4})</option>  
 	   		</select>
    		</div>
    		
@@ -76,10 +79,11 @@
 	 	${sample}
 	 	 -->
 	 	<br/><br/><br/>
- 		<c:forEach items="${searchPosts}" var="posts">
-		   <div class="search_company"  style="white-space:nowrap; background-color:#0dd8fc">
+ 		<c:forEach items="${searchResultPosts}" var="posts">
+		   <div>
 		 	  ${posts.postTitle}
 		   </div>
+
  		</c:forEach>
    </div>
       
