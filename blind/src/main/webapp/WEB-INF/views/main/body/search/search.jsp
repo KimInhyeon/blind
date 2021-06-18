@@ -7,96 +7,139 @@
   <head>
     <meta charset="UTF-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Insert title here</title>
+	<!--북마크 변경-자바스크립트-사용않기로 결정(사유:화면새로고침등을 실시해야 함.)
+	<script type= "text/javascript">
+		function innerHTMLTest(){
+			alert("bookmarkSet을 누르셨습니다.");
+			var bookmarkSet = document.getElementById("bookmarkSet");
+			bookmarkSet.innerHTML =	"<a><i class=" + 'bookmark icon' +"></i></a>";			
+		}
+	</script>
+	 -->
+	 
+	<!-- 제이쿼리 통해 북마크 변경안
+	<script>
+		function bookmarkChanege(){
+		    var bookmarkOnOffSet = $('#bookmarkSet').serialize();
+		    $.ajax({
+		        url: "/search/bookmarkChanege",
+		        data: book,
+		        type:"POST",
+		        cache: false
+		    }).done(function (fragment) {
+		         $("#list").replaceWith(fragment);
+		    });
+		    
+		}	
+	</script>
+ -->
+	 
+	<title>検索結果 page</title>
    </head>
    
    <body>
-   <!-- 금요일(6/18)에 업로드될 공통레이아웃의 포맷에 따라 변경을 실시할 것. -->
-
+   
+   <!-- 검색창 -->
    <div class="inputSearchKeyword">    
    		<form>
-			<div class="ui right action left icon input">
-			  <i class="search icon"></i>
-			  <input type="text" placeholder="Search"
-				     name="searchKeyword" value=${pastSearchKeyword}> 
+	   		<div class="ui transparent left icon input">
+				  <input type="text" placeholder="Search"
+					     name="searchKeyword" value=${pastSearchKeyword}> 
+	    		<i class="search icon"></i>
+	  			<div class="results"></div>
 			</div>
    		</form>
    </div>
-   <div class="main_contents">
-	    <!-- 검색어가 기업이 아닌경우 출력되지 않는다. -->      
-	    <div class="search_company_name">
-  				<h1><strong>${boardTopicName}</strong>검색결과</h1>
-   				<h3>기업</h3>
-  		</div>
- 
 
+
+
+	<!-- 검색결과출력페이지(전체) -->
+   <div class="ui stacked segment" >
+		<h1><strong>${searchKeyword}</strong>検索結果</h1> <!-- 검색키워드로 변경(지금은 기업명일때만 나온다. -->
+	
+	<!-- 검색결과1. 기업정보 / 검색어가 기업이 아닌경우 출력되지 않는다. -->      
 		<c:if test="${searchResultCompanyDataFlag eq '1'}"><!-- searchResultCompanyDataFlag의 값이 1이면 회사정보 있으며, 이에따라 출력실시. -->
-	   		<div class="search_company"  style="height: auto; width: 100%; border:1px solid #5e615b; padding:20;" >
-				<div class="search_company_intro"> <!-- 회사이름,별점 안내 및  리뷰,게시글,연봉 버튼 생성 -->
-					<a href="" style="font-color:000000; text-decoration:none"><!-- 회사의 안내페이지 링크 주도록 설정. -->
-						<img src="" width=40, height=40>	
+			<div class="ui stacked segment" >
+	   			<h3>企業</h3>
+		   		<div class="search_company"  style="height: auto; width: 100%; border:1px solid #5e615b; padding:20;" >
+					<!-- 검색결과1.1. 기업의 기본정보페이지(총평점 및 리뷰/게시글/연봉링크) -->
+					<div class="search_company_intro"> <!-- 회사이름,별점 안내 및  리뷰,게시글,연봉 버튼 생성 -->
+						<a href="" style="font-color:000000; text-decoration:none"><!-- 회사의 안내페이지 링크 주도록 설정. -->
+							<img src="" width=40px, height=40px style="margin:20px">	
 							${searchResultCompany[0].companyName}
-					</a>
-					<i class="star icon"></i>
-					<ul>
-						<a href="">리뷰</a>
-						<a href="">게시글</a>
-						<a href="">연봉</a>
-					</ul>	
-				</div>			
-			<div class="vote">
-				<p>${searchResultCompany[0].companyName}은(는) 일해보고 싶은 회사인가요?</p>
-				<div class="button_vote">
-					<button class="ui icon button">
-						<i class="thumbs up outline icon"></i>
-					</button>
-					<button class="ui icon button" >
-						<i class="thumbs down outline icon"></i>
-					</button>
-				</div>
-
-				<a href="" class="review" style="background-color:#03f8fc">
-					<div>${companyReviews[0].allPoint}
-						<span>리뷰전체 보기</span>
-					</div> 
-					<div>${companyReviews[0].jobGroupCode}</div>
-					<div>${companyReviews[0].simpleComment}</div>
-					<div>${companyReviews[0].disadvantages}</div>
-		
-				</a>
+						</a>
+						<i class="star icon"></i>
+						<ul style="margin-left:40px">
+							<a href="">レビュー</a>　❘
+							<a href="">企業ポスト</a>　❘
+							<a href="">給料</a>
+						</ul>	
+					</div>
+	
+					<!-- 검색결과1.2. 일하고 싶은 기업인지 추천/비추천버튼 -->
+					<div class="ui stacked segment" style="margin:60px ">
+						<div class="ui stacked segment" style="height: auto; width: 100%; border:1px solid #33333; margin:10px;" >
+							${searchResultCompany[0].companyName}は働きたい企業ですか
+							<button style="color: blue;" class="ui icon button">
+								<i class="thumbs up outline icon"></i>
+							</button>
+							<button style="color: red;" class="ui icon button" >
+								<i class="thumbs down outline icon"></i>
+							</button>
+						</div>
+	 				
+						<div style="background-color:#b1d4e3; margin:10px">
+							<a href="" class="review" >
+							<div>${companyReviews[0].allPoint}</div> 				
+							<span>レビュー全部見る</span>
+							<div>${companyReviews[0].jobGroupCode}</div>
+							<div>${companyReviews[0].simpleComment}</div>
+							<div>${companyReviews[0].disadvantages}</div>
+							</a>
+						</div>
+					</div>
+		 		</div>
 			</div>
-   		</div>
-		</c:if>
+	  	</c:if>
 
-
-        
-   
-   <div class="search_topic">
-   		<div class="drop down button">
-	   		<select name="topics">
-	   			<option value="전체">전체(${countPostAll})</option>
-	   			<option value="토픽1">토픽1(${countPostofBoard1})</option>
-	   			<option value="토픽2">토픽2(${countPostofBoard2})</option>   		
-	   			<option value="토픽3">토픽3(${countPostofBoard3})</option>
-	   			<option value="토픽4">토픽4(${countPostofBoard4})</option>  
-	   		</select>
-   		</div>
-	</div>   		
-
-	<div class="postOutList" >
- 		<c:forEach items="${searchResultPosts}" var="posts"> <!-- 아이템이 2개이면 어떻게 할것인가?(댓글필요) -->
-		   <div class="postOutEach" style="float: left; width:40%; margin:10px;" >
-		   		<div>보드타입 맵핑필요</div>
-		 		<div> <p>${posts.postTitle}</p> </div>			
-				<div> <i class="eye icon"></i> 				(조회수출력)</div>
-				<div> <i class="thumbs up outline icon"></i> (추천수클릭)</div>	   
-		   		<div> <i class="comment outline icon"></i>   (댓글수출력)</div>
-		   		<div> ${posts.postCreateDate} <i class="bookmark outline icon"></i></div>
-		   </div>
- 		</c:forEach>
+	<!-- 검색결과2. 토픽(게시글) -->
+		<div class="ui stacked segment" style="height: auto; width: 100%; border:1px solid #5e615b;" >
+			<!-- 드롭버튼 2개(토픽선택, 정렬설정) -->
+			<div>
+				<select class="ui dropdown" style="border:1px solid #5e615b;">
+			   		<option value="">トピック全体(${countPostAll})</option>
+			   		<option value="トピック1">トピック1(${countPostofBoard1})</option>
+			  		<option value="トピック2">トピック2(${countPostofBoard2})</option>   		
+			   		<option value="トピック3">トピック3(${countPostofBoard3})</option>
+			   		<option value="トピック4">トピック4(${countPostofBoard4})</option>  
+				</select>
+				
+				<select class="ui dropdown" style="border:1px solid #5e615b; float:right;">
+					<option value="">最新順</option>
+					<option value="">最新順</option>
+					<option value="">推薦順</option>
+				</select>
+			</div>   		
+		 <hr width = "100%" color = "#000000" size = "5"></hr>
+			<!-- 게시글(포스트)들 출력 -->
+			<div class="ui four column grid">
+			 	<c:forEach items="${searchResultPosts}" var="posts"> <!-- 아이템이 2개이면 어떻게 할것인가?(댓글필요) -->
+					<div class="column"style="float: left; width:40%; margin:10px;">
+						<div>보드타입 맵핑필요</div>
+					 	<div> <p>${posts.postTitle}</p> </div>			
+						<div> <i class="eye icon"></i> 				(조회수출력)</div>
+						<div> <i class="thumbs up outline icon"></i> (추천수클릭)</div>	   
+				   		<div> <i class="comment outline icon"></i>   (댓글수출력)</div>
+				   		<div> ${posts.postCreateDate}
+					   		<div id="bookmarkSet"><a><i class="bookmark outline icon"></i></a></div>
+				   		</div>
+				   </div>
+		 		</c:forEach>
+			</div>
+		</div>
    </div>
-      
-  </body>
+
+</body>
 </html>
 
 

@@ -88,6 +88,7 @@ public class SearchController {
 		mav.addObject("searchResultCompany",searchResultCompany); //기업정보 여부 플래그를 추가합시다.(회사없을시 false) int,char등 어느것이든 가능.
 		// JSTL-C의 IF 태그통해 출력여부 결정.
 		
+		mav.addObject("searchKeyword",searchKeyword);
 		
 		mav.addObject("searchResultCompanyDataFlag",searchResultCompanyDataFlag);
 		mav.addObject("searchResultPosts",searchResultPosts);
