@@ -6,18 +6,26 @@
 <select id="getSearchCompany" resultType="com.ksinfo.blind.search.dto.CompanyDto"> 
     SELECT * FROM blind.company_mgt
     where company_name= #{searchKeyword};  
+</select> 
+
+<select id="getPostCount" resultType="com.ksinfo.blind.search.dto.CompanyDto"> 
+    SELECT * FROM blind.company_mgt
+    where company_name= #{searchKeyword};  
+	groupby
 </select>
+
 
 <select id="getCompanyReviews" resultType="com.ksinfo.blind.search.dto.CompanyReviewDto"> 
 	SELECT * FROM blind.company_review_mgt
-    INNER JOIN blind.company_mgt
-    ON blind.company_review_mgt.company_id = blind.company_mgt.company_id;
+	INNER JOIN blind.company_mgt
+	ON blind.company_review_mgt.company_id = blind.company_mgt.company_id;	
 </select>
 
 <select id="getSearchPosts" resultType="com.ksinfo.blind.search.dto.PostDto"> 
     SELECT * FROM blind.post_mgt
     where post_title like '%'|| #{searchKeyword} ||'%' ;  
-</select>
+</select><!-- orderby 실시(추천순,작성일최신순) recommandCount / createDate를 조인하여실시.-->
+
 
 </mapper>
 

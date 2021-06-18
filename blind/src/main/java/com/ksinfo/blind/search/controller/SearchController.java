@@ -40,9 +40,26 @@ public class SearchController {
 		List<CompanyReviewDto> companyReviews = searchService.getCompanyReviews(searchKeyword);	
 		List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);					
 
+		/*
+		logger.info("데이터준비 2단계. 회사정보여부 플래그");	
+		int searchResultCompanyDataFlag=0; //값이 1일시 회사정보 있음
+		if( !(searchResultCompany.get(0).getCompanyName().isEmpty()) ) { //.isEmpty()가 false면 회사정보가 있음.
+			searchResultCompanyDataFlag=1;
+		}*/
+		
+		logger.info("데이터준비 2단계. 회사정보여부 플래그");	
+		int searchResultCompanyDataFlag=0; //값이 1일시 회사정보 있음
+		if( !(searchResultCompany.isEmpty()) && !(searchResultCompany.get(0).getCompanyName().isEmpty())) { //!(searchResultCompany.isEmpty())가 0이다 회사정보가 있음.
+			logger.info("확인결과: 회사정보 있음");	
+			searchResultCompanyDataFlag=1;
+		}
+		else {
+			logger.info("확인결과: 회사정보 없음");	
+			searchResultCompanyDataFlag=0;
+		}
 		
 		logger.info("데이터준비 2단계.드롭버튼(토픽선택)의 카운트");	
-		//[문의] 컨트롤러내에서 카운트 하기보다는 SQL로 하는 것 나은지 여부 
+		//[문의] 컨트롤러내에서 카운트 하기보다는 SQL로 하는 것 나은지 여부.  
 		int countPostAll=0;
 		int countPostofBoard1=0;
 		int countPostofBoard2=0;
@@ -68,7 +85,11 @@ public class SearchController {
 
 		
 		logger.info("데이터준비 3단계. mav에게 searchResultPosts가 받은 정보를 입력. 웹페이지에 출력할 수 있도록 실시.");		
-		mav.addObject("searchResultCompany",searchResultCompany);
+		mav.addObject("searchResultCompany",searchResultCompany); //기업정보 여부 플래그를 추가합시다.(회사없을시 false) int,char등 어느것이든 가능.
+		// JSTL-C의 IF 태그통해 출력여부 결정.
+		
+		
+		mav.addObject("searchResultCompanyDataFlag",searchResultCompanyDataFlag);
 		mav.addObject("searchResultPosts",searchResultPosts);
 		mav.addObject("companyReviews",companyReviews);
 		
