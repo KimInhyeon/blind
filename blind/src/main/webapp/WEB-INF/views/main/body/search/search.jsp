@@ -137,7 +137,7 @@
 					 	<div style="margin:4px;">
 					 		 <i class="eye icon"></i>${viewCountOfPosts[i].postCount}
 							 <i class="thumbs up outline icon"></i> (추천수)
-							 <i class="comment outline icon"></i>   (댓글수)
+							 <i class="comment outline icon"></i>  ${replyCountOfPosts[i]}
 						</div>
 				   		<div> 
 					  		<div style="float:left;">

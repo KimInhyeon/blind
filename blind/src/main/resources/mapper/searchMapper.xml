@@ -29,9 +29,20 @@
 
 <select id="getViewCountOfPosts" resultType="com.ksinfo.blind.search.dto.PostCountInfDto"> 
     <!-- SELECT blind.post_count_inf.post_count FROM blind.blind.post_count_inf -->
-    SELECT * FROM blind.blind.post_count_inf
-    where  #{postId} = blind.post_count_inf.post_id;
+    SELECT * FROM blind.post_count_inf
+    where #{postId} = blind.post_count_inf.post_id;
 </select>
+	
+
+<select id="getReplysOfPosts" resultType="com.ksinfo.blind.search.dto.ReplyDto"> 
+    SELECT * FROM blind.reply_mgt
+    where  #{postId} = blind.reply_mgt.post_id;
+</select>	
+	
+<select id="getReplyCountsOfPosts" resultType="int"> 
+    SELECT count(post_id) FROM blind.reply_mgt
+    where  #{postId} = blind.reply_mgt.post_id;
+</select>	
 	
 </mapper>
 

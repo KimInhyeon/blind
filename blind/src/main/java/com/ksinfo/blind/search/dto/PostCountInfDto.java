@@ -4,6 +4,8 @@ public class PostCountInfDto {
 	private String postCountId;	  //post_count_id bigint GENERATED ALWAYS AS IDENTITY
 	private int postId;  //post_id bigint not null
 	private String postCount;  //post_count bigint not null
+	
+	
 	public String getPostCountId() {
 		return postCountId;
 	}

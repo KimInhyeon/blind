@@ -9,6 +9,7 @@ import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
 import com.ksinfo.blind.search.dto.PostCountInfDto;
 import com.ksinfo.blind.search.dto.PostDto;
+import com.ksinfo.blind.search.dto.ReplyDto;
 import com.ksinfo.blind.search.dto.SearchDto;
 
 @Repository
@@ -19,7 +20,9 @@ public interface SearchMapper {
 	List<PostDto> getSearchPosts(String searchKeyword); 
 	List<CompanyReviewDto> getCompanyReviews(String searchKeyword);
 	List<PostCountInfDto> getViewCountOfPosts(int postId);
+	List<ReplyDto> getReplysOfPosts(int postId);
 	
+	List<Integer> getReplyCountsOfPosts(int postId);
 	//(2)창주님경우 ->페이지 출력을 페이지 카운트
 	//int getTotalRecordsCount(CompanySearchVO companySearchVO); //CompanySearchVO.java를 통해 객체 생성. 문제는 내용을 모르겠다.
 	//List<CompanyVO>getCompanyList(RowBounds rowBounds, CompanySearchVO companySearchVO);
