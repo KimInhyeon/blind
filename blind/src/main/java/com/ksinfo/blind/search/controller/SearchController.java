@@ -40,36 +40,22 @@ public class SearchController {
 	public ModelAndView search(String searchKeyword, ModelAndView mav){	
 		logger.info("SearchController-search 시작");	
 		
-		logger.info("데이터준비 1단계. postgreDB에게 정보를 받음.");	
-		List<CompanyDto> searchResultCompany = searchService.getSearchCompany(searchKeyword);
-		List<CompanyReviewDto> companyReviews = searchService.getCompanyReviews(searchKeyword);	
-		List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);				
-		List<PostCountInfDto> viewCountOfPosts = new ArrayList<>(); //조회수(테이블 : POST_COUNT_INF)	 
+		logger.info("기업정보 관련 데이터 준비");	
+		List<CompanyDto> searchResultCompany = searchService.getSearchCompany(searchKeyword);	//기업프로필
+		List<CompanyReviewDto> companyReviews = searchService.getCompanyReviews(searchKeyword);	//기업에 대한 기업리뷰
+		List<String> jobGroupNameOfCompanyReviewer = new ArrayList<>(); 						//기업리뷰-리뷰작성자의 직군명 정보 저장.
 		
-		//기업리뷰-리뷰작성자의 직군명 정보 저장.
-		List<String> jobGroupNameOfCompanyReviewer = new ArrayList<>(); 
 		
-		//포스트-드롭버튼 관련 기능들
-		List<BoardDto> boardTopicName = new ArrayList<>(); //토픽의 이름 수신
-		List<Integer> boardTopicCount = new ArrayList<>(); //토픽별 포스트의 갯수 카운트
-
-		//토픽의 이름 집계
-		for(int i=0; i<searchResultPosts.size() ;i++ ) {
-			boardTopicName.addAll(i, searchService.getBoardTopicName(searchResultPosts.get(i).getBoardId()) );
-			//boardTopicName = searchService.getBoardTopicName(searchResultPosts.get(i).getBoardId()); //토픽의 이름 수신
+		logger.info("데이터준비 2단계. 회사정보여부 플래그");	
+		int searchResultCompanyDataFlag=0; //값이 1일시 회사정보 있음
+		if( !(searchResultCompany.isEmpty()) && !(searchResultCompany.get(0).getCompanyName().isEmpty())) { //!(searchResultCompany.isEmpty())가 0이다 회사정보가 있음.
+			logger.info("확인결과: 회사정보 있음");	
+			searchResultCompanyDataFlag=1;
 		}
-		//토픽별 포스트의 갯수 집계
-		//for(int i=0; i<searchResultPosts.size() ;i++ ) {
-		//	boardTopicCount = searchService.getBoardTopicName(searchResultPosts.get(i).getBoardId()); //토픽의 이름 수신
-		//}
-		
-		
-		//포스트 작성자의 닉네임 및 근무기업, 추천수,댓글수는 관련INF테이블에서 로드 불가관계로 select 시 count 명령통해 카운트하여 리턴하는 형태로 진행.	
-		List<UserDto> writerDataOfPosts =  new ArrayList<>(); 		//post의 작성자의 정보 저장. jsp페이지에 닉네임 출력도 담당.
-		List<String>  writerCompany =  new ArrayList<>();			//post 작성자의 근무회사 정보 저장.
-		List<Integer> recommendCountOfPosts = new ArrayList<>();	//추천수(테이블 : POST_RECOMMEND_INF)
-		List<Integer> replyCountOfPosts = new ArrayList<>(); 		//댓글수(각 포스트별 댓글 카운트.)
-		
+		else {
+			logger.info("확인결과: 회사정보 없음");	
+			searchResultCompanyDataFlag=0;
+		}
 		
 		//기업리뷰를 작성한 사람의 직군명(jobGroupName)을 저장.
 		for(int i=0; i<companyReviews.size() ;i++ ) {
@@ -77,6 +63,31 @@ public class SearchController {
 		}
 		
 		
+		
+		//포스트 작성자의 닉네임 및 근무기업, 추천수,댓글수는 관련INF테이블에서 로드 불가관계로 select 시 count 명령통해 카운트하여 리턴하는 형태로 진행.	
+		List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);				
+		List<PostCountInfDto> viewCountOfPosts = new ArrayList<>(); //조회수(테이블 : POST_COUNT_INF)	 
+		List<UserDto> writerDataOfPosts =  new ArrayList<>(); 		//post의 작성자의 정보 저장. jsp페이지에 닉네임 출력도 담당.
+		List<String>  writerCompany =  new ArrayList<>();			//post 작성자의 근무회사 정보 저장.
+		List<Integer> recommendCountOfPosts = new ArrayList<>();	//추천수(테이블 : POST_RECOMMEND_INF)
+		List<Integer> replyCountOfPosts = new ArrayList<>(); 		//댓글수(각 포스트별 댓글 카운트.)
+		
+		//드롭버튼 관련 기능들
+		List<BoardDto> boardTopicName = new ArrayList<>(); //토픽의 이름 수신
+		List<Integer> boardTopicCount = new ArrayList<>(); //토픽별 포스트의 갯수 카운트(총갯수 제외)
+		int	boardTopicCountOfAll=0;						   //토픽별 포스트의 총갯수 카운트
+		//드롭버튼 토픽의 이름 집계
+		for(int i=0; i<searchResultPosts.size() ;i++ ) {
+			boardTopicName.addAll(i, searchService.getBoardTopicName(searchResultPosts.get(i).getBoardId()) );
+		}
+		//드롭버튼의 토픽별 포스트의 갯수 집계
+		
+		for(int i=0; i<searchResultPosts.size() ;i++ ) {
+			boardTopicCount.addAll(i, searchService.getBoardTopicCount(searchResultPosts.get(i).getBoardId()) );
+			boardTopicCountOfAll=boardTopicCountOfAll+boardTopicCount.get(i);
+		}
+
+
 		//포스트 목록 출력시 관련 정보수집
 		
 		//포스트를 작성한 유저의 닉네임과 근무하는 기업 정보를 로드.
@@ -103,19 +114,9 @@ public class SearchController {
 		
 		
 
-		logger.info("데이터준비 2단계. 회사정보여부 플래그");	
-		int searchResultCompanyDataFlag=0; //값이 1일시 회사정보 있음
-		if( !(searchResultCompany.isEmpty()) && !(searchResultCompany.get(0).getCompanyName().isEmpty())) { //!(searchResultCompany.isEmpty())가 0이다 회사정보가 있음.
-			logger.info("확인결과: 회사정보 있음");	
-			searchResultCompanyDataFlag=1;
-		}
-		else {
-			logger.info("확인결과: 회사정보 없음");	
-			searchResultCompanyDataFlag=0;
-		}
+
 		
-		logger.info("데이터준비 2단계.드롭버튼(토픽선택)의 카운트");	
-		//[문의] 컨트롤러내에서 카운트 하기보다는 SQL로 하는 것 나은지 여부.  
+		logger.info("데이터준비 2단계.드롭버튼(토픽선택)의 카운트");	  
 		
 
 		
@@ -132,8 +133,9 @@ public class SearchController {
  		//2.포스트관련 정보
 		//2.1 드롭다운버튼관련
 		mav.addObject("boardTopicName",boardTopicName);			//검색어에 검색된 포스트들의 토픽(게시판) 이름들 저장.
-		//mav.addObject("boardTopicCount",boardTopicCount);
-		
+		mav.addObject("boardTopicCountOfAll",boardTopicCountOfAll);
+		mav.addObject("boardTopicCount",boardTopicCount);
+			
 		//2.2 포스트출력
 		mav.addObject("searchResultPosts",searchResultPosts);			//검색어와 관련된 포스트(게시글)들 전달.
 		mav.addObject("writerDataOfPosts",writerDataOfPosts);			//포스트 작성자의 닉네임 정보

@@ -70,7 +70,11 @@
     SELECT * FROM blind.board_mgt
     where #{boardId} = blind.board_mgt.board_id;
 </select>	
-	 
+
+<select id="getBoardTopicCount" resultType="int"> 
+    SELECT count(post_id)FROM blind.post_mgt
+    where #{boardId} = blind.post_mgt.board_id;
+</select>		 
 	 
 </mapper>
 

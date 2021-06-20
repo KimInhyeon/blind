@@ -111,9 +111,11 @@
 			<!-- 드롭버튼 2개(토픽선택, 정렬설정) -->
 			<div>
 				<select class="ui dropdown" style="border:1px solid #5e615b;">
-		   		<option value="">トピック全体(${countPostAll})</option> <!-- 전체는 무조건 사용되므로 무조건 적용. -->
+				<c:set var="i" value="0" />
+		   		<option value="">トピック全体( ${boardTopicCountOfAll} )</option> <!-- 전체는 무조건 사용되므로 무조건 적용. -->
 				<c:forEach items="${boardTopicName}" var="menuTopicName">
-			   		<option value="test"> ${menuTopicName.boardTopicName} 	</option>
+			   		<option value="test"> ${menuTopicName.boardTopicName} ( ${boardTopicCount[i]} )</option>
+		 		    <c:set var="i" value="${i+1}" />
 			   	</c:forEach>
 				</select>
 				

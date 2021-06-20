@@ -1,5 +1,6 @@
 package com.ksinfo.blind.search.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -29,7 +30,7 @@ public interface SearchMapper {
 	List<String>  getWriterCompany (int companyId);
 	List<String>  getJobGroupNameOfCompanyReviewer(int jobGroupCode);	
 	List<BoardDto> getBoardTopicName(int boardId);
-	
+	List<Integer> getBoardTopicCount(int boardId); 
 	//(2)창주님경우 ->페이지 출력을 페이지 카운트
 	//int getTotalRecordsCount(CompanySearchVO companySearchVO); //CompanySearchVO.java를 통해 객체 생성. 문제는 내용을 모르겠다.
 	//List<CompanyVO>getCompanyList(RowBounds rowBounds, CompanySearchVO companySearchVO);

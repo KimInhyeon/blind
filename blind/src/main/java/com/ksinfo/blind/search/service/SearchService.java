@@ -68,7 +68,10 @@ public class SearchService {
 	public List<BoardDto> getBoardTopicName(int boardId){
 		return mapper.getBoardTopicName(boardId);			
 	}
-	
+
+	public List<Integer> getBoardTopicCount(int boardId){
+		return mapper.getBoardTopicCount(boardId);			
+	} 
 }
 
 
