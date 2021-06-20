@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ksinfo.blind.search.dto.BoardDto;
 import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
 import com.ksinfo.blind.search.dto.PostCountInfDto;
@@ -62,6 +63,10 @@ public class SearchService {
 	
 	public List<String> getJobGroupNameOfCompanyReviewer(int jobGroupCode){
 		return mapper.getJobGroupNameOfCompanyReviewer(jobGroupCode);			
+	}
+
+	public List<BoardDto> getBoardTopicName(int boardId){
+		return mapper.getBoardTopicName(boardId);			
 	}
 	
 }

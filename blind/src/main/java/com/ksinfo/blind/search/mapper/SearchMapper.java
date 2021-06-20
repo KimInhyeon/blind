@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import com.ksinfo.blind.search.dto.BoardDto;
 import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
 import com.ksinfo.blind.search.dto.PostCountInfDto;
@@ -27,7 +28,7 @@ public interface SearchMapper {
 	List<UserDto> getWriterDataOfPosts(int userId);
 	List<String>  getWriterCompany (int companyId);
 	List<String>  getJobGroupNameOfCompanyReviewer(int jobGroupCode);	
-	
+	List<BoardDto> getBoardTopicName(int boardId);
 	
 	//(2)창주님경우 ->페이지 출력을 페이지 카운트
 	//int getTotalRecordsCount(CompanySearchVO companySearchVO); //CompanySearchVO.java를 통해 객체 생성. 문제는 내용을 모르겠다.

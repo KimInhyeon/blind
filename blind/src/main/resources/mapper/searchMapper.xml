@@ -66,5 +66,11 @@
     where cast(#{jobGroupCode} as char)  = blind.job_group_mst.job_group_code;
 </select>		
 	 
+<select id="getBoardTopicName" resultType="com.ksinfo.blind.search.dto.BoardDto"> 
+    SELECT * FROM blind.board_mgt
+    where #{boardId} = blind.board_mgt.board_id;
+</select>	
+	 
+	 
 </mapper>
 

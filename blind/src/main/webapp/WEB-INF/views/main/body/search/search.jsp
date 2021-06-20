@@ -67,7 +67,7 @@
 					<!-- 회사이름,별점 안내 및  리뷰,게시글,연봉 버튼 생성 -->
 					<div style="position:absolute;">
 						<div style="float:left; border:1px solid #5e615b;"> 
-							<a href=""><img src="" width=20px, height=20px style="margin:10px;" align="top"></a><!-- 회사의 안내페이지 링크 주도록 설정. -->
+							<a href=""><img src="" width=40px, height=40px style="margin:5px;" align="top"></a><!-- 회사의 안내페이지 링크 주도록 설정. -->
 						</div>
 						<div  style="border:1px solid #5e615b;">
 							<a href="">${searchResultCompany[0].companyName}</a>
@@ -111,11 +111,10 @@
 			<!-- 드롭버튼 2개(토픽선택, 정렬설정) -->
 			<div>
 				<select class="ui dropdown" style="border:1px solid #5e615b;">
-			   		<option value="">トピック全体(${countPostAll})</option>
-			   		<option value="トピック1">トピック1(${countPostofBoard1})</option>
-			  		<option value="トピック2">トピック2(${countPostofBoard2})</option>   		
-			   		<option value="トピック3">トピック3(${countPostofBoard3})</option>
-			   		<option value="トピック4">トピック4(${countPostofBoard4})</option>  
+		   		<option value="">トピック全体(${countPostAll})</option> <!-- 전체는 무조건 사용되므로 무조건 적용. -->
+				<c:forEach items="${boardTopicName}" var="topicName">
+			   		<option value="test"> ${topicName.boardTopicName} </option>
+			   	</c:forEach>
 				</select>
 				
 				<select class="ui dropdown" style="border:1px solid #5e615b; float:right;">

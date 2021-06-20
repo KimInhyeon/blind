@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ksinfo.blind.search.dto.BoardDto;
 import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
 import com.ksinfo.blind.search.dto.PostCountInfDto;
@@ -45,8 +46,21 @@ public class SearchController {
 		List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);				
 		List<PostCountInfDto> viewCountOfPosts = new ArrayList<>(); //조회수(테이블 : POST_COUNT_INF)	 
 		
-		//기업리뷰 관련
-		List<String> jobGroupNameOfCompanyReviewer  = new ArrayList<>(); 
+		//기업리뷰-리뷰작성자의 직군명 정보 저장.
+		List<String> jobGroupNameOfCompanyReviewer = new ArrayList<>(); 
+		
+		//포스트-드롭버튼 관련 기능들
+		List<BoardDto> boardTopicName = new ArrayList<>(); //토픽의 이름 수신
+		List<Integer> boardTopicCount = new ArrayList<>(); //토픽별 포스트의 갯수 카운트
+
+		//토픽의 이름 집계
+		for(int i=0; i<searchResultPosts.size() ;i++ ) {
+			boardTopicName = searchService.getBoardTopicName(searchResultPosts.get(i).getBoardId()); //토픽의 이름 수신
+		}
+		//토픽별 포스트의 갯수 집계
+		//for(int i=0; i<searchResultPosts.size() ;i++ ) {
+		//	boardTopicCount = searchService.getBoardTopicName(searchResultPosts.get(i).getBoardId()); //토픽의 이름 수신
+		//}
 		
 		
 		//포스트 작성자의 닉네임 및 근무기업, 추천수,댓글수는 관련INF테이블에서 로드 불가관계로 select 시 count 명령통해 카운트하여 리턴하는 형태로 진행.	
@@ -61,11 +75,13 @@ public class SearchController {
 			jobGroupNameOfCompanyReviewer.addAll(i, searchService.getJobGroupNameOfCompanyReviewer(companyReviews.get(i).getJobGroupCode()));
 		}
 		
+		
+		//포스트 목록 출력시 관련 정보수집
+		
 		//포스트를 작성한 유저의 닉네임과 근무하는 기업 정보를 로드.
 		for(int i=0; i<searchResultPosts.size() ;i++ ) {
 			writerDataOfPosts.addAll(i, searchService.getWriterDataOfPosts(Integer.parseInt(searchResultPosts.get(i).getUserId() )));
 		}
-		
 		//포스트 작성자의 근무기업 정보를 저장.
 		for(int i=0; i<searchResultPosts.size() ;i++ ) {
 			writerCompany.addAll(i, searchService.getWriterCompany(Integer.parseInt(writerDataOfPosts.get(i).getCompanyId() )));
@@ -79,8 +95,6 @@ public class SearchController {
 		for(int i=0; i < searchResultPosts.size() ;i++ ) {
 			recommendCountOfPosts.addAll(i, searchService.getReplyCountsOfPosts(Integer.parseInt(searchResultPosts.get(i).getPostId())) );			
 		}		
-
-		
 		//포스트별 댓글수 카운트
 		for(int i=0; i < searchResultPosts.size() ;i++ ) {
 			replyCountOfPosts.addAll(i, searchService.getReplyCountsOfPosts(Integer.parseInt(searchResultPosts.get(i).getPostId())) );			
@@ -101,28 +115,7 @@ public class SearchController {
 		
 		logger.info("데이터준비 2단계.드롭버튼(토픽선택)의 카운트");	
 		//[문의] 컨트롤러내에서 카운트 하기보다는 SQL로 하는 것 나은지 여부.  
-		int countPostAll=0;
-		int countPostofBoard1=0;
-		int countPostofBoard2=0;
-		int countPostofBoard3=0;
-		int countPostofBoard4=0;
 		
-		for(int i=0; i < searchResultPosts.size() ; i++) {
-			countPostAll++;
-			
-			if(searchResultPosts.get(i).getBoardId().equals("1") ) {
-				countPostofBoard1++;
-			}
-			else if(searchResultPosts.get(i).getBoardId().equals("2") ) {
-				countPostofBoard2++;
-			}
-			else if(searchResultPosts.get(i).getBoardId().equals("3") ) {
-				countPostofBoard3++;
-			}
-			else if(searchResultPosts.get(i).getBoardId().equals("4") ) {
-				countPostofBoard4++;
-			}
-		}
 
 		
 		logger.info("데이터준비 3단계. mav에게 searchResultPosts가 받은 정보를 입력. 웹페이지에 출력할 수 있도록 실시.");		
@@ -137,10 +130,8 @@ public class SearchController {
 		
  		//2.포스트관련 정보
 		//2.1 드롭다운버튼관련
-		mav.addObject("countPostAll", countPostAll);			
-		mav.addObject("countPostofBoard1", countPostofBoard1);
-		mav.addObject("countPostofBoard2", countPostofBoard2);
-
+		mav.addObject("boardTopicName",boardTopicName);			//검색어에 검색된 포스트들의 토픽(게시판) 이름들 저장.
+		//mav.addObject("boardTopicCount",boardTopicCount);
 		
 		//2.2 포스트출력
 		mav.addObject("searchResultPosts",searchResultPosts);			//검색어와 관련된 포스트(게시글)들 전달.

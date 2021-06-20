@@ -5,7 +5,7 @@ public class PostDto {
 	//2.POST_MGT //게시글관리 테이블의 변수
 	private String postId;			 	 //post_id bigint GENERATED ALWAYS AS IDENTITY
 	private String userId;				 //user_id bigint 					  	   //게시글 작성 유저의 id.직접로드가 아니라, 작성유저의 일치를 파악 위함.
-	private String boardId;				 //board_id 
+	private int boardId;				 //board_id 
 	private String postTitle;		     //post_title character varying(200)   	   //게시글의 제목
 	private char   postBlindFlag;		 //post_blind_flag character(1) 		   //표시여부. 이것도 확인해야 한다.
 	private String postContents;  	 	 //post_contents text 					   //게시글의 내용
@@ -26,10 +26,10 @@ public class PostDto {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getBoardId() {
+	public int getBoardId() {
 		return boardId;
 	}
-	public void setBoardId(String boardId) {
+	public void setBoardId(int boardId) {
 		this.boardId = boardId;
 	}
 	public String getPostTitle() {
