@@ -27,5 +27,11 @@
 </select><!-- orderby 실시(추천순,작성일최신순) recommandCount / createDate를 조인하여실시.-->
 
 
+<select id="getViewCountOfPosts" resultType="com.ksinfo.blind.search.dto.PostCountInfDto"> 
+    <!-- SELECT blind.post_count_inf.post_count FROM blind.blind.post_count_inf -->
+    SELECT * FROM blind.blind.post_count_inf
+    where  #{postId} = blind.post_count_inf.post_id;
+</select>
+	
 </mapper>
 

@@ -7,11 +7,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
+import com.ksinfo.blind.search.dto.PostCountInfDto;
 import com.ksinfo.blind.search.dto.PostDto;
 import com.ksinfo.blind.search.dto.SearchDto;
 import com.ksinfo.blind.search.service.SearchService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +40,17 @@ public class SearchController {
 		logger.info("데이터준비 1단계. postgreDB에게 정보를 받음.");	
 		List<CompanyDto> searchResultCompany = searchService.getSearchCompany(searchKeyword);
 		List<CompanyReviewDto> companyReviews = searchService.getCompanyReviews(searchKeyword);	
-		List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);					
+		List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);		
+		
+		//List<PostCountInfDto> viewCountOfPosts=searchService.getViewCountOfPosts(Integer.parseInt(searchResultPosts.get(0).getPostId()));
+		List<PostCountInfDto> viewCountOfPosts = new ArrayList<>();
+		//List<Integer> viewCountOfPosts = new ArrayList<>();
 
+		for(int i=0; i<searchResultPosts.size() ;i++ ) {
+	        viewCountOfPosts.addAll(i, searchService.getViewCountOfPosts(Integer.parseInt(searchResultPosts.get(i).getPostId())) );
+		}
+
+				
 		/*
 		logger.info("데이터준비 2단계. 회사정보여부 플래그");	
 		int searchResultCompanyDataFlag=0; //값이 1일시 회사정보 있음
@@ -84,6 +95,11 @@ public class SearchController {
 		}
 
 		
+		//조회수(게시글의 조회수 정보) : [테이블] POST_COUNT_INF
+		//추천수(게시글의 추천수 정보) :
+		//댓글수(게시글의 댓글수 정보) : 
+		
+		
 		logger.info("데이터준비 3단계. mav에게 searchResultPosts가 받은 정보를 입력. 웹페이지에 출력할 수 있도록 실시.");		
 		mav.addObject("searchResultCompany",searchResultCompany); //기업정보 여부 플래그를 추가합시다.(회사없을시 false) int,char등 어느것이든 가능.
 		// JSTL-C의 IF 태그통해 출력여부 결정.
@@ -99,6 +115,8 @@ public class SearchController {
 		mav.addObject("countPostAll", countPostAll);
 		mav.addObject("countPostofBoard1", countPostofBoard1);
 		mav.addObject("countPostofBoard2", countPostofBoard2);
+		
+		mav.addObject("viewCountOfPosts", viewCountOfPosts);
 		
 		
 		//mav.addObject("sample",searchResultPosts.get(0).getPostTitle());

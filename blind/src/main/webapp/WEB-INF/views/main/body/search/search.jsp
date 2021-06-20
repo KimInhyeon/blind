@@ -55,21 +55,21 @@
 
 
 	<!-- 검색결과출력페이지(전체) -->
-   <div class="ui stacked segment" >
+   <div class="ui stacked segment"  style="border:1px solid #5e615b;">
 		<h1><strong>${searchKeyword}</strong> 検索結果</h1> <!-- 검색키워드로 변경(지금은 기업명일때만 나온다. -->
 	
 	<!-- 검색결과1. 기업정보 / 검색어가 기업이 아닌경우 출력되지 않는다. -->      
 		<c:if test="${searchResultCompanyDataFlag eq '1'}"><!-- searchResultCompanyDataFlag의 값이 1이면 회사정보 있으며, 이에따라 출력실시. -->
-			<div class="ui stacked segment" >
+			<div class="ui stacked segment">
 	   			<h3>企業</h3>
-		   		<div class="search_company"  style="height: auto; width: 100%; border:1px solid #5e615b; padding:20;" >
+		   		<div  class="ui stacked segment"  style="height: auto; width: 100%; border:1px solid #5e615b; padding:20;" >
 					<!-- 검색결과1.1. 기업의 기본정보페이지(총평점 및 리뷰/게시글/연봉링크) -->
 					<!-- 회사이름,별점 안내 및  리뷰,게시글,연봉 버튼 생성 -->
 					<div style="position:absolute;">
-						<div style="float:left;"> 
+						<div style="float:left; border:1px solid #5e615b;"> 
 							<a href=""><img src="" width=20px, height=20px style="margin:10px;" align="top"></a><!-- 회사의 안내페이지 링크 주도록 설정. -->
 						</div>
-						<div>
+						<div  style="border:1px solid #5e615b;">
 							<a href="">${searchResultCompany[0].companyName}</a>
 							<i class="star icon"></i>
 							<ul style="line-height:1px;  display:block;" >
@@ -81,7 +81,7 @@
 					</div>
 	
 					<!-- 검색결과1.2. 일하고 싶은 기업인지 추천/비추천버튼 -->
-					<div class="ui stacked segment" style="margin:60px ">
+					<div class="ui stacked segment" style="margin:60px; border:1px solid #5e615b;">
 						<div class="ui stacked segment" style="height: auto; width: 100%; border:1px solid #33333; margin:10px;" >
 							${searchResultCompany[0].companyName}は働きたい企業ですか
 							<button style="color: blue;" class="ui icon button">
@@ -93,12 +93,12 @@
 						</div>
 	 				
 						<div style="background-color:#b1d4e3; margin:10px">
-							<a href="" class="review" >
-							<div>${companyReviews[0].allPoint}</div> 				
-							<span>レビュー全部見る</span>
-							<div>${companyReviews[0].jobGroupCode}</div>
-							<div>${companyReviews[0].simpleComment}</div>
-							<div>${companyReviews[0].disadvantages}</div>
+							<a href="">
+								<div>${companyReviews[0].allPoint}</div> 				
+								<div style="float:Right;">レビュー全部見る > </div>
+								<div>${companyReviews[0].jobGroupCode}</div>
+								<div>${companyReviews[0].simpleComment}</div>
+								<div>${companyReviews[0].disadvantages}</div>
 							</a>
 						</div>
 					</div>
@@ -127,30 +127,51 @@
 		 <hr width = "100%" color = "#000000" size = "5"></hr>
 			<!-- 게시글(포스트)들 출력 -->
 			<div class="ui four column grid">
-			 	<c:forEach items="${searchResultPosts}" var="posts"> <!-- 아이템이 2개이면 어떻게 할것인가?(댓글필요) -->
+			<c:set var="i" value="0" />
+				<c:forEach items="${searchResultPosts}" var="posts"> <!-- 아이템이 2개이면 어떻게 할것인가?(댓글필요) -->
 					<div class="column" style="float: left; width:40%; margin:10px; display:inline; border:1px solid #5e615b; ">
-						<div>보드타입 맵핑필요</div>
+						<div> ${i} </div>
 					 	<div style="margin:4px;"> <h3>${posts.postTitle}</h3> </div>			
 					 	<div style="margin:4px;"> <p>${posts.postContents}</p></div>
 					 	<div style="margin:4px;"> ks-infosys-kin***</div>
 					 	<div style="margin:4px;">
-					 		 <i class="eye icon"></i>				 (조회수)
+					 		 <i class="eye icon"></i>${viewCountOfPosts[i].postCount}
 							 <i class="thumbs up outline icon"></i> (추천수)
 							 <i class="comment outline icon"></i>   (댓글수)
 						</div>
 				   		<div> 
-					  		${fn:substring(posts.postCreateDate,0,10)}
-					   		<div id="bookmarkSet">
+					  		<div style="float:left;">
+					  		${fn:substring(posts.postCreateDate,5,10)}
+					  		</div>
+					   		<div id="bookmarkSet" >
 					   			<a><i class="bookmark outline icon"></i></a>
 					   		</div>
 				   		</div>
 				   </div>
+		 		   <c:set var="i" value="${i+1}" />
 		 		</c:forEach>
 			</div>
 		</div>
    </div>
 
 </body>
+<!-- 
+					<div style="position:absolute;">
+						<div style="float:left; border:1px solid #5e615b;"> 
+							<a href=""><img src="" width=20px, height=20px style="margin:10px;" align="top"></a>
+						</div>
+						<div  style="border:1px solid #5e615b;">
+							<a href="">${searchResultCompany[0].companyName}</a>
+							<i class="star icon"></i>
+							<ul style="line-height:1px;  display:block;" >
+								<a href="">レビュー</a>　❘
+								<a href="">企業ポスト</a>　❘
+								<a href="">給料</a>
+							</ul>	
+						</div>
+					</div>
+ -->
+
 </html>
 
 

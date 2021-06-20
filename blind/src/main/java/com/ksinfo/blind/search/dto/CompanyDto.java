@@ -9,6 +9,8 @@ public class CompanyDto {
 	private String companyAddress;	// company_address character varying(200)
 	private String verifyFlag;		// verify_flag character(1) not null
 	private String closingFlag;		// closing_flag character(1) not null
+	
+	
 	public String getCompanyId() {
 		return companyId;
 	}
