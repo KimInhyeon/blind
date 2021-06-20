@@ -3,9 +3,11 @@ package com.ksinfo.blind.search.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ksinfo.blind.search.dto.BoardDto;
+import com.ksinfo.blind.search.dto.BookmarkDto;
 import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
 import com.ksinfo.blind.search.dto.PostCountInfDto;
@@ -22,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -35,6 +39,13 @@ public class SearchController {
 
 	@Autowired SearchService searchService;  // SearchService.java에서 선언된 DB의 자료형  
 	
+
+	@RequestMapping(value = "bookmarkChanege", method = RequestMethod.GET)
+	@ResponseBody 	
+	public int bookmarkChanege() { //나중에 리턴형을 BookmarkDto으로 할지 여부 결정필요.
+		//북마크 설정 mapper.xml을 통해 SQL 수정실시하도록 갱신예정.
+		return 1; //성공시 flag 개념으로 1을 성공의 개념으로 리턴.
+	}
 	
 	@RequestMapping("/search")  
 	public ModelAndView search(String searchKeyword, ModelAndView mav){	

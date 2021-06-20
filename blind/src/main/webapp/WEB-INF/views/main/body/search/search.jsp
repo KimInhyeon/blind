@@ -8,34 +8,26 @@
   <head>
     <meta charset="UTF-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<!--북마크 변경-자바스크립트-사용않기로 결정(사유:화면새로고침등을 실시해야 함.)
-	<script type= "text/javascript">
-		function innerHTMLTest(){
-			alert("bookmarkSet을 누르셨습니다.");
-			var bookmarkSet = document.getElementById("bookmarkSet");
-			bookmarkSet.innerHTML =	"<a><i class=" + 'bookmark icon' +"></i></a>";			
-		}
-	</script>
-	 -->
-	 
-	<!-- 제이쿼리 통해 북마크 변경안
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
 	<script>
-		function bookmarkChanege(){
-		    var bookmarkOnOffSet = $('#bookmarkSet').serialize();
-		    $.ajax({
-		        url: "/search/bookmarkChanege",
-		        data: book,
-		        type:"POST",
-		        cache: false
-		    }).done(function (fragment) {
-		         $("#list").replaceWith(fragment);
-		    });
-		    
-		}	
+		$(function(){
+		    $("#bookmarkSet").click(function(){
+			    $.ajax({
+					url: "bookmarkChanege",
+					dataType: "json",
+		   	     	type:"GET",
+					success: function(result){	//vo객체에 담긴 값이 result에 들어온다.
+						alert("북마크 성공"+result);
+						$("#bookmarkSet").html("<a><i class='bookmark icon'></i></a>");
+					},
+					error: function(){
+						alert("에러");
+					}				
+		    	});
+			});   
+		});
 	</script>
- -->
-	 
-	<title>検索結果 page</title>
+   <title>検索結果 page</title>
    </head>
    
    <body>

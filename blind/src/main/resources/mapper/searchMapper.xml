@@ -75,6 +75,19 @@
     SELECT count(post_id)FROM blind.post_mgt
     where #{boardId} = blind.post_mgt.board_id;
 </select>		 
+	
+<!-- 콤보박스의 정렬기준 옵션(최신순,추천순) -->
+<!-- 콤보박스의 정렬기준 옵션_최신순  -->
+<select id="sortPostBylatestDate" resultType="com.ksinfo.blind.search.dto.PostDto"> 
+SELECT * FROM blind.post_mgt
+ORDER BY post_create_date DESC;	 
+</select>		 
 	 
+<!-- 콤보박스의 정렬기준 옵션_추천순 -->	 
+<select id="sortPostByRecommendCounts" resultType="com.ksinfo.blind.search.dto.PostDto"> 
+<!-- (작성중) -->
+</select>		 
+
+
 </mapper>
 
