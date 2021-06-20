@@ -26,18 +26,18 @@ public class BoardDto {
 	}
 
 	public char getBoardAnonymousFlag() {
-		return boardAnonymousFlag;
+		return anonymousFlag;
 	}
 
 	public void setBoardAnonymousFlag(char boardAnonymousFlag) {
-		this.boardAnonymousFlag = boardAnonymousFlag;
+		this.anonymousFlag = boardAnonymousFlag;
 	}
 
 	public char getBoardLogicalDelFlag() {
-		return boardLogicalDelFlag;
+		return logicalDelFlag;
 	}
 
 	public void setBoardLogicalDelFlag(char boardLogicalDelFlag) {
-		this.boardLogicalDelFlag = boardLogicalDelFlag;
+		this.logicalDelFlag = boardLogicalDelFlag;
 	}
 }
