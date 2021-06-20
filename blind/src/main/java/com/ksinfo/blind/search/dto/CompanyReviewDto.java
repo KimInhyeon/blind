@@ -6,7 +6,7 @@ public class CompanyReviewDto {
 	
 	private String userId;			//리뷰작성유저id//user_id bigint not null
 	private String companyId;		//회사의id	//company_id bigint not null
-	private String jobGroupCode;	//직군코드		//job_group_code character(2) not null
+	private int jobGroupCode;	//직군코드		//job_group_code character(2) not null
 	private String allPoint;		//총점		//all_point numeric(2, 1) not null
 	private String simpleComment;  //한줄평 		// simple_comment character varying(60) not null
 	private String disadvantages;	//단점평가내용	// disadvantages character varying(400) not null	
@@ -23,10 +23,10 @@ public class CompanyReviewDto {
 	public void setCompanyId(String companyId) {
 		this.companyId = companyId;
 	}
-	public String getJobGroupCode() {
+	public int getJobGroupCode() {
 		return jobGroupCode;
 	}
-	public void setJobGroupCode(String jobGroupCode) {
+	public void setJobGroupCode(int jobGroupCode) {
 		this.jobGroupCode = jobGroupCode;
 	}
 	public String getAllPoint() {

@@ -96,7 +96,7 @@
 							<a href="">
 								<div>${companyReviews[0].allPoint}</div> 				
 								<div style="float:Right;">レビュー全部見る > </div>
-								<div>${companyReviews[0].jobGroupCode}</div>
+								<div>${jobGroupNameOfCompanyReviewer[0]}</div>
 								<div>${companyReviews[0].simpleComment}</div>
 								<div>${companyReviews[0].disadvantages}</div>
 							</a>

@@ -61,6 +61,10 @@
     where  #{companyId} = blind.company_mgt.company_id;
 </select>		
 
-	
+<select id="getJobGroupNameOfCompanyReviewer" resultType="String"> 
+    SELECT job_group_name FROM blind.job_group_mst
+    where cast(#{jobGroupCode} as char)  = blind.job_group_mst.job_group_code;
+</select>		
+	 
 </mapper>
 

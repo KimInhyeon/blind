@@ -56,10 +56,13 @@ public class SearchService {
 		return mapper.getWriterDataOfPosts(userId);	
 	}
 	
-	public List<String>  getWriterCompany (int companyId){
+	public List<String> getWriterCompany (int companyId){
 		return mapper.getWriterCompany(companyId);			
 	}
 	
+	public List<String> getJobGroupNameOfCompanyReviewer(int jobGroupCode){
+		return mapper.getJobGroupNameOfCompanyReviewer(jobGroupCode);			
+	}
 	
 }
 
