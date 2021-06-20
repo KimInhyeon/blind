@@ -72,6 +72,11 @@ public class SearchService {
 	public List<Integer> getBoardTopicCount(int boardId){
 		return mapper.getBoardTopicCount(boardId);			
 	} 
+	
+	
+	public List<PostDto> getsortPostBylatestDate(String searchKeyword){
+		return mapper.getsortPostBylatestDate(searchKeyword);					
+	} 
 }
 
 

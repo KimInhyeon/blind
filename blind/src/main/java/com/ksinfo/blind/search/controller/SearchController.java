@@ -47,6 +47,29 @@ public class SearchController {
 		return 1; //성공시 flag 개념으로 1을 성공의 개념으로 리턴.
 	}
 	
+	@RequestMapping(value = "sortPosts", method = RequestMethod.POST)
+	@ResponseBody 	
+	public ModelAndView sortPosts(int sortPostOption, String searchKeyword,  ModelAndView mav){ //나중에 리턴형을 BookmarkDto으로 할지 여부 결정필요.
+		logger.info("sortPosts");
+		logger.info("sortPostOption : "+sortPostOption + "searchKeyword : "+searchKeyword);
+		List<PostDto> searchResultPosts  = new ArrayList<>();  //검색을 재실시 한 다음 
+		
+		switch(sortPostOption) {
+			case 1 :
+				searchResultPosts = searchService.getsortPostBylatestDate(searchKeyword);	//검색을 재실시 한 다음 
+				mav.addObject("searchResultPosts", searchResultPosts);					
+				logger.info("sortPosts 리턴 데이터 설정.");		
+				break;
+				
+			case 2 :  break;
+			default : break;
+		}
+
+		mav.setViewName("main/search/search");
+		return mav;	
+	}
+	
+	
 	@RequestMapping("/search")  
 	public ModelAndView search(String searchKeyword, ModelAndView mav){	
 		logger.info("SearchController-search 시작");	
@@ -123,13 +146,6 @@ public class SearchController {
 			replyCountOfPosts.addAll(i, searchService.getReplyCountsOfPosts(Integer.parseInt(searchResultPosts.get(i).getPostId())) );			
 		}		
 		
-		
-
-
-		
-		logger.info("데이터준비 2단계.드롭버튼(토픽선택)의 카운트");	  
-		
-
 		
 		logger.info("데이터준비 3단계. mav에게 searchResultPosts가 받은 정보를 입력. 웹페이지에 출력할 수 있도록 실시.");		
 		//이전검색어 그대로 전달.

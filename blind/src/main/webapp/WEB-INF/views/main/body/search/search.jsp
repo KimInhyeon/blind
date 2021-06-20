@@ -24,7 +24,24 @@
 						alert("에러");
 					}				
 		    	});
-			});   
+			});  
+					 		    
+
+		    $("#sortPosts").on('change', function(){
+			    $.ajax({
+		   	     	type:"POST",
+			    	url: "sortPosts",
+					data : { sortPostOption : $("#sortPosts option:selected").val() 
+							 ,searchKeyword : $("input[name=searchKeyword]").val()
+						   },
+					success: function(result){	//vo객체에 담긴 값이 result에 들어온다.
+						alert("정렬옵션 리턴결과 : "+result);
+					},
+					error: function(result){
+						alert("에러"+result);
+					}				
+		    	});
+			}); 
 		});
 	</script>
    <title>検索結果 page</title>
@@ -111,10 +128,9 @@
 			   	</c:forEach>
 				</select>
 				
-				<select class="ui dropdown" style="border:1px solid #5e615b; float:right;">
-					<option value="">最新順</option>
-					<option value="">最新順</option>
-					<option value="">推薦順</option>
+				<select id="sortPosts" class="ui dropdown" style="border:1px solid #5e615b; float:right;">
+					<option value="1">最新順</option>
+					<option value="2">推薦順</option>
 				</select>
 			</div>   		
 		 <hr width = "100%" color = "#000000" size = "5"></hr>
@@ -134,8 +150,10 @@
 						</div>
 				   		<div> 
 					  		<div style="float:left;">
-					  		${fn:substring(posts.postCreateDate,5,10)}
-					  		</div>
+						  		${fn:substring(posts.postCreateDate,5,10)}
+						  		<!-- 최신순 정렬시 시간순으로 정렬여부 파악시 활용. ${posts.postCreateDate} -->
+						  		<!-- 본래 사용할 코드.(비상백업) ${fn:substring(posts.postCreateDate,5,10)}  -->
+						  		</div>
 					   		<div id="bookmarkSet" >
 					   			<a><i class="bookmark outline icon"></i></a>
 					   		</div>
@@ -146,24 +164,8 @@
 			</div>
 		</div>
    </div>
-
 </body>
-<!-- 
-					<div style="position:absolute;">
-						<div style="float:left; border:1px solid #5e615b;"> 
-							<a href=""><img src="" width=20px, height=20px style="margin:10px;" align="top"></a>
-						</div>
-						<div  style="border:1px solid #5e615b;">
-							<a href="">${searchResultCompany[0].companyName}</a>
-							<i class="star icon"></i>
-							<ul style="line-height:1px;  display:block;" >
-								<a href="">レビュー</a>　❘
-								<a href="">企業ポスト</a>　❘
-								<a href="">給料</a>
-							</ul>	
-						</div>
-					</div>
- -->
+
 
 </html>
 

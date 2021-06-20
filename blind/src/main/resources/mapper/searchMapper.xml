@@ -78,9 +78,11 @@
 	
 <!-- 콤보박스의 정렬기준 옵션(최신순,추천순) -->
 <!-- 콤보박스의 정렬기준 옵션_최신순  -->
-<select id="sortPostBylatestDate" resultType="com.ksinfo.blind.search.dto.PostDto"> 
+<select id="getsortPostBylatestDate" resultType="com.ksinfo.blind.search.dto.PostDto"> 
 SELECT * FROM blind.post_mgt
-ORDER BY post_create_date DESC;	 
+where post_title like '%'|| #{searchKeyword} ||'%'
+ORDER BY post_create_date DESC;
+
 </select>		 
 	 
 <!-- 콤보박스의 정렬기준 옵션_추천순 -->	 
