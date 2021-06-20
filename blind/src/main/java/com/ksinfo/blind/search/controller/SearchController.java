@@ -55,7 +55,8 @@ public class SearchController {
 
 		//토픽의 이름 집계
 		for(int i=0; i<searchResultPosts.size() ;i++ ) {
-			boardTopicName = searchService.getBoardTopicName(searchResultPosts.get(i).getBoardId()); //토픽의 이름 수신
+			boardTopicName.addAll(i, searchService.getBoardTopicName(searchResultPosts.get(i).getBoardId()) );
+			//boardTopicName = searchService.getBoardTopicName(searchResultPosts.get(i).getBoardId()); //토픽의 이름 수신
 		}
 		//토픽별 포스트의 갯수 집계
 		//for(int i=0; i<searchResultPosts.size() ;i++ ) {

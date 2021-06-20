@@ -112,8 +112,8 @@
 			<div>
 				<select class="ui dropdown" style="border:1px solid #5e615b;">
 		   		<option value="">トピック全体(${countPostAll})</option> <!-- 전체는 무조건 사용되므로 무조건 적용. -->
-				<c:forEach items="${boardTopicName}" var="topicName">
-			   		<option value="test"> ${topicName.boardTopicName} </option>
+				<c:forEach items="${boardTopicName}" var="menuTopicName">
+			   		<option value="test"> ${menuTopicName.boardTopicName} 	</option>
 			   	</c:forEach>
 				</select>
 				
@@ -129,7 +129,7 @@
 			<c:set var="i" value="0" />
 				<c:forEach items="${searchResultPosts}" var="posts"> <!-- 아이템이 2개이면 어떻게 할것인가?(댓글필요) -->
 					<div class="column" style="float: left; width:40%; margin:10px; display:inline; border:1px solid #5e615b; ">
-						<div> ${i} </div>
+						<div> ${boardTopicName[i].boardTopicName} </div>
 					 	<div style="margin:4px;"> <h3>${posts.postTitle}</h3> </div>			
 					 	<div style="margin:4px;"> <p>${posts.postContents}</p></div>
 					 	<div style="margin:4px;"> ${writerCompany[i]} - ${writerDataOfPosts[i].userNickName}  </div>
