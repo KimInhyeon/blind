@@ -47,23 +47,21 @@ public class SearchController {
 		//조회수는 POST_COUNT_INF테이블 통해 바로 로딩.
 		List<PostCountInfDto> viewCountOfPosts = new ArrayList<>(); //조회수(테이블 : POST_COUNT_INF)	 
 		
-		//															//추천수(테이블 : POST_RECOMMEND_INF)
-		
-		
-		//List<ReplyDto> replysOfPosts = new ArrayList<>();			//각 포스트에 해당하는 댓글들의 정보들을 모두 로드(테이블 : REPLY_MGT)
-		List<Integer>  replyCountOfPosts  = new ArrayList<>(); 		//각 포스트별 댓글 카운트.
+		//추천수,댓글수는 관련INF테이블에서 로드 불가관계로 select 시 count 명령통해 카운트하여 리턴하는 형태로 진행.	
+		List<Integer> recommendCountOfPosts = new ArrayList<>();	//추천수(테이블 : POST_RECOMMEND_INF)
+		List<Integer> replyCountOfPosts = new ArrayList<>(); 		//댓글수(각 포스트별 댓글 카운트.)
 
-		
+
 		//각 포스트별 조회수 확인 
 		for(int i=0; i<searchResultPosts.size() ;i++ ) {
 	        viewCountOfPosts.addAll(i, searchService.getViewCountOfPosts(Integer.parseInt(searchResultPosts.get(i).getPostId()) ) );
 		}
 
-		/*댓글의 모든 정보 로드(포스트에 해당하는 댓글들만)
+		//포스트별 추천수 카운트
 		for(int i=0; i < searchResultPosts.size() ;i++ ) {
-			replysOfPosts.addAll(i, searchService.getReplysOfPosts(Integer.parseInt(searchResultPosts.get(i).getPostId()) ));
-		}
-		*/
+			recommendCountOfPosts.addAll(i, searchService.getReplyCountsOfPosts(Integer.parseInt(searchResultPosts.get(i).getPostId())) );			
+		}		
+
 		
 		//포스트별 댓글수 카운트
 		for(int i=0; i < searchResultPosts.size() ;i++ ) {
@@ -139,6 +137,7 @@ public class SearchController {
 		
 		mav.addObject("searchResultPosts",searchResultPosts);	//검색어와 관련된 포스트(게시글)들 전달.
 		mav.addObject("viewCountOfPosts", viewCountOfPosts);	//각 포스트별 조회수 정보전달
+		mav.addObject("recommendCountOfPosts",recommendCountOfPosts);		//각 포스트별 추천수 정보전달
 		mav.addObject("replyCountOfPosts", replyCountOfPosts);	//각 포스트별 댓글수 정보전달
 		
 		

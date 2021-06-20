@@ -21,7 +21,7 @@ public interface SearchMapper {
 	List<CompanyReviewDto> getCompanyReviews(String searchKeyword);
 	List<PostCountInfDto> getViewCountOfPosts(int postId);
 	List<ReplyDto> getReplysOfPosts(int postId);
-	
+	List<Integer> getRecommendCountOfPosts(int postId);
 	List<Integer> getReplyCountsOfPosts(int postId);
 	//(2)창주님경우 ->페이지 출력을 페이지 카운트
 	//int getTotalRecordsCount(CompanySearchVO companySearchVO); //CompanySearchVO.java를 통해 객체 생성. 문제는 내용을 모르겠다.

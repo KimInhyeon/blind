@@ -136,7 +136,7 @@
 					 	<div style="margin:4px;"> ks-infosys-kin***</div>
 					 	<div style="margin:4px;">
 					 		 <i class="eye icon"></i>${viewCountOfPosts[i].postCount}
-							 <i class="thumbs up outline icon"></i> (추천수)
+							 <i class="thumbs up outline icon"></i> ${recommendCountOfPosts[i]}
 							 <i class="comment outline icon"></i>  ${replyCountOfPosts[i]}
 						</div>
 				   		<div> 

@@ -43,6 +43,10 @@ public class SearchService {
 	}
 
 	
+	public List<Integer> getRecommendCountOfPosts(int postId){
+		return mapper.getRecommendCountOfPosts(postId);	
+	}
+	
 	public 	List<Integer> getReplyCountsOfPosts(int postId){
 		return mapper.getReplyCountsOfPosts(postId);	
 	}
