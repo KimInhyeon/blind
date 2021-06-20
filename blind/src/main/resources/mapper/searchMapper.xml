@@ -39,10 +39,28 @@
     where  #{postId} = blind.reply_mgt.post_id;
 </select>	
 	
+	
+<select id="getRecommendCountOfPosts" resultType="int"> 
+    SELECT count(post_id) FROM blind.post_recommend_inf
+    where  #{postId} = blind.post_recommend_inf.post_id;
+</select>		
+	
+	
 <select id="getReplyCountsOfPosts" resultType="int"> 
     SELECT count(post_id) FROM blind.reply_mgt
     where  #{postId} = blind.reply_mgt.post_id;
 </select>	
+	
+<select id="getWriterDataOfPosts" resultType="com.ksinfo.blind.search.dto.UserDto"> 
+    SELECT * FROM blind.user_mgt
+    where  #{userId} = blind.user_mgt.user_id;
+</select>		
+	
+<select id="getWriterCompany" resultType="String"> 
+    SELECT company_name FROM blind.company_mgt
+    where  #{companyId} = blind.company_mgt.company_id;
+</select>		
+
 	
 </mapper>
 

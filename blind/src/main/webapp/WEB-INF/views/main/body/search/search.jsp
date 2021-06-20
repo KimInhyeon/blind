@@ -133,7 +133,7 @@
 						<div> ${i} </div>
 					 	<div style="margin:4px;"> <h3>${posts.postTitle}</h3> </div>			
 					 	<div style="margin:4px;"> <p>${posts.postContents}</p></div>
-					 	<div style="margin:4px;"> ks-infosys-kin***</div>
+					 	<div style="margin:4px;"> ${writerCompany[i]} - ${writerDataOfPosts[i].userNickName}  </div>
 					 	<div style="margin:4px;">
 					 		 <i class="eye icon"></i>${viewCountOfPosts[i].postCount}
 							 <i class="thumbs up outline icon"></i> ${recommendCountOfPosts[i]}

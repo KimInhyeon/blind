@@ -6,16 +6,10 @@ public class UserDto {
 	private String userNickName;		// user_nickName character varying(30)
 	private String nickNamechangeDate;	// nickName_change_date date not null
 	private String companyId;			// company_id bigint
-	private char   userLogicalDelFlag; 	// logical_del_flag character(1) not null
+	private char   logicalDelFlag; 	// logical_del_flag character(1) not null
 
 
 	//3.USER_MGT //유저관리 테이블	
-
-
-	public char getUserLogicalDelFlag() {
-		return userLogicalDelFlag;
-	}
-
 	public int getUserId() {
 		return userId;
 	}
@@ -48,8 +42,13 @@ public class UserDto {
 		this.companyId = companyId;
 	}
 
-	public void setUserLogicalDelFlag(char userLogicalDelFlag) {
-		this.userLogicalDelFlag = userLogicalDelFlag;
+	public char getLogicalDelFlag() {
+		return logicalDelFlag;
 	}
 
+	public void setLogicalDelFlag(char logicalDelFlag) {
+		this.logicalDelFlag = logicalDelFlag;
+	}
+
+	
 }

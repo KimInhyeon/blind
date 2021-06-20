@@ -10,6 +10,7 @@ import com.ksinfo.blind.search.dto.PostCountInfDto;
 import com.ksinfo.blind.search.dto.PostDto;
 import com.ksinfo.blind.search.dto.ReplyDto;
 import com.ksinfo.blind.search.dto.SearchDto;
+import com.ksinfo.blind.search.dto.UserDto;
 import com.ksinfo.blind.search.mapper.SearchMapper;
 
 @Service 
@@ -47,11 +48,17 @@ public class SearchService {
 		return mapper.getRecommendCountOfPosts(postId);	
 	}
 	
-	public 	List<Integer> getReplyCountsOfPosts(int postId){
+	public List<Integer> getReplyCountsOfPosts(int postId){
 		return mapper.getReplyCountsOfPosts(postId);	
 	}
 	
-	//	List<Integer> getReplyCountsOfPosts(int postId);
+	public List<UserDto> getWriterDataOfPosts(int userId){
+		return mapper.getWriterDataOfPosts(userId);	
+	}
+	
+	public List<String>  getWriterCompany (int companyId){
+		return mapper.getWriterCompany(companyId);			
+	}
 	
 	
 }
