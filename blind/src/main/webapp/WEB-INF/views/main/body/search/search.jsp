@@ -10,39 +10,49 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
 	<script>
-		$(function(){
-		    $("#bookmarkSet").click(function(){
-			    $.ajax({
-					url: "bookmarkChanege",
-					dataType: "json",
-		   	     	type:"GET",
-					success: function(result){	//vo객체에 담긴 값이 result에 들어온다.
-						alert("북마크 성공"+result);
-						$("#bookmarkSet").html("<a><i class='bookmark icon'></i></a>");
-					},
-					error: function(){
-						alert("에러");
-					}				
-		    	});
-			});  
-					 		    
+	//	$(function(){
+	//	    $("#bookmarkSet").click(function(){
+	//		    $.ajax({
+	//				url: "bookmarkChanege",
+	//				dataType: "json",
+	//	   	     	type:"GET",
+	//				success: function(result){	//vo객체에 담긴 값이 result에 들어온다.
+	//					alert("북마크 성공"+result);
+	//					$("#bookmarkSet").html("<a><i class='bookmark icon'></i></a>");
+	//				},
+	//				error: function(){
+	//					alert("에러");
+	//				}				
+	//	    	});
+	//		});  
+			function bookmarkSet(postId){
+				alert(postId); //postid를 컨트롤러에게 넘겨줘서 북마크 처리가능.
+				var bookmarkId = "#bookmarkSet"+postId;
+				$(bookmarkId).html("<a><i class='bookmark icon'></i></a>");
+			}
+	
 
 		    $("#sortPosts").on('change', function(){
 			    $.ajax({
 		   	     	type:"POST",
 			    	url: "sortPosts",
-					data : { sortPostOption : $("#sortPosts option:selected").val() 
-							 ,searchKeyword : $("input[name=searchKeyword]").val()
+					data : { sortPostOption : $("#sortPosts option:selected").val() //값 1:최신순 정렬, 값 2:추천순정렬
+							 ,searchKeyword : $("input[name=searchKeyword]").val()  //검색창의 검색어
 						   },
-					success: function(result){	//vo객체에 담긴 값이 result에 들어온다.
-						alert("정렬옵션 리턴결과 : "+result);
+					dataType:"json",
+					success: function(result){
+						//alert("정렬옵션 리턴결과 : "+result);
+						$.each(result,function(key, value){
+							var arr = value.postTitle;
+							console.log(arr);
+						});
 					},
 					error: function(result){
 						alert("에러"+result);
 					}				
 		    	});
 			}); 
-		});
+//		});
 	</script>
    <title>検索結果 page</title>
    </head>
@@ -69,14 +79,14 @@
 	
 	<!-- 검색결과1. 기업정보 / 검색어가 기업이 아닌경우 출력되지 않는다. -->      
 		<c:if test="${searchResultCompanyDataFlag eq '1'}"><!-- searchResultCompanyDataFlag의 값이 1이면 회사정보 있으며, 이에따라 출력실시. -->
-			<div class="ui stacked segment">
+			<div class="ui stacked segment" style="border:1px solid #33333;">
 	   			<h3>企業</h3>
 		   		<div  class="ui stacked segment"  style="height: auto; width: 100%; border:1px solid #5e615b; padding:20;" >
 					<!-- 검색결과1.1. 기업의 기본정보페이지(총평점 및 리뷰/게시글/연봉링크) -->
 					<!-- 회사이름,별점 안내 및  리뷰,게시글,연봉 버튼 생성 -->
 					<div style="position:absolute;">
 						<div style="float:left; border:1px solid #5e615b;"> 
-							<a href=""><img src="" width=40px, height=40px style="margin:5px;" align="top"></a><!-- 회사의 안내페이지 링크 주도록 설정. -->
+							<a href=""><img  src="${pageContext.request.contextPath}/resources/images/company/${searchResultCompany[0].companyId}.png" width=40px, height=40px style="margin:5px;" align="top"></a><!-- 회사의 안내페이지 링크 주도록 설정. -->
 						</div>
 						<div  style="border:1px solid #5e615b;">
 							<a href="">${searchResultCompany[0].companyName}</a>
@@ -127,8 +137,7 @@
 		 		    <c:set var="i" value="${i+1}" />
 			   	</c:forEach>
 				</select>
-				
-				<select id="sortPosts" class="ui dropdown" style="border:1px solid #5e615b; float:right;">
+				<select id="sortPosts" style="border:1px solid #5e615b; float:right;">
 					<option value="1">最新順</option>
 					<option value="2">推薦順</option>
 				</select>
@@ -154,7 +163,7 @@
 						  		<!-- 최신순 정렬시 시간순으로 정렬여부 파악시 활용. ${posts.postCreateDate} -->
 						  		<!-- 본래 사용할 코드.(비상백업) ${fn:substring(posts.postCreateDate,5,10)}  -->
 						  		</div>
-					   		<div id="bookmarkSet" >
+					   		<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" >
 					   			<a><i class="bookmark outline icon"></i></a>
 					   		</div>
 				   		</div>

@@ -47,9 +47,9 @@ public class SearchController {
 		return 1; //성공시 flag 개념으로 1을 성공의 개념으로 리턴.
 	}
 	
-	@RequestMapping(value = "sortPosts", method = RequestMethod.POST)
+	@RequestMapping(value = "sortPosts", method = RequestMethod.POST, produces="application/json")
 	@ResponseBody 	
-	public ModelAndView sortPosts(int sortPostOption, String searchKeyword,  ModelAndView mav){ //나중에 리턴형을 BookmarkDto으로 할지 여부 결정필요.
+	public List<PostDto> sortPosts(int sortPostOption, String searchKeyword){ 
 		logger.info("sortPosts");
 		logger.info("sortPostOption : "+sortPostOption + "searchKeyword : "+searchKeyword);
 		List<PostDto> searchResultPosts  = new ArrayList<>();  //검색을 재실시 한 다음 
@@ -57,7 +57,7 @@ public class SearchController {
 		switch(sortPostOption) {
 			case 1 :
 				searchResultPosts = searchService.getsortPostBylatestDate(searchKeyword);	//검색을 재실시 한 다음 
-				mav.addObject("searchResultPosts", searchResultPosts);					
+				//mav.addObject("searchResultPosts", searchResultPosts);					
 				logger.info("sortPosts 리턴 데이터 설정.");		
 				break;
 				
@@ -65,8 +65,7 @@ public class SearchController {
 			default : break;
 		}
 
-		mav.setViewName("main/search/search");
-		return mav;	
+		return searchResultPosts;	
 	}
 	
 	
@@ -166,7 +165,7 @@ public class SearchController {
 		//2.2 포스트출력
 		mav.addObject("searchResultPosts",searchResultPosts);			//검색어와 관련된 포스트(게시글)들 전달.
 		mav.addObject("writerDataOfPosts",writerDataOfPosts);			//포스트 작성자의 닉네임 정보
-		mav.addObject("writerCompany",writerCompany);			//포스트 작성자의 근무회사 정보		
+		mav.addObject("writerCompany",writerCompany);					//포스트 작성자의 근무회사 정보		
 		mav.addObject("viewCountOfPosts", viewCountOfPosts);			//각 포스트별 조회수 정보전달
 		mav.addObject("recommendCountOfPosts",recommendCountOfPosts);	//각 포스트별 추천수 정보전달
 		mav.addObject("replyCountOfPosts", replyCountOfPosts);			//각 포스트별 댓글수 정보전달
