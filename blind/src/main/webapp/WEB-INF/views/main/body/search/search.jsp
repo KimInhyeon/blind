@@ -10,49 +10,50 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
 	<script>
-	//	$(function(){
-	//	    $("#bookmarkSet").click(function(){
-	//		    $.ajax({
-	//				url: "bookmarkChanege",
-	//				dataType: "json",
-	//	   	     	type:"GET",
-	//				success: function(result){	//vo객체에 담긴 값이 result에 들어온다.
-	//					alert("북마크 성공"+result);
-	//					$("#bookmarkSet").html("<a><i class='bookmark icon'></i></a>");
-	//				},
-	//				error: function(){
-	//					alert("에러");
-	//				}				
-	//	    	});
-	//		});  
-			function bookmarkSet(postId){
-				alert(postId); //postid를 컨트롤러에게 넘겨줘서 북마크 처리가능.
-				var bookmarkId = "#bookmarkSet"+postId;
-				$(bookmarkId).html("<a><i class='bookmark icon'></i></a>");
-			}
+	function bookmarkSet(postId){
+		alert(postId); //postid를 컨트롤러에게 넘겨줘서 북마크 처리가능.
+		var bookmarkId = "#bookmarkSet"+postId;
+		$(bookmarkId).html("<a><i class='bookmark icon'></i></a>");
+	}
 	
-
-		    $("#sortPosts").on('change', function(){
-			    $.ajax({
-		   	     	type:"POST",
-			    	url: "sortPosts",
-					data : { sortPostOption : $("#sortPosts option:selected").val() //값 1:최신순 정렬, 값 2:추천순정렬
-							 ,searchKeyword : $("input[name=searchKeyword]").val()  //검색창의 검색어
-						   },
-					dataType:"json",
-					success: function(result){
-						//alert("정렬옵션 리턴결과 : "+result);
-						$.each(result,function(key, value){
-							var arr = value.postTitle;
-							console.log(arr);
-						});
-					},
-					error: function(result){
-						alert("에러"+result);
-					}				
-		    	});
-			}); 
-//		});
+	$(function(){
+		$("#sortPosts").on('change', function(){
+	    	$.ajax({
+				type:"POST",
+			    url: "sortPosts",
+				data : { sortPostOption : $("#sortPosts option:selected").val() //값 1:최신순 정렬, 값 2:추천순정렬
+						 ,searchKeyword : $("input[name=searchKeyword]").val()  //검색창의 검색어
+					   },
+				dataType:"json",
+				success: function(result){
+					console.log(result);
+					//값 정상 전달여부 확인위한 콘솔로그.
+					$.each(result,function(key, value){
+					var arr = value.postTitle;
+					console.log(arr);
+					});
+					
+					//포스트리스트의 화면재구성 시작
+					//주요틀 재구성
+					$(postList).html("");
+					//$(postList).append("<div class='column' style='float: left; width:40%; margin:10px; display:inline; border:1px solid #5e615b;'>");
+					//반복문통해 각 포스트들 출력진행
+					$.each(result, function (key, value) {	
+						$(postList).append("<div class='column' style='float: left; width:40%; margin:10px; display:inline; border:1px solid #5e615b;'>"
+	                						+"<div>"+value.boardTopicName+"</div>"
+						                    +"<div style='margin:4px;'> <h3>" +value.postTitle+ "</h3> </div>");
+					});
+	                
+	                //마지막 부분 출력
+                	$(postList).append("</div>");							
+	                
+				},
+				error: function(result){
+					alert("에러"+result);
+				}				
+			});
+		}); 
+	});
 	</script>
    <title>検索結果 page</title>
    </head>
@@ -144,7 +145,7 @@
 			</div>   		
 		 <hr width = "100%" color = "#000000" size = "5"></hr>
 			<!-- 게시글(포스트)들 출력 -->
-			<div class="ui four column grid">
+			<div class="ui four column grid" id="postList">
 			<c:set var="i" value="0" />
 				<c:forEach items="${searchResultPosts}" var="posts"> <!-- 아이템이 2개이면 어떻게 할것인가?(댓글필요) -->
 					<div class="column" style="float: left; width:40%; margin:10px; display:inline; border:1px solid #5e615b; ">
