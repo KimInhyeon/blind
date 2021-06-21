@@ -10,6 +10,7 @@ import com.ksinfo.blind.search.dto.BoardDto;
 import com.ksinfo.blind.search.dto.BookmarkDto;
 import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
+import com.ksinfo.blind.search.dto.PostAlignDto;
 import com.ksinfo.blind.search.dto.PostCountInfDto;
 import com.ksinfo.blind.search.dto.PostDto;
 import com.ksinfo.blind.search.dto.ReplyDto;
@@ -49,21 +50,23 @@ public class SearchController {
 	
 	@RequestMapping(value = "sortPosts", method = RequestMethod.POST, produces="application/json")
 	@ResponseBody 	
-	public List<PostDto> sortPosts(int sortPostOption, String searchKeyword){ 
+	public List<PostAlignDto> sortPosts(int sortPostOption, String searchKeyword){ 
 		logger.info("sortPosts");
 		logger.info("sortPostOption : "+sortPostOption + "searchKeyword : "+searchKeyword);
-		List<PostDto> searchResultPosts  = new ArrayList<>();  //검색을 재실시 한 다음 
-		
+
+		List<PostAlignDto>  searchResultPosts  = new ArrayList<>();  		//재검색을 실시하여 해당 SQL의 order by등이 적용된 출력.
 		switch(sortPostOption) {
 			case 1 :
-				searchResultPosts = searchService.getsortPostBylatestDate(searchKeyword);	//검색을 재실시 한 다음 
-				//mav.addObject("searchResultPosts", searchResultPosts);					
+				searchResultPosts = searchService.getsortPostBylatestDate(searchKeyword); //검색을 재실시 한 다음 
 				logger.info("sortPosts 리턴 데이터 설정.");		
+				break;			
+			case 2 : 
+				logger.info("sortPosts-2번 선택. 아직 실행사항 미작성.");		
 				break;
-				
-			case 2 :  break;
+			
 			default : break;
 		}
+
 
 		return searchResultPosts;	
 	}
@@ -108,6 +111,7 @@ public class SearchController {
 		//드롭버튼 관련 기능들
 		List<BoardDto> boardTopicName = new ArrayList<>(); //토픽의 이름 수신
 		List<Integer> boardTopicCount = new ArrayList<>(); //토픽별 포스트의 갯수 카운트(총갯수 제외)
+
 		int	boardTopicCountOfAll=0;						   //토픽별 포스트의 총갯수 카운트
 		//드롭버튼 토픽의 이름 집계
 		for(int i=0; i<searchResultPosts.size() ;i++ ) {

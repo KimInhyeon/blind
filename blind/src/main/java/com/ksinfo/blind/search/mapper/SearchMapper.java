@@ -9,11 +9,13 @@ import org.springframework.stereotype.Repository;
 import com.ksinfo.blind.search.dto.BoardDto;
 import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
+import com.ksinfo.blind.search.dto.PostAlignDto;
 import com.ksinfo.blind.search.dto.PostCountInfDto;
 import com.ksinfo.blind.search.dto.PostDto;
 import com.ksinfo.blind.search.dto.ReplyDto;
 import com.ksinfo.blind.search.dto.SearchDto;
 import com.ksinfo.blind.search.dto.UserDto;
+
 
 @Repository
 @Mapper 
@@ -31,7 +33,8 @@ public interface SearchMapper {
 	List<String>  getJobGroupNameOfCompanyReviewer(int jobGroupCode);	
 	List<BoardDto> getBoardTopicName(int boardId);
 	List<Integer> getBoardTopicCount(int boardId); 
-	List<PostDto> getsortPostBylatestDate(String searchKeyword); 	
+	//List<PostDto> getsortPostBylatestDate(String searchKeyword); 	
+	List<PostAlignDto> getsortPostBylatestDate(String searchKeyword);
 	//(2)창주님경우 ->페이지 출력을 페이지 카운트
 	//int getTotalRecordsCount(CompanySearchVO companySearchVO); //CompanySearchVO.java를 통해 객체 생성. 문제는 내용을 모르겠다.
 	//List<CompanyVO>getCompanyList(RowBounds rowBounds, CompanySearchVO companySearchVO);

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.ksinfo.blind.search.dto.BoardDto;
 import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
+import com.ksinfo.blind.search.dto.PostAlignDto;
 import com.ksinfo.blind.search.dto.PostCountInfDto;
 import com.ksinfo.blind.search.dto.PostDto;
 import com.ksinfo.blind.search.dto.ReplyDto;
@@ -74,7 +75,7 @@ public class SearchService {
 	} 
 	
 	
-	public List<PostDto> getsortPostBylatestDate(String searchKeyword){
+	public List<PostAlignDto> getsortPostBylatestDate(String searchKeyword){
 		return mapper.getsortPostBylatestDate(searchKeyword);					
 	} 
 }

@@ -24,7 +24,7 @@
 <select id="getSearchPosts" resultType="com.ksinfo.blind.search.dto.PostDto"> 
     SELECT * FROM blind.post_mgt
     where post_title like '%'|| #{searchKeyword} ||'%' ;  
-</select><!-- orderby 실시(추천순,작성일최신순) recommandCount / createDate를 조인하여실시.-->
+</select>
 
 
 <select id="getViewCountOfPosts" resultType="com.ksinfo.blind.search.dto.PostCountInfDto"> 
@@ -78,11 +78,33 @@
 	
 <!-- 콤보박스의 정렬기준 옵션(최신순,추천순) -->
 <!-- 콤보박스의 정렬기준 옵션_최신순  -->
-<select id="getsortPostBylatestDate" resultType="com.ksinfo.blind.search.dto.PostDto"> 
-SELECT * FROM blind.post_mgt
+<select id="getsortPostBylatestDate" resultType="com.ksinfo.blind.search.dto.PostAlignDto"> 
+
+SELECT DISTINCT
+	blind.board_mgt.board_topic_name  --토픽(게시판)명
+	,blind.post_mgt.post_title		  --게시글 주제
+	,blind.post_mgt.post_contents	  --게시글 내용
+	,blind.user_mgt.user_nickname	  --작성자의 닉네임
+	,blind.post_count_inf.post_count  --글의 조회수
+	,blind.post_mgt.post_create_date  --게시글의 최초작성일
+FROM blind.post_mgt
+	LEFT JOIN blind.post_count_inf		--JOIN(post_count)
+	ON blind.post_mgt.post_id = blind.post_count_inf.post_id
+	LEFT JOIN blind.board_mgt			--JOIN(board_topic_name)
+	ON blind.post_mgt.board_id = blind.board_mgt.board_id
+	LEFT JOIN blind.user_mgt			--JOIN(user_nickname)
+	ON blind.post_mgt.user_id = blind.user_mgt.user_id
+	LEFT JOIN blind.post_recommend_inf			--JOIN(user_nickname)
+	ON blind.post_mgt.post_id = blind.post_recommend_inf.post_id
 where post_title like '%'|| #{searchKeyword} ||'%'
 ORDER BY post_create_date DESC;
 
+
+<!-- SELECT * FROM blind.post_mgt
+where post_title like '%'|| #{searchKeyword} ||'%'
+ORDER BY post_create_date DESC;
+ -->
+ 
 </select>		 
 	 
 <!-- 콤보박스의 정렬기준 옵션_추천순 -->	 
