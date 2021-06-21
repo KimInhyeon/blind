@@ -41,7 +41,22 @@
 					$.each(result, function (key, value) {	
 						$(postList).append("<div class='column' style='float: left; width:40%; margin:10px; display:inline; border:1px solid #5e615b;'>"
 	                						+"<div>"+value.boardTopicName+"</div>"
-						                    +"<div style='margin:4px;'> <h3>" +value.postTitle+ "</h3> </div>");
+						                    +"<div style='margin:4px;'> <h3>" +value.postTitle+ "</h3> </div>"
+						                    +"<div style='margin:4px;'> <p>"+value.postContents+"</p></div>" 
+						                    +"<div style='margin:4px;'> " +value.userNickName +  "</div>"       
+						                    +"<div style='margin:4px;'>"
+						                        +"<i class='eye icon'></i>" + value.postCount
+						                        +"<i class='thumbs up outline icon'></i>" +value.recommendCountOfPosts
+						                        +"<i class='comment outline icon'></i>"  +value.replyCountOfPosts
+						                    +"</div>"
+						                    +"<div>" 
+						                    	+"<div style='float:left;'>"
+						                    	+ value.postCreateDate
+						                    +"</div>"
+						              			+"<div id='bookmarkSet"+value.postId +" ' onclick='bookmarkSet(" +value.postId + ")'>"
+						                 		   +"<a><i class='bookmark outline icon'></i></a>"
+						                		+"</div>"
+						          			+"</div>");
 					});
 	                
 	                //마지막 부분 출력
