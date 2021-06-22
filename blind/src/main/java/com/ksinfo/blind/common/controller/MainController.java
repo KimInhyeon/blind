@@ -9,10 +9,10 @@ import org.springframework.web.servlet.ModelAndView;
 public class MainController {
 
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
-    public ModelAndView mainView() {
-        ModelAndView mv = new ModelAndView();
-        
-        mv.setViewName("main/main");
-        return mv;
-    }
+	public ModelAndView mainView() {
+		ModelAndView mv = new ModelAndView();
+
+		mv.setViewName("main/main");
+		return mv;
+	}
 }

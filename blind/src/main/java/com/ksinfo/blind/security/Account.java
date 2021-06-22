@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class Account implements UserDetails {
 	private static final long serialVersionUID = 1L;
-	
+
 	private long userId;
 	private int userGeneration;
 	private String lastGenerationFlag;

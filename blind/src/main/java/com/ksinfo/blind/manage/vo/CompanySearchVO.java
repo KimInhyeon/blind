@@ -18,4 +18,20 @@ public class CompanySearchVO {
 		this.searchTarget = searchTarget == null ? "" : searchTarget;
 		this.searchKeyword = searchKeyword == null ? "" : searchKeyword;
 	}
+
+	public byte getVerifyFlag() {
+		return verifyFlag;
+	}
+
+	public byte getClosingFlag() {
+		return closingFlag;
+	}
+
+	public String getSearchTarget() {
+		return searchTarget;
+	}
+
+	public String getSearchKeyword() {
+		return searchKeyword;
+	}
 }

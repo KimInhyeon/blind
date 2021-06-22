@@ -11,18 +11,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MessageUtils {
-	
-    @Autowired
-    private MessageSource messageSource;
 
-    private MessageSourceAccessor accessor;
-    
-    @PostConstruct
-    private void init() {
-        accessor = new MessageSourceAccessor(messageSource, Locale.JAPAN);
-    }
+	@Autowired
+	private MessageSource messageSource;
 
-    public String getMessage(String code) {
-        return accessor.getMessage(code);
-    }
+	private MessageSourceAccessor accessor;
+
+	@PostConstruct
+	private void init() {
+		accessor = new MessageSourceAccessor(messageSource, Locale.JAPAN);
+	}
+
+	public String getMessage(String code) {
+		return accessor.getMessage(code);
+	}
 }
