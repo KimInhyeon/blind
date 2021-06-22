@@ -26,7 +26,7 @@
 				</choose>
 				LIKE '%' || #{searchKeyword} || '%'
 			</if>
-		</where>
+		</where>;
 	</select>
 
 	<select id="getCompanyList" parameterType="com.ksinfo.blind.manage.vo.CompanySearchVO" resultType="com.ksinfo.blind.manage.vo.CompanyVO">
@@ -35,19 +35,18 @@
 			verify_flag,
 			closing_flag,
 			company_name,
-			company_mgt.business_type_code,
-			business_type_name,
+			business_type_code,
 			company_address,
 			TO_CHAR(founding_date, 'YYYY-MM-DD') AS founding_date,
 			workers_count,
 			company_domain,
+			company_homepage,
+			company_explain,
 			user_nickName,
 			TO_CHAR(app_date, 'YYYY-MM-DD') AS app_date
 		FROM blind.company_mgt
 		INNER JOIN blind.user_mgt
 			ON company_mgt.user_id = user_mgt.user_id
-		INNER JOIN blind.business_type_mst
-			ON company_mgt.business_type_code = business_type_mst.business_type_code
 		<where>
 			<if test="searchKeyword neq ''">
 				<choose>
@@ -68,4 +67,66 @@
 		</where>
 		ORDER BY company_id;
 	</select>
+
+	<select id="getBusinessTypeList" resultType="com.ksinfo.blind.manage.vo.BusinessTypeVO">
+		SELECT * FROM blind.business_type_mst ORDER BY business_type_id;
+	</select>
+
+	<insert id="applyCompany">
+		INSERT INTO
+			blind.company_mgt
+		VALUES (
+			DEFAULT,
+			#{userId},
+			#{companyName},
+			#{businessTypeCode},
+			#{companyAddress},
+			CAST(#{foundingDate} AS DATE),
+			#{workersCount},
+			now(),
+			#{companyDomain},
+			#{companyHomepage},
+			#{companyExplain},
+			#{verifyFlag},
+			#{closingFlag},
+			#{userId},
+			now(),
+			#{userId},
+			now(),
+			'0'
+		);
+	</insert>
+
+	<update id="updateCompany">
+		UPDATE
+			blind.company_mgt
+		SET
+			company_name = #{companyName},
+			business_type_code = #{businessTypeCode},
+			company_address = #{companyAddress},
+			founding_date = CAST(#{foundingDate} AS DATE),
+			workers_count = #{workersCount},
+			company_domain = #{companyDomain},
+			company_homepage = #{companyHomepage},
+			company_explain = #{companyExplain},
+			closing_flag = #{closingFlag},
+			rec_update_user_id = #{userId},
+			rec_update_date = now()
+		WHERE
+			company_id = CAST(#{companyId} AS BIGINT);
+	</update>
+
+	<update id="updateVerify">
+		UPDATE
+			blind.company_mgt
+		SET
+			verify_flag = #{verifyFlag},
+		    rec_update_user_id = #{userId},
+		    rec_update_date = now()
+		WHERE
+			company_id IN
+				<foreach collection="companyIdList" item="companyId" open="(" close=")" separator=",">
+					CAST(#{companyId} AS BIGINT)
+				</foreach>;
+	</update>
 </mapper>

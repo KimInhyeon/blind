@@ -23,6 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
+		.antMatchers("/manage/**").hasRole("SV")
 		.antMatchers("/companyMain/**", "/topicMain/**").hasRole("RM")
 		.antMatchers("/companyMain/**", "/topicMain/**").hasRole("NM")
 		.antMatchers("/", "/main", "/registMember").permitAll()
