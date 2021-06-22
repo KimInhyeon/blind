@@ -7,27 +7,27 @@
 	<meta http-equiv="Expires" content="0"/>
 	<meta http-equiv="Pragma" content="no-cache"/>
 
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/common.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/messageId.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/common.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/messageId.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/dist/semantic.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/dist/semantic.min.css"/>
 	<script>
-        $(document).ready(function () {
-            $('.ui.dropdown.item').dropdown();
+		$(document).ready(function () {
+			$('.ui.dropdown.item').dropdown();
 
-            $('.message .close')
-                .on('click', function () {
-                    $(this)
-                        .closest('.message')
-                        .transition('fade');
-                });
+			$('.message .close')
+				.on('click', function () {
+					$(this)
+						.closest('.message')
+						.transition('fade');
+				});
 
-            $('.clickMenu').click(function () {
-                $(this).children('a').get(0).click();
-            });
-        });
+			$('.clickMenu').click(function () {
+				$(this).children('a').get(0).click();
+			});
+		});
 	</script>
 
 	<title>KSINFOSYS_BLIND PROTOTYPE</title>
