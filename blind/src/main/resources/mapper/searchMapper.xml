@@ -26,6 +26,11 @@
     where post_title like '%'|| #{searchKeyword} ||'%' ;  
 </select>
 
+<select id="getPostsOfOneTopic" parameterType="java.util.Map" resultType="com.ksinfo.blind.search.dto.PostDto"> 
+    SELECT * FROM blind.post_mgt
+    where post_title like '%'|| #{searchKeyword} ||'%' and board_id = #{boardId};  
+</select>
+
 
 <select id="getViewCountOfPosts" resultType="com.ksinfo.blind.search.dto.PostCountInfDto"> 
     <!-- SELECT blind.post_count_inf.post_count FROM blind.blind.post_count_inf -->

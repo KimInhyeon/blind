@@ -78,6 +78,12 @@ public class SearchService {
 	public List<PostAlignDto> getsortPostBylatestDate(String searchKeyword){
 		return mapper.getsortPostBylatestDate(searchKeyword);					
 	} 
+
+	public List<PostDto> getPostsOfOneTopic(int selectBoardId, String searchKeyword ){
+		return mapper.getPostsOfOneTopic(selectBoardId ,searchKeyword);							
+	}
+	
+	
 }
 
 

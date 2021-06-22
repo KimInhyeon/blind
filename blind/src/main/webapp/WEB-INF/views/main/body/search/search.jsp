@@ -17,6 +17,29 @@
 	}
 	
 	$(function(){
+		$("#viewPostsOfOneTopic").on('change', function(){					
+	    	$.ajax({
+				type:"POST",
+			    url: "viewPostsOfOneTopic",
+				data : { selectBoardId : $("#viewPostsOfOneTopic option:selected").val()//-1:전체 출력으로 실시. -1이외는 selecteTopicNumber에 따라 1개 토픽관련 포스트만 출력.
+						 ,searchKeyword : $("input[name=searchKeyword]").val() 			 //검색창의 검색어
+				 	   },
+				dataType:"json",
+				success: function(){
+					alert("success");
+					//console.log(result);
+					//값 정상 전달여부 확인위한 콘솔로그.
+					//$.each(result,function(key, value){
+					//var arr = value.postTitle;
+					///console.log(arr);
+				},
+				error: function(){
+					alert("에러");
+				}				
+			});
+		}); 
+	
+		
 		$("#sortPosts").on('change', function(){
 	    	$.ajax({
 				type:"POST",
@@ -143,16 +166,19 @@
 
 	<!-- 검색결과2. 토픽(게시글) -->
 		<div class="ui stacked segment" style="height: auto; width: 100%; border:1px solid #5e615b;" >
-			<!-- 드롭버튼 2개(토픽선택, 정렬설정) -->
+			<!-- 드롭버튼 - 토픽선택, 정렬설정 -->
+			<!-- 드롭버튼(1)토픽선택 -->
 			<div>
-				<select class="ui dropdown" style="border:1px solid #5e615b;">
-				<c:set var="i" value="0" />
-		   		<option value="">トピック全体( ${boardTopicCountOfAll} )</option> <!-- 전체는 무조건 사용되므로 무조건 적용. -->
+				<select id="viewPostsOfOneTopic" class="ui dropdown" style="border:1px solid #5e615b;">
+				<option value="-1">トピック全体( ${boardTopicCountOfAll} )</option> <!-- 전체는 무조건 사용되므로 무조건 적용. -->
+			    <c:set var="i" value="0" />
 				<c:forEach items="${boardTopicName}" var="menuTopicName">
-			   		<option value="test"> ${menuTopicName.boardTopicName} ( ${boardTopicCount[i]} )</option>
-		 		    <c:set var="i" value="${i+1}" />
+				    <option value="${i}"> ${menuTopicName.boardTopicName} ( ${boardTopicCount[i]} )</option>
+                    <c:set var="i" value="${i+1}" />
 			   	</c:forEach>
 				</select>
+				
+				<!-- 드롭버튼(2)정렬설정 --> 		
 				<select id="sortPosts" style="border:1px solid #5e615b; float:right;">
 					<option value="1">最新順</option>
 					<option value="2">推薦順</option>
@@ -175,9 +201,7 @@
 						</div>
 				   		<div> 
 					  		<div style="float:left;">
-						  		${fn:substring(posts.postCreateDate,5,10)}
-						  		<!-- 최신순 정렬시 시간순으로 정렬여부 파악시 활용. ${posts.postCreateDate} -->
-						  		<!-- 본래 사용할 코드.(비상백업) ${fn:substring(posts.postCreateDate,5,10)}  -->
+						  		${fn:substring(posts.postCreateDate,0,10)}
 						  		</div>
 					   		<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" >
 					   			<a><i class="bookmark outline icon"></i></a>

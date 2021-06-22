@@ -35,6 +35,8 @@ public interface SearchMapper {
 	List<Integer> getBoardTopicCount(int boardId); 
 	//List<PostDto> getsortPostBylatestDate(String searchKeyword); 	
 	List<PostAlignDto> getsortPostBylatestDate(String searchKeyword);
+	List<PostDto> getPostsOfOneTopic(int selectBoardId, String searchKeyword );
+	
 	//(2)창주님경우 ->페이지 출력을 페이지 카운트
 	//int getTotalRecordsCount(CompanySearchVO companySearchVO); //CompanySearchVO.java를 통해 객체 생성. 문제는 내용을 모르겠다.
 	//List<CompanyVO>getCompanyList(RowBounds rowBounds, CompanySearchVO companySearchVO);

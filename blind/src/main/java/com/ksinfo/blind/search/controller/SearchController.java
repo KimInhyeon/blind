@@ -48,6 +48,16 @@ public class SearchController {
 		return 1; //성공시 flag 개념으로 1을 성공의 개념으로 리턴.
 	}
 	
+	
+	@RequestMapping(value = "viewPostsOfOneTopic", method = RequestMethod.POST, produces="application/json")
+	@ResponseBody 	
+	public List<PostDto> viewPostsOfOneTopic(int selectBoardId, String searchKeyword ){ 
+		logger.info("viewPostsOfOneTopic");
+		logger.info("selectBoardId : "+ selectBoardId + "  searchKeyword : "+searchKeyword);
+		List<PostDto> searchResultPostsOfOneTopic = searchService.getPostsOfOneTopic(selectBoardId, searchKeyword);
+		return searchResultPostsOfOneTopic;
+	}
+	
 	@RequestMapping(value = "sortPosts", method = RequestMethod.POST, produces="application/json")
 	@ResponseBody 	
 	public List<PostAlignDto> sortPosts(int sortPostOption, String searchKeyword){ 
@@ -58,7 +68,7 @@ public class SearchController {
 		switch(sortPostOption) {
 			case 1 :
 				searchResultPosts = searchService.getsortPostBylatestDate(searchKeyword); //검색을 재실시 한 다음 
-				logger.info("sortPosts 리턴 데이터 설정.");		
+				logger.info("sortPosts 리턴 데이터 설정.");	
 				break;			
 			case 2 : 
 				logger.info("sortPosts-2번 선택. 아직 실행사항 미작성.");		
