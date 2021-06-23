@@ -33,6 +33,7 @@ public class CompanyController {
 			@RequestParam(name = "closingFlag", defaultValue = "0") byte closingFlag) {
 		CompanySearchVO companySearchVO = new CompanySearchVO(verifyFlag, closingFlag, searchTarget, searchKeyword);
 		PageNavigator navi = companyService.getNavi(page, companySearchVO);
+		System.out.println(verifyFlag + ", " + closingFlag + ", " + searchTarget + ", " + searchKeyword);
 		mav.addObject("companyList", companyService.getCompanyList(navi, companySearchVO));
 		mav.addObject("navi", navi);
 		mav.addObject("searchMap", companySearchVO);

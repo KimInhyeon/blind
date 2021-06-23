@@ -466,12 +466,11 @@
 	function openEditModal() {
 		const companyList = getCompanyList();
 		if (companyList.length > 0) {
-			setModalForEdit();
-			editCompany(companyList);
+			setModalForEdit(companyList);
 		}
 	}
 
-	function setModalForEdit() {
+	function setModalForEdit(companyList) {
 		const comSubmit = document.getElementById("comSubmit");
 		comSubmit.setAttribute("onclick", "update()");
 		comSubmit.innerText = "更新";
@@ -485,6 +484,7 @@
 				setTimeout(editCompany(companyList), 100);
 			}
 		});
+		editCompany(companyList);
 	}
 
 	function editCompany(companyList) {
@@ -537,7 +537,6 @@
 
 	function apply() {
 		if (checkForm() && confirm("新しい会社を申請します。承認は自動的に行われます。")) {
-			let xhr = new XMLHttpRequest();
 			const company = {
 				"userId": ${userId}, // TODO: 臨時にSessionより取得
 				"verifyFlag": '1',
@@ -551,20 +550,25 @@
 				"companyHomepage": document.getElementById("companyHomepage").value,
 				"companyExplain": document.getElementById("companyExplain").value
 			}
-			xhr.open("POST", "${pageContext.request.contextPath}/manage/company/apply", true);
-			xhr.setRequestHeader("Content-Type", "application/json");
-			xhr.send(JSON.stringify(company));
-			xhr.onload = function () {
-				if (xhr.response) {
+			fetch("${pageContext.request.contextPath}/manage/company/apply", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(company)
+			}).then(function (response) {
+				return response.json();
+			}).then(function (result) {
+				if (result) {
 					alert("生成に成功しました");
 					$('#comInfo').modal('hide');
 				} else {
 					alert("生成に失敗しました");
 				}
-			}
-			xhr.onerror = function () {
+			}).catch(function (error) {
 				alert("予期しないエラーが発生しました");
-			}
+				console.log(error);
+			});
 		}
 	}
 
@@ -616,7 +620,6 @@
 
 	function update() {
 		if (checkForm() && confirm("会社の情報を更新しますか？")) {
-			let xhr = new XMLHttpRequest();
 			const company = {
 				"userId": ${userId}, // TODO: 臨時にSessionより取得
 				"companyId": document.getElementById("companyId").innerText,
@@ -630,11 +633,16 @@
 				"companyHomepage": document.getElementById("companyHomepage").value,
 				"companyExplain": document.getElementById("companyExplain").value
 			}
-			xhr.open("PUT", "${pageContext.request.contextPath}/manage/company/update", true);
-			xhr.setRequestHeader("Content-Type", "application/json");
-			xhr.send(JSON.stringify(company));
-			xhr.onload = function () {
-				if (xhr.response) {
+			fetch("${pageContext.request.contextPath}/manage/company/update", {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(company)
+			}).then(function (response) {
+				return response.json();
+			}).then(function (result) {
+				if (result) {
 					alert("更新に成功しました");
 					const companyId = document.getElementsByName("companyId");
 					for (let i = companyId.length - 1; i > -1; --i) {
@@ -659,10 +667,10 @@
 				} else {
 					alert("更新に失敗しました");
 				}
-			}
-			xhr.onerror = function () {
+			}).catch(function (error) {
 				alert("予期しないエラーが発生しました");
-			}
+				console.log(error);
+			});
 		}
 	}
 
@@ -681,21 +689,24 @@
 			}
 		}
 		if (incompleteList.length > 0) {
-			setModalForEdit();
 			alert("申請の内容を確認してください");
-			editCompany(incompleteList);
+			setModalForEdit(incompleteList);
 		} else if (confirm("承認しますか？")) {
 			const data = {
 				"userId": ${userId}, // TODO: 臨時にSessionより取得
 				"companyIdList": companyIdList,
 				"verifyFlag": '1'
 			}
-			let xhr = new XMLHttpRequest();
-			xhr.open("PATCH", "${pageContext.request.contextPath}/manage/company/update", true);
-			xhr.setRequestHeader("Content-Type", "application/json");
-			xhr.send(JSON.stringify(data));
-			xhr.onload = function () {
-				if (xhr.response) {
+			fetch("${pageContext.request.contextPath}/manage/company/update", {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(data)
+			}).then(function (response) {
+				return response.json();
+			}).then(function (result) {
+				if (result) {
 					alert("申請を承認しました");
 					const checkedList = document.querySelectorAll("td > input[type=checkbox]:checked");
 					for (let i = checkedList.length - 1; i > -1; --i) {
@@ -706,10 +717,10 @@
 				} else {
 					alert("承認に失敗しました");
 				}
-			}
-			xhr.onerror = function () {
+			}).catch(function (error) {
 				alert("予期しないエラーが発生しました");
-			}
+				console.log(error);
+			});
 		}
 	}
 
@@ -739,12 +750,16 @@
 				"verifyFlag": '2',
 				"reason": reason
 			}
-			let xhr = new XMLHttpRequest();
-			xhr.open("PATCH", "${pageContext.request.contextPath}/manage/company/update", true);
-			xhr.setRequestHeader("Content-Type", "application/json");
-			xhr.send(JSON.stringify(data));
-			xhr.onload = function () {
-				if (xhr.response) {
+			fetch("${pageContext.request.contextPath}/manage/company/update", {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(data)
+			}).then(function (response) {
+				return response.json();
+			}).then(function (result) {
+				if (result) {
 					alert("申請を却下しました");
 					for (let i = checkedList.length - 1; i > -1; --i) {
 						const verifyFlag = checkedList[i].closest("td").nextElementSibling;
@@ -754,10 +769,10 @@
 				} else {
 					alert("申請の却下に失敗しました");
 				}
-			}
-			xhr.onerror = function () {
+			}).catch(function (error) {
 				alert("予期しないエラーが発生しました");
-			}
+				console.log(error);
+			});
 		}
 	}
 
