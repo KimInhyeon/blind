@@ -76,33 +76,6 @@ public class MemberController {
 		memberService.loadUserByUsername(inputEmail);
 	}
 
-/*	@RequestMapping(value = "/registMember", method = RequestMethod.POST)
-	public ModelAndView signIn(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
-		Account account = new Account();
-
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-		String nickName = request.getParameter("nickName");
-		String role = request.getParameter("role");
-
-		account.setUserEmail(username);
-		account.setUserPassword(password);
-		account.setUserNickname(nickName);
-
-		if (role.equals("NM")) {
-			account.setUserAuth("ROLE_NM");
-		} else if (role.equals("RM")) {
-			account.setUserAuth("ROLE_RM");
-		} else if (role.equals("SV")) {
-			account.setUserAuth("ROLE_SV");
-		}
-
-		int registedCount = memberService.registNewMember(account);
-
-		mv.setViewName("main/main");
-		return mv;
-	}*/
 	@RequestMapping(value = "/registMember", method = RequestMethod.POST)
 	public ModelAndView signIn(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
@@ -111,9 +84,7 @@ public class MemberController {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String nickName = request.getParameter("nickName");
-
-		// TODO: nullエラー臨時対策、後で必ず確認
-		String role = "NM";
+		String role = request.getParameter("role");
 
 		account.setUserEmail(username);
 		account.setUserPassword(password);

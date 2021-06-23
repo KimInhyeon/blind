@@ -33,65 +33,6 @@ public class MemberService implements UserDetailsService {
 	@Autowired
 	MessageUtils messages;
 
-/*	@Override
-	public UserDetails loadUserByUsername(String inputEmail) throws UsernameNotFoundException {
-		Account account = memberMapper.findMemberByEmail(securityUtil.encryptSHA256(inputEmail));
-
-		if (account == null) {
-			throw new UsernameNotFoundException(messages.getMessage("BLIND_ERR_MSG_001"));
-		}
-
-		account.setAuthorities(getAuthorities(account.getUserAuth()));
-
-		UserDetails userDetails = new UserDetails() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean isEnabled() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-
-			@Override
-			public boolean isCredentialsNonExpired() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-
-			@Override
-			public boolean isAccountNonLocked() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-
-			@Override
-			public boolean isAccountNonExpired() {
-				// TODO Auto-generated method stub
-				return true;
-			}
-
-			@Override
-			public String getUsername() {
-				// TODO Auto-generated method stub
-				return account.getUsername();
-			}
-
-			@Override
-			public String getPassword() {
-				// TODO Auto-generated method stub
-				return account.getPassword();
-			}
-
-			@Override
-			public Collection getAuthorities() {
-				// TODO Auto-generated method stub
-				return account.getAuthorities();
-			}
-		};
-
-		return account;
-	}*/
 	@Override
 	public UserDetails loadUserByUsername(String inputEmail) throws UsernameNotFoundException {
 		Account account = memberMapper.findMemberByEmail(securityUtil.encryptSHA256(inputEmail));
@@ -103,6 +44,7 @@ public class MemberService implements UserDetailsService {
 		// TODO: userIdをHttpSessionに入れる臨時コマンド、後で必ず確認
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		request.getSession().setAttribute("userId", account.getUserId());
+		// TODO: userIdをHttpSessionに入れる臨時コマンド、後で必ず確認
 
 		account.setAuthorities(getAuthorities(account.getUserAuth()));
 

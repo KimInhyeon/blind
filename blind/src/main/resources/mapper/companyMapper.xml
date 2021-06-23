@@ -26,7 +26,8 @@
 				</choose>
 				LIKE '%' || #{searchKeyword} || '%'
 			</if>
-		</where>;
+				AND logical_del_flag = '0';
+		</where>
 	</select>
 
 	<select id="getCompanyList" parameterType="com.ksinfo.blind.manage.vo.CompanySearchVO" resultType="com.ksinfo.blind.manage.vo.CompanyVO">
@@ -64,12 +65,16 @@
 			<if test="closingFlag lt 2">
 				AND closing_flag = CAST(#{closingFlag} AS CHAR)
 			</if>
+				AND logical_del_flag = '0'
 		</where>
 		ORDER BY company_id;
 	</select>
 
 	<select id="getBusinessTypeList" resultType="com.ksinfo.blind.manage.vo.BusinessTypeVO">
-		SELECT * FROM blind.business_type_mst ORDER BY business_type_id;
+		SELECT *
+		FROM blind.business_type_mst
+		WHERE logical_del_flag = '0'
+		ORDER BY business_type_id;
 	</select>
 
 	<insert id="applyCompany">
@@ -113,7 +118,8 @@
 			rec_update_user_id = #{userId},
 			rec_update_date = now()
 		WHERE
-			company_id = CAST(#{companyId} AS BIGINT);
+			company_id = CAST(#{companyId} AS BIGINT)
+			AND logical_del_flag = '0';
 	</update>
 
 	<update id="updateVerify">
@@ -121,12 +127,13 @@
 			blind.company_mgt
 		SET
 			verify_flag = #{verifyFlag},
-		    rec_update_user_id = #{userId},
-		    rec_update_date = now()
+			rec_update_user_id = #{userId},
+			rec_update_date = now()
 		WHERE
 			company_id IN
 				<foreach collection="companyIdList" item="companyId" open="(" close=")" separator=",">
 					CAST(#{companyId} AS BIGINT)
-				</foreach>;
+				</foreach>
+			AND logical_del_flag = '0';
 	</update>
 </mapper>

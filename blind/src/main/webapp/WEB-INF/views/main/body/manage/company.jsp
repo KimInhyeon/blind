@@ -677,7 +677,7 @@
 				|| companyList[i].companyExplain.length < 1) {
 				incompleteList.push(companyList[i]);
 			} else {
-				companyIdList.push(Number(companyList[i].companyId));
+				companyIdList.push(companyList[i].companyId);
 			}
 		}
 		if (incompleteList.length > 0) {
@@ -730,7 +730,7 @@
 			let companyIdList = [];
 			const checkedList = document.querySelectorAll("td > input[type=checkbox]:checked");
 			for (let i = checkedList.length - 1; i > -1; --i) {
-				companyIdList.push(Number(checkedList[i].nextElementSibling.value));
+				companyIdList.push(checkedList[i].nextElementSibling.value);
 			}
 			const reason = document.getElementById("reason").value;
 			const data = {
