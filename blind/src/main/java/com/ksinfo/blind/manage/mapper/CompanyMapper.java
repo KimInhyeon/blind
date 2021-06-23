@@ -22,7 +22,7 @@ public interface CompanyMapper {
 
 	int applyCompany(Map<String, Object> company);
 
-	int updateCompany(Map<String, Object> data);
+	int updateCompany(Map<String, Object> company);
 
-	int updateVerify(Map<String, Object> data);
+	int verifyCompany(Map<String, Object> data);
 }

@@ -35,11 +35,11 @@ public class CompanyService {
 		return companyMapper.applyCompany(company) > 0;
 	}
 
-	public boolean updateCompany(Map<String, Object> data) {
-		return companyMapper.updateCompany(data) > 0;
+	public boolean updateCompany(Map<String, Object> company) {
+		return companyMapper.updateCompany(company) > 0;
 	}
 
-	public boolean updateVerify(Map<String, Object> data) {
-		return companyMapper.updateVerify(data) > 0;
+	public int verifyCompany(Map<String, Object> data) {
+		return companyMapper.verifyCompany(data);
 	}
 }

@@ -96,8 +96,8 @@
 						</select>
 					</th>
 					<th>企業名</th>
-					<th>業種</th>
-					<th>所在地</th>
+					<th style="width: 21%">業種</th>
+					<th style="width: 15%">所在地</th>
 					<th style="width: 7%">設立日</th>
 					<th>従業員数</th>
 					<th>ドメイン</th>
@@ -277,12 +277,12 @@
 	window.onload = function () {
 		const verifyFlag = document.getElementsByClassName("verifyFlag");
 		for (let i = verifyFlag.length - 1; i > -1; --i) {
-			verifyFlag[i].innerText = getVerifyFlagName(Number(verifyFlag[i].dataset.value));
+			verifyFlag[i].innerText = getVerifyFlagName(verifyFlag[i].dataset.value);
 			setVerifiedColor(verifyFlag[i]);
 		}
 		const closingFlag = document.getElementsByClassName("closingFlag");
 		for (let i = closingFlag.length - 1; i > -1; --i) {
-			closingFlag[i].innerText = getClosingFlagName(Number(closingFlag[i].dataset.value));
+			closingFlag[i].innerText = getClosingFlagName(closingFlag[i].dataset.value);
 		}
 		const businessType = document.getElementsByClassName("businessType");
 		for (let i = businessType.length - 1; i > -1; --i) {
@@ -316,7 +316,6 @@
 		if (parameter.length > 0) {
 			const page = document.getElementsByClassName("navi");
 			for (let i = page.length - 1; i > -1; --i) {
-				console.log(page[i].getAttribute("href"));
 				const href = page[i].getAttribute("href") + '&' + parameter;
 				page[i].setAttribute("href", href);
 			}
@@ -341,11 +340,11 @@
 
 	function getVerifyFlagName(verifyFlag) {
 		switch (verifyFlag) {
-			case 0:
+			case '0':
 				return "待機";
-			case 1:
+			case '1':
 				return "承認";
-			case 2:
+			case '2':
 				return "却下";
 			default:
 				return "Error";
@@ -354,9 +353,9 @@
 
 	function getClosingFlagName(closingFlag) {
 		switch (closingFlag) {
-			case 0:
+			case '0':
 				return "営業";
-			case 1:
+			case '1':
 				return "廃業";
 			default:
 				return "Error";
@@ -364,11 +363,11 @@
 	}
 
 	function setVerifiedColor(verifyFlag) {
-		switch (Number(verifyFlag.dataset.value)) {
-			case 1:
+		switch (verifyFlag.dataset.value) {
+			case '1':
 				verifyFlag.closest("tr").setAttribute("class", "positive");
 				break;
-			case 2:
+			case '2':
 				verifyFlag.closest("tr").setAttribute("class", "negative");
 				break;
 			default:
@@ -492,7 +491,7 @@
 		if (index < companyList.length) {
 			const verifyFlag = document.getElementById("verifyFlag");
 			verifyFlag.dataset.value = companyList[index].verifyFlag;
-			verifyFlag.innerText = getVerifyFlagName(Number(companyList[index].verifyFlag));
+			verifyFlag.innerText = getVerifyFlagName(companyList[index].verifyFlag);
 			document.getElementById("companyId").innerText = companyList[index].companyId;
 			document.getElementById("closingFlag").options[companyList[index].closingFlag].selected = true;
 			const businessTypeCode = document.getElementById("businessTypeCode");
@@ -557,7 +556,11 @@
 				},
 				body: JSON.stringify(company)
 			}).then(function (response) {
-				return response.json();
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw response.status;
+				}
 			}).then(function (result) {
 				if (result) {
 					alert("生成に成功しました");
@@ -567,7 +570,7 @@
 				}
 			}).catch(function (error) {
 				alert("予期しないエラーが発生しました");
-				console.log(error);
+				console.error(error);
 			});
 		}
 	}
@@ -640,7 +643,11 @@
 				},
 				body: JSON.stringify(company)
 			}).then(function (response) {
-				return response.json();
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw response.status;
+				}
 			}).then(function (result) {
 				if (result) {
 					alert("更新に成功しました");
@@ -652,7 +659,7 @@
 							hidden[2] = company.companyHomepage;
 							hidden[3] = company.companyExplain;
 							td[2].dataset.value = company.closingFlag
-							td[2].innerText = getClosingFlagName(Number(td[2].dataset.value));
+							td[2].innerText = getClosingFlagName(td[2].dataset.value);
 							td[3].innerText = company.companyName;
 							td[4].dataset.value = company.businessTypeCode;
 							td[4].innerText = getBusinessTypeName(company.businessTypeCode);
@@ -660,6 +667,8 @@
 							td[6].innerText = company.foundingDate;
 							td[7].innerText = company.workersCount;
 							td[8].innerText = company.companyDomain;
+							hidden[0].checked = false;
+							check(hidden[0]);
 							break;
 						}
 					}
@@ -669,7 +678,7 @@
 				}
 			}).catch(function (error) {
 				alert("予期しないエラーが発生しました");
-				console.log(error);
+				console.error(error);
 			});
 		}
 	}
@@ -695,7 +704,7 @@
 			const data = {
 				"userId": ${userId}, // TODO: 臨時にSessionより取得
 				"companyIdList": companyIdList,
-				"verifyFlag": '1'
+				"verifyFlag": '1',
 			}
 			fetch("${pageContext.request.contextPath}/manage/company/update", {
 				method: "PATCH",
@@ -704,9 +713,14 @@
 				},
 				body: JSON.stringify(data)
 			}).then(function (response) {
-				return response.json();
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw response.status;
+				}
 			}).then(function (result) {
-				if (result) {
+				const length = companyIdList.length;
+				if (result === length) {
 					alert("申請を承認しました");
 					const checkedList = document.querySelectorAll("td > input[type=checkbox]:checked");
 					for (let i = checkedList.length - 1; i > -1; --i) {
@@ -714,12 +728,15 @@
 						verifyFlag.dataset.value = '1';
 						verifyFlag.innerText = getVerifyFlagName(1);
 					}
+					checkAll(false);
+				} else if (result > 0) {
+					alert("一部の承認に失敗しました");
 				} else {
 					alert("承認に失敗しました");
 				}
 			}).catch(function (error) {
 				alert("予期しないエラーが発生しました");
-				console.log(error);
+				console.error(error);
 			});
 		}
 	}
@@ -757,30 +774,38 @@
 				},
 				body: JSON.stringify(data)
 			}).then(function (response) {
-				return response.json();
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw response.status;
+				}
 			}).then(function (result) {
-				if (result) {
+				if (result === companyIdList.length) {
 					alert("申請を却下しました");
 					for (let i = checkedList.length - 1; i > -1; --i) {
 						const verifyFlag = checkedList[i].closest("td").nextElementSibling;
 						verifyFlag.dataset.value = '2';
 						verifyFlag.innerText = getVerifyFlagName(2);
 					}
+					$('#rejection').modal('hide');
+					checkAll(false);
+				} else if (result > 0) {
+					alert("一部の却下に失敗しました");
 				} else {
 					alert("申請の却下に失敗しました");
 				}
 			}).catch(function (error) {
 				alert("予期しないエラーが発生しました");
-				console.log(error);
+				console.error(error);
 			});
 		}
 	}
 
 	function rejectReason(selection) {
 		const reason = document.getElementById("reason");
-		switch (Number(selection.value)) {
-			case 0:
-			case 1:
+		switch (selection.value) {
+			case '0':
+			case '1':
 				reason.closest("div").setAttribute("class", "ui fluid disabled input");
 				reason.value = selection.options[Number(selection.value)].innerText;
 				break;

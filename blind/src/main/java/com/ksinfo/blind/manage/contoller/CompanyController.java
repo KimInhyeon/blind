@@ -33,7 +33,6 @@ public class CompanyController {
 			@RequestParam(name = "closingFlag", defaultValue = "0") byte closingFlag) {
 		CompanySearchVO companySearchVO = new CompanySearchVO(verifyFlag, closingFlag, searchTarget, searchKeyword);
 		PageNavigator navi = companyService.getNavi(page, companySearchVO);
-		System.out.println(verifyFlag + ", " + closingFlag + ", " + searchTarget + ", " + searchKeyword);
 		mav.addObject("companyList", companyService.getCompanyList(navi, companySearchVO));
 		mav.addObject("navi", navi);
 		mav.addObject("searchMap", companySearchVO);
@@ -44,19 +43,19 @@ public class CompanyController {
 
 	@ResponseBody
 	@PostMapping(value = "manage/company/apply")
-	public boolean createCompany(@RequestBody Map<String, Object> company) {
+	public boolean applyCompany(@RequestBody Map<String, Object> company) {
 		return companyService.applyCompany(company);
 	}
 
 	@ResponseBody
 	@PutMapping(value = "manage/company/update")
-	public boolean verifyCompany(@RequestBody Map<String, Object> company) {
+	public boolean updateCompany(@RequestBody Map<String, Object> company) {
 		return companyService.updateCompany(company);
 	}
 
 	@ResponseBody
 	@PatchMapping(value = "manage/company/update")
-	public boolean updateCompany(@RequestBody Map<String, Object> data) {
-		return companyService.updateVerify(data);
+	public int verifyCompany(@RequestBody Map<String, Object> data) {
+		return companyService.verifyCompany(data);
 	}
 }
