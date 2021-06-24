@@ -63,8 +63,8 @@ public class SearchService {
 		return mapper.getBoardTopicName(boardId);			
 	}
 
-	public List<Integer> getBoardTopicCount(String searchKeyword){
-		return mapper.getBoardTopicCount(searchKeyword);			
+	public List<BoardDto> getBoardNameAndIdAndCount(String searchKeyword){
+		return mapper.getBoardNameAndIdAndCount(searchKeyword);			
 	} 
 	
 	

@@ -25,22 +25,25 @@ public interface SearchMapper {
 	List<CompanyReviewDto> getCompanyReviews(int companyId);
 
 	
-	//개시글 관련 get메소드 모음
-	List<PostDto> getSearchPosts(String searchKeyword); 	//검색어와 관련된 포스트(게시글) 검색
-	List<UserDto> getNicknameAndCompanynameOfPosts(int userId);	//검색어된 게시글에 대한 작성자의 정보(닉네임,근무회사) 
-	
+	//포스트 관련
+	//2.1.포스트 출력 관련
+	List<PostDto> getSearchPosts(String searchKeyword); 	//포스트 제목 기준검색
+	List<UserDto> getNicknameAndCompanynameOfPosts(int userId);	//게시글 작성자의 정보(닉네임,근무회사) 
+
+	List<BoardDto> getBoardNameAndIdAndCount(String searchKeyword); //게시글 제목 기준 검색	
+	List<ReplyDto> getReplysOfPosts(int postId);
 	List<PostCountInfDto> getViewCountOfPosts(int postId);	//게시글 조회수 카운트
 
-	
-	List<ReplyDto> getReplysOfPosts(int postId);
-
+	//드롭박스 정렬 옵션
 	List<BoardDto> getBoardTopicName(int boardId);
-	List<PostAlignDto> getsortPostBylatestDate(String searchKeyword);
-	List<PostDto> getPostsOfOneTopic(java.util.Map<String, Object> paramMap);
+	
 
-	List<Integer> getBoardTopicCount(String searchKeyword); 
-	List<Integer> getRecommendCountOfPosts(int postId);
-	List<Integer> getReplyCountsOfPosts(int postId);
+	List<PostAlignDto> getsortPostBylatestDate(String searchKeyword);//최신일 정렬
+	List<PostDto> getPostsOfOneTopic(java.util.Map<String, Object> paramMap); //추천순 정렬
+	List<Integer> getRecommendCountOfPosts(int postId);	//포스트별 추천수 카운트		
+	List<Integer> getReplyCountsOfPosts(int postId);	//포스트별 댓글수 카운트
+	
+	
 	
 	//(2)창주님경우 ->페이지 출력을 페이지 카운트
 	//int getTotalRecordsCount(CompanySearchVO companySearchVO); //CompanySearchVO.java를 통해 객체 생성. 문제는 내용을 모르겠다.

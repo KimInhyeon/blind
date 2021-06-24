@@ -10,8 +10,6 @@ public class CompanyDto {
 	private String verifyFlag;		// verify_flag character(1) not null
 	private String closingFlag;		// closing_flag character(1) not null
 	
-	
-
 	public int getCompanyId() {
 		return companyId;
 	}

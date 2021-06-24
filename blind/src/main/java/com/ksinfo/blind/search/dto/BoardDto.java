@@ -7,11 +7,21 @@ public class BoardDto {
 	private String  boardOrder;  	 	 // board_order integer not null					//토픽의 화면표시순번
 	private char    anonymousFlag;   // anonymous_flag character(1) not null			//토픽의 닉네임 마스킹여부(1이면 마스킹)
 	private char    logicalDelFlag;  // logical_del_flag character(1) not null			//논리삭제 플래그(1이면 삭제)
-
+	private int 	postCount;
+	
 	
 	// get/set 메솧드
+	
 	public String getBoardTopicName() {
 		return boardTopicName;
+	}
+
+	public int getPostCount() {
+		return postCount;
+	}
+
+	public void setPostCount(int postCount) {
+		this.postCount = postCount;
 	}
 
 	public int getBoardId() {

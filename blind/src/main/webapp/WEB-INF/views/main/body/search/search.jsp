@@ -172,10 +172,18 @@
 			<!-- 드롭버튼(1)토픽선택 -->
 			<div>
 				<select id="viewPostsOfOneTopic" class="ui dropdown" style="border:1px solid #5e615b;">
-				<option value="-1">トピック全体( ${boardTopicCountOfAll} )</option> <!-- 전체는 무조건 사용되므로 무조건 적용. -->
-				<c:forEach items="${boardTopicName}" var="menuTopicName">
-				    <option value="${menuTopicName.boardId}"> ${menuTopicName.boardTopicName} ( ${boardTopicCount[i]} )</option>
-			   	</c:forEach>
+
+				<c:set var="sumOfboardCounts" value="0" />
+					<c:forEach items="${boardNameAndIdAndCount}" var="countOfboard">
+						sumOfboardCounts=sumOfboardCounts+countOfboard
+						<c:set var="sumOfboardCounts" value="${sumOfboardCounts + countOfboard.postCount}" />
+					</c:forEach>
+
+				
+				<option value="-1">トピック全体( ${sumOfboardCounts} )</option> <!-- 전체는 무조건 사용되므로 무조건 적용. -->
+					<c:forEach items="${boardNameAndIdAndCount}" var="menuData">
+					    <option value="${menuData.boardId}"> ${menuData.boardTopicName} ( ${menuData.postCount} )</option>
+					</c:forEach>
 				</select>
 				
 				<!-- 드롭버튼(2)정렬설정 --> 		
@@ -189,7 +197,7 @@
 			<div class="ui four column grid" id="postList">
 
 			<c:set var="i" value="0" />
-				<c:forEach items="${searchResultPosts}" var="posts"> <!-- 아이템이 2개이면 어떻게 할것인가?(댓글필요) -->
+				<c:forEach items="${searchResultPosts}" var="posts">
 					<div class="column" style="float: left; width:40%; margin:10px; display:inline;<!-- border:1px solid #5e615b; -->  ">
 						<div> ${boardTopicName[i].boardTopicName} </div>
 					 	<div style="margin:4px; word-break:break-all;" > <h3>${posts.postTitle}</h3> </div>			

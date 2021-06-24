@@ -95,20 +95,27 @@ ON blind.company_review_mgt.company_id = #{jobGroupCode} ;
 <select id="getBoardTopicCount" resultType="int"> 
 <!-- 드롭버튼의 토픽별 포스트의 갯수 집계 -->
     SELECT 
-		count(*) as postCount
-		,board.board_id
+   		board.board_topic_name
+		,count(*) as postCount
 	from blind.post_mgt post
 	inner join blind.board_mgt board on
 		post.board_id = board.board_id and
-		post.post_title like '%'|| #{searchKeyword} ||'%' ;  
+		post.post_title like '%'|| #{searchKeyword} ||'%'  
 	group by board.board_id;
 </select>		 
 	
 
 	 
-<select id="getBoardTopicName" resultType="com.ksinfo.blind.search.dto.BoardDto"> 
-    SELECT * FROM blind.board_mgt
-    where #{boardId} = blind.board_mgt.board_id;
+<select id="getBoardNameAndIdAndCount" parameterType="String"  resultType="com.ksinfo.blind.search.dto.BoardDto"> 
+    SELECT 
+		board.board_topic_name
+		,board.board_id
+		,count(*) as postCount
+	from blind.post_mgt post
+	inner join blind.board_mgt board on
+		post.board_id = board.board_id and
+		post.post_title like '%'|| #{searchKeyword} ||'%'
+	group by board.board_id;
 </select>	
 
 
