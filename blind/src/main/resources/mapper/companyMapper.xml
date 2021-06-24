@@ -8,64 +8,124 @@
 			INNER JOIN blind.business_type_mst
 				ON company_mgt.business_type_code = business_type_mst.business_type_code
 		</if>
-		<where>
-			<if test="verifyFlag lt 3">
-				verify_flag = CAST(#{verifyFlag} AS CHAR)
-			</if>
-			<if test="closingFlag lt 2">
-				AND closing_flag = CAST(#{closingFlag} AS CHAR)
-			</if>
-			<if test="searchTarget neq ''">
-				AND
-				<choose>
-					<when test="searchTarget eq 'companyName'">company_name</when>
-					<when test="searchTarget eq 'businessTypeName'">business_type_name</when>
-					<when test="searchTarget eq 'companyAddress'">company_address</when>
-					<when test="searchTarget eq 'companyDomain'">company_domain</when>
-					<otherwise>company_id</otherwise>
-				</choose>
-				LIKE '%' || #{searchKeyword} || '%'
-			</if>
-		</where>
+		WHERE company_mgt.logical_del_flag = '0'
+		<if test="verifyFlag eq '0' or verifyFlag eq '1'">
+			AND verify_flag = CAST(#{verifyFlag} AS CHAR)
+		</if>
+		<if test="closingFlag eq '0' or closingFlag eq '1'">
+			AND closing_flag = CAST(#{closingFlag} AS CHAR)
+		</if>
+		<if test="searchTarget neq null and searchKeyword neq null">
+			AND LOWER(
+			<choose>
+				<when test="searchTarget eq 'companyName'">company_name</when>
+				<when test="searchTarget eq 'businessTypeName'">business_type_name</when>
+				<when test="searchTarget eq 'companyDomain'">company_domain</when>
+				<otherwise>company_address</otherwise>
+			</choose>
+			) LIKE '%' || LOWER(#{searchKeyword}) || '%'
+		</if>;
 	</select>
 
 	<select id="getCompanyList" parameterType="com.ksinfo.blind.manage.vo.CompanySearchVO" resultType="com.ksinfo.blind.manage.vo.CompanyVO">
 		SELECT
-			company_mgt.company_id,
-			verify_flag,
-			closing_flag,
-			company_name,
-			company_mgt.business_type_code,
-			business_type_name,
-			company_address,
-			TO_CHAR(founding_date, 'YYYY-MM-DD') AS founding_date,
-			workers_count,
-			company_domain,
-			user_nickName,
-			TO_CHAR(app_date, 'YYYY-MM-DD') AS app_date
+			company_mgt.company_id AS companyId,
+			verify_flag AS verifyFlag,
+			closing_flag AS closingFlag,
+			company_name AS companyName,
+			business_type_code AS businessTypeCode,
+			company_address AS companyAddress,
+			TO_CHAR(founding_date, 'YYYY-MM-DD') AS foundingDate,
+			workers_count AS workersCount,
+			company_domain AS companyDomain,
+			company_homepage AS companyHomepage,
+			company_explain AS companyExplain,
+			user_nickName AS userNickName,
+			TO_CHAR(app_date, 'YYYY-MM-DD') AS appDate
 		FROM blind.company_mgt
-		INNER JOIN blind.user_mgt
-			ON company_mgt.user_id = user_mgt.user_id
-		INNER JOIN blind.business_type_mst
-			ON company_mgt.business_type_code = business_type_mst.business_type_code
-		<where>
-			<if test="searchKeyword neq ''">
-				<choose>
-					<when test="searchTarget eq 'companyName'">company_name</when>
-					<when test="searchTarget eq 'businessTypeName'">business_type_name</when>
-					<when test="searchTarget eq 'companyAddress'">company_address</when>
-					<when test="searchTarget eq 'companyDomain'">company_domain</when>
-					<otherwise>company_id</otherwise>
-				</choose>
-				LIKE '%' || #{searchKeyword} || '%'
-			</if>
-			<if test="verifyFlag lt 3">
-				AND verify_flag = CAST(#{verifyFlag} AS CHAR)
-			</if>
-			<if test="closingFlag lt 2">
-				AND closing_flag = CAST(#{closingFlag} AS CHAR)
-			</if>
-		</where>
-		ORDER BY company_id;
+			INNER JOIN blind.user_mgt
+				ON company_mgt.user_id = user_mgt.user_id
+		WHERE company_mgt.logical_del_flag = '0'
+		<if test="searchKeyword neq null and searchKeyword neq null">
+			AND LOWER(
+			<choose>
+				<when test="searchTarget eq 'companyName'">company_name</when>
+				<when test="searchTarget eq 'businessTypeName'">business_type_name</when>
+				<when test="searchTarget eq 'companyDomain'">company_domain</when>
+				<otherwise>company_address</otherwise>
+			</choose>
+			) LIKE '%' || LOWER(#{searchKeyword}) || '%'
+		</if>
+		<if test="verifyFlag lt 3">
+			AND verify_flag = CAST(#{verifyFlag} AS CHAR)
+		</if>
+		<if test="closingFlag lt 2">
+			AND closing_flag = CAST(#{closingFlag} AS CHAR)
+		</if>
+		ORDER BY companyId;
 	</select>
+
+	<select id="getBusinessTypeList" resultType="com.ksinfo.blind.manage.vo.BusinessTypeVO">
+		SELECT
+			business_type_code AS businessTypeCode,
+			business_type_name AS businessTypeName
+		FROM blind.business_type_mst
+		WHERE logical_del_flag = '0'
+		ORDER BY business_type_id;
+	</select>
+
+	<insert id="applyCompany">
+		INSERT INTO blind.company_mgt
+		VALUES (
+			DEFAULT,
+			#{userId},
+			#{companyName},
+			#{businessTypeCode},
+			#{companyAddress},
+			CAST(#{foundingDate} AS DATE),
+			#{workersCount},
+			now(),
+			#{companyDomain},
+			#{companyHomepage},
+			#{companyExplain},
+			#{verifyFlag},
+			#{closingFlag},
+			#{userId},
+			now(),
+			#{userId},
+			now(),
+			'0'
+		);
+	</insert>
+
+	<update id="updateCompany">
+		UPDATE blind.company_mgt
+		SET
+			company_name = #{companyName},
+			business_type_code = #{businessTypeCode},
+			company_address = #{companyAddress},
+			founding_date = CAST(#{foundingDate} AS DATE),
+			workers_count = #{workersCount},
+			company_domain = #{companyDomain},
+			company_homepage = #{companyHomepage},
+			company_explain = #{companyExplain},
+			closing_flag = #{closingFlag},
+			rec_update_user_id = #{userId},
+			rec_update_date = now()
+		WHERE company_id = CAST(#{companyId} AS BIGINT)
+			AND logical_del_flag = '0';
+	</update>
+
+	<update id="verifyCompany">
+		UPDATE blind.company_mgt
+		SET
+			verify_flag = #{verifyFlag},
+			rec_update_user_id = #{userId},
+			rec_update_date = now()
+		WHERE logical_del_flag = '0'
+			AND company_id IN
+			<foreach collection="companyIdList" item="companyId" open="(" close=")" separator=",">
+				CAST(#{companyId} AS BIGINT)
+			</foreach>;
+	</update>
 </mapper>
