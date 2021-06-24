@@ -56,10 +56,10 @@
 			</choose>
 			) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 		</if>
-		<if test="verifyFlag lt 3">
+		<if test="verifyFlag eq '0' or verifyFlag eq '1'">
 			AND verify_flag = #{verifyFlag}
 		</if>
-		<if test="closingFlag lt 2">
+		<if test="closingFlag eq '0' or closingFlag eq '1'">
 			AND closing_flag = #{closingFlag}
 		</if>
 		ORDER BY companyId;
