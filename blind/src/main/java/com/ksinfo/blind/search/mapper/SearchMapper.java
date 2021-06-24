@@ -35,9 +35,6 @@ public interface SearchMapper {
 	List<PostCountInfDto> getViewCountOfPosts(int postId);	//게시글 조회수 카운트
 
 	//드롭박스 정렬 옵션
-	List<BoardDto> getBoardTopicName(int boardId);
-	
-
 	List<PostAlignDto> getsortPostBylatestDate(String searchKeyword);//최신일 정렬
 	List<PostDto> getPostsOfOneTopic(java.util.Map<String, Object> paramMap); //추천순 정렬
 	List<Integer> getRecommendCountOfPosts(int postId);	//포스트별 추천수 카운트		

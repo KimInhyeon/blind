@@ -40,7 +40,7 @@
 	                						+"<div>"+value.boardTopicName+"</div>"
 						                    +"<div style='margin:4px;'> <h3>" +value.postTitle+ "</h3> </div>"
 						                    +"<div style='margin:4px;'> <p>"+value.postContents+"</p></div>" 
-						                    +"<div style='margin:4px;'> " +value.userNickName +  "</div>"       
+						                    +"<div style='margin:4px;'> " +value.companyName +"-" + value.userNickName +  "</div>"       
 						                    +"<div style='margin:4px;'>"
 						                        +"<i class='eye icon'></i>" + value.postCount
 						                        +"<i class='thumbs up outline icon'></i>" +value.recommendCountOfPosts
@@ -223,7 +223,7 @@
 			<c:set var="i" value="0" />
 				<c:forEach items="${searchResultPosts}" var="posts">
 					<div class="column" style="float: left; width:40%; margin:10px; display:inline;<!-- border:1px solid #5e615b; -->  ">
-						<div> ${boardTopicName[i].boardTopicName} </div>
+						<div> ${boardNameAndIdAndCount[i].boardTopicName} </div>
 					 	<div style="margin:4px; word-break:break-all;" > <h3>${posts.postTitle}</h3> </div>			
 				   		<div class="ui vertical divider">Or</div>
 					 	<div style="margin:4px;"> <p>${posts.postContents}</p></div>

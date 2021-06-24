@@ -48,13 +48,17 @@ public class SearchController {
 		return 1; //성공시 flag 개념으로 1을 성공의 개념으로 리턴.
 	}
 	
-	
+	//포스트-1개의 토픽(board) 선택시 해당하는 게시판만 출력되도록 실행.
 	@RequestMapping(value = "viewPostsOfOneTopic", method = RequestMethod.POST, produces="application/json")
 	@ResponseBody 	
 	public List<PostDto> viewPostsOfOneTopic(int selectBoardId, String searchKeyword ){ 
 		logger.info("viewPostsOfOneTopic start");
 		logger.info("selectBoardId : "+ selectBoardId + "  searchKeyword : "+searchKeyword);
+		
+		//List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);	//게시글 제목 기준 검색
+		
 		List<PostDto> searchResultPostsOfOneTopic = searchService.getPostsOfOneTopic(selectBoardId, searchKeyword);
+
 
 		logger.info("viewPostsOfOneTopic END");
 		return searchResultPostsOfOneTopic;
@@ -140,20 +144,18 @@ public class SearchController {
 		logger.info("데이터준비 3단계. mav에게 searchResultPosts가 받은 정보를 입력. 웹페이지에 출력할 수 있도록 실시.");				
 		//0.이전검색어 그대로 전달.
 		mav.addObject("pastSearchKeyword", searchKeyword); //이전의 검색어.
-		mav.addObject("writerDataOfPosts",writerDataOfPosts);			//포스트 작성자의 닉네임&근무회사 이름 전달		
-				
+					
 		//1.기업정보 관련	
 		mav.addObject("searchResultCompanyDataFlag",searchResultCompanyDataFlag); 		//기업정보 여부애 떠라 jsp페이지에서 기업정보관련 출력여부 결정.
  		mav.addObject("searchResultCompany",searchResultCompany); 						//기업정보를 갖는 오브젝트.
-		mav.addObject("companyReviews",companyReviews);									//검색된 기업에 대한 기업리뷰		
+		mav.addObject("companyReviews",companyReviews);								//검색된 기업에 대한 기업리뷰		
  
 		//2.포스트관련 정보
 		//2.1 드롭다운버튼관련
 		mav.addObject("boardNameAndIdAndCount",boardNameAndIdAndCount);			//검색어에 검색된 포스트들의 토픽(게시판) 이름들 저장. //boardTopicName
 		//2.2 포스트출력
 		mav.addObject("searchResultPosts",searchResultPosts);			//검색어와 관련된 포스트(게시글)들 전달.
-
-
+		mav.addObject("writerDataOfPosts",writerDataOfPosts);			//포스트 작성자의 닉네임&근무회사 이름 전달		
 		mav.addObject("viewCountOfPosts", viewCountOfPosts);			//각 포스트별 조회수 정보전달
 		mav.addObject("recommendCountOfPosts",recommendCountOfPosts);	//각 포스트별 추천수 정보전달
 		mav.addObject("replyCountOfPosts", replyCountOfPosts);			//각 포스트별 댓글수 정보전달

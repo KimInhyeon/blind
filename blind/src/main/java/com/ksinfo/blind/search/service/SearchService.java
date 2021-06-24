@@ -59,10 +59,6 @@ public class SearchService {
 		return mapper.getNicknameAndCompanynameOfPosts(userId);	
 	}
 
-	public List<BoardDto> getBoardTopicName(int boardId){
-		return mapper.getBoardTopicName(boardId);			
-	}
-
 	public List<BoardDto> getBoardNameAndIdAndCount(String searchKeyword){
 		return mapper.getBoardNameAndIdAndCount(searchKeyword);			
 	} 
