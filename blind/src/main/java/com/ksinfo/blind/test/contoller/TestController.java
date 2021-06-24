@@ -19,7 +19,7 @@ public class TestController {
 		ModelAndView mav = new ModelAndView();
 		List<TestDto> testList = testService.findTestData();
 		mav.addObject("testMessage", testList.get(0).getTest());
-		mav.setViewName("test");
+		mav.setViewName("main/test/test");
 		return mav;
 	}
 }

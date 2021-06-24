@@ -11,8 +11,12 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/messageId.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/swiper-bundle.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/swiper-bundle.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/dist/semantic.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/dist/semantic.min.css"/>
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/swiper-bundle.css"/>
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/swiper-bundle.min.css"/>
 	<script>
         $(document).ready(function () {
             $('.ui.dropdown.item').dropdown();
