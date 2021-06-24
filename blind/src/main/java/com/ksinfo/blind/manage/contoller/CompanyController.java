@@ -23,14 +23,15 @@ public class CompanyController {
 
 	@GetMapping(value = "manage")
 	public String company() {
-		return "redirect:manage/company";
+		return "redirect:/manage/company";
 	}
 
 	@GetMapping(value = "manage/company")
 	public ModelAndView company(String searchTarget, String searchKeyword, ModelAndView mav,
-			@RequestParam(name = "page", defaultValue = "1") int page,
-			@RequestParam(name = "verifyFlag", defaultValue = "0") byte verifyFlag,
-			@RequestParam(name = "closingFlag", defaultValue = "0") byte closingFlag) {
+		@RequestParam(name = "page", defaultValue = "1") int page,
+		@RequestParam(name = "verifyFlag", defaultValue = "0") byte verifyFlag,
+		@RequestParam(name = "closingFlag", defaultValue = "0") byte closingFlag
+	) {
 		CompanySearchVO companySearchVO = new CompanySearchVO(verifyFlag, closingFlag, searchTarget, searchKeyword);
 		PageNavigator navi = companyService.getNavi(page, companySearchVO);
 		mav.addObject("companyList", companyService.getCompanyList(navi, companySearchVO));
