@@ -82,82 +82,78 @@ public class SearchController {
 	}
 	
 	
+	//search.jsp에서 검색어를 입력시 작동하는 기능
 	@RequestMapping("/search")  
 	public ModelAndView search(String searchKeyword, ModelAndView mav){	
 		logger.info("SearchController-search 시작");	
 		
 		logger.info("기업정보 관련 데이터 준비");	
 		List<CompanyDto> searchResultCompany = searchService.getSearchCompany(searchKeyword);	//기업프로필
-		List<CompanyReviewDto> companyReviews = searchService.getCompanyReviews(searchKeyword);	//기업에 대한 기업리뷰
-		List<String> jobGroupNameOfCompanyReviewer = new ArrayList<>(); 						//기업리뷰-리뷰작성자의 직군명 정보 저장.
+		List<CompanyReviewDto> companyReviews =  new ArrayList<>();	
 		
-		
-		logger.info("데이터준비 2단계. 회사정보여부 플래그");	
+		logger.info("기업정보여부 플래그(검색어가 기업을 검색했는지 여부를 알리는 용도)");	
 		int searchResultCompanyDataFlag=0; //값이 1일시 회사정보 있음
 		if( !(searchResultCompany.isEmpty()) && !(searchResultCompany.get(0).getCompanyName().isEmpty())) { //!(searchResultCompany.isEmpty())가 0이다 회사정보가 있음.
 			logger.info("확인결과: 회사정보 있음");	
+			companyReviews = searchService.getCompanyReviews(searchResultCompany.get(0).getCompanyId());	//기업에 대한 기업리뷰
 			searchResultCompanyDataFlag=1;
 		}
 		else {
 			logger.info("확인결과: 회사정보 없음");	
 			searchResultCompanyDataFlag=0;
 		}
+
 		
-		//기업리뷰를 작성한 사람의 직군명(jobGroupName)을 저장.
-		for(int i=0; i<companyReviews.size() ;i++ ) {
-			jobGroupNameOfCompanyReviewer.addAll(i, searchService.getJobGroupNameOfCompanyReviewer(companyReviews.get(i).getJobGroupCode()));
-		}
-		
-		
-		
-		//포스트 작성자의 닉네임 및 근무기업, 추천수,댓글수는 관련INF테이블에서 로드 불가관계로 select 시 count 명령통해 카운트하여 리턴하는 형태로 진행.	
-		List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);				
-		List<PostCountInfDto> viewCountOfPosts = new ArrayList<>(); //조회수(테이블 : POST_COUNT_INF)	 
-		List<UserDto> writerDataOfPosts =  new ArrayList<>(); 		//post의 작성자의 정보 저장. jsp페이지에 닉네임 출력도 담당.
-		List<String>  writerCompany =  new ArrayList<>();			//post 작성자의 근무회사 정보 저장.
+		//포스트(게시글 출력관련)
+		List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);	//
+		List<UserDto> writerDataOfPosts = new ArrayList<>();//post의 작성자의 정보 저장. jsp페이지에 닉네임 출력도 담당.
+		List<PostCountInfDto> viewCountOfPosts = new ArrayList<>(); //조회수(테이블 : POST_COUNT_INF)	 		
 		List<Integer> recommendCountOfPosts = new ArrayList<>();	//추천수(테이블 : POST_RECOMMEND_INF)
-		List<Integer> replyCountOfPosts = new ArrayList<>(); 		//댓글수(각 포스트별 댓글 카운트.)
+		List<Integer> replyCountOfPosts = new ArrayList<>(); 		//댓글수(각 포스트별 댓글 카운트.)		
+		
+		//포스트를 작성한 유저의 닉네임과 근무하는 기업 정보를 로드.(List<UserDto> writerDataOfPosts)
+		for(int i=0; i<searchResultPosts.size() ;i++ ) {
+			writerDataOfPosts.addAll(i, searchService.getNicknameAndCompanynameOfPosts(searchResultPosts.get(i).getUserId() ));
+		}
+		mav.addObject("writerDataOfPosts",writerDataOfPosts);			//포스트 작성자의 닉네임&근무회사 이름 전달		
+		
+
+		//각 포스트별 조회수 확인(viewCountOfPosts)
+		for(int i=0; i<searchResultPosts.size() ;i++ ) {
+	        viewCountOfPosts.addAll(i, searchService.getViewCountOfPosts(searchResultPosts.get(i).getPostId()));
+		}
+	
+		//포스트별 추천수 카운트
+		for(int i=0; i < searchResultPosts.size() ;i++ ) {
+			recommendCountOfPosts.addAll(i, searchService.getRecommendCountOfPosts(searchResultPosts.get(i).getPostId()) );			
+		}		
+	
+		//포스트별 댓글수 카운트
+		for(int i=0; i < searchResultPosts.size() ;i++ ) {
+			replyCountOfPosts.addAll(i, searchService.getReplyCountsOfPosts(searchResultPosts.get(i).getPostId()) );			
+		}		
+		
 		
 		//드롭버튼 관련 기능들
 		List<BoardDto> boardTopicName = new ArrayList<>(); //토픽의 이름 수신
-		List<Integer> boardTopicCount = new ArrayList<>(); //토픽별 포스트의 갯수 카운트(총갯수 제외)
-
+		
 		int	boardTopicCountOfAll=0;						   //토픽별 포스트의 총갯수 카운트
 		//드롭버튼 토픽의 이름 집계
 		for(int i=0; i<searchResultPosts.size() ;i++ ) {
 			boardTopicName.addAll(i, searchService.getBoardTopicName(searchResultPosts.get(i).getBoardId()) );
 		}
-		//드롭버튼의 토픽별 포스트의 갯수 집계
-		
-		for(int i=0; i<searchResultPosts.size() ;i++ ) {
-			boardTopicCount.addAll(i, searchService.getBoardTopicCount(searchResultPosts.get(i).getBoardId()) );
-			boardTopicCountOfAll=boardTopicCountOfAll+boardTopicCount.get(i);
-		}
+		mav.addObject("boardTopicCountOfAll",boardTopicCountOfAll);
 
 
-		//포스트 목록 출력시 관련 정보수집
 		
-		//포스트를 작성한 유저의 닉네임과 근무하는 기업 정보를 로드.
-		for(int i=0; i<searchResultPosts.size() ;i++ ) {
-			writerDataOfPosts.addAll(i, searchService.getWriterDataOfPosts(Integer.parseInt(searchResultPosts.get(i).getUserId() )));
-		}
-		//포스트 작성자의 근무기업 정보를 저장.
-		for(int i=0; i<searchResultPosts.size() ;i++ ) {
-			writerCompany.addAll(i, searchService.getWriterCompany(Integer.parseInt(writerDataOfPosts.get(i).getCompanyId() )));
-		}
+
+//		List<Integer> boardTopicCount =searchService.getBoardTopicCount(searchKeyword); //토픽별 포스트의 갯수 카운트(총갯수 제외)
+//		mav.addObject("boardTopicCount",boardTopicCount);
+
 		
-		//각 포스트별 조회수 확인 
-		for(int i=0; i<searchResultPosts.size() ;i++ ) {
-	        viewCountOfPosts.addAll(i, searchService.getViewCountOfPosts(Integer.parseInt(searchResultPosts.get(i).getPostId()) ) );
-		}
-		//포스트별 추천수 카운트
-		for(int i=0; i < searchResultPosts.size() ;i++ ) {
-			recommendCountOfPosts.addAll(i, searchService.getReplyCountsOfPosts(Integer.parseInt(searchResultPosts.get(i).getPostId())) );			
-		}		
-		//포스트별 댓글수 카운트
-		for(int i=0; i < searchResultPosts.size() ;i++ ) {
-			replyCountOfPosts.addAll(i, searchService.getReplyCountsOfPosts(Integer.parseInt(searchResultPosts.get(i).getPostId())) );			
-		}		
+		
+
+
 		
 		
 		logger.info("데이터준비 3단계. mav에게 searchResultPosts가 받은 정보를 입력. 웹페이지에 출력할 수 있도록 실시.");		
@@ -167,19 +163,18 @@ public class SearchController {
 		//1.기업정보 관련	
 		mav.addObject("searchResultCompanyDataFlag",searchResultCompanyDataFlag); 		//기업정보 여부애 떠라 jsp페이지에서 기업정보관련 출력여부 결정.
  		mav.addObject("searchResultCompany",searchResultCompany); 						//기업정보를 갖는 오브젝트.
-		mav.addObject("companyReviews",companyReviews);									//검색된 기업에 대한 기업리뷰
-		mav.addObject("jobGroupNameOfCompanyReviewer",jobGroupNameOfCompanyReviewer);	//리뷰를 작성한 유저의 직군명
-		
- 		//2.포스트관련 정보
+		mav.addObject("companyReviews",companyReviews);									//검색된 기업에 대한 기업리뷰		
+ 
+		//2.포스트관련 정보
 		//2.1 드롭다운버튼관련
 		mav.addObject("boardTopicName",boardTopicName);			//검색어에 검색된 포스트들의 토픽(게시판) 이름들 저장.
-		mav.addObject("boardTopicCountOfAll",boardTopicCountOfAll);
-		mav.addObject("boardTopicCount",boardTopicCount);
+
+
 			
 		//2.2 포스트출력
 		mav.addObject("searchResultPosts",searchResultPosts);			//검색어와 관련된 포스트(게시글)들 전달.
-		mav.addObject("writerDataOfPosts",writerDataOfPosts);			//포스트 작성자의 닉네임 정보
-		mav.addObject("writerCompany",writerCompany);					//포스트 작성자의 근무회사 정보		
+
+
 		mav.addObject("viewCountOfPosts", viewCountOfPosts);			//각 포스트별 조회수 정보전달
 		mav.addObject("recommendCountOfPosts",recommendCountOfPosts);	//각 포스트별 추천수 정보전달
 		mav.addObject("replyCountOfPosts", replyCountOfPosts);			//각 포스트별 댓글수 정보전달

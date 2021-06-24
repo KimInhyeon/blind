@@ -3,8 +3,8 @@ package com.ksinfo.blind.search.dto;
 public class PostDto {
 	
 	//2.POST_MGT //게시글관리 테이블의 변수
-	private String postId;			 	 //post_id bigint GENERATED ALWAYS AS IDENTITY
-	private String userId;				 //user_id bigint 					  	   //게시글 작성 유저의 id.직접로드가 아니라, 작성유저의 일치를 파악 위함.
+	private int postId;			 	 //post_id bigint GENERATED ALWAYS AS IDENTITY
+	private int userId;				 //user_id bigint 					  	   //게시글 작성 유저의 id.직접로드가 아니라, 작성유저의 일치를 파악 위함.
 	private int boardId;				 //board_id 
 	private String postTitle;		     //post_title character varying(200)   	   //게시글의 제목
 	private char   postBlindFlag;		 //post_blind_flag character(1) 		   //표시여부. 이것도 확인해야 한다.
@@ -14,16 +14,16 @@ public class PostDto {
 	private char   logicalDelFlag; 	 //logical_del_flag character(1) not null  //논리삭제 플래그(1이면 삭제)
 
 	
-	public String getPostId() {
+	public int getPostId() {
 		return postId;
 	}
-	public void setPostId(String postId) {
+	public void setPostId(int postId) {
 		this.postId = postId;
 	}
-	public String getUserId() {
+	public int getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 	public int getBoardId() {

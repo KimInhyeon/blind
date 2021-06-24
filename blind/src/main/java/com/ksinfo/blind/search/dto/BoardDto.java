@@ -8,9 +8,34 @@ public class BoardDto {
 	private char    anonymousFlag;   // anonymous_flag character(1) not null			//토픽의 닉네임 마스킹여부(1이면 마스킹)
 	private char    logicalDelFlag;  // logical_del_flag character(1) not null			//논리삭제 플래그(1이면 삭제)
 
-	//1.BOARD_MGT 토픽(게시판)관리 관련 get/set함수들	
+	
+	// get/set 메솧드
 	public String getBoardTopicName() {
 		return boardTopicName;
+	}
+
+	public int getBoardId() {
+		return boardId;
+	}
+
+	public void setBoardId(int boardId) {
+		this.boardId = boardId;
+	}
+
+	public char getAnonymousFlag() {
+		return anonymousFlag;
+	}
+
+	public void setAnonymousFlag(char anonymousFlag) {
+		this.anonymousFlag = anonymousFlag;
+	}
+
+	public char getLogicalDelFlag() {
+		return logicalDelFlag;
+	}
+
+	public void setLogicalDelFlag(char logicalDelFlag) {
+		this.logicalDelFlag = logicalDelFlag;
 	}
 
 	public void setBoardTopicName(String boardTopicName) {

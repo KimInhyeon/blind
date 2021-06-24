@@ -55,8 +55,5 @@ public class CompanyDto {
 		this.closingFlag = closingFlag;
 	}
 
-	//4.COMPANY_MGT 기업관리 테이블 생성	
-
-
 }
 

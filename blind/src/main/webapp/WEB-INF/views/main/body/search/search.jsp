@@ -17,7 +17,9 @@
 	}
 	
 	$(function(){
-		$("#viewPostsOfOneTopic").on('change', function(){					
+		$("#viewPostsOfOneTopic").on('change', function(){	
+			var checkTopicNum= $("#viewPostsOfOneTopic option:selected").val();
+			alert("checkTopicNum:"+checkTopicNum);
 	    	$.ajax({
 				type:"POST",
 			    url: "viewPostsOfOneTopic",
@@ -154,7 +156,7 @@
 							<a href="">
 								<div>${companyReviews[0].allPoint}</div> 				
 								<div style="float:Right;">レビュー全部見る > </div>
-								<div>${jobGroupNameOfCompanyReviewer[0]}</div>
+								<div>${companyReviews[0].jobGroupName}</div>
 								<div>${companyReviews[0].simpleComment}</div>
 								<div>${companyReviews[0].disadvantages}</div>
 							</a>
@@ -171,10 +173,8 @@
 			<div>
 				<select id="viewPostsOfOneTopic" class="ui dropdown" style="border:1px solid #5e615b;">
 				<option value="-1">トピック全体( ${boardTopicCountOfAll} )</option> <!-- 전체는 무조건 사용되므로 무조건 적용. -->
-			    <c:set var="i" value="0" />
 				<c:forEach items="${boardTopicName}" var="menuTopicName">
-				    <option value="${i}"> ${menuTopicName.boardTopicName} ( ${boardTopicCount[i]} )</option>
-                    <c:set var="i" value="${i+1}" />
+				    <option value="${menuTopicName.boardId}"> ${menuTopicName.boardTopicName} ( ${boardTopicCount[i]} )</option>
 			   	</c:forEach>
 				</select>
 				
@@ -187,13 +187,15 @@
 		 <hr width = "100%" color = "#000000" size = "5"></hr>
 			<!-- 게시글(포스트)들 출력 -->
 			<div class="ui four column grid" id="postList">
+
 			<c:set var="i" value="0" />
 				<c:forEach items="${searchResultPosts}" var="posts"> <!-- 아이템이 2개이면 어떻게 할것인가?(댓글필요) -->
-					<div class="column" style="float: left; width:40%; margin:10px; display:inline; border:1px solid #5e615b; ">
+					<div class="column" style="float: left; width:40%; margin:10px; display:inline;<!-- border:1px solid #5e615b; -->  ">
 						<div> ${boardTopicName[i].boardTopicName} </div>
-					 	<div style="margin:4px;"> <h3>${posts.postTitle}</h3> </div>			
+					 	<div style="margin:4px; word-break:break-all;" > <h3>${posts.postTitle}</h3> </div>			
+				   		<div class="ui vertical divider">Or</div>
 					 	<div style="margin:4px;"> <p>${posts.postContents}</p></div>
-					 	<div style="margin:4px;"> ${writerCompany[i]} - ${writerDataOfPosts[i].userNickName}  </div>
+					 	<div style="margin:4px;"> ${writerDataOfPosts[i].userCompanyName} - ${writerDataOfPosts[i].userNickName}  </div>
 					 	<div style="margin:4px;">
 					 		 <i class="eye icon"></i>${viewCountOfPosts[i].postCount}
 							 <i class="thumbs up outline icon"></i> ${recommendCountOfPosts[i]}
@@ -207,12 +209,20 @@
 					   			<a><i class="bookmark outline icon"></i></a>
 					   		</div>
 				   		</div>
+				   		<div class="ui fitted divider"></div>
+
 				   </div>
+
 		 		   <c:set var="i" value="${i+1}" />
+
 		 		</c:forEach>
 			</div>
+
 		</div>
    </div>
+ 
+   
+   
 </body>
 
 

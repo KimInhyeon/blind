@@ -1,5 +1,6 @@
 package com.ksinfo.blind.search.service;
 
+import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,8 @@ public class SearchService {
 		return mapper.getSearchCompany(searchKeyword);     //searchMapper.java mapper확ㅈ
 	}
 
-	public List<CompanyReviewDto> getCompanyReviews(String searchKeyword){
-		return mapper.getCompanyReviews(searchKeyword);
+	public List<CompanyReviewDto> getCompanyReviews(int companyId){
+		return mapper.getCompanyReviews(companyId);
 	}
 
 	public List<PostDto>  getSearchPosts(String searchKeyword){ 
@@ -54,24 +55,16 @@ public class SearchService {
 		return mapper.getReplyCountsOfPosts(postId);	
 	}
 	
-	public List<UserDto> getWriterDataOfPosts(int userId){
-		return mapper.getWriterDataOfPosts(userId);	
-	}
-	
-	public List<String> getWriterCompany (int companyId){
-		return mapper.getWriterCompany(companyId);			
-	}
-	
-	public List<String> getJobGroupNameOfCompanyReviewer(int jobGroupCode){
-		return mapper.getJobGroupNameOfCompanyReviewer(jobGroupCode);			
+	public List<UserDto> getNicknameAndCompanynameOfPosts(int userId){
+		return mapper.getNicknameAndCompanynameOfPosts(userId);	
 	}
 
 	public List<BoardDto> getBoardTopicName(int boardId){
 		return mapper.getBoardTopicName(boardId);			
 	}
 
-	public List<Integer> getBoardTopicCount(int boardId){
-		return mapper.getBoardTopicCount(boardId);			
+	public List<Integer> getBoardTopicCount(String searchKeyword){
+		return mapper.getBoardTopicCount(searchKeyword);			
 	} 
 	
 	
@@ -79,10 +72,15 @@ public class SearchService {
 		return mapper.getsortPostBylatestDate(searchKeyword);					
 	} 
 
-	public List<PostDto> getPostsOfOneTopic(int selectBoardId, String searchKeyword ){
-		return mapper.getPostsOfOneTopic(selectBoardId ,searchKeyword);							
-	}
 	
+	public List<PostDto> getPostsOfOneTopic(int selectBoardId, String searchKeyword){
+		//사용자가 선택한 토픽(보드)을 넘버값과, 검색어를 받아서 검색을 진행한다.
+		//전달해야 하는 값이 2개(boardId,searchKeyword) 이므로 HashMap을 활용하여 값을 넘긴다.
+		java.util.Map<String, Object> paramMap = new HashMap<String, Object>(); //String :키값, object : 밸류값
+		paramMap.put("searchKeyword", searchKeyword); //
+		paramMap.put("boardId", selectBoardId);		
+		return mapper.getPostsOfOneTopic(paramMap);							
+	}
 	
 }
 
