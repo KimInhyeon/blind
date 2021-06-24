@@ -52,9 +52,11 @@ public class SearchController {
 	@RequestMapping(value = "viewPostsOfOneTopic", method = RequestMethod.POST, produces="application/json")
 	@ResponseBody 	
 	public List<PostDto> viewPostsOfOneTopic(int selectBoardId, String searchKeyword ){ 
-		logger.info("viewPostsOfOneTopic");
+		logger.info("viewPostsOfOneTopic start");
 		logger.info("selectBoardId : "+ selectBoardId + "  searchKeyword : "+searchKeyword);
 		List<PostDto> searchResultPostsOfOneTopic = searchService.getPostsOfOneTopic(selectBoardId, searchKeyword);
+
+		logger.info("viewPostsOfOneTopic END");
 		return searchResultPostsOfOneTopic;
 	}
 	

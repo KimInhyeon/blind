@@ -27,13 +27,37 @@
 						 ,searchKeyword : $("input[name=searchKeyword]").val() 			 //검색창의 검색어
 				 	   },
 				dataType:"json",
-				success: function(){
-					alert("success");
-					//console.log(result);
-					//값 정상 전달여부 확인위한 콘솔로그.
-					//$.each(result,function(key, value){
-					//var arr = value.postTitle;
-					///console.log(arr);
+				success: function(result){
+					//alert("success");
+
+					//포스트리스트의 화면재구성 시작
+					//주요틀 재구성
+					$(postList).html("");
+					//$(postList).append("<div class='column' style='float: left; width:40%; margin:10px; display:inline; border:1px solid #5e615b;'>");
+					//반복문통해 각 포스트들 출력진행
+					$.each(result, function (key, value) {	
+						$(postList).append("<div class='column' style='float: left; width:40%; margin:10px; display:inline; border:1px solid #5e615b;'>"
+	                						+"<div>"+value.boardTopicName+"</div>"
+						                    +"<div style='margin:4px;'> <h3>" +value.postTitle+ "</h3> </div>"
+						                    +"<div style='margin:4px;'> <p>"+value.postContents+"</p></div>" 
+						                    +"<div style='margin:4px;'> " +value.userNickName +  "</div>"       
+						                    +"<div style='margin:4px;'>"
+						                        +"<i class='eye icon'></i>" + value.postCount
+						                        +"<i class='thumbs up outline icon'></i>" +value.recommendCountOfPosts
+						                        +"<i class='comment outline icon'></i>"  +value.replyCountOfPosts
+						                    +"</div>"
+						                    +"<div>" 
+						                    	+"<div style='float:left;'>"
+						                    	+ value.postCreateDate
+						                    +"</div>"
+						              			+"<div id='bookmarkSet"+value.postId +" ' onclick='bookmarkSet(" +value.postId + ")'>"
+						                 		   +"<a><i class='bookmark outline icon'></i></a>"
+						                		+"</div>"
+						          			+"</div>");
+					});
+	                //마지막 부분 출력
+                	$(postList).append("</div>");	
+					
 				},
 				error: function(){
 					alert("에러");
