@@ -225,7 +225,11 @@
 					 	<div style="margin:4px; word-break:break-all;" > <h3>${posts.postTitle}</h3> </div>			
 				   		<div class="ui vertical divider">Or</div>
 					 	<div style="margin:4px;"> <p>${posts.postContents}</p></div>
-					 	<div style="margin:4px;"> ${posts.companyName} - ${posts.userNickName}  </div>
+					 	<div style="margin:4px;"> ${posts.companyName} 
+					 		- ${fn:substring(posts.userNickName,0,1)}
+							<c:forEach begin="2" end='${fn:length(posts.userNickName)}'>*</c:forEach>	
+						</div>
+
 					 	<div style="margin:4px;">
 					 		 <i class="eye icon"></i>${posts.postCount}
 							 <i class="thumbs up outline icon"></i> ${posts.recommendCount}
