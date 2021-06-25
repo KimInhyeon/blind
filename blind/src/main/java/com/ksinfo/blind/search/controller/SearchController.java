@@ -56,12 +56,18 @@ public class SearchController {
 		logger.info("selectBoardId : "+ selectBoardId + "  searchKeyword : "+searchKeyword);
 		
 		//List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);	//게시글 제목 기준 검색
-		
-		List<PostDto> searchResultPostsOfOneTopic = searchService.getPostsOfOneTopic(selectBoardId, searchKeyword);
 
+		if(selectBoardId ==-1) {
+			List<PostDto> searchResultAllPosts= searchService.getSearchPosts(searchKeyword);	
+			logger.info("viewPostsOfOneTopic-END(Returns searchResultAllPosts) ");
+			return searchResultAllPosts;
+		}
+		else {
+			List<PostDto> searchResultPostsOfOneTopic = searchService.getPostsOfOneTopic(selectBoardId, searchKeyword);			
+			logger.info("viewPostsOfOneTopic-END(Returns searchResultPostsOfOneTopic) ");
+			return searchResultPostsOfOneTopic;
+		}
 
-		logger.info("viewPostsOfOneTopic END");
-		return searchResultPostsOfOneTopic;
 	}
 	
 	@RequestMapping(value = "sortPosts", method = RequestMethod.POST, produces="application/json")

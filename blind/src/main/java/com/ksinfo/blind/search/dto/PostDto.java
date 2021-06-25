@@ -12,7 +12,9 @@ public class PostDto {
 	private String postCreateDate; 		 //post_create_date timestamp 			   //생성일
 	private String postUpdateDate; 		 //post_update_date timestamp not null 	   //갱신일
 	private char   logicalDelFlag; 	 //logical_del_flag character(1) not null  //논리삭제 플래그(1이면 삭제)
-
+	private String recommendCount;   //글의 추천수
+	private String replyCount;       //글의 댓글수
+	
 	//타 Dto 참고작성
 	//PostCountInfDto와 동일
 	private String postCountId;		  //post_count_id bigint GENERATED ALWAYS AS IDENTITY
@@ -23,48 +25,8 @@ public class PostDto {
 	private String userNickName;		// user_nickName character varying(30)
 	//임의추가
 	private String companyName;		//포스트를 작성한 유저가 근무하는 회사이름
-	
-	// get/set 선언모음
-	
-	
-	
 	public int getPostId() {
 		return postId;
-	}
-
-	public String getUserNickName() {
-		return userNickName;
-	}
-
-	public void setUserNickName(String userNickName) {
-		this.userNickName = userNickName;
-	}
-
-	public String getCompanyName() {
-		return companyName;
-	}
-
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
-
-	public String getBoardTopicName() {
-		return boardTopicName;
-	}
-	public void setBoardTopicName(String boardTopicName) {
-		this.boardTopicName = boardTopicName;
-	}
-	public String getPostCountId() {
-		return postCountId;
-	}
-	public void setPostCountId(String postCountId) {
-		this.postCountId = postCountId;
-	}
-	public String getPostCount() {
-		return postCount;
-	}
-	public void setPostCount(String postCount) {
-		this.postCount = postCount;
 	}
 	public void setPostId(int postId) {
 		this.postId = postId;
@@ -117,8 +79,50 @@ public class PostDto {
 	public void setLogicalDelFlag(char logicalDelFlag) {
 		this.logicalDelFlag = logicalDelFlag;
 	}
-
+	public String getRecommendCount() {
+		return recommendCount;
+	}
+	public void setRecommendCount(String recommendCount) {
+		this.recommendCount = recommendCount;
+	}
+	public String getReplyCount() {
+		return replyCount;
+	}
+	public void setReplyCount(String replyCount) {
+		this.replyCount = replyCount;
+	}
+	public String getPostCountId() {
+		return postCountId;
+	}
+	public void setPostCountId(String postCountId) {
+		this.postCountId = postCountId;
+	}
+	public String getPostCount() {
+		return postCount;
+	}
+	public void setPostCount(String postCount) {
+		this.postCount = postCount;
+	}
+	public String getBoardTopicName() {
+		return boardTopicName;
+	}
+	public void setBoardTopicName(String boardTopicName) {
+		this.boardTopicName = boardTopicName;
+	}
+	public String getUserNickName() {
+		return userNickName;
+	}
+	public void setUserNickName(String userNickName) {
+		this.userNickName = userNickName;
+	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
 	
-	//2.POST_MGT //게시글관리 테이블의 변수	
+	// get/set 선언모음
+
 
 }

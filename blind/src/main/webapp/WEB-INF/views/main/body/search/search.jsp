@@ -43,8 +43,8 @@
 						                    +"<div style='margin:4px;'> " +value.companyName +"-" + value.userNickName +  "</div>"       
 						                    +"<div style='margin:4px;'>"
 						                        +"<i class='eye icon'></i>" + value.postCount
-						                        +"<i class='thumbs up outline icon'></i>" +value.recommendCountOfPosts
-						                        +"<i class='comment outline icon'></i>"  +value.replyCountOfPosts
+						                        +"<i class='thumbs up outline icon'></i>" +value.recommendCount
+						                        +"<i class='comment outline icon'></i>"  +value.replyCount
 						                    +"</div>"
 						                    +"<div>" 
 						                    	+"<div style='float:left;'>"
