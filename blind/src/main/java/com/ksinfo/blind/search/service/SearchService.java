@@ -46,6 +46,15 @@ public class SearchService {
 	public List<PostDto> getSortPostAllTopicBylatestDate(String searchKeyword){
 		return mapper.getSortPostAllTopicBylatestDate(searchKeyword);			
 	}
+	
+	public List<PostDto> getSortPostOneTopicBylatestDate(String searchKeyword,int selectBoardId){
+
+		java.util.Map<String, Object> paramMap = new HashMap<String, Object>(); //String :키값, object : 밸류값
+		paramMap.put("searchKeyword", searchKeyword); //
+		paramMap.put("boardId", selectBoardId);			
+		return mapper.getSortPostOneTopicBylatestDate(paramMap);		
+	} 
+	
 		
 	public List<PostDto> getPostsOfOneTopic(int selectBoardId, String searchKeyword){
 		//사용자가 선택한 토픽(보드)을 넘버값과, 검색어를 받아서 검색을 진행한다.

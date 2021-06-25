@@ -57,7 +57,7 @@ public class SearchController {
 		
 		//List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);	//게시글 제목 기준 검색
 
-		if(selectBoardId ==-1) {
+		if(selectBoardId ==-1) {//-1 : 전체선택
 			List<PostDto> searchResultAllPosts= searchService.getSearchPosts(searchKeyword);	
 			logger.info("viewPostsOfOneTopic-END(Returns searchResultAllPosts) ");
 			return searchResultAllPosts;
@@ -79,18 +79,24 @@ public class SearchController {
 		List<PostDto>  searchResultSortedPosts  = new ArrayList<>();  		//재검색을 실시하여 해당 SQL의 order by등이 적용된 출력.
 		switch(sortPostOption) {	//추천순/최신일 순으로 구별.
 			case 1 : // 1: 최신일
+				// 정렬출력-최신일 기준으로 실시.
+				// 모든 토픽(borad)들을 출력
 				logger.info("sortPosts 리턴 데이터 설정.");	
 				if(selectBoardId == -1){
 					searchResultSortedPosts = searchService.getSortPostAllTopicBylatestDate(searchKeyword);
 					return searchResultSortedPosts;	
 				}
 				else {
-					
+				// 정렬출력-최신일 기준으로 실시.
+				// 1개의 토픽(borad)만 최신일정렬 출력
+					searchResultSortedPosts = searchService.getSortPostOneTopicBylatestDate(searchKeyword,selectBoardId);
+					return searchResultSortedPosts;	
 				}
-				break;			
+				//	break;			
+	
 			case 2 : // 2: 추천순
 				logger.info("sortPosts-2번 선택. 아직 실행사항 미작성.");		
-				break;
+			break;
 			
 			default : break;
 		}
