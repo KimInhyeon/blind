@@ -72,25 +72,29 @@ public class SearchController {
 	
 	@RequestMapping(value = "sortPosts", method = RequestMethod.POST, produces="application/json")
 	@ResponseBody 	
-	public List<PostAlignDto> sortPosts(int sortPostOption, String searchKeyword){ 
-		logger.info("sortPosts");
-		logger.info("sortPostOption : "+sortPostOption + "searchKeyword : "+searchKeyword);
+	public List<PostDto> sortPosts(int sortPostOption, String searchKeyword, int selectBoardId){ 
+		logger.info("sortPosts 시작");
+		logger.info("sortPostOption : "+sortPostOption + "   searchKeyword : "+searchKeyword + "   selectBoardId : " +selectBoardId);
 
-		List<PostAlignDto>  searchResultPosts  = new ArrayList<>();  		//재검색을 실시하여 해당 SQL의 order by등이 적용된 출력.
-		switch(sortPostOption) {
-			case 1 :
-				searchResultPosts = searchService.getsortPostBylatestDate(searchKeyword); //검색을 재실시 한 다음 
+		List<PostDto>  searchResultSortedPosts  = new ArrayList<>();  		//재검색을 실시하여 해당 SQL의 order by등이 적용된 출력.
+		switch(sortPostOption) {	//추천순/최신일 순으로 구별.
+			case 1 : // 1: 최신일
 				logger.info("sortPosts 리턴 데이터 설정.");	
+				if(selectBoardId == -1){
+					searchResultSortedPosts = searchService.getSortPostAllTopicBylatestDate(searchKeyword);
+					return searchResultSortedPosts;	
+				}
+				else {
+					
+				}
 				break;			
-			case 2 : 
+			case 2 : // 2: 추천순
 				logger.info("sortPosts-2번 선택. 아직 실행사항 미작성.");		
 				break;
 			
 			default : break;
 		}
-
-
-		return searchResultPosts;	
+		return searchResultSortedPosts;	
 	}
 	
 	

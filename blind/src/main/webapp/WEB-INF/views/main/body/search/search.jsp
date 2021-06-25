@@ -40,7 +40,8 @@
 	                						+"<div>"+value.boardTopicName+"</div>"
 						                    +"<div style='margin:4px;'> <h3>" +value.postTitle+ "</h3> </div>"
 						                    +"<div style='margin:4px;'> <p>"+value.postContents+"</p></div>" 
-						                    +"<div style='margin:4px;'> " +value.companyName +"-" + value.userNickName +  "</div>"       
+										 	+"<div style='margin:4px;'>"+ value.companyName + value.userNickName
+											+"</div>"
 						                    +"<div style='margin:4px;'>"
 						                        +"<i class='eye icon'></i>" + value.postCount
 						                        +"<i class='thumbs up outline icon'></i>" +value.recommendCount
@@ -65,13 +66,15 @@
 			});
 		}); 
 	
-		
 		$("#sortPosts").on('change', function(){
-	    	$.ajax({
+			var checkTopicNum= $("#viewPostsOfOneTopic option:selected").val();
+			alert("checkTopicNum:"+checkTopicNum);
+			$.ajax({
 				type:"POST",
 			    url: "sortPosts",
 				data : { sortPostOption : $("#sortPosts option:selected").val() //값 1:최신순 정렬, 값 2:추천순정렬
 						 ,searchKeyword : $("input[name=searchKeyword]").val()  //검색창의 검색어
+						 ,selectBoardId : $("#viewPostsOfOneTopic option:selected").val()//-1:전체 출력으로 실시. -1이외는 selecteTopicNumber에 따라 1개 토픽관련 포스트만 출력.
 					   },
 				dataType:"json",
 				success: function(result){
@@ -220,10 +223,10 @@
 			<!-- 게시글(포스트)들 출력 -->
 			<div class="ui four column grid" id="postList">
 				<c:forEach items="${searchResultPosts}" var="posts">
-					<div class="column" style="float: left; width:40%; margin:10px; display:inline;<!-- border:1px solid #5e615b; -->  ">
+					<div class="column" style="float: left; width:40%; margin:10px; display:inline;">
+
 						<div> ${posts.boardTopicName} </div>
 					 	<div style="margin:4px; word-break:break-all;" > <h3>${posts.postTitle}</h3> </div>			
-				   		<div class="ui vertical divider">Or</div>
 					 	<div style="margin:4px;"> <p>${posts.postContents}</p></div>
 					 	<div style="margin:4px;"> ${posts.companyName} 
 					 		- ${fn:substring(posts.userNickName,0,1)}
@@ -243,7 +246,8 @@
 					   			<a><i class="bookmark outline icon"></i></a>
 					   		</div>
 				   		</div>
-				   		<div class="ui fitted divider"></div>
+				   		 <div class="ui fitted divider" style="margin-top:50px; "><!--fit 되는 얇은 선--></div>
+				   		 					<div class="ui vertical divider">  </div>
 				   </div>
 		 		</c:forEach>
 			</div>
