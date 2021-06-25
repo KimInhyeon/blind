@@ -81,7 +81,7 @@ public class SearchController {
 			case 1 : // 1: 최신일
 				// 정렬출력-최신일 기준으로 실시.
 				// 모든 토픽(borad)들을 출력
-				logger.info("sortPosts 리턴 데이터 설정.");	
+				logger.info("sortPosts-최신일 기준 정렬");	
 				if(selectBoardId == -1){
 					searchResultSortedPosts = searchService.getSortPostAllTopicBylatestDate(searchKeyword);
 					return searchResultSortedPosts;	
@@ -95,7 +95,14 @@ public class SearchController {
 				//	break;			
 	
 			case 2 : // 2: 추천순
-				logger.info("sortPosts-2번 선택. 아직 실행사항 미작성.");		
+				logger.info("sortPosts-추천순 정렬 시작");		
+				if(selectBoardId == -1){ 
+					logger.info("sortPosts-추천순 정렬-모든 토픽(board)을 추천순 정렬");		
+					searchResultSortedPosts = searchService.getSortPostAllTopicByRecommend(searchKeyword);
+					return searchResultSortedPosts;	
+				}
+				else {
+				}
 			break;
 			
 			default : break;

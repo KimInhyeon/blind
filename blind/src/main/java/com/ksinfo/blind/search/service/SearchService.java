@@ -48,7 +48,6 @@ public class SearchService {
 	}
 	
 	public List<PostDto> getSortPostOneTopicBylatestDate(String searchKeyword,int selectBoardId){
-
 		java.util.Map<String, Object> paramMap = new HashMap<String, Object>(); //String :Å°°ª, object : ¹ë·ù°ª
 		paramMap.put("searchKeyword", searchKeyword); //
 		paramMap.put("boardId", selectBoardId);			
@@ -63,6 +62,10 @@ public class SearchService {
 		paramMap.put("searchKeyword", searchKeyword); //
 		paramMap.put("boardId", selectBoardId);		
 		return mapper.getPostsOfOneTopic(paramMap);							
+	}
+	
+	public List<PostDto> getSortPostAllTopicByRecommend(String searchKeyword){
+		return mapper.getSortPostAllTopicByRecommend(searchKeyword);						
 	}
 	
 }

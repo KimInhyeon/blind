@@ -272,7 +272,47 @@ ORDER BY post_create_date DESC;
 </select>		 
 	 
 <!-- 콤보박스의 정렬기준 옵션_추천순 -->	 
-<select id="sortPostByRecommendCounts" resultType="com.ksinfo.blind.search.dto.PostDto"> 
+<select id="getSortPostAllTopicByRecommend" resultType="com.ksinfo.blind.search.dto.PostDto"> 
+SELECT DISTINCT
+   blind.board_mgt.board_topic_name           --토픽(게시판)명
+   ,blind.post_mgt.post_title                 --게시글 주제
+   ,blind.post_mgt.post_contents              --게시글 내용
+   ,blind.company_mgt.company_name            --근무기업명
+   ,blind.user_mgt.user_nickname              --작성자의 닉네임
+   ,blind.post_count_inf.post_count           --글의 조회수
+   ,count_recommend_inf.recommend_count   	  --글의 추천수
+   ,count_reply_inf.reply_count          	  --글의 댓글수
+   ,blind.post_mgt.post_create_date           --게시글의 최초작성일
+FROM blind.post_mgt
+LEFT JOIN blind.board_mgt     			      --토픽(게시판)명
+   ON blind.post_mgt.board_id = blind.board_mgt.board_id
+LEFT JOIN blind.user_mgt            		  --작성자의 닉네임
+   ON blind.post_mgt.user_id = blind.user_mgt.user_id
+LEFT JOIN blind.post_count_inf         		  --글의 조회수
+   ON blind.post_mgt.post_id = blind.post_count_inf.post_id
+LEFT JOIN 
+  (SELECT 
+    COUNT(*) AS recommend_count
+   ,post_id								  	 --ON blind.post_mgt.post_id = count_inf.post_id를 위해 추가.
+  FROM
+	blind.post_recommend_inf   			     --게시글의 추천수
+  GROUP BY post_id) count_recommend_inf
+	ON blind.post_mgt.post_id = count_recommend_inf.post_id
+LEFT JOIN blind.company_mgt    				--근무기업명
+   ON blind.user_mgt.company_id = blind.company_mgt.company_id 
+LEFT JOIN 
+  (SELECT 
+    COUNT(*) AS reply_count
+   ,post_id			--ON blind.post_mgt.post_id = count_inf.post_id를 위해 추가.
+  FROM
+   blind.reply_mgt
+  GROUP BY post_id) count_reply_inf
+ON blind.post_mgt.post_id = count_reply_inf.post_id 
+where blind.post_mgt.post_title like '%'|| #{searchKeyword} ||'%'
+ORDER BY recommend_count ASC;
+</select>		 
+
+<select id="getSortPostOneTopicByRecommend" parameterType="java.util.Map" resultType="com.ksinfo.blind.search.dto.PostDto"> 
 SELECT DISTINCT
    blind.board_mgt.board_topic_name           --토픽(게시판)명
    ,blind.post_mgt.post_title                 --게시글 주제
