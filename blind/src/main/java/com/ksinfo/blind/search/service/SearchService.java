@@ -61,11 +61,18 @@ public class SearchService {
 		java.util.Map<String, Object> paramMap = new HashMap<String, Object>(); //String :酈高, object : 寨盟高
 		paramMap.put("searchKeyword", searchKeyword); //
 		paramMap.put("boardId", selectBoardId);		
-		return mapper.getPostsOfOneTopic(paramMap);							
+		return mapper.getPostsOfOneTopic(paramMap);			
 	}
 	
 	public List<PostDto> getSortPostAllTopicByRecommend(String searchKeyword){
 		return mapper.getSortPostAllTopicByRecommend(searchKeyword);						
+	}
+
+	public List<PostDto> getSortPostOneTopicByRecommend(int selectBoardId, String searchKeyword){
+		java.util.Map<String, Object> paramMap = new HashMap<String, Object>(); //String :酈高, object : 寨盟高
+		paramMap.put("searchKeyword", searchKeyword); //
+		paramMap.put("boardId", selectBoardId);		
+		return mapper.getSortPostOneTopicByRecommend(paramMap);					
 	}
 	
 }

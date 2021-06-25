@@ -27,12 +27,17 @@ public interface SearchMapper {
 
 	
 	//포스트 관련
-	//2.1.포스트 출력 관련
+	//2.1. 검색시 포스트 출력 관련
 	List<PostDto> getSearchPosts(String searchKeyword); 	//포스트 제목 기준검색
 	List<UserDto> getNicknameAndCompanynameOfPosts(int userId);	//게시글 작성자의 정보(닉네임,근무회사) 
 	List<BoardDto> getBoardNameAndIdAndCount(String searchKeyword); //게시글 제목 기준 검색	
 
+	
+	
 	//2.2. 드롭박스 정렬 옵션
+	//2.2.1
+	List<PostDto> getPostsOfOneTopic(Map<String, Object> paramMap);
+
 	//2.2.1. 최신일 정렬
 	List<PostDto> getSortPostAllTopicBylatestDate(String searchKeyword); //전체 정렬시 boardId 필요없음.
 	List<PostDto> getSortPostOneTopicBylatestDate(Map<String, Object> paramMap); //전체 정렬시 boardId 필요없음.

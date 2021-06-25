@@ -57,12 +57,14 @@ public class SearchController {
 		
 		//List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);	//게시글 제목 기준 검색
 
-		if(selectBoardId ==-1) {//-1 : 전체선택
+		if(selectBoardId ==-1) {
+			//토픽선택-전체토픽(모두출력) 선택
 			List<PostDto> searchResultAllPosts= searchService.getSearchPosts(searchKeyword);	
 			logger.info("viewPostsOfOneTopic-END(Returns searchResultAllPosts) ");
 			return searchResultAllPosts;
 		}
 		else {
+			//토픽선택- 1개의 토픽만 출력.
 			List<PostDto> searchResultPostsOfOneTopic = searchService.getPostsOfOneTopic(selectBoardId, searchKeyword);			
 			logger.info("viewPostsOfOneTopic-END(Returns searchResultPostsOfOneTopic) ");
 			return searchResultPostsOfOneTopic;
@@ -77,18 +79,16 @@ public class SearchController {
 		logger.info("sortPostOption : "+sortPostOption + "   searchKeyword : "+searchKeyword + "   selectBoardId : " +selectBoardId);
 
 		List<PostDto>  searchResultSortedPosts  = new ArrayList<>();  		//재검색을 실시하여 해당 SQL의 order by등이 적용된 출력.
-		switch(sortPostOption) {	//추천순/최신일 순으로 구별.
-			case 1 : // 1: 최신일
-				// 정렬출력-최신일 기준으로 실시.
-				// 모든 토픽(borad)들을 출력
+		switch(sortPostOption) {//추천순/최신일 순으로 구별.
+			case 1 : // case 1 : 최신일
+				// sort-최신일-모든 토픽(borad) 출력
 				logger.info("sortPosts-최신일 기준 정렬");	
 				if(selectBoardId == -1){
 					searchResultSortedPosts = searchService.getSortPostAllTopicBylatestDate(searchKeyword);
 					return searchResultSortedPosts;	
 				}
-				else {
-				// 정렬출력-최신일 기준으로 실시.
-				// 1개의 토픽(borad)만 최신일정렬 출력
+				else {   
+				// sort-최신일-1개의 토픽(borad)만 출력
 					searchResultSortedPosts = searchService.getSortPostOneTopicBylatestDate(searchKeyword,selectBoardId);
 					return searchResultSortedPosts;	
 				}
@@ -96,14 +96,17 @@ public class SearchController {
 	
 			case 2 : // 2: 추천순
 				logger.info("sortPosts-추천순 정렬 시작");		
+				// sort-추천순-모든 토픽(borad) 출력
 				if(selectBoardId == -1){ 
 					logger.info("sortPosts-추천순 정렬-모든 토픽(board)을 추천순 정렬");		
 					searchResultSortedPosts = searchService.getSortPostAllTopicByRecommend(searchKeyword);
 					return searchResultSortedPosts;	
 				}
 				else {
+					// sort-추천순-1개의 토픽(borad)만 출력
+					searchResultSortedPosts = searchService.getSortPostOneTopicByRecommend(selectBoardId,searchKeyword);
+					return searchResultSortedPosts;					
 				}
-			break;
 			
 			default : break;
 		}
