@@ -119,30 +119,6 @@ public class SearchController {
 		//2.포스트관련 정보
 		//2.1 포스트출력
 		List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);	//게시글 제목 기준 검색
-		List<UserDto> writerDataOfPosts = new ArrayList<>();//post의 작성자의 정보 저장. jsp페이지에 닉네임 출력도 담당.
-		List<PostCountInfDto> viewCountOfPosts = new ArrayList<>(); //조회수(테이블 : POST_COUNT_INF)	 		
-		List<Integer> recommendCountOfPosts = new ArrayList<>();	//추천수(테이블 : POST_RECOMMEND_INF)
-		List<Integer> replyCountOfPosts = new ArrayList<>(); 		//댓글수(각 포스트별 댓글 카운트.)		
-		
-		//포스트를 작성한 유저의 닉네임과 근무하는 기업 정보를 로드.(List<UserDto> writerDataOfPosts)
-		for(int i=0; i<searchResultPosts.size() ;i++ ) {
-			writerDataOfPosts.addAll(i, searchService.getNicknameAndCompanynameOfPosts(searchResultPosts.get(i).getUserId() ));
-		}
-
-
-		//각 포스트별 조회수 확인(viewCountOfPosts)
-		for(int i=0; i<searchResultPosts.size() ;i++ ) {
-	        viewCountOfPosts.addAll(i, searchService.getViewCountOfPosts(searchResultPosts.get(i).getPostId()));
-		}
-		//포스트별 추천수 카운트
-		for(int i=0; i < searchResultPosts.size() ;i++ ) {
-			recommendCountOfPosts.addAll(i, searchService.getRecommendCountOfPosts(searchResultPosts.get(i).getPostId()) );			
-		}		
-		//포스트별 댓글수 카운트
-		for(int i=0; i < searchResultPosts.size() ;i++ ) {
-			replyCountOfPosts.addAll(i, searchService.getReplyCountsOfPosts(searchResultPosts.get(i).getPostId()) );			
-		}		
-		
 
 		//2.2 드롭다운버튼관련
 		List<BoardDto> boardNameAndIdAndCount = searchService.getBoardNameAndIdAndCount(searchKeyword); //토픽의 이름 수신
@@ -161,10 +137,6 @@ public class SearchController {
 		mav.addObject("boardNameAndIdAndCount",boardNameAndIdAndCount);			//검색어에 검색된 포스트들의 토픽(게시판) 이름들 저장. //boardTopicName
 		//2.2 포스트출력
 		mav.addObject("searchResultPosts",searchResultPosts);			//검색어와 관련된 포스트(게시글)들 전달.
-		mav.addObject("writerDataOfPosts",writerDataOfPosts);			//포스트 작성자의 닉네임&근무회사 이름 전달		
-		mav.addObject("viewCountOfPosts", viewCountOfPosts);			//각 포스트별 조회수 정보전달
-		mav.addObject("recommendCountOfPosts",recommendCountOfPosts);	//각 포스트별 추천수 정보전달
-		mav.addObject("replyCountOfPosts", replyCountOfPosts);			//각 포스트별 댓글수 정보전달
 		
 			
 		logger.info("출력할 경로 설정.");		

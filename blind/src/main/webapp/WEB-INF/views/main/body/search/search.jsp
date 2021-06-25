@@ -95,8 +95,8 @@
 						                    +"<div style='margin:4px;'> " +value.userNickName +  "</div>"       
 						                    +"<div style='margin:4px;'>"
 						                        +"<i class='eye icon'></i>" + value.postCount
-						                        +"<i class='thumbs up outline icon'></i>" +value.recommendCountOfPosts
-						                        +"<i class='comment outline icon'></i>"  +value.replyCountOfPosts
+						                        +"<i class='thumbs up outline icon'></i>" +value.recommendCount
+						                        +"<i class='comment outline icon'></i>" +value.replyCount
 						                    +"</div>"
 						                    +"<div>" 
 						                    	+"<div style='float:left;'>"
@@ -219,19 +219,17 @@
 		 <hr width = "100%" color = "#000000" size = "5"></hr>
 			<!-- 게시글(포스트)들 출력 -->
 			<div class="ui four column grid" id="postList">
-
-			<c:set var="i" value="0" />
 				<c:forEach items="${searchResultPosts}" var="posts">
 					<div class="column" style="float: left; width:40%; margin:10px; display:inline;<!-- border:1px solid #5e615b; -->  ">
-						<div> ${boardNameAndIdAndCount[i].boardTopicName} </div>
+						<div> ${posts.boardTopicName} </div>
 					 	<div style="margin:4px; word-break:break-all;" > <h3>${posts.postTitle}</h3> </div>			
 				   		<div class="ui vertical divider">Or</div>
 					 	<div style="margin:4px;"> <p>${posts.postContents}</p></div>
-					 	<div style="margin:4px;"> ${writerDataOfPosts[i].userCompanyName} - ${writerDataOfPosts[i].userNickName}  </div>
+					 	<div style="margin:4px;"> ${posts.companyName} - ${posts.userNickName}  </div>
 					 	<div style="margin:4px;">
-					 		 <i class="eye icon"></i>${viewCountOfPosts[i].postCount}
-							 <i class="thumbs up outline icon"></i> ${recommendCountOfPosts[i]}
-							 <i class="comment outline icon"></i>  ${replyCountOfPosts[i]}
+					 		 <i class="eye icon"></i>${posts.postCount}
+							 <i class="thumbs up outline icon"></i> ${posts.recommendCount}
+							 <i class="comment outline icon"></i>  ${posts.replyCount}
 						</div>
 				   		<div> 
 					  		<div style="float:left;">
@@ -242,14 +240,9 @@
 					   		</div>
 				   		</div>
 				   		<div class="ui fitted divider"></div>
-
 				   </div>
-
-		 		   <c:set var="i" value="${i+1}" />
-
 		 		</c:forEach>
 			</div>
-
 		</div>
    </div>
  

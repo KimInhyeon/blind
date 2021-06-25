@@ -25,6 +25,8 @@ public class PostDto {
 	private String userNickName;		// user_nickName character varying(30)
 	//임의추가
 	private String companyName;		//포스트를 작성한 유저가 근무하는 회사이름
+	
+	
 	public int getPostId() {
 		return postId;
 	}
