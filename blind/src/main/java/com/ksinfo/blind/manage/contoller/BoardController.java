@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class BoardController {
 	@Autowired
-	BoardService boardService;
+	private BoardService boardService;
 
 	@GetMapping(value = "manage/board")
 	public ModelAndView board(ModelAndView mav) {

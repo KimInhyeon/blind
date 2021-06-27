@@ -33,7 +33,7 @@
 			verify_flag AS verifyFlag,
 			closing_flag AS closingFlag,
 			company_name AS companyName,
-			business_type_code AS businessTypeCode,
+			co.business_type_code AS businessTypeCode,
 			company_address AS companyAddress,
 			TO_CHAR(founding_date, 'YYYY-MM-DD') AS foundingDate,
 			workers_count AS workersCount,

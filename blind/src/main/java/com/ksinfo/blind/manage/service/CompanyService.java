@@ -1,8 +1,8 @@
 package com.ksinfo.blind.manage.service;
 
-import com.ksinfo.blind.manage.dto.CompanyVerifyDto;
 import com.ksinfo.blind.manage.dto.CompanyDto;
 import com.ksinfo.blind.manage.dto.CompanySearchDto;
+import com.ksinfo.blind.manage.dto.CompanyVerifyDto;
 import com.ksinfo.blind.manage.mapper.CompanyMapper;
 import com.ksinfo.blind.manage.vo.BusinessTypeVO;
 import com.ksinfo.blind.manage.vo.CompanyVO;
@@ -36,17 +36,17 @@ public class CompanyService {
 	}
 
 	public boolean applyCompany(CompanyDto company, HttpSession session) {
-		company.setUserId((long) session.getAttribute("userId"));
+		company.setUserId(Long.parseLong(session.getAttribute("userId").toString()));
 		return companyMapper.applyCompany(company) > 0;
 	}
 
 	public boolean updateCompany(CompanyDto company, HttpSession session) {
-		company.setUserId((long) session.getAttribute("userId"));
+		company.setUserId(Long.parseLong(session.getAttribute("userId").toString()));
 		return companyMapper.updateCompany(company) > 0;
 	}
 
 	public int verifyCompany(CompanyVerifyDto data, HttpSession session) {
-		data.setUserId((long) session.getAttribute("userId"));
+		data.setUserId(Long.parseLong(session.getAttribute("userId").toString()));
 		return companyMapper.verifyCompany(data);
 	}
 }

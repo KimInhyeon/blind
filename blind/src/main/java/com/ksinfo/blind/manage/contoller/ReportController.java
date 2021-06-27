@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ReportController {
 	@Autowired
-	ReportService reportService;
+	private ReportService reportService;
 
 	@GetMapping(value = "manage/report")
 	public ModelAndView report(ModelAndView mav) {

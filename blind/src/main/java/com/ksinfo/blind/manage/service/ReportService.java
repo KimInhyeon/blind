@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReportService {
 	@Autowired
-	ReportMapper reportMapper;
+	private ReportMapper reportMapper;
 }
