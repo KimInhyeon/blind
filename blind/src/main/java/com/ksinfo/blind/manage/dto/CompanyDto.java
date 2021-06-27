@@ -1,123 +1,99 @@
-//package com.ksinfo.blind.manage.dto;
-//
-//import java.util.Date;
-//
-//public class CompanyDto {
-//	private long companyId;
-//	private long userId;
-//	private String companyName;
-//	private byte businessTypeCode;
-//	private String companyAddress;
-//	private Date foundingDate;
-//	private String workersCount;
-//	private Date appDate;
-//	private String companyDomain;
-//	private String companyHomepage;
-//	private String companyExplain;
-//	private boolean verifyFlag;
-//	private boolean closingFlag;
-//
-//	public long getCompanyId() {
-//		return companyId;
-//	}
-//
-//	public void setCompanyId(long companyId) {
-//		this.companyId = companyId;
-//	}
-//
-//	public long getUserId() {
-//		return userId;
-//	}
-//
-//	public void setUserId(long userId) {
-//		this.userId = userId;
-//	}
-//
-//	public String getCompanyName() {
-//		return companyName;
-//	}
-//
-//	public void setCompanyName(String companyName) {
-//		this.companyName = companyName;
-//	}
-//
-//	public byte getBusinessTypeCode() {
-//		return businessTypeCode;
-//	}
-//
-//	public void setBusinessTypeCode(byte businessTypeCode) {
-//		this.businessTypeCode = businessTypeCode;
-//	}
-//
-//	public String getCompanyAddress() {
-//		return companyAddress;
-//	}
-//
-//	public void setCompanyAddress(String companyAddress) {
-//		this.companyAddress = companyAddress;
-//	}
-//
-//	public Date getFoundingDate() {
-//		return foundingDate;
-//	}
-//
-//	public void setFoundingDate(Date foundingDate) {
-//		this.foundingDate = foundingDate;
-//	}
-//
-//	public String getWorkersCount() {
-//		return workersCount;
-//	}
-//
-//	public void setWorkersCount(String workersCount) {
-//		this.workersCount = workersCount;
-//	}
-//
-//	public Date getAppDate() {
-//		return appDate;
-//	}
-//
-//	public void setAppDate(Date appDate) {
-//		this.appDate = appDate;
-//	}
-//
-//	public String getCompanyDomain() {
-//		return companyDomain;
-//	}
-//
-//	public void setCompanyDomain(String companyDomain) {
-//		this.companyDomain = companyDomain;
-//	}
-//
-//	public String getCompanyHomepage() {
-//		return companyHomepage;
-//	}
-//
-//	public void setCompanyHomepage(String companyHomepage) {
-//		this.companyHomepage = companyHomepage;
-//	}
-//
-//	public String getCompanyExplain() {
-//		return companyExplain;
-//	}
-//
-//	public void setCompanyExplain(String companyExplain) {
-//		this.companyExplain = companyExplain;
-//	}
-//
-//	public boolean isVerifyFlag() {
-//		return verifyFlag;
-//	}
-//
-//	public void setVerifyFlag(boolean verifyFlag) {
-//		this.verifyFlag = verifyFlag;
-//	}
-//
-//	public boolean isClosingFlag() {
-//		return closingFlag;
-//	}
-//
-//	public void setClosingFlag(boolean closingFlag) {
-//		this.closingFlag = closingFlag;
-//	}
-//}
+package com.ksinfo.blind.manage.dto;
+
+import java.sql.Date;
+
+public class CompanyDto {
+	private long userId;
+	private long companyId;
+	private char verifyFlag;
+	private char closingFlag;
+	private String companyName;
+	private String businessTypeCode;
+	private Date foundingDate;
+	private String workersCount;
+	private String companyAddress;
+	private String companyDomain;
+	private String companyHomepage;
+	private String companyExplain;
+
+	public CompanyDto(long companyId, char verifyFlag, char closingFlag,
+		String companyName, String businessTypeCode, Date foundingDate, String workersCount,
+		String companyAddress, String companyDomain, String companyHomepage, String companyExplain
+	) {
+		this.companyId = companyId;
+		switch (verifyFlag) {
+			case '0':
+			case '1':
+				this.verifyFlag = verifyFlag;
+				break;
+			default:
+				this.verifyFlag = '2';
+				break;
+		}
+		if (closingFlag == '0') {
+			this.closingFlag = '0';
+		} else {
+			this.closingFlag = '1';
+		}
+		this.companyName = companyName;
+		this.businessTypeCode = businessTypeCode;
+		this.foundingDate = foundingDate;
+		this.workersCount = workersCount;
+		this.companyAddress = companyAddress;
+		this.companyDomain = companyDomain;
+		this.companyHomepage = companyHomepage;
+		this.companyExplain = companyExplain;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public long getCompanyId() {
+		return companyId;
+	}
+
+	public char getVerifyFlag() {
+		return verifyFlag;
+	}
+
+	public char getClosingFlag() {
+		return closingFlag;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public String getBusinessTypeCode() {
+		return businessTypeCode;
+	}
+
+	public Date getFoundingDate() {
+		return foundingDate;
+	}
+
+	public String getWorkersCount() {
+		return workersCount;
+	}
+
+	public String getCompanyAddress() {
+		return companyAddress;
+	}
+
+	public String getCompanyDomain() {
+		return companyDomain;
+	}
+
+	public String getCompanyHomepage() {
+		return companyHomepage;
+	}
+
+	public String getCompanyExplain() {
+		return companyExplain;
+	}
+}
