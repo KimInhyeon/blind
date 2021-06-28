@@ -56,11 +56,13 @@ public class SearchController {
 		logger.info("selectBoardId : "+ selectBoardId + "  searchKeyword : "+searchKeyword);
 		
 			//선택한 토픽에 대한 포스트들만 리턴실시.
+			//<!-- 2.2.포스트-토픽선택(왼쪽드롭박스) : 1개의 토픽만 선택시 리턴 -->
 			List<PostDto> searchResultPostsSelectTopic = searchService.getPostSelectTopic(selectBoardId, searchKeyword);			
 			logger.info("viewPostsOfOneTopic-END(Returns searchResultPostsOfOneTopic) ");
 			return searchResultPostsSelectTopic;
 	}
 	
+	//오른쪽 드롭박스(추천순/최신일 정렬)
 	@RequestMapping(value = "sortPosts", method = RequestMethod.POST, produces="application/json")
 	@ResponseBody 	
 	public List<PostDto> sortPosts(int sortPostOption, String searchKeyword, int selectBoardId){ 
@@ -69,12 +71,15 @@ public class SearchController {
 		List<PostDto>  searchResultSortedPosts  = new ArrayList<>();  		//재검색을 실시하여 해당 SQL의 order by등이 적용된 출력.
 		
 		if(sortPostOption == 1) {
-			logger.info("sortPosts-최순 정렬 시작");	
+			logger.info("sortPosts-정렬옵션 : 최신일 기준");	
+			//<!-- 2.3. 콤보박스의 정렬기준 옵션_추천순 -->	
+			//<!-- 2.3.1. 콤보박스의 포스트-정렬옵션-최신일  -->
 			searchResultSortedPosts = searchService.getSortPostBylatestDate(selectBoardId, searchKeyword);
 			return searchResultSortedPosts;
 		}
 		else {
-			logger.info("sortPosts-추천순 정렬 시작");		
+			logger.info("sortPosts-정렬옵션 : 추천수 기준");	
+			//<!-- 2.3.2. 콤보박스의 포스트-정렬옵션-추천순  -->
 				searchResultSortedPosts = searchService.getSortPostByRecommend(selectBoardId, searchKeyword);
 				return searchResultSortedPosts;
 		}
@@ -86,6 +91,7 @@ public class SearchController {
 		logger.info("SearchController-search 시작");	
 		
 		logger.info("기업정보 관련 데이터 준비");	
+		//<!-- 1.1.회사의 프로필 정보 수신 -->
 		List<CompanyDto> searchResultCompany = searchService.getSearchCompany(searchKeyword);	//기업프로필
 		List<CompanyReviewDto> companyReviews =  new ArrayList<>();	
 		
@@ -94,8 +100,9 @@ public class SearchController {
 		if( !(searchResultCompany.isEmpty()) && !(searchResultCompany.get(0).getCompanyName().isEmpty())) { 
 			//!(searchResultCompany.isEmpty())가 0이다 회사정보가 있음.
 			logger.info("확인결과: 회사정보 있음");	
-			companyReviews = searchService.getCompanyReviews(searchResultCompany.get(0).getCompanyId());	
-			//기업에 대한 기업리뷰
+			
+			//<!-- 1.2.회사의 리뷰정보 수신 -->
+			companyReviews = searchService.getCompanyReviews(searchResultCompany.get(0).getCompanyId());//기업에 대한 기업리뷰 수신
 			searchResultCompanyDataFlag=1;
 		}
 		else {
@@ -104,12 +111,13 @@ public class SearchController {
 		}
 
 		
-		//2.포스트관련 정보
-		//2.1 포스트출력
-		List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);	//게시글 제목 기준 검색
+		//2.포스트출력관련
 		
-		//2.2.포스트-토픽선택(왼쪽드롭박스)
-		//2.2.1. [왼쪽드롭박스버튼] 토픽개수및 포스트들의 갯수 카운트 리턴
+		//<!-- 2.1.게시글 출력관련 -->
+		//<!-- 2.1.1. 기본검색(포스트-정렬옵션-최신일순 정렬) -->
+		List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);	//게시글의 제목검색&정렬기준: 최신일
+		
+		//<!-- 2.1.2. [왼쪽드롭박스버튼] 토픽개수및 포스트들의 갯수 카운트 리턴 -->
 		List<BoardDto> boardNameAndIdAndCount = searchService.getBoardNameAndIdAndCount(searchKeyword); //토픽의 이름 수신
 
 		
