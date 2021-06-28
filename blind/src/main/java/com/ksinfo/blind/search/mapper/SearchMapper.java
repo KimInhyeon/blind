@@ -43,8 +43,7 @@ public interface SearchMapper {
 	List<PostDto> getSortPostOneTopicBylatestDate(Map<String, Object> paramMap); //전체 정렬시 boardId 필요없음.
 
 	//2.2.2. 추천순 정렬
-	List<PostDto> getSortPostAllTopicByRecommend(String searchKeyword); // 추천순으로 전체정렬
-	List<PostDto> getSortPostOneTopicByRecommend(java.util.Map<String, Object> paramMap); //추천순으로 1개의 토픽의 포스트만 정렬. 
+	List<PostDto> getSortPostByRecommend(java.util.Map<String, Object> paramMap); //추천순으로 1개의 토픽의 포스트만 정렬. 
 
 	
 	

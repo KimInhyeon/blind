@@ -79,38 +79,9 @@ public class SearchController {
 		logger.info("sortPostOption : "+sortPostOption + "   searchKeyword : "+searchKeyword + "   selectBoardId : " +selectBoardId);
 
 		List<PostDto>  searchResultSortedPosts  = new ArrayList<>();  		//재검색을 실시하여 해당 SQL의 order by등이 적용된 출력.
-		switch(sortPostOption) {//추천순/최신일 순으로 구별.
-			case 1 : // case 1 : 최신일
-				// sort-최신일-모든 토픽(borad) 출력
-				logger.info("sortPosts-최신일 기준 정렬");	
-				if(selectBoardId == -1){
-					searchResultSortedPosts = searchService.getSortPostAllTopicBylatestDate(searchKeyword);
-					return searchResultSortedPosts;	
-				}
-				else {   
-				// sort-최신일-1개의 토픽(borad)만 출력
-					searchResultSortedPosts = searchService.getSortPostOneTopicBylatestDate(searchKeyword,selectBoardId);
-					return searchResultSortedPosts;	
-				}
-				//	break;			
-	
-			case 2 : // 2: 추천순
 				logger.info("sortPosts-추천순 정렬 시작");		
-				// sort-추천순-모든 토픽(borad) 출력
-				if(selectBoardId == -1){ 
-					logger.info("sortPosts-추천순 정렬-모든 토픽(board)을 추천순 정렬");		
-					searchResultSortedPosts = searchService.getSortPostAllTopicByRecommend(searchKeyword);
-					return searchResultSortedPosts;	
-				}
-				else {
-					// sort-추천순-1개의 토픽(borad)만 출력
-					searchResultSortedPosts = searchService.getSortPostOneTopicByRecommend(selectBoardId,searchKeyword);
-					return searchResultSortedPosts;					
-				}
-			
-			default : break;
-		}
-		return searchResultSortedPosts;	
+				searchResultSortedPosts = searchService.getSortPostByRecommend(selectBoardId, searchKeyword);
+				return searchResultSortedPosts;
 	}
 	
 	
@@ -125,9 +96,11 @@ public class SearchController {
 		
 		logger.info("기업정보여부 플래그(검색어가 기업을 검색했는지 여부를 알리는 용도)");	
 		int searchResultCompanyDataFlag=0; //값이 1일시 회사정보 있음
-		if( !(searchResultCompany.isEmpty()) && !(searchResultCompany.get(0).getCompanyName().isEmpty())) { //!(searchResultCompany.isEmpty())가 0이다 회사정보가 있음.
+		if( !(searchResultCompany.isEmpty()) && !(searchResultCompany.get(0).getCompanyName().isEmpty())) { 
+			//!(searchResultCompany.isEmpty())가 0이다 회사정보가 있음.
 			logger.info("확인결과: 회사정보 있음");	
-			companyReviews = searchService.getCompanyReviews(searchResultCompany.get(0).getCompanyId());	//기업에 대한 기업리뷰
+			companyReviews = searchService.getCompanyReviews(searchResultCompany.get(0).getCompanyId());	
+			//기업에 대한 기업리뷰
 			searchResultCompanyDataFlag=1;
 		}
 		else {
@@ -164,4 +137,6 @@ public class SearchController {
 		return mav;	
 
 	}
+	
+	
 }

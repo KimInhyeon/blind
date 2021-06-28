@@ -8,7 +8,26 @@
   <head>
     <meta charset="UTF-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
+        <script
+         src="https://code.jquery.com/jquery-3.1.1.min.js"
+          integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+         crossorigin="anonymous"></script>
+        <script src="../semantic/semantic.js"></script>
+        <style>
+            body{padding:2rem;}
+           .tit{padding: 6px 0 8px; font-size: 150%; font-weight: 700;}
+           #direc{padding:15px; width:100%; background-color:#f2f2f3;}
+           #direc a{color:black; padding:5px;}
+           .dir_category{padding-bottom:20px;}
+           #dir_searchtext{padding: 12px 0;}
+           #dir_searchtext::placeholder{font-size:17px;}
+           .dirkey{padding:40px 0px;}
+           .dirkey li a{font-weight:500; color:black; font-size:15px;}
+           .dirkey ul li{line-height:220%;}
+           .dirpaging{text-align:center; padding-top:20px;}
+        </style>
+	
+	
 	<script>
 	function bookmarkSet(postId){
 		alert(postId); //postid를 컨트롤러에게 넘겨줘서 북마크 처리가능.
@@ -36,11 +55,14 @@
 					//$(postList).append("<div class='column' style='float: left; width:40%; margin:10px; display:inline; border:1px solid #5e615b;'>");
 					//반복문통해 각 포스트들 출력진행
 					$.each(result, function (key, value) {	
+						var hideUserNick =  value.userNickName.substring(0,1)+'****';
 						$(postList).append("<div class='column' style='float: left; width:40%; margin:10px; display:inline; border:1px solid #5e615b;'>"
 	                						+"<div>"+value.boardTopicName+"</div>"
 						                    +"<div style='margin:4px;'> <h3>" +value.postTitle+ "</h3> </div>"
 						                    +"<div style='margin:4px;'> <p>"+value.postContents+"</p></div>" 
-										 	+"<div style='margin:4px;'>"+ value.companyName + value.userNickName
+										 	+"<div style='margin:4px;'>"+ value.companyName 
+									 		+"<div>" + hideUserNick + "</div>"
+											
 											+"</div>"
 						                    +"<div style='margin:4px;'>"
 						                        +"<i class='eye icon'></i>" + value.postCount
@@ -130,7 +152,7 @@
    <!-- 검색창 -->
    <div class="inputSearchKeyword">    
    		<form>
-	   		<div class="ui transparent left icon input">
+        <div class="ui fluid massive left icon input">
 				  <input type="text" placeholder="Search"
 					     name="searchKeyword" value=${pastSearchKeyword}> 
 	    		<i class="search icon"></i>
@@ -138,7 +160,6 @@
 			</div>
    		</form>
    </div>
-
 
 
 	<!-- 검색결과출력페이지(전체) -->
@@ -191,6 +212,7 @@
 					</div>
 		 		</div>
 			</div>
+		<div class="ui divider"></div>
 	  	</c:if>
 
 	<!-- 검색결과2. 토픽(게시글) -->
@@ -230,7 +252,7 @@
 					 	<div style="margin:4px;"> <p>${posts.postContents}</p></div>
 					 	<div style="margin:4px;"> ${posts.companyName} 
 					 		- ${fn:substring(posts.userNickName,0,1)}
-							<c:forEach begin="2" end='${fn:length(posts.userNickName)}'>*</c:forEach>	
+							<c:forEach begin="2" end='5'>*</c:forEach>	
 						</div>
 
 					 	<div style="margin:4px;">
@@ -253,8 +275,95 @@
 			</div>
 		</div>
    </div>
- 
-   
+
+ <!-- ------------------------------------ -->
+   <div class="ui container">
+        <h3 class="tit">ディレクトリ</h3>
+        <div class="dir_category">
+            <div class="ui breadcrumb" id="direc">
+                <a class="active section">あ行</a>
+                <div class="divider"> / </div>
+                <a class="section">か行</a>
+                <div class="divider"> / </div>
+                <a class="section">さ行</a>
+                <div class="divider"> / </div>
+                <a class="section">た行</a>
+                <div class="divider"> / </div>
+                <a class="section">な行</a>
+                <div class="divider"> / </div>
+                <a class="section">は行</a>
+                <div class="divider"> / </div>
+                <a class="section">ま行</a>
+                <div class="divider"> / </div>
+                <a class="section">や行</a>
+                <div class="divider"> / </div>
+                <a class="section">ら行</a>
+                <div class="divider"> / </div>
+                <a class="section">わ行</a>
+                <div class="divider"> / </div>
+                <a class="section">A～Z</a>
+                <div class="divider"> / </div>
+                <a class="section">0 - 9</a>
+            </div>
+        </div>
+        
+        <div class="ui fluid massive left icon input">
+            <input type="text" placeholder="キーワードを入力してください。" id="dir_searchtext">
+            <i class="search icon" id="searchicon"></i>
+        </div>
+        <div class="ui two column grid container">
+            <div class="column">
+                <div class="dirkey">
+                    <ul class="ui list">
+                        <li style="line-height:150%;"><a>トヨタ　経歴</a></li>
+                        <li style="line-height:150%;"><a>トヨタ　企業文化</a></li>
+                        <li style="line-height:150%;"><a>トヨタ　福祉</a></li>
+                        <li style="line-height:150%;"><a>トヨタ　お給料</a></li>
+                        <li style="line-height:150%;"><a>トヨタ　会社</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="column">
+                <div class="dirkey">
+                    <ul class="ui list">
+                        <li style="line-height:150%;"><a>トヨタ　経歴</a></li>
+                        <li style="line-height:150%;"><a>トヨタ　企業文化</a></li>
+                        <li style="line-height:150%;"><a>トヨタ　福祉</a></li>
+                        <li style="line-height:150%;"><a>トヨタ　お給料</a></li>
+                        <li style="line-height:150%;"><a>トヨタ　会社</a></li>
+                    </ul>
+                </div>
+            </div>
+    
+            
+        </div>
+        <div class="ui fitted divider" style="margin:15px 0px;"><!--fit 되는 얇은 선--></div>
+        <div class="dirpaging">
+        <div class="ui pagination menu">
+            <a class="item active">
+              <
+            </a>
+            <div class="disabled item">
+              1
+            </div>
+            <a class="item">
+              2
+            </a>
+            <a class="item">
+              3
+            </a>
+            <a class="item">
+              4
+            </a>
+            <a class="item">
+              5
+            </a>
+            <a class="item">
+              >
+            </a>
+          </div>
+        </div>
+    </div>
    
 </body>
 
