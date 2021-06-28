@@ -83,8 +83,23 @@ where blind.post_mgt.post_title like '%'|| #{searchKeyword} ||'%'
 order by blind.post_mgt.post_create_date DESC;
 </select>
 
+<!-- 2.1.2. [왼쪽드롭박스버튼] 토픽개수및 포스트들의 갯수 카운트 리턴 -->
+<select id="getBoardNameAndIdAndCount" parameterType="String"  resultType="com.ksinfo.blind.search.dto.BoardDto"> 
+    SELECT 
+		board.board_topic_name
+		,board.board_id
+		,count(*) as postCount
+	from blind.post_mgt post
+	inner join blind.board_mgt board on
+		post.board_id = board.board_id and
+		post.post_title like '%'|| #{searchKeyword} ||'%'
+	group by board.board_id
+	order by board.board_id ASC;
+</select>	
 
-<!-- 2.2.포스트-토픽선택(왼쪽드롭박스) --> <!-- getPostsOfOneTopic -->
+
+<!-- 2.2.포스트-토픽선택(왼쪽드롭박스) -->
+<!-- 2.2.1 [왼쪽드롭박스버튼] 1개의 토픽만 선택시 리턴-->
 <select id="getPostSelectTopic" parameterType="java.util.Map" resultType="com.ksinfo.blind.search.dto.PostDto"> 
 SELECT DISTINCT
    blind.board_mgt.board_topic_name           --토픽(게시판)명
@@ -125,7 +140,7 @@ where blind.post_mgt.post_title like '%'|| #{searchKeyword} ||'%'
 	<if test="boardId neq -1">
 		and blind.post_mgt.board_id =  #{boardId}
 	</if>
-ORDER BY recommend_count DESC;
+ORDER BY post_mgt.post_create_date DESC;
 </select>
 	 
 <!-- 2.3. 콤보박스의 정렬기준 옵션_추천순 -->	 <!-- getSortPostOneTopicByRecommend -->
@@ -185,18 +200,6 @@ ORDER BY recommend_count DESC;
 
 
 
-<!-- 2.2 선택한 토픽 출력(왼쪽드롭박스버튼) -->
-<select id="getBoardNameAndIdAndCount" parameterType="String"  resultType="com.ksinfo.blind.search.dto.BoardDto"> 
-    SELECT 
-		board.board_topic_name
-		,board.board_id
-		,count(*) as postCount
-	from blind.post_mgt post
-	inner join blind.board_mgt board on
-		post.board_id = board.board_id and
-		post.post_title like '%'|| #{searchKeyword} ||'%'
-	group by board.board_id;
-</select>	
 
 
 

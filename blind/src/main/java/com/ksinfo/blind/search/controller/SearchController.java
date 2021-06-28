@@ -49,27 +49,16 @@ public class SearchController {
 	}
 	
 	//포스트-1개의 토픽(board) 선택시 해당하는 게시판만 출력되도록 실행.
-	@RequestMapping(value = "viewPostsOfOneTopic", method = RequestMethod.POST, produces="application/json")
+	@RequestMapping(value = "viewPostsSelectedTopic", method = RequestMethod.POST, produces="application/json")
 	@ResponseBody 	
-	public List<PostDto> viewPostsOfOneTopic(int selectBoardId, String searchKeyword ){ 
-		logger.info("viewPostsOfOneTopic start");
+	public List<PostDto> viewPostsSelectedTopic(int selectBoardId, String searchKeyword ){ 
+		logger.info("viewPostsSelectedTopic start");
 		logger.info("selectBoardId : "+ selectBoardId + "  searchKeyword : "+searchKeyword);
 		
-		//List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);	//게시글 제목 기준 검색
-
-		if(selectBoardId ==-1) {
-			//토픽선택-전체토픽(모두출력) 선택
-			List<PostDto> searchResultAllPosts= searchService.getSearchPosts(searchKeyword);	
-			logger.info("viewPostsOfOneTopic-END(Returns searchResultAllPosts) ");
-			return searchResultAllPosts;
-		}
-		else {
-			//토픽선택- 1개의 토픽만 출력.
+			//선택한 토픽에 대한 포스트들만 리턴실시.
 			List<PostDto> searchResultPostsSelectTopic = searchService.getPostSelectTopic(selectBoardId, searchKeyword);			
 			logger.info("viewPostsOfOneTopic-END(Returns searchResultPostsOfOneTopic) ");
 			return searchResultPostsSelectTopic;
-		}
-
 	}
 	
 	@RequestMapping(value = "sortPosts", method = RequestMethod.POST, produces="application/json")
@@ -77,13 +66,19 @@ public class SearchController {
 	public List<PostDto> sortPosts(int sortPostOption, String searchKeyword, int selectBoardId){ 
 		logger.info("sortPosts 시작");
 		logger.info("sortPostOption : "+sortPostOption + "   searchKeyword : "+searchKeyword + "   selectBoardId : " +selectBoardId);
-
 		List<PostDto>  searchResultSortedPosts  = new ArrayList<>();  		//재검색을 실시하여 해당 SQL의 order by등이 적용된 출력.
-				logger.info("sortPosts-추천순 정렬 시작");		
+		
+		if(sortPostOption == 1) {
+			logger.info("sortPosts-최순 정렬 시작");	
+			searchResultSortedPosts = searchService.getSortPostBylatestDate(selectBoardId, searchKeyword);
+			return searchResultSortedPosts;
+		}
+		else {
+			logger.info("sortPosts-추천순 정렬 시작");		
 				searchResultSortedPosts = searchService.getSortPostByRecommend(selectBoardId, searchKeyword);
 				return searchResultSortedPosts;
+		}
 	}
-	
 	
 	//search.jsp에서 검색어를 입력시 작동하는 기능
 	@RequestMapping("/search")  
@@ -112,11 +107,15 @@ public class SearchController {
 		//2.포스트관련 정보
 		//2.1 포스트출력
 		List<PostDto> searchResultPosts = searchService.getSearchPosts(searchKeyword);	//게시글 제목 기준 검색
-
-		//2.2 드롭다운버튼관련
+		
+		//2.2.포스트-토픽선택(왼쪽드롭박스)
+		//2.2.1. [왼쪽드롭박스버튼] 토픽개수및 포스트들의 갯수 카운트 리턴
 		List<BoardDto> boardNameAndIdAndCount = searchService.getBoardNameAndIdAndCount(searchKeyword); //토픽의 이름 수신
 
+		
+		// mav를 통해 값을 jsp에게 리턴할 수 있도록 mavadd 실시.
 		logger.info("데이터준비 3단계. mav에게 searchResultPosts가 받은 정보를 입력. 웹페이지에 출력할 수 있도록 실시.");				
+
 		//0.이전검색어 그대로 전달.
 		mav.addObject("pastSearchKeyword", searchKeyword); //이전의 검색어.
 					
@@ -126,9 +125,10 @@ public class SearchController {
 		mav.addObject("companyReviews",companyReviews);								//검색된 기업에 대한 기업리뷰		
  
 		//2.포스트관련 정보
-		//2.1 드롭다운버튼관련
+		//2.1 포스트출력
 		mav.addObject("boardNameAndIdAndCount",boardNameAndIdAndCount);			//검색어에 검색된 포스트들의 토픽(게시판) 이름들 저장. //boardTopicName
-		//2.2 포스트출력
+		//2.2.포스트-토픽선택(왼쪽드롭박스)
+		//2.2.1. [왼쪽드롭박스버튼] 토픽개수및 포스트들의 갯수 카운트 리턴
 		mav.addObject("searchResultPosts",searchResultPosts);			//검색어와 관련된 포스트(게시글)들 전달.
 		
 			

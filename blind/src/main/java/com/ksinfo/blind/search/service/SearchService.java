@@ -18,32 +18,22 @@ import com.ksinfo.blind.search.mapper.SearchMapper;
 
 @Service 
 public class SearchService {
-
-	
 	@Autowired 
 	public SearchMapper mapper;  //SearchMapper.java
 	
 	public List<CompanyDto> getSearchCompany(String searchKeyword) { 
 		return mapper.getSearchCompany(searchKeyword);     //searchMapper.java mapper확ㅈ
 	}
-
 	public List<CompanyReviewDto> getCompanyReviews(int companyId){
 		return mapper.getCompanyReviews(companyId);
 	}
-
 	public List<PostDto>  getSearchPosts(String searchKeyword){ 
 		return mapper.getSearchPosts(searchKeyword);     //searchMapper.java mapper확ㅈ
-	}
-	
-	public List<UserDto> getNicknameAndCompanynameOfPosts(int userId){
-		return mapper.getNicknameAndCompanynameOfPosts(userId);	
-	}
-
+	}	
 	public List<BoardDto> getBoardNameAndIdAndCount(String searchKeyword){
 		return mapper.getBoardNameAndIdAndCount(searchKeyword);			
 	} 
 	
-
 		
 	public List<PostDto> getPostSelectTopic(int selectBoardId, String searchKeyword){
 		//사용자가 선택한 토픽(보드)을 넘버값과, 검색어를 받아서 검색을 진행한다.
@@ -56,7 +46,7 @@ public class SearchService {
 
 	
 	//포스트-정렬-최신일 순
-	public List<PostDto> getSortPostBylatestDate(String searchKeyword,int selectBoardId){
+	public List<PostDto> getSortPostBylatestDate(int selectBoardId, String searchKeyword){
 		java.util.Map<String, Object> paramMap = new HashMap<String, Object>(); //String :키값, object : 밸류값
 		paramMap.put("searchKeyword", searchKeyword); //
 		paramMap.put("boardId", selectBoardId);			
@@ -71,5 +61,3 @@ public class SearchService {
 	}
 	
 }
-
-

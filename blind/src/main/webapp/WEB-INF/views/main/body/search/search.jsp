@@ -36,13 +36,14 @@
 	}
 	
 	$(function(){
-		$("#viewPostsOfOneTopic").on('change', function(){	
-			var checkTopicNum= $("#viewPostsOfOneTopic option:selected").val();
+		//1개의 토픽을 선택시 해당 토픽만 출력하도록 하는 제이쿼리 함수.
+		$("#viewPostsSelectedTopic").on('change', function(){	
+			var checkTopicNum= $("#viewPostsSelectedTopic option:selected").val();
 			alert("checkTopicNum:"+checkTopicNum);
 	    	$.ajax({
 				type:"POST",
-			    url: "viewPostsOfOneTopic",
-				data : { selectBoardId : $("#viewPostsOfOneTopic option:selected").val()//-1:전체 출력으로 실시. -1이외는 selecteTopicNumber에 따라 1개 토픽관련 포스트만 출력.
+			    url: "viewPostsSelectedTopic",
+				data : { selectBoardId : $("#viewPostsSelectedTopic option:selected").val()//-1:전체 출력으로 실시. -1이외는 selecteTopicNumber에 따라 1개 토픽관련 포스트만 출력.
 						 ,searchKeyword : $("input[name=searchKeyword]").val() 			 //검색창의 검색어
 				 	   },
 				dataType:"json",
@@ -89,14 +90,14 @@
 		}); 
 	
 		$("#sortPosts").on('change', function(){
-			var checkTopicNum= $("#viewPostsOfOneTopic option:selected").val();
+			var checkTopicNum= $("#viewPostsSelectedTopic option:selected").val();
 			alert("checkTopicNum:"+checkTopicNum);
 			$.ajax({
 				type:"POST",
 			    url: "sortPosts",
 				data : { sortPostOption : $("#sortPosts option:selected").val() //값 1:최신순 정렬, 값 2:추천순정렬
 						 ,searchKeyword : $("input[name=searchKeyword]").val()  //검색창의 검색어
-						 ,selectBoardId : $("#viewPostsOfOneTopic option:selected").val()//-1:전체 출력으로 실시. -1이외는 selecteTopicNumber에 따라 1개 토픽관련 포스트만 출력.
+						 ,selectBoardId : $("#viewPostsSelectedTopic option:selected").val()//-1:전체 출력으로 실시. -1이외는 selecteTopicNumber에 따라 1개 토픽관련 포스트만 출력.
 					   },
 				dataType:"json",
 				success: function(result){
@@ -144,7 +145,9 @@
 		}); 
 	});
 	</script>
+	
    <title>検索結果 page</title>
+   
    </head>
    
    <body>
@@ -220,15 +223,16 @@
 			<!-- 드롭버튼 - 토픽선택, 정렬설정 -->
 			<!-- 드롭버튼(1)토픽선택 -->
 			<div>
-				<select id="viewPostsOfOneTopic" class="ui dropdown" style="border:1px solid #5e615b;">
+				<select id="viewPostsSelectedTopic" class="ui dropdown" style="border:1px solid #5e615b;">
 
+				<!-- 모든 토픽들의 포스트들을 총합 -->
 				<c:set var="sumOfboardCounts" value="0" />
 					<c:forEach items="${boardNameAndIdAndCount}" var="countOfboard">
 						sumOfboardCounts=sumOfboardCounts+countOfboard
 						<c:set var="sumOfboardCounts" value="${sumOfboardCounts + countOfboard.postCount}" />
 					</c:forEach>
 
-				
+				<!-- 모든 토픽들과 포스트들의 이름, 갯수들을 출력.-->
 				<option value="-1">トピック全体( ${sumOfboardCounts} )</option> <!-- 전체는 무조건 사용되므로 무조건 적용. -->
 					<c:forEach items="${boardNameAndIdAndCount}" var="menuData">
 					    <option value="${menuData.boardId}"> ${menuData.boardTopicName} ( ${menuData.postCount} )</option>
@@ -275,96 +279,6 @@
 			</div>
 		</div>
    </div>
-
- <!-- ------------------------------------ -->
-   <div class="ui container">
-        <h3 class="tit">ディレクトリ</h3>
-        <div class="dir_category">
-            <div class="ui breadcrumb" id="direc">
-                <a class="active section">あ行</a>
-                <div class="divider"> / </div>
-                <a class="section">か行</a>
-                <div class="divider"> / </div>
-                <a class="section">さ行</a>
-                <div class="divider"> / </div>
-                <a class="section">た行</a>
-                <div class="divider"> / </div>
-                <a class="section">な行</a>
-                <div class="divider"> / </div>
-                <a class="section">は行</a>
-                <div class="divider"> / </div>
-                <a class="section">ま行</a>
-                <div class="divider"> / </div>
-                <a class="section">や行</a>
-                <div class="divider"> / </div>
-                <a class="section">ら行</a>
-                <div class="divider"> / </div>
-                <a class="section">わ行</a>
-                <div class="divider"> / </div>
-                <a class="section">A～Z</a>
-                <div class="divider"> / </div>
-                <a class="section">0 - 9</a>
-            </div>
-        </div>
-        
-        <div class="ui fluid massive left icon input">
-            <input type="text" placeholder="キーワードを入力してください。" id="dir_searchtext">
-            <i class="search icon" id="searchicon"></i>
-        </div>
-        <div class="ui two column grid container">
-            <div class="column">
-                <div class="dirkey">
-                    <ul class="ui list">
-                        <li style="line-height:150%;"><a>トヨタ　経歴</a></li>
-                        <li style="line-height:150%;"><a>トヨタ　企業文化</a></li>
-                        <li style="line-height:150%;"><a>トヨタ　福祉</a></li>
-                        <li style="line-height:150%;"><a>トヨタ　お給料</a></li>
-                        <li style="line-height:150%;"><a>トヨタ　会社</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="column">
-                <div class="dirkey">
-                    <ul class="ui list">
-                        <li style="line-height:150%;"><a>トヨタ　経歴</a></li>
-                        <li style="line-height:150%;"><a>トヨタ　企業文化</a></li>
-                        <li style="line-height:150%;"><a>トヨタ　福祉</a></li>
-                        <li style="line-height:150%;"><a>トヨタ　お給料</a></li>
-                        <li style="line-height:150%;"><a>トヨタ　会社</a></li>
-                    </ul>
-                </div>
-            </div>
-    
-            
-        </div>
-        <div class="ui fitted divider" style="margin:15px 0px;"><!--fit 되는 얇은 선--></div>
-        <div class="dirpaging">
-        <div class="ui pagination menu">
-            <a class="item active">
-              <
-            </a>
-            <div class="disabled item">
-              1
-            </div>
-            <a class="item">
-              2
-            </a>
-            <a class="item">
-              3
-            </a>
-            <a class="item">
-              4
-            </a>
-            <a class="item">
-              5
-            </a>
-            <a class="item">
-              >
-            </a>
-          </div>
-        </div>
-    </div>
-   
 </body>
 
 
