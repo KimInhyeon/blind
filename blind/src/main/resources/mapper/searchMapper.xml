@@ -51,7 +51,7 @@ SELECT DISTINCT
    ,blind.post_mgt.post_contents              --게시글 내용
    ,blind.company_mgt.company_name          --근무기업명
    ,blind.user_mgt.user_nickname              --작성자의 닉네임
-   ,blind.post_count_inf.post_count                     --글의 조회수
+   ,COALESCE(blind.post_count_inf.post_count, 0) AS post_count   --글의 조회수
    ,COALESCE(count_recommend_inf.recommend_count, 0) AS recommend_count  --글의 추천수
    ,COALESCE(count_reply_inf.reply_count, 0) AS  reply_count       --글의 댓글수
    ,blind.post_mgt.post_create_date           --게시글의 최초작성일
@@ -107,7 +107,7 @@ SELECT DISTINCT
    ,blind.post_mgt.post_contents              --게시글 내용
    ,blind.company_mgt.company_name          --근무기업명
    ,blind.user_mgt.user_nickname              --작성자의 닉네임
-   ,blind.post_count_inf.post_count                     --글의 조회수
+   ,COALESCE(blind.post_count_inf.post_count, 0) AS post_count      --글의 조회수
    ,COALESCE(count_recommend_inf.recommend_count, 0) AS recommend_count  --글의 추천수
    ,COALESCE(count_reply_inf.reply_count, 0) AS  reply_count       --글의 댓글수
    ,blind.post_mgt.post_create_date           --게시글의 최초작성일
@@ -152,7 +152,7 @@ SELECT DISTINCT
    ,blind.post_mgt.post_contents              --게시글 내용
    ,blind.company_mgt.company_name            --근무기업명
    ,blind.user_mgt.user_nickname              --작성자의 닉네임
-   ,blind.post_count_inf.post_count           --글의 조회수
+   ,COALESCE(blind.post_count_inf.post_count, 0) AS post_count   --글의 조회수
    ,COALESCE(count_recommend_inf.recommend_count, 0) AS recommend_count  --글의 추천수
    ,COALESCE(count_reply_inf.reply_count, 0) AS  reply_count       --글의 댓글수
    ,blind.post_mgt.post_create_date           --게시글의 최초작성일
@@ -196,7 +196,7 @@ SELECT DISTINCT
    ,blind.post_mgt.post_contents              --게시글 내용
    ,blind.company_mgt.company_name            --근무기업명
    ,blind.user_mgt.user_nickname              --작성자의 닉네임
-   ,blind.post_count_inf.post_count           --글의 조회수
+   ,COALESCE(blind.post_count_inf.post_count, 0) AS post_count   --글의 조회수
    ,COALESCE(count_recommend_inf.recommend_count, 0) AS recommend_count  --글의 추천수
    ,COALESCE(count_reply_inf.reply_count, 0) AS  reply_count       --글의 댓글수
    ,blind.post_mgt.post_create_date           --게시글의 최초작성일
