@@ -53,35 +53,31 @@
 					//포스트리스트의 화면재구성 시작
 					//주요틀 재구성
 					$(postList).html("");
-					//$(postList).append("<div class='column' style='float: left; width:40%; margin:10px; display:inline; border:1px solid #5e615b;'>");
 					//반복문통해 각 포스트들 출력진행
 					$.each(result, function (key, value) {	
 						var hideUserNick =  value.userNickName.substring(0,1)+'****';
-						$(postList).append("<div class='column' style='float: left; width:40%; margin:10px; display:inline; border:1px solid #5e615b;'>"
-	                						+"<div>"+value.boardTopicName+"</div>"
-						                    +"<div style='margin:4px;'> <h3>" +value.postTitle+ "</h3> </div>"
-						                    +"<div style='margin:4px;'> <p>"+value.postContents+"</p></div>" 
-										 	+"<div style='margin:4px;'>"+ value.companyName 
-									 		+"<div>" + hideUserNick + "</div>"
-											
-											+"</div>"
-						                    +"<div style='margin:4px;'>"
-						                        +"<i class='eye icon'></i>" + value.postCount
-						                        +"<i class='thumbs up outline icon'></i>" +value.recommendCount
-						                        +"<i class='comment outline icon'></i>"  +value.replyCount
-						                    +"</div>"
-						                    +"<div>" 
-						                    	+"<div style='float:left;'>"
-						                    	+ value.postCreateDate
-						                    +"</div>"
-						              			+"<div id='bookmarkSet"+value.postId +" ' onclick='bookmarkSet(" +value.postId + ")'>"
-						                 		   +"<a><i class='bookmark outline icon'></i></a>"
+						var postCreateDate = value.postCreateDate.substring(5,7)+'.'+value.postCreateDate.substring(8,10);
+						$(postList).append("<div class='column' style='float: left; width:45%; margin:10px; display:inline;'>"
+	                							+"<div>"+value.boardTopicName+"</div>"
+						                   		+"<div style='margin:10px; word-break:break-all;'> <h3>" +value.postTitle+ "</h3> </div>"
+						                    	+"<div style='margin:10px;'> <p>"+value.postContents+"</p></div>" 
+										 		+"<div style='margin:10px;'>"+ value.companyName 
+									 				+"<div>" + hideUserNick + "</div>"
+												+"</div>"
+						                    	+"<div style='padding:10px; line-heigh:top;'>"
+						                        	+"<i class='eye icon' style='margin:0px 5px 0px 5px;'></i>" + value.postCount
+						                        	+"<i class='thumbs up outline icon' style='margin:0px 5px 0px 5px;'></i>" +value.recommendCount
+						                        	+"<i class='comment outline icon' style='margin:0px 5px 0px 5px;'></i>"  +value.replyCount
+						                    		+"<div style='float:right;'>"
+							                    		+ postCreateDate
+							              				+"<div id='bookmarkSet" +value.postId + " 'onclick='bookmarkSet(" +value.postId + ")' style='display:inline;margin:0px 5px 0px 5px;'>"
+								                    		+"<a style='color:#000000; margin:0px;'><i class='bookmark outline icon'></i></a>"
+							                			+"</div>"
 						                		+"</div>"
 						          			+"</div>");
-					});
-	                //마지막 부분 출력
-                	$(postList).append("</div>");	
-					
+						}); //$.each(result, function (key, value) 반복출력 종료.
+		                //마지막 부분 출력
+	                	$(postList).append("</div>");	
 				},
 				error: function(){
 					alert("에러");
@@ -249,31 +245,27 @@
 			<!-- 게시글(포스트)들 출력 -->
 			<div class="ui four column grid" id="postList">
 				<c:forEach items="${searchResultPosts}" var="posts">
-					<div class="column" style="float: left; width:40%; margin:10px; display:inline;">
+					<div class="column" style="float: left; width:45%; margin:10px; display:inline;">
 
 						<div> ${posts.boardTopicName} </div>
-					 	<div style="margin:4px; word-break:break-all;" > <h3>${posts.postTitle}</h3> </div>			
-					 	<div style="margin:4px;"> <p>${posts.postContents}</p></div>
-					 	<div style="margin:4px;"> ${posts.companyName} 
+					 	<div style="margin:10px; word-break:break-all;" > <h3>${posts.postTitle}</h3> </div>			
+					 	<div style="margin:10px;"> ${posts.postContents}</div>
+					 	<div style="margin:10px;"> ${posts.companyName} 
 					 		- ${fn:substring(posts.userNickName,0,1)}
-							<c:forEach begin="2" end='5'>*</c:forEach>	
+							<c:forEach begin="2" end='5'>*</c:forEach>
 						</div>
 
-					 	<div style="margin:4px;">
-					 		 <i class="eye icon"></i>${posts.postCount}
-							 <i class="thumbs up outline icon"></i> ${posts.recommendCount}
-							 <i class="comment outline icon"></i>  ${posts.replyCount}
-						</div>
-				   		<div> 
-					  		<div style="float:left;">
-						  		${fn:substring(posts.postCreateDate,0,10)}
-						  		</div>
-					   		<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" >
-					   			<a><i class="bookmark outline icon"></i></a>
-					   		</div>
+					 	<div style="padding:10px; line-heigh:top;">
+					 		 <i class="eye icon" style="margin:0px 5px 0px 5px;"></i>${posts.postCount} <!-- margin: top, right, bottom, left;  -->
+							 <i class="thumbs up outline icon" style="margin:0px 5px 0px 5px;"></i> ${posts.recommendCount}
+							 <i class="comment outline icon"  style="margin:0px 5px 0px 5px;"></i>  ${posts.replyCount}
+					  		<div style="float:Right;">
+						 		${fn:substring(posts.postCreateDate,5,7)}.${fn:substring(posts.postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(posts.postCreateDate,0,10)} -->
+						   		<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
+						   			<a style="color:#000000; margin:0px;"><i class="bookmark outline icon"></i></a>
+						   		</div>
+						  	</div>
 				   		</div>
-				   		 <div class="ui fitted divider" style="margin-top:50px; "><!--fit 되는 얇은 선--></div>
-				   		 					<div class="ui vertical divider">  </div>
 				   </div>
 		 		</c:forEach>
 			</div>
