@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ksinfo.blind.search.mapper.SearchMapper">
 
-
+<!-- 1.회사관련 xml -->
+<!-- 1.1.회사의 프로필 정보 수신 -->
 <select id="getSearchCompany" parameterType="String" resultType="com.ksinfo.blind.search.dto.CompanyDto"> 
     SELECT 
     company_id
@@ -12,6 +13,7 @@
     where company_name= #{searchKeyword};
 </select>
 
+<!-- 1.2.회사의 리뷰정보 수신 -->
 <select id="getCompanyReviews" parameterType="int" resultType="com.ksinfo.blind.search.dto.CompanyReviewDto"> 
 SELECT 
 	job_group_mst.job_group_name as jobGroupName <!-- sql상으로는 나오지만 문제는 스프링 data상으로는 보관되지 않는다는 것. -->
@@ -34,16 +36,13 @@ LEFT JOIN blind.job_group_mst
 ON blind.job_group_mst.job_group_code = blind.company_review_mgt.job_group_code	
 LEFT JOIN blind.company_mgt
 ON blind.company_review_mgt.company_id = #{jobGroupCode} ;	
-</select>
- 
-
-<select id="getPostCount" resultType="com.ksinfo.blind.search.dto.CompanyDto"> 
-    SELECT * FROM blind.company_mgt
-    where company_name= #{searchKeyword};  
-</select>
+</select> 
+<!-- 회사관련 xml 끝 -->
 
 
 
+<!-- 2.포스트 관련 xml -->
+<!-- 2.1.기본검색(포스트-정렬옵션-최신일순 정렬) -->
 <select id="getSearchPosts" resultType="com.ksinfo.blind.search.dto.PostDto"> 
 SELECT DISTINCT
    blind.board_mgt.board_topic_name           --토픽(게시판)명
@@ -84,7 +83,9 @@ where blind.post_mgt.post_title like '%'|| #{searchKeyword} ||'%'
 order by blind.post_mgt.post_create_date DESC;
 </select>
 
-<select id="getPostsOfOneTopic" parameterType="java.util.Map" resultType="com.ksinfo.blind.search.dto.PostDto"> 
+
+<!-- 2.2.포스트-토픽선택(왼쪽드롭박스) --> <!-- getPostsOfOneTopic -->
+<select id="getPostSelectTopic" parameterType="java.util.Map" resultType="com.ksinfo.blind.search.dto.PostDto"> 
 SELECT DISTINCT
    blind.board_mgt.board_topic_name           --토픽(게시판)명
    ,blind.post_mgt.post_title                 --게시글 주제
@@ -121,158 +122,13 @@ LEFT JOIN
   GROUP BY post_id) count_reply_inf
 ON blind.post_mgt.post_id = count_reply_inf.post_id 
 where blind.post_mgt.post_title like '%'|| #{searchKeyword} ||'%' 
-and blind.post_mgt.board_id = #{boardId};
-
+	<if test="boardId neq -1">
+		and blind.post_mgt.board_id =  #{boardId}
+	</if>
+ORDER BY recommend_count DESC;
 </select>
-
-
-<select id="getViewCountOfPosts" resultType="com.ksinfo.blind.search.dto.PostCountInfDto"> 
-    <!-- SELECT blind.post_count_inf.post_count FROM blind.blind.post_count_inf -->
-    SELECT * FROM blind.post_count_inf
-    where #{postId} = blind.post_count_inf.post_id;
-</select>
-	
-
-<select id="getReplysOfPosts" resultType="com.ksinfo.blind.search.dto.ReplyDto"> 
-    SELECT * FROM blind.reply_mgt
-    where  #{postId} = blind.reply_mgt.post_id;
-</select>	
-	
-	
-
-	
-<select id="getNicknameAndCompanynameOfPosts"  parameterType="int" resultType="com.ksinfo.blind.search.dto.UserDto"> 
-	SELECT
-		user_mgt.user_nickname
-		, blind.company_mgt.company_name as userCompanyName
-	FROM blind.user_mgt
-	Left Join blind.company_mgt
-		ON blind.user_mgt.company_id = blind.company_mgt.company_id  
-    where  #{userId}  = blind.user_mgt.user_id;
-</select>		
-	
-	
-<select id="getRecommendCountOfPosts" resultType="int"> <!-- 추천수카운트 -->
-    SELECT count(post_id) FROM blind.post_recommend_inf
-    where  #{postId} = blind.post_recommend_inf.post_id;
-</select>		
-	
-<select id="getReplyCountsOfPosts" resultType="int"> 
-    SELECT count(post_id) FROM blind.reply_mgt
-    where  #{postId} = blind.reply_mgt.post_id;
-</select>		
-
-
-<select id="getBoardTopicCount" resultType="int"> 
-<!-- 드롭버튼의 토픽별 포스트의 갯수 집계 -->
-    SELECT 
-   		board.board_topic_name
-		,count(*) as postCount
-	from blind.post_mgt post
-	inner join blind.board_mgt board on
-		post.board_id = board.board_id and
-		post.post_title like '%'|| #{searchKeyword} ||'%'  
-	group by board.board_id;
-</select>		 
-
 	 
-<select id="getBoardNameAndIdAndCount" parameterType="String"  resultType="com.ksinfo.blind.search.dto.BoardDto"> 
-    SELECT 
-		board.board_topic_name
-		,board.board_id
-		,count(*) as postCount
-	from blind.post_mgt post
-	inner join blind.board_mgt board on
-		post.board_id = board.board_id and
-		post.post_title like '%'|| #{searchKeyword} ||'%'
-	group by board.board_id;
-</select>	
-
-
-<!-- 콤보박스의 정렬기준 옵션(최신순,추천순) -->
-<!-- 콤보박스의 정렬기준 옵션_최신순  -->
-<select id="getSortPostAllTopicBylatestDate" parameterType="String" resultType="com.ksinfo.blind.search.dto.PostDto"> 
-SELECT DISTINCT
-   blind.board_mgt.board_topic_name           --토픽(게시판)명
-   ,blind.post_mgt.post_title                 --게시글 주제
-   ,blind.post_mgt.post_contents              --게시글 내용
-   ,blind.company_mgt.company_name            --근무기업명
-   ,blind.user_mgt.user_nickname              --작성자의 닉네임
-   ,blind.post_count_inf.post_count           --글의 조회수
-   ,count_recommend_inf.recommend_count   	  --글의 추천수
-   ,count_reply_inf.reply_count          	  --글의 댓글수
-   ,blind.post_mgt.post_create_date           --게시글의 최초작성일
-FROM blind.post_mgt
-LEFT JOIN blind.board_mgt     			      --토픽(게시판)명
-   ON blind.post_mgt.board_id = blind.board_mgt.board_id
-LEFT JOIN blind.user_mgt            		  --작성자의 닉네임
-   ON blind.post_mgt.user_id = blind.user_mgt.user_id
-LEFT JOIN blind.post_count_inf         		  --글의 조회수
-   ON blind.post_mgt.post_id = blind.post_count_inf.post_id
-LEFT JOIN 
-  (SELECT 
-    COUNT(*) AS recommend_count
-   ,post_id								  	 --ON blind.post_mgt.post_id = count_inf.post_id를 위해 추가.
-  FROM
-	blind.post_recommend_inf   			     --게시글의 추천수
-  GROUP BY post_id) count_recommend_inf
-	ON blind.post_mgt.post_id = count_recommend_inf.post_id
-LEFT JOIN blind.company_mgt    				--근무기업명
-   ON blind.user_mgt.company_id = blind.company_mgt.company_id 
-LEFT JOIN 
-  (SELECT 
-    COUNT(*) AS reply_count
-   ,post_id			--ON blind.post_mgt.post_id = count_inf.post_id를 위해 추가.
-  FROM
-   blind.reply_mgt
-  GROUP BY post_id) count_reply_inf
-ON blind.post_mgt.post_id = count_reply_inf.post_id 
-where blind.post_mgt.post_title like '%'|| #{searchKeyword} ||'%'
-ORDER BY post_create_date DESC;
-</select>		 
-	 
-<select id="getSortPostOneTopicBylatestDate" parameterType="java.util.Map" resultType="com.ksinfo.blind.search.dto.PostDto"> 
-SELECT DISTINCT
-   blind.board_mgt.board_topic_name           --토픽(게시판)명
-   ,blind.post_mgt.post_title                 --게시글 주제
-   ,blind.post_mgt.post_contents              --게시글 내용
-   ,blind.company_mgt.company_name            --근무기업명
-   ,blind.user_mgt.user_nickname              --작성자의 닉네임
-   ,blind.post_count_inf.post_count           --글의 조회수
-   ,COALESCE(count_recommend_inf.recommend_count, 0) AS recommend_count  --글의 추천수
-   ,COALESCE(count_reply_inf.reply_count, 0) AS  reply_count       --글의 댓글수
-   ,blind.post_mgt.post_create_date           --게시글의 최초작성일
-FROM blind.post_mgt
-LEFT JOIN blind.board_mgt     			      --토픽(게시판)명
-   ON blind.post_mgt.board_id = blind.board_mgt.board_id
-LEFT JOIN blind.user_mgt            		  --작성자의 닉네임
-   ON blind.post_mgt.user_id = blind.user_mgt.user_id
-LEFT JOIN blind.post_count_inf         		  --글의 조회수
-   ON blind.post_mgt.post_id = blind.post_count_inf.post_id
-LEFT JOIN 
-  (SELECT 
-    COUNT(*) AS recommend_count
-   ,post_id								  	 --ON blind.post_mgt.post_id = count_inf.post_id를 위해 추가.
-  FROM
-	blind.post_recommend_inf   			     --게시글의 추천수
-  GROUP BY post_id) count_recommend_inf
-	ON blind.post_mgt.post_id = count_recommend_inf.post_id
-LEFT JOIN blind.company_mgt    				--근무기업명
-   ON blind.user_mgt.company_id = blind.company_mgt.company_id 
-LEFT JOIN 
-  (SELECT 
-    COUNT(*) AS reply_count
-   ,post_id			--ON blind.post_mgt.post_id = count_inf.post_id를 위해 추가.
-  FROM
-   blind.reply_mgt
-  GROUP BY post_id) count_reply_inf
-ON blind.post_mgt.post_id = count_reply_inf.post_id 
-where blind.post_mgt.post_title like '%'|| #{searchKeyword} ||'%'
-	and blind.post_mgt.board_id = #{boardId}
-ORDER BY post_create_date DESC;
-</select>		 
-	 
-<!-- 콤보박스의 정렬기준 옵션_추천순 -->	 <!-- getSortPostOneTopicByRecommend -->
+<!-- 2.3. 콤보박스의 정렬기준 옵션_추천순 -->	 <!-- getSortPostOneTopicByRecommend -->
 <select id="getSortPostByRecommend" parameterType="java.util.Map" resultType="com.ksinfo.blind.search.dto.PostDto"> 
 SELECT DISTINCT
    blind.board_mgt.board_topic_name           --토픽(게시판)명
@@ -315,5 +171,123 @@ where blind.post_mgt.post_title like '%'|| #{searchKeyword} ||'%'
 	</if>
 ORDER BY recommend_count DESC;
 </select>		 
+
+
+
+
+
+<!-- 코드 심플화 작업 실시할 것 -->
+<select id="getViewCountOfPosts" resultType="com.ksinfo.blind.search.dto.PostCountInfDto"> 
+    <!-- SELECT blind.post_count_inf.post_count FROM blind.blind.post_count_inf -->
+    SELECT * FROM blind.post_count_inf
+    where #{postId} = blind.post_count_inf.post_id;
+</select>
+
+
+
+<!-- 2.2 선택한 토픽 출력(왼쪽드롭박스버튼) -->
+<select id="getBoardNameAndIdAndCount" parameterType="String"  resultType="com.ksinfo.blind.search.dto.BoardDto"> 
+    SELECT 
+		board.board_topic_name
+		,board.board_id
+		,count(*) as postCount
+	from blind.post_mgt post
+	inner join blind.board_mgt board on
+		post.board_id = board.board_id and
+		post.post_title like '%'|| #{searchKeyword} ||'%'
+	group by board.board_id;
+</select>	
+
+
+
+
+
+
+<!-- 콤보박스의 포스트-정렬옵션-최신일  -->
+<select id="getSortPostBylatestDate" parameterType="java.util.Map" resultType="com.ksinfo.blind.search.dto.PostDto"> 
+SELECT DISTINCT
+   blind.board_mgt.board_topic_name           --토픽(게시판)명
+   ,blind.post_mgt.post_title                 --게시글 주제
+   ,blind.post_mgt.post_contents              --게시글 내용
+   ,blind.company_mgt.company_name            --근무기업명
+   ,blind.user_mgt.user_nickname              --작성자의 닉네임
+   ,blind.post_count_inf.post_count           --글의 조회수
+   ,COALESCE(count_recommend_inf.recommend_count, 0) AS recommend_count  --글의 추천수
+   ,COALESCE(count_reply_inf.reply_count, 0) AS  reply_count       --글의 댓글수
+   ,blind.post_mgt.post_create_date           --게시글의 최초작성일
+FROM blind.post_mgt
+LEFT JOIN blind.board_mgt     			      --토픽(게시판)명
+   ON blind.post_mgt.board_id = blind.board_mgt.board_id
+LEFT JOIN blind.user_mgt            		  --작성자의 닉네임
+   ON blind.post_mgt.user_id = blind.user_mgt.user_id
+LEFT JOIN blind.post_count_inf         		  --글의 조회수
+   ON blind.post_mgt.post_id = blind.post_count_inf.post_id
+LEFT JOIN 
+  (SELECT 
+    COUNT(*) AS recommend_count
+   ,post_id								  	 --ON blind.post_mgt.post_id = count_inf.post_id를 위해 추가.
+  FROM
+	blind.post_recommend_inf   			     --게시글의 추천수
+  GROUP BY post_id) count_recommend_inf
+	ON blind.post_mgt.post_id = count_recommend_inf.post_id
+LEFT JOIN blind.company_mgt    				--근무기업명
+   ON blind.user_mgt.company_id = blind.company_mgt.company_id 
+LEFT JOIN 
+  (SELECT 
+    COUNT(*) AS reply_count
+   ,post_id			--ON blind.post_mgt.post_id = count_inf.post_id를 위해 추가.
+  FROM
+   blind.reply_mgt
+  GROUP BY post_id) count_reply_inf
+ON blind.post_mgt.post_id = count_reply_inf.post_id 
+where blind.post_mgt.post_title like '%'|| #{searchKeyword} ||'%'
+	<if test="boardId neq -1">
+		and blind.post_mgt.board_id =  #{boardId}
+	</if>
+ORDER BY post_create_date DESC;
+</select>		 
+
+<!-- 불필요로 판단 -->
+<!-- 
+<select id="getPostCount" resultType="com.ksinfo.blind.search.dto.CompanyDto"> 
+    SELECT * FROM blind.company_mgt
+    where company_name= #{searchKeyword};  
+</select>
+
+<select id="getReplysOfPosts" resultType="com.ksinfo.blind.search.dto.ReplyDto"> 
+    SELECT * FROM blind.reply_mgt
+    where  #{postId} = blind.reply_mgt.post_id;
+</select>	
+<select id="getNicknameAndCompanynameOfPosts"  parameterType="int" resultType="com.ksinfo.blind.search.dto.UserDto"> 
+	SELECT
+		user_mgt.user_nickname
+		, blind.company_mgt.company_name as userCompanyName
+	FROM blind.user_mgt
+	Left Join blind.company_mgt
+		ON blind.user_mgt.company_id = blind.company_mgt.company_id  
+    where  #{userId}  = blind.user_mgt.user_id;
+</select>		
+<select id="getRecommendCountOfPosts" resultType="int">
+    SELECT count(post_id) FROM blind.post_recommend_inf
+    where  #{postId} = blind.post_recommend_inf.post_id;
+</select>		
+	
+<select id="getReplyCountsOfPosts" resultType="int"> 
+    SELECT count(post_id) FROM blind.reply_mgt
+    where  #{postId} = blind.reply_mgt.post_id;
+</select>		
+
+<select id="getBoardTopicCount" resultType="int"> 
+    SELECT 
+   		board.board_topic_name
+		,count(*) as postCount
+	from blind.post_mgt post
+	inner join blind.board_mgt board on
+		post.board_id = board.board_id and
+		post.post_title like '%'|| #{searchKeyword} ||'%'  
+	group by board.board_id;
+</select>		 	
+ -->
+
 
 </mapper>

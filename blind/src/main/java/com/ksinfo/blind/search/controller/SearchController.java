@@ -65,9 +65,9 @@ public class SearchController {
 		}
 		else {
 			//토픽선택- 1개의 토픽만 출력.
-			List<PostDto> searchResultPostsOfOneTopic = searchService.getPostsOfOneTopic(selectBoardId, searchKeyword);			
+			List<PostDto> searchResultPostsSelectTopic = searchService.getPostSelectTopic(selectBoardId, searchKeyword);			
 			logger.info("viewPostsOfOneTopic-END(Returns searchResultPostsOfOneTopic) ");
-			return searchResultPostsOfOneTopic;
+			return searchResultPostsSelectTopic;
 		}
 
 	}

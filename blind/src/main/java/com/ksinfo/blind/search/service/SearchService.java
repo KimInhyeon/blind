@@ -43,27 +43,26 @@ public class SearchService {
 		return mapper.getBoardNameAndIdAndCount(searchKeyword);			
 	} 
 	
-	public List<PostDto> getSortPostAllTopicBylatestDate(String searchKeyword){
-		return mapper.getSortPostAllTopicBylatestDate(searchKeyword);			
-	}
-	
-	public List<PostDto> getSortPostOneTopicBylatestDate(String searchKeyword,int selectBoardId){
-		java.util.Map<String, Object> paramMap = new HashMap<String, Object>(); //String :키값, object : 밸류값
-		paramMap.put("searchKeyword", searchKeyword); //
-		paramMap.put("boardId", selectBoardId);			
-		return mapper.getSortPostOneTopicBylatestDate(paramMap);		
-	} 
-	
+
 		
-	public List<PostDto> getPostsOfOneTopic(int selectBoardId, String searchKeyword){
+	public List<PostDto> getPostSelectTopic(int selectBoardId, String searchKeyword){
 		//사용자가 선택한 토픽(보드)을 넘버값과, 검색어를 받아서 검색을 진행한다.
 		//전달해야 하는 값이 2개(boardId,searchKeyword) 이므로 HashMap을 활용하여 값을 넘긴다.
 		java.util.Map<String, Object> paramMap = new HashMap<String, Object>(); //String :키값, object : 밸류값
 		paramMap.put("searchKeyword", searchKeyword); //
 		paramMap.put("boardId", selectBoardId);		
-		return mapper.getPostsOfOneTopic(paramMap);			
+		return mapper.getPostSelectTopic(paramMap);			
 	}
+
 	
+	//포스트-정렬-최신일 순
+	public List<PostDto> getSortPostBylatestDate(String searchKeyword,int selectBoardId){
+		java.util.Map<String, Object> paramMap = new HashMap<String, Object>(); //String :키값, object : 밸류값
+		paramMap.put("searchKeyword", searchKeyword); //
+		paramMap.put("boardId", selectBoardId);			
+		return mapper.getSortPostBylatestDate(paramMap);		
+	} 
+	//포스트-정렬-추천순
 	public List<PostDto> getSortPostByRecommend(int selectBoardId, String searchKeyword){
 		java.util.Map<String, Object> paramMap = new HashMap<String, Object>(); //String :키값, object : 밸류값
 		paramMap.put("searchKeyword", searchKeyword); //
