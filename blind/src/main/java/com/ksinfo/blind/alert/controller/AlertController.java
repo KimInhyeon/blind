@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ksinfo.blind.search.controller.SearchController;
 
 @Controller
-public class alertController {
+public class AlertController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 	

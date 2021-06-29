@@ -12,7 +12,6 @@ import com.ksinfo.blind.search.dto.PostAlignDto;
 import com.ksinfo.blind.search.dto.PostCountInfDto;
 import com.ksinfo.blind.search.dto.PostDto;
 import com.ksinfo.blind.search.dto.ReplyDto;
-import com.ksinfo.blind.search.dto.SearchDto;
 import com.ksinfo.blind.search.dto.UserDto;
 import com.ksinfo.blind.search.mapper.SearchMapper;
 

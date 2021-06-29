@@ -14,7 +14,6 @@ import com.ksinfo.blind.search.dto.PostAlignDto;
 import com.ksinfo.blind.search.dto.PostCountInfDto;
 import com.ksinfo.blind.search.dto.PostDto;
 import com.ksinfo.blind.search.dto.ReplyDto;
-import com.ksinfo.blind.search.dto.SearchDto;
 import com.ksinfo.blind.search.dto.UserDto;
 import com.ksinfo.blind.search.service.SearchService;
 
@@ -97,7 +96,8 @@ public class SearchController {
 		
 		logger.info("기업정보여부 플래그(검색어가 기업을 검색했는지 여부를 알리는 용도)");	
 		int searchResultCompanyDataFlag=0; //값이 1일시 회사정보 있음
-		if( !(searchResultCompany.isEmpty()) && !(searchResultCompany.get(0).getCompanyName().isEmpty())) { 
+//		if( !(searchResultCompany.isEmpty()) && !(searchResultCompany.get(0).getCompanyName().isEmpty())) { 
+		if( !(searchResultCompany.isEmpty()) ) { 
 			//!(searchResultCompany.isEmpty())가 0이다 회사정보가 있음.
 			logger.info("확인결과: 회사정보 있음");	
 			
@@ -136,15 +136,20 @@ public class SearchController {
 		//2.1 포스트출력
 		mav.addObject("boardNameAndIdAndCount",boardNameAndIdAndCount);			//검색어에 검색된 포스트들의 토픽(게시판) 이름들 저장. //boardTopicName
 		//2.2.포스트-토픽선택(왼쪽드롭박스)
-		//2.2.1. [왼쪽드롭박스버튼] 토픽개수및 포스트들의 갯수 카운트 리턴
+		//2.2.1. [왼쪽드롭박스버튼] 토픽개수및 포스트들의 갯수 카운트 리턴 <jsp 페이지에서 연산시 문제가 되지 않을까 우려 있음.>
 		mav.addObject("searchResultPosts",searchResultPosts);			//검색어와 관련된 포스트(게시글)들 전달.
-		
+		mav.addObject("searchResultPostsLastNumber",searchResultPosts.size()-1 );
 			
 		logger.info("출력할 경로 설정.");		
 		mav.setViewName("main/search/search");
 		return mav;	
 
 	}
-	
-	
+
+	@RequestMapping("/search/testView")  
+	public ModelAndView testView(ModelAndView mav){		
+		mav.setViewName("main/search/testView");
+		return mav;	
+	}
+
 }

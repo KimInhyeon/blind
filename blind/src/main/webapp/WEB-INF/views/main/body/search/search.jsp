@@ -12,7 +12,7 @@
          src="https://code.jquery.com/jquery-3.1.1.min.js"
           integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
          crossorigin="anonymous"></script>
-        <script src="../semantic/semantic.js"></script>
+        
         <style>
             body{padding:2rem;}
            .tit{padding: 6px 0 8px; font-size: 150%; font-weight: 700;}
@@ -29,6 +29,45 @@
            .company_review_sample > * {
            		padding:5px;
            }
+           
+           html, body {
+			   position: relative;
+			   height: 100%;
+			}
+			
+			body {
+			   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+			   font-size: 14px;
+			   color: #000;
+			   margin: 0;
+			   padding: 0;
+			}
+			
+			body {
+			   padding: 2rem;
+			}
+			
+			.tit {
+			   padding: 6px 0 8px;
+			   font-size: 150%;
+			   font-weight: 700;
+			}
+			
+			.bookmarkcontent a {
+			   color: black;
+			   display: block;
+			   padding-bottom: 8px;
+			}
+			
+			.bookmarkcontent a span {
+			   font-size: 80%;
+			}
+			
+			.bookmarkcontent p {
+			   padding-top: 12px;
+			   font-size: 90%;
+			}
+			           
         </style>
 	
 	
@@ -150,7 +189,8 @@
    </head>
    
    <body>
-   
+   		 <div class="ui container">
+			<div class="bookmarkcontent">
    <!-- 검색창 -->
    <div class="inputSearchKeyword">    
    		<form>
@@ -165,7 +205,6 @@
 
 
 	<!-- 검색결과출력페이지(전체) -->
-   <div class="ui stacked segment" >
 		<h1><strong>${searchKeyword}</strong> 検索結果</h1> <!-- 검색키워드로 변경(지금은 기업명일때만 나온다. -->
 	
 	<!-- 검색결과1. 기업정보 / 검색어가 기업이 아닌경우 출력되지 않는다. -->      
@@ -218,9 +257,8 @@
 	  	</c:if>
 
 	<!-- 검색결과2. 토픽(게시글) -->
-		<div class="ui stacked segment" style="height: auto; width: 100%;" >
-			<!-- 드롭버튼 - 토픽선택, 정렬설정 -->
-			<!-- 드롭버튼(1)토픽선택 -->
+		<!-- 드롭버튼 - 토픽선택, 정렬설정 -->
+		<!-- 드롭버튼(1)토픽선택 -->
 			<div>
 				<select id="viewPostsSelectedTopic" class="ui dropdown" style="width:200px;height:50px;">
 
@@ -246,35 +284,71 @@
 			</div>   		
 		 <hr width = "100%" color = "#000000" size = "5"></hr>
 			<!-- 게시글(포스트)들 출력 -->
-			<div class="ui internally celled grid" id="postList" >
-				<div class="row">
-					<c:forEach items="${searchResultPosts}" var="posts">
-						<div class="column" style="float: left; width:45%; margin:10px; display:inline;">
-							<div> ${posts.boardTopicName} </div>
-						 	<div style="margin:10px; word-break:break-all;" > <h3>${posts.postTitle}</h3> </div>			
-						 	<div style="margin:10px;"> ${posts.postContents}</div>
-						 	<div style="margin:10px;"> ${posts.companyName} 
-						 		- ${fn:substring(posts.userNickName,0,1)}
-								<c:forEach begin="2" end='5'>*</c:forEach>
-							</div>
-	
+				<div class="ui internally celled grid" id="postList" >
+					<c:forEach items="${searchResultPosts}" var="posts" varStatus="status" step="2" begin="0" end="${searchResultPostsLastNumber }" >
+						<div class="row">
+							<div class="eight wide column" style="border-color: #d4d4d5; border-width: thin !important; border-style: inset;">
+								<a href=""><span>${searchResultPosts[status.index].boardTopicName }</span></a>	
+								<a href=""><span style="font-size: 130%; font-weight: 700;">${searchResultPosts[status.index].postTitle}</span></a>
+									<div class="ui grid">
+										<div class="thirteen wide column">
+											<a href=""><p>${searchResultPosts[status.index].postContents}</p></a>
+											<a href=""><p> ${searchResultPosts[status.index].companyName} 
+	  												 	   - ${fn:substring(searchResultPosts[status.index].userNickName,0,1)} ****</p></a>
+										</div>
+										<div class="three wide column">
+											<img class="ui tiny right floated image" src="bookmarkimage.png">
+										</div>
+									</div>
+
 						 	<div style="padding:10px; line-heigh:top;">
-						 		 <i class="eye icon" style="margin:0px 5px 0px 5px;"></i>${posts.postCount} <!-- margin: top, right, bottom, left;  -->
-								 <i class="thumbs up outline icon" style="margin:0px 5px 0px 5px;"></i> ${posts.recommendCount}
-								 <i class="comment outline icon"  style="margin:0px 5px 0px 5px;"></i>  ${posts.replyCount}
+						 		 <i class="eye icon" style="margin:0px 5px 0px 5px;"></i>${searchResultPosts[status.index].postCount} <!-- margin: top, right, bottom, left;  -->
+								 <i class="thumbs up outline icon" style="margin:0px 5px 0px 5px;"></i> ${searchResultPosts[status.index].recommendCount}
+								 <i class="comment outline icon"  style="margin:0px 5px 0px 5px;"></i>  ${searchResultPosts[status.index].replyCount}
 						  		<div style="float:Right;">
-							 		${fn:substring(posts.postCreateDate,5,7)}.${fn:substring(posts.postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(posts.postCreateDate,0,10)} -->
-							   		<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
+							 		${fn:substring(searchResultPosts[status.index].postCreateDate,5,7)}.${fn:substring(searchResultPosts[status.index].postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(searchResultPosts[status.index].postCreateDate,0,10)} -->
+							   		<div id="bookmarkSet${searchResultPosts[status.index].postId}" onclick="bookmarkSet(${searchResultPosts[status.index].postId})" style="display: inline; margin:0px 5px 0px 5px;">
 							   			<a style="color:#000000; margin:0px;"><i class="bookmark outline icon"></i></a>
 							   		</div>
 							  	</div>
 					   		</div>
 					   </div>
+
+						<c:if test ="${status.last eq false}">
+							<div class="eight wide column" style="border-color: #d4d4d5; border-width: thin !important; border-style: inset;">
+								<a href=""><span>${searchResultPosts[status.index+1].boardTopicName }</span></a>	
+								<a href=""><span style="font-size: 130%; font-weight: 700;">${searchResultPosts[status.index+1].postTitle}</span></a>
+									<div class="ui grid">
+										<div class="thirteen wide column">
+											<a href=""><p>${searchResultPosts[status.index+1].postContents}</p></a>
+											<a href=""><p> ${searchResultPosts[status.index+1].companyName} 
+	  												 	   - ${fn:substring(searchResultPosts[status.index+1].userNickName,0,1)} ****</p></a>
+										</div>
+										<div class="three wide column">
+											<img class="ui tiny right floated image" src="bookmarkimage.png">
+										</div>
+									</div>
+
+						 	<div style="padding:10px; line-heigh:top;">
+						 		 <i class="eye icon" style="margin:0px 5px 0px 5px;"></i>${searchResultPosts[status.index+1].postCount} <!-- margin: top, right, bottom, left;  -->
+								 <i class="thumbs up outline icon" style="margin:0px 5px 0px 5px;"></i> ${searchResultPosts[status.index+1].recommendCount}
+								 <i class="comment outline icon"  style="margin:0px 5px 0px 5px;"></i>  ${searchResultPosts[status.index+1].replyCount}
+						  		<div style="float:Right;">
+							 		${fn:substring(searchResultPosts[status.index+1].postCreateDate,5,7)}.${fn:substring(searchResultPosts[status.index+1].postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(searchResultPosts[status.index+1].postCreateDate,0,10)} -->
+							   		<div id="bookmarkSet${searchResultPosts[status.index+1].postId}" onclick="bookmarkSet(${searchResultPosts[status.index+1].postId})" style="display: inline; margin:0px 5px 0px 5px;">
+							   			<a style="color:#000000; margin:0px;"><i class="bookmark outline icon"></i></a>
+							   		</div>
+							  	</div>
+					   		</div>
+					   </div>
+			   		</c:if>
+					
+					</div>
 					</c:forEach>
+
 			 	 </div>
 			</div>
 		</div>
-   </div>
 </body>
 
 
