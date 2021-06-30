@@ -100,20 +100,20 @@
 		
 			<div class="alert_list_post">
 			  	<ul style="list-style:none;"><!-- 한국경우 1번(토픽에 맞지 않는 글) 제외하면 동일함. -->
-					<li><input type="radio" name="alert_post_reason"  value="1"> 욕설 / 비하발언</li>
-					<li><input type="radio" name="alert_post_reason"  value="2"> 특정인 비방	</li>
-					<li><input type="radio" name="alert_post_reason"  value="3"> 개인 사생활 침해</li>	
-					<li><input type="radio" name="alert_post_reason"  value="4"> 19+ 만남 / 쪽지유도</li>	
-					<li><input type="radio" name="alert_post_reason"  value="5"> 음란성</li>	
-					<li><input type="radio" name="alert_post_reason"  value="6"> 회사 기밀</li>				 
-					<li><input type="radio" name="alert_post_reason"  value="7"> 게시글 / 댓글 도배</li>	
-					<li><input type="radio" name="alert_post_reason"  value="8"> 시즈널 이벤트, 추천인 코드 등</li>	
-					<li><input type="radio" name="alert_post_reason"  value="9"> 홍보성 컨텐츠</li>				 
-					<li><input type="radio" name="alert_post_reason"  value="10"> 퇴사자 신고</li>	 
-					<li><input type="radio" name="alert_post_reason"  value="11"> 닉네임 신고</li>	 
-					<li><input type="radio" name="alert_post_reason"  value="12"> 부적절한 회사 / 채널 태그</li>	 
-					<li><input type="radio" name="alert_post_reason"  value="13"> 기타 </li>	 
-				</ul>
+					<li><input type="radio" name="alert_post_reason"  value="1">${alertListOfPost}</li><!-- 욕설 / 비하발언 -->
+					<li><input type="radio" name="alert_post_reason"  value="2"> </li><!-- 특정인 비방 -->
+					<li><input type="radio" name="alert_post_reason"  value="3"> </li><!-- 개인 사생활 침해 -->	
+					<li><input type="radio" name="alert_post_reason"  value="4"> 19+ 만남 / 쪽지유도</li>	<!--  -->
+					<li><input type="radio" name="alert_post_reason"  value="5"> 음란성</li>	<!--  -->
+					<li><input type="radio" name="alert_post_reason"  value="6"> 회사 기밀</li>		<!--  -->		 
+					<li><input type="radio" name="alert_post_reason"  value="7"> 게시글 / 댓글 도배</li>	<!--  -->
+					<li><input type="radio" name="alert_post_reason"  value="8"> 시즈널 이벤트, 추천인 코드 등</li>	<!--  -->
+					<li><input type="radio" name="alert_post_reason"  value="9"> 홍보성 컨텐츠</li>				 <!--  -->
+					<li><input type="radio" name="alert_post_reason"  value="10"> 퇴사자 신고</li>	 <!--  -->
+					<li><input type="radio" name="alert_post_reason"  value="11"> 닉네임 신고</li>	 <!--  -->
+					<li><input type="radio" name="alert_post_reason"  value="12"> 부적절한 회사 / 채널 태그</li><!--  -->	 
+					<li><input type="radio" name="alert_post_reason"  value="13"> </li>	 <!-- 기타 -->
+				</ul><!-- textarea는 기타버튼 클릭시에만 작동하도록 수정. -->
 				<textarea id="alert_write" style="width:400px; height:150px; resize: none;"></textarea>
 			</div>		
 				<button class="ui primary button" style="width:400px; height:50px; text-align:center;">신고하기</button>

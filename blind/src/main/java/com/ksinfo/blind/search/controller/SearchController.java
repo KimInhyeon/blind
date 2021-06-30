@@ -96,7 +96,6 @@ public class SearchController {
 		
 		logger.info("기업정보여부 플래그(검색어가 기업을 검색했는지 여부를 알리는 용도)");	
 		int searchResultCompanyDataFlag=0; //값이 1일시 회사정보 있음
-//		if( !(searchResultCompany.isEmpty()) && !(searchResultCompany.get(0).getCompanyName().isEmpty())) { 
 		if( !(searchResultCompany.isEmpty()) ) { 
 			//!(searchResultCompany.isEmpty())가 0이다 회사정보가 있음.
 			logger.info("확인결과: 회사정보 있음");	

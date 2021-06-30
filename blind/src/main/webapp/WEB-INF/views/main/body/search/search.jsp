@@ -102,7 +102,7 @@
 						var hideUserNick =  value.userNickName.substring(0,1)+'****';
 						var postCreateDate = value.postCreateDate.substring(5,7)+'.'+value.postCreateDate.substring(8,10);
 						
-						$(postList).append("<div class='eight wide column' style='border-color: #d4d4d5; border-width: thin !important; border-style: inset;'>"
+						$(postList).append("<div class='eight wide column' style='border-color: #d4d4d5; border-width: thin !important; border-style: inset;　border-collapse: collapse !important;'>"
 	                								+"<a href=''><span>"+ value.boardTopicName +"</span></a>"	
 	                								+"<a href=''><span style='font-size: 130%; font-weight: 700;'>" +value.postTitle + "</span></a>"
 	                								+"<div class='ui grid'>"
@@ -220,21 +220,24 @@
 		<c:if test="${searchResultCompanyDataFlag eq '1'}"><!-- searchResultCompanyDataFlag의 값이 1이면 회사정보 있으며, 이에따라 출력실시. -->
 			<div class="ui stacked segment" >
 	   			<h3>企業</h3>
-		   		<div  class="ui stacked segment"  style="height: auto; width: 100%;  padding:20;" >
+		   		<div class="ui stacked segment"  style="height: auto; width: 100%;  padding:20;" >
 					<!-- 검색결과1.1. 기업의 기본정보페이지(총평점 및 리뷰/게시글/연봉링크) -->
 					<!-- 회사이름,별점 안내 및  리뷰,게시글,연봉 버튼 생성 -->
-					<div style="position:absolute;">
-						<div style="float:left; "> 
-							<a href=""><img  src="${pageContext.request.contextPath}/resources/images/company/${searchResultCompany[0].companyId}.png" width=40px, height=40px style="margin:5px;" align="top"></a><!-- 회사의 안내페이지 링크 주도록 설정. -->
-						</div>
-						<div>
-							<a href="">${searchResultCompany[0].companyName}</a>
-							<i class="star icon"></i>
-							<ul style="line-height:1px;  display:block;" >
-								<a href="">レビュー</a>　❘
-								<a href="">企業ポスト</a>　❘
-								<a href="">給料</a>
-							</ul>	
+					<div class="company_profile_part" > <!-- onclick 통해 div영역 클릭시 페이지 이동(''내에 이동할 URL 기입) -->
+						<div class="logo_and_companyName" style="float:left;display: inline;"> 
+							<div style="display: flex;">
+								<img src="${pageContext.request.contextPath}/resources/images/company/${searchResultCompany[0].companyId}.png" 
+											width=40px, height=40px style="margin:5px;" align="top">
+									<div>
+										${searchResultCompany[0].companyName} 
+										<i class="star icon"></i>
+										<div style="display: flex;">
+											<a href=""><span>レビュー</span></a>
+											<a href=""><span>企業ポスト</span></a>
+											<a href=""><span>給料</span></a>
+										</div>
+									</div>
+								</div>
 						</div>
 					</div>
 	
@@ -251,13 +254,22 @@
 						</div>
 	 				
 						<div class="company_review_sample" style="background-color:#b1d4e3; margin:10px;">
-							<a href="">
-								<div>${companyReviews[0].allPoint}</div> 				
-								<div style="float:Right;">レビュー全部見る > </div>
-								<div>${companyReviews[0].jobGroupName}</div>
-								<div>${companyReviews[0].simpleComment}</div>
-								<div>${companyReviews[0].disadvantages}</div>
-							</a>
+							<c:choose> 
+								<c:when test="${empty companyReviews}">
+									<div>この企業のレビューはありません。</div>
+									<div>一番に作成しませんか。</div>
+									<div style="float:Right;">　<a href="">この企業のレビューを作成する</a>　</div>　
+								</c:when>
+								<c:otherwise>
+									<a href="">
+										<div>${companyReviews[0].allPoint}</div> 				
+										<div style="float:Right;">レビュー全部見る > </div>
+										<div>${companyReviews[0].jobGroupName}</div>
+										<div>${companyReviews[0].simpleComment}</div>
+										<div>${companyReviews[0].disadvantages}</div>
+									</a>						
+								</c:otherwise>
+							</c:choose>						
 						</div>
 					</div>
 		 		</div>
