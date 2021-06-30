@@ -96,7 +96,6 @@
 					//포스트리스트의 화면재구성 시작
 					//주요틀 재구성
 					$(postList).html("");
-					$(postList).html("<div class='row'>");
 					//반복문통해 각 포스트들 출력진행
 					$.each(result, function (key, value) {	
 						var hideUserNick =  value.userNickName.substring(0,1)+'****';
@@ -123,8 +122,7 @@
 		    										   			+"<a style='color:#000000; margin:0px;'><i class='bookmark outline icon'></i></a>"
 		    									   			+"</div>"
 	    									  			+"</div>"
-	    							   				+"</div>"
-		                						+"</div>");
+	    							   				+"</div>");
 						}); //$.each(result, function (key, value) 반복출력 종료.
 		                //마지막 부분 출력
 	                	$(postList).append("</div>");	
@@ -152,7 +150,6 @@
 					//포스트리스트의 화면재구성 시작
 					//주요틀 재구성
 					$(postList).html("");
-					$(postList).html("<div class='row'>");
 					//반복문통해 각 포스트들 출력진행
 					$.each(result, function (key, value) {	
 						var hideUserNick =  value.userNickName.substring(0,1)+'****';
@@ -179,7 +176,6 @@
 		    										   			+"<a style='color:#000000; margin:0px;'><i class='bookmark outline icon'></i></a>"
 		    									   			+"</div>"
 	    									  			+"</div>"
-	    							   				+"</div>"
 		                						+"</div>");
 						}); //$.each(result, function (key, value) 반복출력 종료.
 		                //마지막 부분 출력
@@ -306,16 +302,15 @@
 		 <hr width = "100%" color = "#000000" size = "5"></hr>
 			<!-- 게시글(포스트)들 출력 -->
 				<div class="ui internally celled grid" id="postList" >
-					<c:forEach items="${searchResultPosts}" var="posts" varStatus="status" step="2" begin="0" end="${searchResultPostsLastNumber }" >
-						<div class="row">
+					<c:forEach items="${searchResultPosts}" var="posts" >
 							<div class="eight wide column" style="border-color: #d4d4d5; border-width: thin !important; border-style: inset;">
-								<a href=""><span>${searchResultPosts[status.index].boardTopicName }</span></a>	
-								<a href=""><span style="font-size: 130%; font-weight: 700;">${searchResultPosts[status.index].postTitle}</span></a>
+								<a href=""><span>${posts.boardTopicName }</span></a>	
+								<a href=""><span style="font-size: 130%; font-weight: 700;">${posts.postTitle}</span></a>
 									<div class="ui grid">
 										<div class="thirteen wide column">
-											<a href=""><p>${searchResultPosts[status.index].postContents}</p></a>
-											<a href=""><p> ${searchResultPosts[status.index].companyName} 
-	  												 	   - ${fn:substring(searchResultPosts[status.index].userNickName,0,1)} ****</p></a>
+											<a href=""><p>${posts.postContents}</p></a>
+											<a href=""><p> ${posts.companyName} 
+	  												 	   - ${fn:substring(posts.userNickName,0,1)} ****</p></a>
 										</div>
 										<div class="three wide column">
 											<img class="ui tiny right floated image" src="bookmarkimage.png">
@@ -323,50 +318,19 @@
 									</div>
 
 						 	<div style="padding:10px; line-heigh:top;">
-						 		 <i class="eye icon" style="margin:0px 5px 0px 5px;"></i>${searchResultPosts[status.index].postCount} <!-- margin: top, right, bottom, left;  -->
-								 <i class="thumbs up outline icon" style="margin:0px 5px 0px 5px;"></i> ${searchResultPosts[status.index].recommendCount}
-								 <i class="comment outline icon"  style="margin:0px 5px 0px 5px;"></i>  ${searchResultPosts[status.index].replyCount}
+						 		 <i class="eye icon" style="margin:0px 5px 0px 5px;"></i>${posts.postCount} <!-- margin: top, right, bottom, left;  -->
+								 <i class="thumbs up outline icon" style="margin:0px 5px 0px 5px;"></i> ${posts.recommendCount}
+								 <i class="comment outline icon"  style="margin:0px 5px 0px 5px;"></i>  ${posts.replyCount}
 						  		<div style="float:Right;">
-							 		${fn:substring(searchResultPosts[status.index].postCreateDate,5,7)}.${fn:substring(searchResultPosts[status.index].postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(searchResultPosts[status.index].postCreateDate,0,10)} -->
-							   		<div id="bookmarkSet${searchResultPosts[status.index].postId}" onclick="bookmarkSet(${searchResultPosts[status.index].postId})" style="display: inline; margin:0px 5px 0px 5px;">
+							 		${fn:substring(posts.postCreateDate,5,7)}.${fn:substring(posts.postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(posts.postCreateDate,0,10)} -->
+							   		<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
 							   			<a style="color:#000000; margin:0px;"><i class="bookmark outline icon"></i></a>
 							   		</div>
 							  	</div>
 					   		</div>
 					   </div>
-
-						<c:if test ="${status.last eq false}">
-							<div class="eight wide column" style="border-color: #d4d4d5; border-width: thin !important; border-style: inset;">
-								<a href=""><span>${searchResultPosts[status.index+1].boardTopicName }</span></a>	
-								<a href=""><span style="font-size: 130%; font-weight: 700;">${searchResultPosts[status.index+1].postTitle}</span></a>
-									<div class="ui grid">
-										<div class="thirteen wide column">
-											<a href=""><p>${searchResultPosts[status.index+1].postContents}</p></a>
-											<a href=""><p> ${searchResultPosts[status.index+1].companyName} 
-	  												 	   - ${fn:substring(searchResultPosts[status.index+1].userNickName,0,1)} ****</p></a>
-										</div>
-										<div class="three wide column">
-											<img class="ui tiny right floated image" src="bookmarkimage.png">
-										</div>
-									</div>
-
-						 	<div style="padding:10px; line-heigh:top;">
-						 		 <i class="eye icon" style="margin:0px 5px 0px 5px;"></i>${searchResultPosts[status.index+1].postCount} <!-- margin: top, right, bottom, left;  -->
-								 <i class="thumbs up outline icon" style="margin:0px 5px 0px 5px;"></i> ${searchResultPosts[status.index+1].recommendCount}
-								 <i class="comment outline icon"  style="margin:0px 5px 0px 5px;"></i>  ${searchResultPosts[status.index+1].replyCount}
-						  		<div style="float:Right;">
-							 		${fn:substring(searchResultPosts[status.index+1].postCreateDate,5,7)}.${fn:substring(searchResultPosts[status.index+1].postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(searchResultPosts[status.index+1].postCreateDate,0,10)} -->
-							   		<div id="bookmarkSet${searchResultPosts[status.index+1].postId}" onclick="bookmarkSet(${searchResultPosts[status.index+1].postId})" style="display: inline; margin:0px 5px 0px 5px;">
-							   			<a style="color:#000000; margin:0px;"><i class="bookmark outline icon"></i></a>
-							   		</div>
-							  	</div>
-					   		</div>
-					   </div>
-			   		</c:if>
 					
-					</div>
 					</c:forEach>
-
 			 	 </div>
 			</div>
 		</div>
