@@ -14,8 +14,8 @@ public class AlertService {
 	@Autowired 
 	public AlertMapper mapper; 
 	
-	public List<ReportReasonDto> getAlertReasonList(int alertType) { 
-		return mapper.getAlertReasonList(alertType);    
+	public List<ReportReasonDto> getAlertReasonList() { 
+		return mapper.getAlertReasonList();    
 	}
 	
 }

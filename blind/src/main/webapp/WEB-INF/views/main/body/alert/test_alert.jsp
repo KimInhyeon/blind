@@ -111,21 +111,43 @@
 $(function(){ 
 	   $("#alert_post").on("click", function(){
 		  var alert_post =$("#alert_post").val();
-	      var param = {
-	        alertType : alert_post,
-	        test2 : 'test2text'
-	      };
+//	      var param = {
+//	        alertType : alert_post,
+//	        test2 : 'test2text'
+//	      };
 
 	     // alert("alertType :"+alertType);
 	       $.ajax({
 	         type : "POST",
 	         url  : "/blind/loadAlertReasonList",
-	         data : param,
+//	         data : param,
 	         dataType: "json",
 	         success: function(result){
+	            
+	            //모달창에 데이터들을 입력하기 위한 코드
+	     
+	            //1.신고할 포스트의 제목과 작성자 닉네임을 로드 및 삽입.
+				//  포스트의 글과 닉네임을 해당페이지에서 바로 modal에게로 전달하기 위한 코드.
+				var postTitle = $('#sample_post_title').text(); 
+				var nickName =  $('#sample_nickname_writer').text();		
+				document.getElementById("postTitle").innerHTML=postTitle;
+				document.getElementById("nickName").innerHTML=nickName;
 
-	            alert("리턴성공 result:"+result);
-	            $(".modal_alert_post").modal('show');
+				
+				//2.신고할 사항들의 리스트
+				$(alert_list_post).html(""); //초기화
+				
+				//추가시작
+				$(alert_list_post).append("<ul>");
+				$.each(result, function (key, value) {	
+					$(alert_list_post).append("<li style='list-style:none;margin-right: 100px;'><input type='radio' name='alert_post_reason'  value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</li>");
+				});
+				$(alert_list_post).append("</ul>");
+				$(alert_list_post).append("<textarea id='alert_write' style='width:100%; height:150px; resize: none;'></textarea>");
+			
+				//신고모달창 팝업
+				$(".warp_alert_post").modal('show');
+				
 	         },
 	         error: function(){
 	            alert("에러");
@@ -306,25 +328,9 @@ $(document).ready(function () {
 		 	
 			<div class="ui inverted divider"></div>
 
-			<div class="alert_list_post">
-			  	<ul style="list-style:none;">
-					<li><input type="radio" name="alert_post_reason"  value="1"> 토픽에 맞지 않는 글</li>
-					<li><input type="radio" name="alert_post_reason"  value="2"> 욕설 / 비하발언</li>
-					<li><input type="radio" name="alert_post_reason"  value="3"> 특정인 비방	</li>	
-					<li><input type="radio" name="alert_post_reason"  value="4"> 개인 사생활 침해</li>	
-					<li><input type="radio" name="alert_post_reason"  value="5"> 19+ 만남 / 쪽지유도</li>	
-					<li><input type="radio" name="alert_post_reason"  value="6"> 음란성</li>				 
-					<li><input type="radio" name="alert_post_reason"  value="7"> 회사 기밀</li>	
-					<li><input type="radio" name="alert_post_reason"  value="8"> 게시글 / 댓글 도배</li>	
-					<li><input type="radio" name="alert_post_reason"  value="9"> 시즈널 이벤트, 추천인 코드 등 </li>				 
-					<li><input type="radio" name="alert_post_reason"  value="10"> 홍보성 컨텐츠</li>	 
-					<li><input type="radio" name="alert_post_reason"  value="11"> 퇴사자 신고</li>	 
-					<li><input type="radio" name="alert_post_reason"  value="12"> 닉네임 신고</li>	 
-					<li><input type="radio" name="alert_post_reason"  value="13"> 부적절한 회사 / 채널 태그</li>	 
-					<li><input type="radio" name="alert_post_reason"  value="14"> 기타 </li>	 
-				</ul>
-				<textarea id="alert_write" style="width:400px; height:150px; resize: none;"></textarea>
+			<div id="alert_list_post">
+				<!-- 제이쿼리 통해 로드한 신고리스트들을 출력합니다. -->
 			</div>		
-			<button class="ui primary button" style="width:400px; height:50px; text-align:center;">신고하기</button>
+			<button class="ui primary button" style="width:100%; height:50px; text-align:center; margin-top: 10px;">신고하기</button>
 		</div>	 
 	</div>

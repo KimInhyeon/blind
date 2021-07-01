@@ -3,7 +3,7 @@
 <mapper namespace="com.ksinfo.blind.alert.mapper.AlertMapper">
 
 <!-- 1.신고이유들을 리턴 -->
-<select id="getAlertReasonList" parameterType="int" resultType="com.ksinfo.blind.alert.dto.ReportReasonDto"> 
+<select id="getAlertReasonList" resultType="com.ksinfo.blind.alert.dto.ReportReasonDto"> 
 	SELECT * FROM blind.report_reason_mst
 	ORDER BY report_reason_code ASC;
 </select>

@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 @Mapper 
 public interface AlertMapper {
-	List<ReportReasonDto> getAlertReasonList(int alertType);
+	List<ReportReasonDto> getAlertReasonList();
 }

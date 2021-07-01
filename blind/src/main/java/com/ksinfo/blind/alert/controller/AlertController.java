@@ -34,12 +34,12 @@ public class AlertController {
 	//						
 	@RequestMapping(value="/loadAlertReasonList",method=RequestMethod.POST)
 	   @ResponseBody
-	   public Map<String, Object> loadAlertReasonList(@RequestParam Map<String, Object> param){ 
+	   public List<ReportReasonDto> loadAlertReasonList(@RequestParam Map<String, Object> param){ 
 	      logger.info("loadAlertReasonList 시작.");
 	      logger.info("입력된 신고 유형(1:포스트/2:기업리뷰/3:포스트댓글)에 따라 신고사유들을 리턴.");
 	      logger.info("alertType : "+param.get("alertType"));
 	      logger.info("alertType : "+param.get("test2"));
-	      List<ReportReasonDto> alertReasonList = alertService.getAlertReasonList(alertType);
+	      List<ReportReasonDto> alertReasonList = alertService.getAlertReasonList();
 	      return alertReasonList;   
 	   }
 
