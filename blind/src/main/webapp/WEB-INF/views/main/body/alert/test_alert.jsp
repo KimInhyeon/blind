@@ -109,22 +109,14 @@
 	
 <script>
 $(function(){ 
-	   $("#alert_post").on("click", function(){
-		  var alert_post =$("#alert_post").val();
-//	      var param = {
-//	        alertType : alert_post,
-//	        test2 : 'test2text'
-//	      };
-
-	     // alert("alertType :"+alertType);
-	       $.ajax({
+	$("#alert_post").on("click", function(){
+		var alert_post =$("#alert_post").val();
+	    $.ajax({
 	         type : "POST",
 	         url  : "/blind/loadAlertReasonList",
-//	         data : param,
 	         dataType: "json",
 	         success: function(result){
-	            
-	            //모달창에 데이터들을 입력하기 위한 코드
+	          	//모달창에 데이터들을 입력하기 위한 코드
 	     
 	            //1.신고할 포스트의 제목과 작성자 닉네임을 로드 및 삽입.
 				//  포스트의 글과 닉네임을 해당페이지에서 바로 modal에게로 전달하기 위한 코드.
@@ -133,7 +125,6 @@ $(function(){
 				document.getElementById("postTitle").innerHTML=postTitle;
 				document.getElementById("nickName").innerHTML=nickName;
 
-				
 				//2.신고할 사항들의 리스트
 				$(alert_list_post).html(""); //초기화
 				
@@ -147,15 +138,31 @@ $(function(){
 			
 				//신고모달창 팝업
 				$(".warp_alert_post").modal('show');
-				
 	         },
 	         error: function(){
 	            alert("에러");
 	         }            
-	      });
-	   });
+		});
 	});
+	   
+	//신고 모달창의 '신고하기'버튼 라디오신고버튼 클릭여부확인
+	$("#send_alert").on("click", function(){
+		var selectAlertReason = $('input[name="alert_post_reason"]:checked').val();
+		alert("선택라디오값 : "+selectAlertReason);
+		if(typeof selectAlertReason == "undefined" || selectAlertReason == "" || selectAlertReason == null){ 
+			alert("申告する理由を選んでください。"); //선택된 신고사항이 없기에 선택을 요청
+		}else{
+			alert("申告完了。");//
+		}
+	}); 	   
+});
 
+
+
+
+		
+
+//--------------------------------------------------------------------------------------------------------]
 /*
 $(function(){ 
 	$("#alert_post").on("click", function(){
@@ -222,8 +229,8 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('#testNoSelect').click(function () {
       // getter
-      var radioVal = $('input[name="radioTxt"]:checked').val();
-      alert(radioVal);
+      var radioVal = $('input[name="radio_test_alert"]:checked').val(); //radioTxt
+      alert("radioVal : " +radioVal);
     });
 
     $('#radioCheckedClear').click(function () {
@@ -233,14 +240,6 @@ $(document).ready(function () {
     });
   });
 </script>
-<!-- 	
-		data : $(alertType),
-				//포스트의 글과 닉네임을 해당페이지에서 바로 modal에게로 전달하기 위한 코드.
-				//var postTitle = $('#sample_post_title').text(); 
-				//var nickName =  $('#sample_nickname_writer').text();		
-				//document.getElementById("postTitle").innerHTML=postTitle;
-				//document.getElementById("nickName").innerHTML=nickName;
- -->
 	
 </head>
 
@@ -329,8 +328,13 @@ $(document).ready(function () {
 			<div class="ui inverted divider"></div>
 
 			<div id="alert_list_post">
-				<!-- 제이쿼리 통해 로드한 신고리스트들을 출력합니다. -->
+				<!-- 제이쿼리(alert_post)를 통해 로드한 신고리스트들을 출력합니다. -->
 			</div>		
-			<button class="ui primary button" style="width:100%; height:50px; text-align:center; margin-top: 10px;">신고하기</button>
+			
+			<button class="ui primary button" id="send_alert"
+					style="width:100%; height:50px; text-align:center; margin-top: 10px;">
+					신고하기
+			</button>
+			
 		</div>	 
 	</div>
