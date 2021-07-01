@@ -109,6 +109,8 @@
 	
 <script>
 $(function(){ 
+	//1.신고하기(포스트)
+	//1.1. 신고모달창 팝업실시
 	$("#alert_post").on("click", function(){
 		var alert_post =$("#alert_post").val();
 	    $.ajax({
@@ -134,8 +136,8 @@ $(function(){
 					$(alert_list_post).append("<li style='list-style:none;margin-right: 100px;'><input type='radio' name='alert_post_reason'  value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</li>");
 				});
 				$(alert_list_post).append("</ul>");
-				$(alert_list_post).append("<textarea id='alert_write' style='width:100%; height:150px; resize: none;'></textarea>");
-			
+				$(alert_list_post).append("<textarea id='alert_write' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
+				
 				//신고모달창 팝업
 				$(".warp_alert_post").modal('show');
 	         },
@@ -145,7 +147,7 @@ $(function(){
 		});
 	});
 	   
-	//신고 모달창의 '신고하기'버튼 라디오신고버튼 클릭여부확인
+	//1.2.신고 모달창의 '신고하기'버튼 클릭시 신고이유 선택여부 확인.
 	$("#send_alert").on("click", function(){
 		var selectAlertReason = $('input[name="alert_post_reason"]:checked').val();
 		alert("선택라디오값 : "+selectAlertReason);
@@ -157,88 +159,6 @@ $(function(){
 	}); 	   
 });
 
-
-
-
-		
-
-//--------------------------------------------------------------------------------------------------------]
-/*
-$(function(){ 
-	$("#alert_post").on("click", function(){
-		var alertType=$("#alert_post").val();
-		var obj = 0;
-		alert("alertType :"+alertType);
-    	$.ajax({
-			type : "POST",
-		    url  : "/blind/loadAlertReasonList",
-			data : alertType,
-			dataType:"Json",
-			success: function(result){
-
-				alert("리턴성공 result:"+result);
-				
-				//포스트의 글과 닉네임을 해당페이지에서 바로 modal에게로 전달하기 위한 코드.
-				var postTitle = $('#sample_post_title').text(); 
-				var nickName =  $('#sample_nickname_writer').text();		
-				document.getElementById("postTitle").innerHTML=postTitle;
-				document.getElementById("nickName").innerHTML=nickName;
-				
-				$(".warp_alert_post").modal('show');
-			},
-			error: function(){
-				alert("에러");
-			}				
-		});
-	});
-});
-*/
-
-//라디오 버튼- 활성/비활성 버튼 여부에 따라 텍스트 입력가능여부 설정
-$(document).ready(function(){
-    // 라디오버튼 클릭시 이벤트 발생
-    $("input:radio[name=radio]").click(function(){
- 
-        if($("input[name=radio]:checked").val() == "1"){
-            $("input:text[name=text]").attr("disabled",false);
-            // radio 버튼의 value 값이 1이라면 활성화
- 
-        }else if($("input[name=radio]:checked").val() == "0"){
-              $("input:text[name=text]").attr("disabled",true);
-            // radio 버튼의 value 값이 0이라면 비활성화
-        }
-    });
-});
-
-//라디오 버튼 클릭시 값 출력
-$(document).ready(function () {
-    $('#radioButton').click(function () {
-      // getter
-      var radioVal = $('input[name="radioTxt"]:checked').val();
-      alert(radioVal);
-    });
-
-    $('#radioButton2').click(function () {
-      // setter
-      // 선택한 부분을 세팅할 수 있다.
-      $('input[name="radioTxt"]').val(['Banana']);
-    });
-  });
-
-//라디오버튼 미선택시 경고팝업 체크
-$(document).ready(function () {
-    $('#testNoSelect').click(function () {
-      // getter
-      var radioVal = $('input[name="radio_test_alert"]:checked').val(); //radioTxt
-      alert("radioVal : " +radioVal);
-    });
-
-    $('#radioCheckedClear').click(function () {
-      // setter
-      // 선택한 부분을 세팅할 수 있다.
-      $('input[name="radioTxt"]').val(['Banana']);
-    });
-  });
 </script>
 	
 </head>
@@ -260,7 +180,23 @@ $(document).ready(function () {
 	 
 	<button id="alert_post" value="1">신고하기(포스트버전)</button>
 
-
+<!-- 
+//라디오 버튼- 활성/비활성 버튼 여부에 따라 텍스트 입력가능여부 설정
+$(document).ready(function(){
+    // 라디오버튼 클릭시 이벤트 발생
+    $("input:radio[name=radio]").click(function(){
+ 
+        if($("input[name=radio]:checked").val() == "1"){
+            $("input:text[name=text]").attr("disabled",false);
+            // radio 버튼의 value 값이 1이라면 활성화
+ 
+        }else if($("input[name=radio]:checked").val() == "0"){
+              $("input:text[name=text]").attr("disabled",true);
+            // radio 버튼의 value 값이 0이라면 비활성화
+        }
+    });
+});
+ -->
 
 <!-- [JQuery]라디오버튼 선택시 텍스트박스 활성화/비활성화  -->
 <div style="width:200px;">
@@ -271,42 +207,10 @@ $(document).ready(function () {
   <input type="text" name="text">
 </div>
 
-<!-- 라디오 버튼 값 출력 -->
-    <ul>
-      <li>
-        <input type="radio" name="radioTxt" value="Apple" checked>Apple
-      </li>
-      <li>
-        <input type="radio" name="radioTxt" value="Grape">Grape
-      </li>
-      <li>
-        <input type="radio" name="radioTxt" value="Banana">Banana
-      </li>
-    </ul>
-    <button type="button" name="button" id="radioButton">get radio Value</button>
-    <button type="button" name="button" id="radioButton2">set radio Value</button>
-
-
-<!-- 라디오 버튼 선택않을시 경고창 띄우기 -->
-    <ul>
-      <li>
-        <input type="radio" name="radio_test_alert" value="alert_1">alert_1
-      </li>
-      <li>
-        <input type="radio" name="radio_test_alert" value="alert_2">alert_2
-      </li>
-      <li>
-        <input type="radio" name="radio_test_alert" value="alert_3">alert_3
-      </li>
-    </ul>
-    <button type="button" name="radio_test" id="testNoSelect">라디오버튼테스트(선택X시 경고팝업)</button>
-    <button type="button" name="radio_test" id="radioCheckedClear">라디오버튼 선택초기화</button>
-
-
 </body>
 
 </html>
-
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 	<!-- post 신고에 대한 모달창 -->
 	<div class="modal">
 		<div class="warp_alert_post">
