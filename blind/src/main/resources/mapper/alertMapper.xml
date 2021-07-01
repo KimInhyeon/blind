@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.alert.mapper.AlertMapper">
+
+<!-- 1.신고이유들을 리턴 -->
+<select id="getAlertReasonList" parameterType="int" resultType="com.ksinfo.blind.alert.dto.ReportReasonDto"> 
+	SELECT * FROM blind.report_reason_mst
+	ORDER BY report_reason_code ASC;
+</select>
+
+</mapper>
