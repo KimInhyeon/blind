@@ -14,10 +14,10 @@ public class PageNavigator {
 			totalPage = (totalRecord + recordLimit - 1) / recordLimit;
 			if (page > totalPage) {
 				currentPage = totalPage;
-			} else if (page < 1) {
-				currentPage = 1;
-			} else {
+			} else if (page > 0) {
 				currentPage = page;
+			} else {
+				currentPage = 1;
 			}
 			if (totalPage <= pagination) {
 				startPage = 1;
