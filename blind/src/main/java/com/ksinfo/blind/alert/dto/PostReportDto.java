@@ -5,7 +5,7 @@ public class PostReportDto {
 	private int postId;						//	, post_id
 	private int userId;						//	, user_id
 	private String postReportDate;			//	, post_report_date
-	private int reportReasonCode;			//	, report_reason_code
+	private String reportReasonCode;			//	, report_reason_code
 	private String  reportReasonContent;	//	, report_reason_content
 	private char verifyFlag;				//	, verify_flag
 	private char  completeFlag;				//	, complete_flag
@@ -48,10 +48,11 @@ public class PostReportDto {
 	public void setPostReportDate(String postReportDate) {
 		this.postReportDate = postReportDate;
 	}
-	public int getReportReasonCode() {
+
+	public String getReportReasonCode() {
 		return reportReasonCode;
 	}
-	public void setReportReasonCode(int reportReasonCode) {
+	public void setReportReasonCode(String reportReasonCode) {
 		this.reportReasonCode = reportReasonCode;
 	}
 	public String getReportReasonContent() {

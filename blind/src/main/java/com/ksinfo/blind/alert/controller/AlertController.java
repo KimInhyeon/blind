@@ -62,7 +62,7 @@ public class AlertController {
 	      // 작성의 편의 및 PostReportDto의 변수에 맞도록 정정. 
 	      int postId = Integer.parseInt(param.get("postId").toString()) ;
 	      int userId = Integer.parseInt(param.get("userId").toString()) ;
-	      int reportReasonCode = Integer.parseInt(param.get("reportReasonCode").toString()) ;
+	      String reportReasonCode = param.get("reportReasonCode").toString();
 	      int alertType = Integer.parseInt(param.get("alertType").toString()) ;
 	      String reportReasonContent = param.get("report_reason_content").toString();
 	      
