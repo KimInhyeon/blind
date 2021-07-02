@@ -383,7 +383,6 @@
 			boardSubmit("PATCH", board).then(function (result) {
 				if (result > 0) {
 					const tbody = document.querySelector("tbody");
-					history.replaceState(tbody.innerHTML, "");
 					const trList = tbody.children;
 					const originOrder = Number(order.dataset.value);
 					if (board.closedFlag === "1") { // トピックの閉鎖
@@ -480,7 +479,7 @@
 							}
 						}
 					}
-					history.pushState(tbody.innerHTML, "");
+					history.replaceState(tbody.innerHTML, "");
 					alert("生成に成功しました");
 					$("#boardInfo").modal("hide");
 				} else if (result > -1) {
@@ -506,7 +505,6 @@
 					board.boardId = boardId;
 					board.closedFlag = "0";
 					const tbody = document.querySelector("tbody");
-					history.replaceState(tbody.innerHTML, "");
 					const closedFlag = document.querySelector("#closedFilter > select").value;
 					if (closedFlag === "0") {
 						let tbodyHtml = "";
@@ -533,7 +531,7 @@
 					} else {
 						tbody.innerHTML = getNewBoardRow(board) + tbody.innerHTML;
 					}
-					history.pushState(tbody.innerHTML, "");
+					history.replaceState(tbody.innerHTML, "");
 					alert("生成に成功しました");
 					$("#boardInfo").modal("hide");
 				} else if (boardId > -1) {
@@ -594,6 +592,11 @@
 		// Pjax
 		onpopstate = function (event) {
 			document.querySelector("tbody").innerHTML = event.state;
+			const searchParams = new URLSearchParams(location.search);
+			const closedFlag = searchParams.get("closedFlag");
+			const anonymousFlag = searchParams.get("anonymousFlag");
+			document.querySelector("#closedFilter > select").value = closedFlag === null ? "0" : closedFlag;
+			document.querySelector("#anonymousFilter > select").value = anonymousFlag === null ? "2" : anonymousFlag;
 		};
 	};
 </script>
