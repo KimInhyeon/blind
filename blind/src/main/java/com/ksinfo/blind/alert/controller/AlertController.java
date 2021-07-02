@@ -30,8 +30,8 @@ public class AlertController {
 	@Autowired AlertService alertService;  
 	
 	
-	//신고버튼(포스트신고) 클릭시 해당 신고
-	//						
+	//1.신고버튼(포스트신고) 클릭시 해당 신고
+	//1.1. 신고하기 팝업창 					
 	@RequestMapping(value="/loadAlertReasonList",method=RequestMethod.POST)
 	   @ResponseBody
 	   public List<ReportReasonDto> loadAlertReasonList(@RequestParam Map<String, Object> param){ 
@@ -43,10 +43,44 @@ public class AlertController {
 	      return alertReasonList;   
 	   }
 
+
+	//수신된 신고사항을 DB의 POST_REPORT_MGT에 저장
+	@RequestMapping(value="/sendAlert",method=RequestMethod.POST)
+	   @ResponseBody
+	   public int receiveAlert(@RequestParam Map<String, Object> param){ 
+	      logger.info("receiveAlert 시작.");			
+	      
+	      //수신된 정보 확인
+	      logger.info("postId : "+param.get("postId")); 						//게시글의 id
+	      logger.info("userId : "+param.get("userId")); 						//신고자의 id(닉네임이 아님)
+	      logger.info("selectAlertReason : "+param.get("selectAlertReason"));	//신고사유 코드번호
+	     
+		      
+	      return 1;
+	}
+	
+	
+	//신고하기 테스트 페이지로 이동
 	@RequestMapping("/alert/test_alert")  
 	public ModelAndView test_alert(ModelAndView mav){	
 		logger.info("test_alert 페이지 이동");
-	mav.setViewName("main/alert/test_alert");
-	return mav;	
+		
+//	List<PostDto> searchResultPostsSelectTopic = searchService.getPostSelectTopic(selectBoardId, searchKeyword);
+//	mav.addObject("searchResultPosts",searchResultPosts);			//검색어와 관련된 포스트(게시글)들 전달.
+		
+		
+		//임의의 데이터 추가.
+		//1.포스트신고관련 필요정보
+		int postId = 1000;			//게시글의 id
+	    int userId = 2000; 			//신고자의 id(닉네임이 아님)
+	    //selectAlertReason(신고사유 코드번호)는 신고시 추가되므로 생략.
+		
+		
+		
+		
+		mav.addObject("postId",postId);		
+		mav.addObject("userId",userId);		
+		mav.setViewName("main/alert/test_alert");
+		return mav;	
 	}
 }

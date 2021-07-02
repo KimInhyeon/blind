@@ -118,6 +118,7 @@ $(function(){
 	         url  : "/blind/loadAlertReasonList",
 	         dataType: "json",
 	         success: function(result){
+	             console.log("12345");
 	          	//모달창에 데이터들을 입력하기 위한 코드
 	     
 	            //1.신고할 포스트의 제목과 작성자 닉네임을 로드 및 삽입.
@@ -146,13 +147,7 @@ $(function(){
 	         }            
 		});
 	});
-	
-	$("input[name='alert_post_reason']:radio").on("change", function () {
-        //라디오 버튼 값을 가져온다.
-   		var selectAlertReason = $('input[name="alert_post_reason"]:checked').val();
-                        
-        alert(noticeCat);            
-	});
+
 	
 	//1.2.신고 모달창의 '신고하기'버튼 클릭시 신고이유 선택여부 확인.
 	$("#send_alert").on("click", function(){
@@ -161,32 +156,91 @@ $(function(){
 		if(typeof selectAlertReason == "undefined" || selectAlertReason == "" || selectAlertReason == null){ 
 			alert("申告する理由を選んでください。"); //선택된 신고사항이 없기에 선택을 요청
 		}else{
-			alert("申告完了。");//
+			alert("신고시작。");
+		    $.ajax({
+		         type : "POST",
+		         url  : "/blind/sendAlert",
+		         data : { postId : ${postId}
+						 ,userId : ${userId}
+						 ,selectAlertReason
+		         },
+		         dataType: "json",
+		         
+		         
+		         success: function(result){
+		            console.log("신고완료");
+		 			alert("신고완료。");
+		         },
+		         error: function(){
+		            alert("신고에러");
+		         }            
+			});
+			
 		}
 	});
 	
+	$("input[name='alert_post_reason']").change (function () {
+        //라디오 버튼 값을 가져온다.
+        console.log("aaaaa");
+   		var selectAlertReason = $('input[name="alert_post_reason"]:checked').val();
+                        
+        alert(selectAlertReason);            
+	});
+	
 });
-
 </script>
 	
 </head>
 
 <body>
 	<!-- 게시글 가안입니다. 신고시 제목과 닉네임 전송을 묘사하기 위한 샘플 목적으로 만들어졌습니다. -->
-	<div class="sample_post" style="margin:20px;">
-		<div id="sample_post_title">
-			<h3>this is sample_post_title.</h3>
-		</div>
-		<div id="sample_nickname_writer">
-			<p>o****</p>
-		</div>
-		<div id="sample_post_contents">
-			<p>sample_post_contents.</p>
-		</div>
-	</div>
+	<table class="ui celled table" style="width:100%;margin:20px;">
+	  <thead>
+	    <tr>
+	    	<th>분류(전송시 구분값)</th>
+		    <th>정보1</th>
+		    <th>정보2</th>
+		    <th>글 제목</th>
+		    <th>작성자 닉네임</th>
+		    <th>신고모달버튼</th>
+	  	</tr>
+	  </thead>
+	  <tbody>
+	    <tr>	   
+		    <td data-label="alert_type">
+				post(1)
+		    </td>
 
-	 
-	<button id="alert_post" value="1">신고하기(포스트버전)</button>
+			<td data-label="code_data">
+				post_id : ${postId}
+		    </td>
+		    
+	    	<td data-label="code_data">
+				user_id : ${userId}
+		    </td>
+	    
+	    
+	      	<td data-label="title">
+		      	<div id="sample_post_title">
+					<h3>this is sample_post_title.</h3>
+				</div>
+			</td>
+
+	      <td data-label="writer_nick_name">
+	     		<div id="sample_nickname_writer">
+					<p>o****</p>
+				</div>
+		  </td>
+			
+	      <td data-label="alert_button">
+	     		<button id="alert_post" value="1">신고하기(포스트버전)</button>
+	      </td>
+	    </tr>
+	    
+	  </tbody>
+	</table>
+
+	
 </body>
 
 </html>
@@ -202,7 +256,7 @@ $(function(){
 				</div>
 			</div> 
 			<div>
-				<strong>作成者</strong>
+				<strong style="display: inline;">作成者</strong>
 				<div id="postTitle"><!-- 신고할 포스트의 제목이 jquery를 통해 입력됩니다. --></div>
 			</div> 
 			<div>

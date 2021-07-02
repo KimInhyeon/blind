@@ -43,10 +43,6 @@
 			   padding: 0;
 			}
 			
-			body {
-			   padding: 2rem;
-			}
-			
 			.tit {
 			   padding: 6px 0 8px;
 			   font-size: 150%;
