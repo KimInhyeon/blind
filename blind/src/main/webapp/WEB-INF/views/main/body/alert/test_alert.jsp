@@ -146,7 +146,14 @@ $(function(){
 	         }            
 		});
 	});
-	   
+	
+	$("input[name='alert_post_reason']:radio").on("change", function () {
+        //라디오 버튼 값을 가져온다.
+   		var selectAlertReason = $('input[name="alert_post_reason"]:checked').val();
+                        
+        alert(noticeCat);            
+	});
+	
 	//1.2.신고 모달창의 '신고하기'버튼 클릭시 신고이유 선택여부 확인.
 	$("#send_alert").on("click", function(){
 		var selectAlertReason = $('input[name="alert_post_reason"]:checked').val();
@@ -156,7 +163,8 @@ $(function(){
 		}else{
 			alert("申告完了。");//
 		}
-	}); 	   
+	});
+	
 });
 
 </script>
@@ -179,38 +187,11 @@ $(function(){
 
 	 
 	<button id="alert_post" value="1">신고하기(포스트버전)</button>
-
-<!-- 
-//라디오 버튼- 활성/비활성 버튼 여부에 따라 텍스트 입력가능여부 설정
-$(document).ready(function(){
-    // 라디오버튼 클릭시 이벤트 발생
-    $("input:radio[name=radio]").click(function(){
- 
-        if($("input[name=radio]:checked").val() == "1"){
-            $("input:text[name=text]").attr("disabled",false);
-            // radio 버튼의 value 값이 1이라면 활성화
- 
-        }else if($("input[name=radio]:checked").val() == "0"){
-              $("input:text[name=text]").attr("disabled",true);
-            // radio 버튼의 value 값이 0이라면 비활성화
-        }
-    });
-});
- -->
-
-<!-- [JQuery]라디오버튼 선택시 텍스트박스 활성화/비활성화  -->
-<div style="width:200px;">
-  <input type="radio" name="radio" id="r1" value="1" checked><label for="r1">활성화</label>
-  <input type="radio" name="radio" id="r2" value="0"><label for="r2">비활성화</label>
-</div>
-<div style="width:200px;">
-  <input type="text" name="text">
-</div>
-
 </body>
 
 </html>
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+
 	<!-- post 신고에 대한 모달창 -->
 	<div class="modal">
 		<div class="warp_alert_post">
