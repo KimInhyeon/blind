@@ -2,10 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ksinfo.blind.alert.mapper.AlertMapper">
 
-<!-- 1.신고이유들을 리턴 -->
+<!-- 1.신고이유들을 리턴(모달창에 출력시 사용 -->
 <select id="getAlertReasonList" resultType="com.ksinfo.blind.alert.dto.ReportReasonDto"> 
 	SELECT * FROM blind.report_reason_mst
 	ORDER BY report_reason_code ASC;
 </select>
+
+<!-- 2.신고접수-포스트의 신고시 -->
+<select id="setPostReport"  parameterType="com.ksinfo.blind.alert.dto.PostReportDto"> 	
+INSERT INTO blind.post_report_mgt(
+	post_report_id
+	, post_id
+	, user_id
+	, post_report_date
+	, report_reason_code
+	, report_reason_content
+	, verify_flag
+	, complete_flag
+	, reject_reason
+	, rec_create_user_id
+	, rec_create_date
+	, rec_update_user_id
+	, rec_update_date
+	, logical_del_flag
+)VALUES(
+	default	--post_report_id
+	, #{postId}	--, post_id
+	, #{userId} --, user_id
+	, now() --, post_report_date
+	, #{reportReasonCode} --, report_reason_code
+	, #{reportReasonContent} --, report_reason_content
+	, 0 --, verify_flag :게시글 신고 승인플래그(0:미승인, 1:승인)
+	, 0 --, complete_flag 처리구분플래그(0:미처리, 1:처리)
+	, '' --, reject_reason : 승인거절 사유
+	, #{userId} --, rec_create_user_id
+	, now() --, rec_create_date
+	, #{userId} --, rec_update_user_id
+	, now() --, rec_update_date
+	, 0	--, logical_del_flag 논리삭제플래그(0:미삭제, 1:삭제)
+);
+</select>
+
 
 </mapper>

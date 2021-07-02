@@ -137,7 +137,7 @@ $(function(){
 					$(alert_list_post).append("<li style='list-style:none;margin-right: 100px;'><input type='radio' name='alert_post_reason'  value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</li>");
 				});
 				$(alert_list_post).append("</ul>");
-				$(alert_list_post).append("<textarea id='alert_write' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
+				$(alert_list_post).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
 				
 				//신고모달창 팝업
 				$(".warp_alert_post").modal('show');
@@ -151,9 +151,9 @@ $(function(){
 	
 	//1.2.신고 모달창의 '신고하기'버튼 클릭시 신고이유 선택여부 확인.
 	$("#send_alert").on("click", function(){
-		var selectAlertReason = $('input[name="alert_post_reason"]:checked').val();
-		alert("선택라디오값 : "+selectAlertReason);
-		if(typeof selectAlertReason == "undefined" || selectAlertReason == "" || selectAlertReason == null){ 
+		var reportReasonCode = $('input[name="alert_post_reason"]:checked').val();
+		var alertType =1; //맨처음 화면에서 alert_post 값이 넘어오지 않아서 전송버튼 클릭시로 변경.
+		if(typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null){ 
 			alert("申告する理由を選んでください。"); //선택된 신고사항이 없기에 선택을 요청
 		}else{
 			alert("신고시작。");
@@ -162,12 +162,12 @@ $(function(){
 		         url  : "/blind/sendAlert",
 		         data : { postId : ${postId}
 						 ,userId : ${userId}
-						 ,selectAlertReason
+						 ,reportReasonCode
+						 ,alertType
+						 ,report_reason_content : $("#report_reason_content").val()
 		         },
 		         dataType: "json",
-		         
-		         
-		         success: function(result){
+		         success: function(){
 		            console.log("신고완료");
 		 			alert("신고완료。");
 		         },

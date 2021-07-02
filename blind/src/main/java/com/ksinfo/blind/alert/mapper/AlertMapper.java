@@ -2,6 +2,8 @@ package com.ksinfo.blind.alert.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import com.ksinfo.blind.alert.dto.PostReportDto;
 import com.ksinfo.blind.alert.dto.ReportReasonDto;
 import java.util.List;
 
@@ -9,4 +11,5 @@ import java.util.List;
 @Mapper 
 public interface AlertMapper {
 	List<ReportReasonDto> getAlertReasonList();
+	void setPostReport(PostReportDto postReport);
 }

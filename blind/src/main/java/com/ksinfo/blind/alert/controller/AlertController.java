@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ksinfo.blind.alert.dto.PostReportDto;
 import com.ksinfo.blind.alert.dto.ReportReasonDto;
 import com.ksinfo.blind.alert.mapper.AlertMapper;
 import com.ksinfo.blind.alert.service.AlertService;
@@ -44,7 +45,7 @@ public class AlertController {
 	   }
 
 
-	//수신된 신고사항을 DB의 POST_REPORT_MGT에 저장
+	//수신된 신고사항을 DB에 저장
 	@RequestMapping(value="/sendAlert",method=RequestMethod.POST)
 	   @ResponseBody
 	   public int receiveAlert(@RequestParam Map<String, Object> param){ 
@@ -53,9 +54,35 @@ public class AlertController {
 	      //수신된 정보 확인
 	      logger.info("postId : "+param.get("postId")); 						//게시글의 id
 	      logger.info("userId : "+param.get("userId")); 						//신고자의 id(닉네임이 아님)
-	      logger.info("selectAlertReason : "+param.get("selectAlertReason"));	//신고사유 코드번호
-	     
-		      
+	      logger.info("selectAlertReason : "+param.get("reportReasonCode"));	//신고사유 코드번호
+	      logger.info("alertType : "+param.get("alertType"));					//신고유형(1:포스트/2:기업리뷰/3:포스트댓글)
+	      logger.info("reportReasonContent : "+param.get("report_reason_content"));		//textarea의 작성내용.
+
+	      
+	      // 작성의 편의 및 PostReportDto의 변수에 맞도록 정정. 
+	      int postId = Integer.parseInt(param.get("postId").toString()) ;
+	      int userId = Integer.parseInt(param.get("userId").toString()) ;
+	      int reportReasonCode = Integer.parseInt(param.get("reportReasonCode").toString()) ;
+	      int alertType = Integer.parseInt(param.get("alertType").toString()) ;
+	      String reportReasonContent = param.get("report_reason_content").toString();
+	      
+	      
+	      //신고유형(v포스트)에 따라 신고를 저장할 테이블을 구분
+	      switch( alertType ) {
+	      	case 1:	//대상 테이블(1)포스트 -> POST_REPORT_MGT에 저장
+	      		logger.info("post신고로 확인, POST_REPORT_MGT에 insert시작."); 	
+	      		PostReportDto postReport = new PostReportDto();  
+	      		postReport.setPostId(postId);
+	      		postReport.setUserId(userId);
+	      		postReport.setReportReasonCode(reportReasonCode);
+	      		postReport.setReportReasonContent(reportReasonContent);
+	      		
+	      		alertService.setPostReport(postReport);
+	      		break;
+	      	default: 
+	      		logger.info("정의되지 않은 신고유형입니다."); 	
+	      		break;
+	      }		      
 	      return 1;
 	}
 	
