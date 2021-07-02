@@ -8,12 +8,17 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ReportController {
+	private final ReportService reportService;
+
 	@Autowired
-	private ReportService reportService;
+	public ReportController(ReportService reportService) {
+		this.reportService = reportService;
+	}
 
 	@GetMapping(value = "manage/report")
-	public ModelAndView report(ModelAndView mav) {
-		mav.setViewName("main/manage/report");
-		return mav;
+	public ModelAndView report() {
+		ModelAndView modelAndView = new ModelAndView("main/manage/report");
+
+		return modelAndView;
 	}
 }

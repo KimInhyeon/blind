@@ -12,10 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,11 +37,6 @@ public class MemberService implements UserDetailsService {
 		if (account == null) {
 			throw new UsernameNotFoundException(messages.getMessage("BLIND_ERR_MSG_001"));
 		}
-
-		// TODO: userIdをHttpSessionに入れる臨時コマンド、後で必ず確認
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-		request.getSession().setAttribute("userId", account.getUserId());
-		// TODO: userIdをHttpSessionに入れる臨時コマンド、後で必ず確認
 
 		account.setAuthorities(getAuthorities(account.getUserAuth()));
 

@@ -351,22 +351,20 @@
 		editCompany(0);
 	}
 
-	async function verifyCompanyList(verifyData) {
+	async function companySubmit(method, data) {
 		let result = -1;
-		await fetch(location.pathname + "/update", {
-			method: "PATCH",
+		await fetch(location.pathname, {
+			method: method,
 			headers: {
 				"Content-Type": "application/json"
 			},
-			body: JSON.stringify(verifyData)
+			body: JSON.stringify(data)
 		}).then(function (response) {
 			if (response.ok) {
-				return response.json();
+				result = response.json();
 			} else {
 				throw response.status;
 			}
-		}).then(function (response) {
-			result = response;
 		}).catch(function (error) {
 			alert("予期しないエラーが発生しました");
 			console.error(error);
@@ -411,27 +409,25 @@
 				checkedList = unfilledCheckedList;
 				openEditCompanyListModal();
 			} else if (confirm("承認しますか？")) {
-				verifyCompanyList({
+				companySubmit("PATCH", {
 					"companyIdList": companyIdList,
 					"verifyFlag": "1"
 				}).then(function (result) {
-					if (result > -1) {
-						if (result === companyIdList.length) {
-							alert("申請を承認しました");
-							for (let i = 0; i < checkedListLength; ++i) {
-								const verifyFlag = checkedList[i].closest("td").nextElementSibling;
-								verifyFlag.dataset.value = "1";
-								verifyFlag.innerText = "承認";
-							}
-							checkAllCompanyRows(false);
-						} else if (result > 0) {
-							alert("一部の承認に失敗しました");
-							if (confirm("ページをリフレッシュします")) {
-								location.reload();
-							}
-						} else {
-							alert("承認に失敗しました");
+					if (result === companyIdList.length) {
+						alert("申請を承認しました");
+						for (let i = 0; i < checkedListLength; ++i) {
+							const verifyFlag = checkedList[i].closest("td").nextElementSibling;
+							verifyFlag.dataset.value = "1";
+							verifyFlag.innerText = "承認";
 						}
+						checkAllCompanyRows(false);
+					} else if (result > 0) {
+						alert("一部の承認に失敗しました");
+						if (confirm("ページをリフレッシュします")) {
+							location.reload();
+						}
+					} else if (result > -1) {
+						alert("承認に失敗しました");
 					}
 				});
 			}
@@ -447,7 +443,7 @@
 			reason.focus();
 		} else {
 			reason.closest("div").setAttribute("class", "ui fluid disabled input");
-			reason.value = selection.options[Number(index)].innerText;
+			reason.value = selection.options[index].innerText;
 		}
 	}
 
@@ -470,7 +466,7 @@
 			for (let i = checkedList.length - 1; i > -1; --i) {
 				companyIdList.push(companyList[Number(checkedList[i].dataset.index)].companyId);
 			}
-			verifyCompanyList({
+			companySubmit("PATCH", {
 				"companyIdList": companyIdList,
 				"verifyFlag": "2",
 				"reason": reason
@@ -486,7 +482,7 @@
 					$("#rejection").modal("hide");
 				} else if (result > 0) {
 					alert("一部の却下に失敗しました");
-				} else {
+				} else if (result > -1) {
 					alert("申請の却下に失敗しました");
 				}
 			});
@@ -569,20 +565,8 @@
 			const company = getCompanyData();
 			const companyId = Number(document.getElementById("companyId").innerText);
 			company.companyId = companyId;
-			fetch(location.pathname + "/update", {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify(company)
-			}).then(function (response) {
-				if (response.ok) {
-					return response.json();
-				} else {
-					throw response.status;
-				}
-			}).then(function (result) {
-				if (result) {
+			companySubmit("PUT", company).then(function (result) {
+				if (result > 0) {
 					alert("更新に成功しました");
 					for (let i = companyList.length - 1; i > -1; --i) {
 						if (companyId === companyList[i].companyId) {
@@ -604,12 +588,9 @@
 						}
 					}
 					$("#comInfo").modal("hide");
-				} else {
+				} else if (result > -1) {
 					alert("更新に失敗しました");
 				}
-			}).catch(function (error) {
-				alert("予期しないエラーが発生しました");
-				console.error(error);
 			});
 		}
 	}
@@ -639,28 +620,13 @@
 		if (checkForm() && confirm("新しい会社を申請します。承認は自動的に行われます。")) {
 			const company = getCompanyData();
 			company.verifyFlag = "1";
-			fetch(location.pathname + "/apply", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify(company)
-			}).then(function (response) {
-				if (response.ok) {
-					return response.json();
-				} else {
-					throw response.status;
-				}
-			}).then(function (result) {
-				if (result) {
+			companySubmit("POST", company).then(function (result) {
+				if (result > 0) {
 					alert("生成に成功しました");
 					$("#comInfo").modal("hide");
-				} else {
+				} else if (result > -1) {
 					alert("生成に失敗しました");
 				}
-			}).catch(function (error) {
-				alert("予期しないエラーが発生しました");
-				console.error(error);
 			});
 		}
 	}
@@ -731,11 +697,10 @@
 		}
 		verifyFilter.addEventListener("change", function () {
 			searchParams.delete("page");
-			const verifyFlag = this.value;
 			if (verifyFilter.value === "0") {
 				searchParams.delete("verifyFlag");
 			} else {
-				searchParams.set("verifyFlag", verifyFlag);
+				searchParams.set("verifyFlag", this.value);
 			}
 			location.search = searchParams.toString();
 		});
@@ -746,11 +711,10 @@
 		}
 		closingFilter.addEventListener("change", function () {
 			searchParams.delete("page");
-			const closingFlag = this.value;
 			if (closingFlag === "0") {
 				searchParams.delete("closingFlag");
 			} else {
-				searchParams.set("closingFlag", closingFlag);
+				searchParams.set("closingFlag", this.value);
 			}
 			location.search = searchParams.toString();
 		});
@@ -763,16 +727,16 @@
 			const parameter = searchParams.toString();
 			const parameterIsExist = parameter.length > 0;
 			const getParameterHtml = function (page) {
-				let parameterHtml;
 				if (page > 1) {
-					parameterHtml = "?page=" + page
+					let parameterHtml = "?page=" + page
 					if (parameterIsExist) {
 						parameterHtml += "&" + parameter;
 					}
+					return parameterHtml
 				} else if (parameterIsExist) {
-					parameterHtml = "?" + parameter;
+					return "?" + parameter;
 				}
-				return parameterHtml;
+				return "";
 			};
 			let page = ${navi.startPage};
 			if (page === 1) {
@@ -810,6 +774,7 @@
 		businessType.forEach(function (name, code) {
 			html += "<option value =\"" + code + "\">" + code + ". " + name + "</option>";
 		});
+		document.getElementById("foundingDate").setAttribute("max", new Date().toISOString().substring(0, 10));
 		$("#comInfo").modal({
 			duration: 100,
 			closable: false,
