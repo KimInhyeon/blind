@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 @Mapper 
 public interface AlertMapper {
-	List<ReportReasonDto> getAlertReasonList();
+	List<ReportReasonDto> getAlertReasonList(String alertType);
 	void setPostReport(PostReportDto postReport);
 }

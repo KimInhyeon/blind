@@ -111,14 +111,15 @@
 $(function(){ 
 	//1.신고하기(포스트)
 	//1.1. 신고모달창 팝업실시
+	//컨트롤러의 loadAlertReasonList 를 통해 신고이유 리스트들을 로드. 
 	$("#alert_post").on("click", function(){
-		var alert_post =$("#alert_post").val();
+		var alertType ="0006";
 	    $.ajax({
 	         type : "POST",
 	         url  : "/blind/loadAlertReasonList",
+	         data : { alertType },
 	         dataType: "json",
 	         success: function(result){
-	             console.log("12345");
 	          	//모달창에 데이터들을 입력하기 위한 코드
 	     
 	            //1.신고할 포스트의 제목과 작성자 닉네임을 로드 및 삽입.
@@ -152,7 +153,7 @@ $(function(){
 	//1.2.신고 모달창의 '신고하기'버튼 클릭시 신고이유 선택여부 확인.
 	$("#send_alert").on("click", function(){
 		var reportReasonCode = $('input[name="alert_post_reason"]:checked').val();
-		var alertType =1; //맨처음 화면에서 alert_post 값이 넘어오지 않아서 전송버튼 클릭시로 변경.
+		var alertType =0006; //맨처음 화면에서 alert_post 값이 넘어오지 않아서 전송버튼 클릭시로 변경.
 		if(typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null){ 
 			alert("申告する理由を選んでください。"); //선택된 신고사항이 없기에 선택을 요청
 		}else{
@@ -208,7 +209,7 @@ $(function(){
 	  <tbody>
 	    <tr>	   
 		    <td data-label="alert_type">
-				post(1)
+				post(0006)
 		    </td>
 
 			<td data-label="code_data">
@@ -233,7 +234,7 @@ $(function(){
 		  </td>
 			
 	      <td data-label="alert_button">
-	     		<button id="alert_post" value="1">신고하기(포스트버전)</button>
+	     		<button id="alert_post" value="0006">신고하기(포스트버전)</button>
 	      </td>
 	    </tr>
 	    

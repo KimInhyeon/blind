@@ -7,6 +7,16 @@ public class ReportReasonDto {
 	private String  reportReasonCode;				//report_reason_code / 신고사유코드
 	private String reportReasonContents; 		//report_reason_contents / 신고사유내용
 	private char logicalDelFlag;				// logical_del_flag 논리삭제플래그(0:미삭제, 1:삭제)
+	private String reportScreenCode;											//report_screen_code :신고화면(0006포스트, 0008기업리뷰,0012 댓글)
+	
+	
+	
+	public String getReportScreenCode() {
+		return reportScreenCode;
+	}
+	public void setReportScreenCode(String reportScreenCode) {
+		this.reportScreenCode = reportScreenCode;
+	}
 	public int getReportReasonId() {
 		return reportReasonId;
 	}

@@ -5,7 +5,9 @@
 <!-- 1.신고이유들을 리턴(모달창에 출력시 사용 -->
 <select id="getAlertReasonList" resultType="com.ksinfo.blind.alert.dto.ReportReasonDto"> 
 	SELECT * FROM blind.report_reason_mst
+	where blind.report_reason_mst.report_screen_code = #{alertType}
 	ORDER BY report_reason_code ASC;
+	
 </select>
 
 <!-- 2.신고접수-포스트의 신고시 -->

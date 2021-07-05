@@ -14,9 +14,9 @@ import com.ksinfo.blind.alert.mapper.AlertMapper;
 public class AlertService {
 	@Autowired 
 	public AlertMapper mapper; 
-	
-	public List<ReportReasonDto> getAlertReasonList() { 
-		return mapper.getAlertReasonList();    
+
+	public List<ReportReasonDto> getAlertReasonList(String alertType) { 
+		return mapper.getAlertReasonList(alertType);    
 	}
 
 	public void setPostReport(PostReportDto postReport) { 

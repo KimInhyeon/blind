@@ -37,10 +37,14 @@ public class AlertController {
 	   @ResponseBody
 	   public List<ReportReasonDto> loadAlertReasonList(@RequestParam Map<String, Object> param){ 
 	      logger.info("loadAlertReasonList 시작.");
-	      logger.info("입력된 신고 유형(1:포스트/2:기업리뷰/3:포스트댓글)에 따라 신고사유들을 리턴.");
+	      logger.info("입력된 신고 유형(0006:포스트/0008:기업리뷰/0012:포스트댓글)에 따라 신고사유들을 리턴.");
+
 	      logger.info("alertType : "+param.get("alertType"));
-	      logger.info("alertType : "+param.get("test2"));
-	      List<ReportReasonDto> alertReasonList = alertService.getAlertReasonList();
+	      String alertType = (String) param.get("alertType"); //형변환 (Object->String) 
+	      
+	      //입력된 신고유형은 xml의 where문을 활용하여 분류실시.(따라서 switch문 실시않음)
+	      List<ReportReasonDto> alertReasonList = alertService.getAlertReasonList( alertType );
+	     
 	      return alertReasonList;   
 	   }
 
@@ -69,7 +73,7 @@ public class AlertController {
 	      
 	      //신고유형(v포스트)에 따라 신고를 저장할 테이블을 구분
 	      switch( alertType ) {
-	      	case 1:	//대상 테이블(1)포스트 -> POST_REPORT_MGT에 저장
+	      	case 0006:	//대상 테이블(1)포스트 -> POST_REPORT_MGT에 저장
 	      		logger.info("post신고로 확인, POST_REPORT_MGT에 insert시작."); 	
 	      		PostReportDto postReport = new PostReportDto();  
 	      		postReport.setPostId(postId);
@@ -92,18 +96,14 @@ public class AlertController {
 	public ModelAndView test_alert(ModelAndView mav){	
 		logger.info("test_alert 페이지 이동");
 		
-//	List<PostDto> searchResultPostsSelectTopic = searchService.getPostSelectTopic(selectBoardId, searchKeyword);
-//	mav.addObject("searchResultPosts",searchResultPosts);			//검색어와 관련된 포스트(게시글)들 전달.
-		
+		//	List<PostDto> searchResultPostsSelectTopic = searchService.getPostSelectTopic(selectBoardId, searchKeyword);
+		//	mav.addObject("searchResultPosts",searchResultPosts);			//검색어와 관련된 포스트(게시글)들 전달.
 		
 		//임의의 데이터 추가.
 		//1.포스트신고관련 필요정보
 		int postId = 1000;			//게시글의 id
 	    int userId = 2000; 			//신고자의 id(닉네임이 아님)
 	    //selectAlertReason(신고사유 코드번호)는 신고시 추가되므로 생략.
-		
-		
-		
 		
 		mav.addObject("postId",postId);		
 		mav.addObject("userId",userId);		
