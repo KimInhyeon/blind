@@ -31,39 +31,39 @@ public class AlertController {
 	@Autowired AlertService alertService;  
 	
 	
-	//1.½Å°í¹öÆ°(Æ÷½ºÆ®½Å°í) Å¬¸¯½Ã ÇØ´ç ½Å°í
-	//1.1. ½Å°íÇÏ±â ÆË¾÷Ã¢ 					
+	//1.ì‹ ê³ ë²„íŠ¼(í¬ìŠ¤íŠ¸ì‹ ê³ ) í´ë¦­ì‹œ í•´ë‹¹ ì‹ ê³ 
+	//1.1. ì‹ ê³ í•˜ê¸° íŒì—…ì°½ 					
 	@RequestMapping(value="/loadAlertReasonList",method=RequestMethod.POST)
 	   @ResponseBody
 	   public List<ReportReasonDto> loadAlertReasonList(@RequestParam Map<String, Object> param){ 
-	      logger.info("loadAlertReasonList ½ÃÀÛ.");
-	      logger.info("ÀÔ·ÂµÈ ½Å°í À¯Çü(0006:Æ÷½ºÆ®/0008:±â¾÷¸®ºä/0012:Æ÷½ºÆ®´ñ±Û)¿¡ µû¶ó ½Å°í»çÀ¯µéÀ» ¸®ÅÏ.");
+	      logger.info("loadAlertReasonList ì‹œì‘.");
+	      logger.info("ì…ë ¥ëœ ì‹ ê³  ìœ í˜•(0006:í¬ìŠ¤íŠ¸/0008:ê¸°ì—…ë¦¬ë·°/0012:í¬ìŠ¤íŠ¸ëŒ“ê¸€)ì— ë”°ë¼ ì‹ ê³ ì‚¬ìœ ë“¤ì„ ë¦¬í„´.");
 
 	      logger.info("alertType : "+param.get("alertType"));
-	      String alertType = (String) param.get("alertType"); //Çüº¯È¯ (Object->String) 
+	      String alertType = (String) param.get("alertType"); //í˜•ë³€í™˜ (Object->String) 
 	      
-	      //ÀÔ·ÂµÈ ½Å°íÀ¯ÇüÀº xmlÀÇ where¹®À» È°¿ëÇÏ¿© ºĞ·ù½Ç½Ã.(µû¶ó¼­ switch¹® ½Ç½Ã¾ÊÀ½)
+	      //ì…ë ¥ëœ ì‹ ê³ ìœ í˜•ì€ xmlì˜ whereë¬¸ì„ í™œìš©í•˜ì—¬ ë¶„ë¥˜ì‹¤ì‹œ.(ë”°ë¼ì„œ switchë¬¸ ì‹¤ì‹œì•ŠìŒ)
 	      List<ReportReasonDto> alertReasonList = alertService.getAlertReasonList( alertType );
 	     
 	      return alertReasonList;   
 	   }
 
 
-	//¼ö½ÅµÈ ½Å°í»çÇ×À» DB¿¡ ÀúÀå
+	//ìˆ˜ì‹ ëœ ì‹ ê³ ì‚¬í•­ì„ DBì— ì €ì¥
 	@RequestMapping(value="/sendAlert",method=RequestMethod.POST)
 	   @ResponseBody
 	   public int receiveAlert(@RequestParam Map<String, Object> param){ 
-	      logger.info("receiveAlert ½ÃÀÛ.");			
+	      logger.info("receiveAlert ì‹œì‘.");			
 	      
-	      //¼ö½ÅµÈ Á¤º¸ È®ÀÎ
-	      logger.info("postId : "+param.get("postId")); 						//°Ô½Ã±ÛÀÇ id
-	      logger.info("userId : "+param.get("userId")); 						//½Å°íÀÚÀÇ id(´Ğ³×ÀÓÀÌ ¾Æ´Ô)
-	      logger.info("selectAlertReason : "+param.get("reportReasonCode"));	//½Å°í»çÀ¯ ÄÚµå¹øÈ£
-	      logger.info("alertType : "+param.get("alertType"));					//½Å°íÀ¯Çü(1:Æ÷½ºÆ®/2:±â¾÷¸®ºä/3:Æ÷½ºÆ®´ñ±Û)
-	      logger.info("reportReasonContent : "+param.get("report_reason_content"));		//textareaÀÇ ÀÛ¼º³»¿ë.
+	      //ìˆ˜ì‹ ëœ ì •ë³´ í™•ì¸
+	      logger.info("postId : "+param.get("postId")); 						//ê²Œì‹œê¸€ì˜ id
+	      logger.info("userId : "+param.get("userId")); 						//ì‹ ê³ ìì˜ id(ë‹‰ë„¤ì„ì´ ì•„ë‹˜)
+	      logger.info("selectAlertReason : "+param.get("reportReasonCode"));	//ì‹ ê³ ì‚¬ìœ  ì½”ë“œë²ˆí˜¸
+	      logger.info("alertType : "+param.get("alertType"));					//ì‹ ê³ ìœ í˜•(1:í¬ìŠ¤íŠ¸/2:ê¸°ì—…ë¦¬ë·°/3:í¬ìŠ¤íŠ¸ëŒ“ê¸€)
+	      logger.info("reportReasonContent : "+param.get("report_reason_content"));		//textareaì˜ ì‘ì„±ë‚´ìš©.
 
 	      
-	      // ÀÛ¼ºÀÇ ÆíÀÇ ¹× PostReportDtoÀÇ º¯¼ö¿¡ ¸Âµµ·Ï Á¤Á¤. 
+	      // ì‘ì„±ì˜ í¸ì˜ ë° PostReportDtoì˜ ë³€ìˆ˜ì— ë§ë„ë¡ ì •ì •. 
 	      int postId = Integer.parseInt(param.get("postId").toString()) ;
 	      int userId = Integer.parseInt(param.get("userId").toString()) ;
 	      String reportReasonCode = param.get("reportReasonCode").toString();
@@ -71,10 +71,10 @@ public class AlertController {
 	      String reportReasonContent = param.get("report_reason_content").toString();
 	      
 	      
-	      //½Å°íÀ¯Çü(vÆ÷½ºÆ®)¿¡ µû¶ó ½Å°í¸¦ ÀúÀåÇÒ Å×ÀÌºíÀ» ±¸ºĞ
+	      //ì‹ ê³ ìœ í˜•(ví¬ìŠ¤íŠ¸)ì— ë”°ë¼ ì‹ ê³ ë¥¼ ì €ì¥í•  í…Œì´ë¸”ì„ êµ¬ë¶„
 	      switch( alertType ) {
-	      	case 0006:	//´ë»ó Å×ÀÌºí(1)Æ÷½ºÆ® -> POST_REPORT_MGT¿¡ ÀúÀå
-	      		logger.info("post½Å°í·Î È®ÀÎ, POST_REPORT_MGT¿¡ insert½ÃÀÛ."); 	
+	      	case 0006:	//ëŒ€ìƒ í…Œì´ë¸”(1)í¬ìŠ¤íŠ¸ -> POST_REPORT_MGTì— ì €ì¥
+	      		logger.info("postì‹ ê³ ë¡œ í™•ì¸, POST_REPORT_MGTì— insertì‹œì‘."); 	
 	      		PostReportDto postReport = new PostReportDto();  
 	      		postReport.setPostId(postId);
 	      		postReport.setUserId(userId);
@@ -84,29 +84,44 @@ public class AlertController {
 	      		alertService.setPostReport(postReport);
 	      		break;
 	      	default: 
-	      		logger.info("Á¤ÀÇµÇÁö ¾ÊÀº ½Å°íÀ¯ÇüÀÔ´Ï´Ù."); 	
+	      		logger.info("ì •ì˜ë˜ì§€ ì•Šì€ ì‹ ê³ ìœ í˜•ì…ë‹ˆë‹¤."); 	
 	      		break;
 	      }		      
 	      return 1;
 	}
 	
 	
-	//½Å°íÇÏ±â Å×½ºÆ® ÆäÀÌÁö·Î ÀÌµ¿
+	//ì‹ ê³ í•˜ê¸° í…ŒìŠ¤íŠ¸ í˜ì´ì§€ë¡œ ì´ë™
 	@RequestMapping("/alert/test_alert")  
 	public ModelAndView test_alert(ModelAndView mav){	
-		logger.info("test_alert ÆäÀÌÁö ÀÌµ¿");
+		logger.info("test_alert í˜ì´ì§€ ì´ë™");
 		
 		//	List<PostDto> searchResultPostsSelectTopic = searchService.getPostSelectTopic(selectBoardId, searchKeyword);
-		//	mav.addObject("searchResultPosts",searchResultPosts);			//°Ë»ö¾î¿Í °ü·ÃµÈ Æ÷½ºÆ®(°Ô½Ã±Û)µé Àü´Ş.
+		//	mav.addObject("searchResultPosts",searchResultPosts);			//ê²€ìƒ‰ì–´ì™€ ê´€ë ¨ëœ í¬ìŠ¤íŠ¸(ê²Œì‹œê¸€)ë“¤ ì „ë‹¬.
 		
-		//ÀÓÀÇÀÇ µ¥ÀÌÅÍ Ãß°¡.
-		//1.Æ÷½ºÆ®½Å°í°ü·Ã ÇÊ¿äÁ¤º¸
-		int postId = 1000;			//°Ô½Ã±ÛÀÇ id
-	    int userId = 2000; 			//½Å°íÀÚÀÇ id(´Ğ³×ÀÓÀÌ ¾Æ´Ô)
-	    //selectAlertReason(½Å°í»çÀ¯ ÄÚµå¹øÈ£)´Â ½Å°í½Ã Ãß°¡µÇ¹Ç·Î »ı·«.
-		
-		mav.addObject("postId",postId);		
+		//ì„ì˜ì˜ ë°ì´í„° ì¶”ê°€.
+		//1.í˜„ ì‚¬ìš©ìì˜ id
+		int userId = 9990; 			//ì‹ ê³ ìì˜ id(ë‹‰ë„¤ì„ì´ ì•„ë‹˜)
 		mav.addObject("userId",userId);		
+		
+		//2.í¬ìŠ¤íŠ¸ì‹ ê³ ê´€ë ¨ í•„ìš”ì •ë³´
+		int postId = 1000;			//ê²Œì‹œê¸€ì˜ id
+		mav.addObject("postId",postId);		
+		
+		//3.ê¸°ì—…ë¦¬ë·° ì‹ ê³ ê´€ë ¨ í•„ìš”ì •ë³´ 
+	    int companyReviewId = 2000;//ê¸°ì—…ë¦¬ë·°ê¸€ì˜ id
+		mav.addObject("companyReviewId",companyReviewId);		
+
+		//4.ëŒ“ê¸€ ì‹ ê³ ê´€ë ¨ 	
+	    int replyId = 3000;		   //ëŒ“ê¸€ì˜ id
+		mav.addObject("replyId",replyId);		
+		
+		
+	    //selectAlertReason(ì‹ ê³ ì‚¬ìœ  ì½”ë“œë²ˆí˜¸)ëŠ” ì‹ ê³ ì‹œ ì¶”ê°€ë˜ë¯€ë¡œ ìƒëµ.
+		
+	    
+
+
 		mav.setViewName("main/alert/test_alert");
 		return mav;	
 	}

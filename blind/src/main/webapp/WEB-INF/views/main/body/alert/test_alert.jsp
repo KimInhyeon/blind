@@ -17,40 +17,16 @@
 	<meta charset="UTF-8">
 	<title></title>
 <style>
-	.ui.grid > .row {
-		padding-bottom: 0;
-	}
-
-	.ui.table thead th {
-		padding: 0;
-	}
-
-	.ui.table td {
-		padding: .78571429em .2em .78571429em .2em;
-	}
-
-	.ui.compact.selection.dropdown {
-		font-weight: 700;
-		padding: 0;
-	}
-
-	.ui.modal > .actions {
-		text-align: center;
-	}
-	
-	.modal_alert_post{
-		float: left;
-	}
-	
-	.inf_post > * { 
-		  margin-top: 15px; 
-	}
-
-	input[type="radio"] {  
-	  margin-top: 20px; 
-	}
-	
-	        #modal.modal-overlay {
+	.ui.grid > .row { padding-bottom: 0; }
+	.ui.table thead th { padding: 0; }
+	.ui.table td { padding: .78571429em .2em .78571429em .2em; }
+	.ui.compact.selection.dropdown { font-weight: 700; padding: 0; }
+	.ui.modal > .actions { text-align: center; }
+	.modal_alert_post{ float: left; }
+	.inf_post > * { margin-top: 15px; }
+	input[type="radio"] { margin-top: 20px; }
+    
+    #modal.modal-overlay {
             width: 100%;
             height: 100%;
             position: absolute;
@@ -108,12 +84,12 @@
 </style>	
 	
 <script>
+
 $(function(){ 
-	//1.신고하기(포스트)
-	//1.1. 신고모달창 팝업실시
+	//신고하기-신고모달창 팝업실시(포스트/기업리뷰/댓글 공통활용)
 	//컨트롤러의 loadAlertReasonList 를 통해 신고이유 리스트들을 로드. 
-	$("#alert_post").on("click", function(){
-		var alertType ="0006";
+	$("#alert_start").on("click", function(){
+		//var alertType ="0006";
 	    $.ajax({
 	         type : "POST",
 	         url  : "/blind/loadAlertReasonList",
@@ -124,31 +100,31 @@ $(function(){
 	     
 	            //1.신고할 포스트의 제목과 작성자 닉네임을 로드 및 삽입.
 				//  포스트의 글과 닉네임을 해당페이지에서 바로 modal에게로 전달하기 위한 코드.
-				var postTitle = $('#sample_post_title').text(); 
+				var alertTitle = $('#sample_post_title').text(); 
 				var nickName =  $('#sample_nickname_writer').text();		
-				document.getElementById("postTitle").innerHTML=postTitle;
+				document.getElementById("alertTitle").innerHTML=alertTitle;
 				document.getElementById("nickName").innerHTML=nickName;
 
 				//2.신고할 사항들의 리스트
-				$(alert_list_post).html(""); //초기화
+				$(alert_reason_list).html(""); //초기화
 				
 				//추가시작
-				$(alert_list_post).append("<ul>");
+				$(alert_reason_list).append("<ul>");
 				$.each(result, function (key, value) {	
-					$(alert_list_post).append("<li style='list-style:none;margin-right: 100px;'><input type='radio' name='alert_post_reason'  value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</li>");
+					$(alert_reason_list).append("<li style='list-style:none;margin-right: 100px;'><input type='radio' name='alert_post_reason'  value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</li>");
 				});
-				$(alert_list_post).append("</ul>");
-				$(alert_list_post).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
+				$(alert_reason_list).append("</ul>");
+				$(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
 				
 				//신고모달창 팝업
-				$(".warp_alert_post").modal('show');
+				$(".warp_alert_modal").modal('show');
 	         },
 	         error: function(){
 	            alert("에러");
 	         }            
 		});
 	});
-
+	
 	
 	//1.2.신고 모달창의 '신고하기'버튼 클릭시 신고이유 선택여부 확인.
 	$("#send_alert").on("click", function(){
@@ -208,57 +184,61 @@ $(function(){
 	  </thead>
 	  <tbody>
 	    <tr>	   
-		    <td data-label="alert_type">
-				post(0006)
-		    </td>
-
-			<td data-label="code_data">
-				post_id : ${postId}
-		    </td>
-		    
-	    	<td data-label="code_data">
-				user_id : ${userId}
-		    </td>
-	    
-	    
+		    <td data-label="alert_type"> post(0006)	</td>
+			<td data-label="code_data"> post_id : ${postId} </td>
+	    	<td data-label="code_data"> user_id(신고자 유저id) : ${userId} </td>
 	      	<td data-label="title">
 		      	<div id="sample_post_title">
 					<h3>this is sample_post_title.</h3>
 				</div>
 			</td>
-
-	      <td data-label="writer_nick_name">
+	        <td data-label="writer_nick_name">
 	     		<div id="sample_nickname_writer">
 					<p>o****</p>
 				</div>
 		  </td>
-			
 	      <td data-label="alert_button">
-	     		<button id="alert_post" value="0006">신고하기(포스트버전)</button>
+	     		<button id="alert_start_post" value="0006">신고하기(포스트버전)</button>
 	      </td>
 	    </tr>
-	    
+	    <tr>	   
+		    <td data-label="alert_type"> 企業レビュー(0008)	</td>
+			<td data-label="code_data"> company_review_id : ${companyReviewId} </td>
+	    	<td data-label="code_data"> user_id(신고자 유저id) : ${userId} </td>
+	      	<td data-label="title">
+		      	<div id="sample_company_review_title"> <!-- 신고 모달화면에 띄우기 용 -->
+					<h3>this is sample_company_review_title.</h3>
+				</div>
+			</td>
+	        <td data-label="writer_nick_name">
+	     		<div id="sample_nickname_writer">
+					<p>o****</p>
+				</div>
+		  </td>
+	      <td data-label="alert_button">
+	     		<button id="alert_start_review" value="0008">申告する(企業レビュー)</button>
+	      </td>
+	    </tr>
 	  </tbody>
 	</table>
 
-	
 </body>
 
 </html>
 
 
-	<!-- post 신고에 대한 모달창 -->
+	<!-- 신고에 대한 모달창(신고모달은 공통으로 활용) -->
 	<div class="modal">
-		<div class="warp_alert_post">
+		<div class="warp_alert_modal">
 			<div class="inf_post_title">
-				<h1 style="display:inline;">신고하기(1.포스트버전)</h1>
+				<h1 style="display:inline;">申告する(ポスト)</h1>
 				<div style="float:right;">
 					<h1><a href="#" rel="modal:close"> X </a></h1>  
 				</div>
 			</div> 
 			<div>
 				<strong style="display: inline;">作成者</strong>
-				<div id="postTitle"><!-- 신고할 포스트의 제목이 jquery를 통해 입력됩니다. --></div>
+				<div id="alertTitle"><!-- 신고할 포스트의 제목이 jquery를 통해 입력됩니다. --></div>
 			</div> 
 			<div>
 				<strong>タイトル</strong> 
@@ -267,7 +247,7 @@ $(function(){
 		 	
 			<div class="ui inverted divider"></div>
 
-			<div id="alert_list_post">
+			<div id="alert_reason_list">
 				<!-- 제이쿼리(alert_post)를 통해 로드한 신고리스트들을 출력합니다. -->
 			</div>		
 			
