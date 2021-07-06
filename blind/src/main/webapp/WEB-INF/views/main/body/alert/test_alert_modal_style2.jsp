@@ -12,10 +12,10 @@
         <style>
             #alert_modal {
                 display: none;
-                width: 300px;
-                padding: 20px 60px;
-                background-color: #fefefe;
-                border: 1px solid #888;
+                width: 400px;
+                height : auto;
+                padding: 50px 50px;
+                background-color: #ffffff;
                 border-radius: 3px;
             }
 
@@ -23,6 +23,12 @@
                 position: absolute;
                 top: 10px;
                 right: 10px;
+            }
+            
+            li{
+	            list-style:none;
+	            margin-bottom:15px;
+	            float:left;
             }
         </style>
     </head>
@@ -41,6 +47,7 @@
 		  	</tr>
 		  </thead>
 		  <tbody>
+		  <!-- 1.포스트 신고 예제 -->
 		    <tr>	   
 			    <td data-label="alert_type"> post(0006)	</td>
 				<td data-label="code_data"> post_id : ${postId} </td>
@@ -59,6 +66,7 @@
 		     		<button id="alert_start_post" value="0006">신고하기(포스트버전)</button>
 		      </td>
 		    </tr>
+		  <!-- 2.기업리뷰 신고 예제 -->
 		    <tr>	   
 			    <td data-label="alert_type"> 企業レビュー(0008)	</td>
 				<td data-label="code_data"> company_review_id : ${companyReviewId} </td>
@@ -66,6 +74,25 @@
 		      	<td data-label="title">
 			      	<div id="sample_company_review_title"> <!-- 신고 모달화면에 띄우기 용 -->
 						<h3>this is sample_company_review_title.</h3>
+					</div>
+				</td>
+		        <td data-label="writer_nick_name">
+		     		<div id="sample_nickname_writer">
+						<p>o****</p>
+					</div>
+			  </td>
+		      <td data-label="alert_button">
+		     		<button id="alert_start_review" value="0008">申告する(企業レビュー)</button>
+		      </td>
+		    </tr>	    
+		    <!-- 3.댓글 신고 예제 -->
+		    <tr>	   
+			    <td data-label="alert_type"> コメント(0012)	</td>
+				<td data-label="code_data"> company_review_id : ${companyReviewId} </td>
+		    	<td data-label="code_data"> user_id(신고자 유저id) : ${userId} </td>
+		      	<td data-label="title">
+			      	<div id="sample_company_review_title"> <!-- 신고 모달화면에 띄우기 용 -->
+						<h3>this is sample_reply_title.</h3>
 					</div>
 				</td>
 		        <td data-label="writer_nick_name">
@@ -84,8 +111,8 @@
 	<div id="alert_modal">
 		<div class="warp_alert_modal">
 			<div class="inf_post_title">
-				<h1 style="display:inline;">申告する(ポスト)</h1>
-				<div style="float:right;"> <h1><a href="#" rel="modal:close"> X </a></h1> </div>
+				<h2 style="display:inline;">申告する(ポスト)</h2>
+				<div style="float:right;"> <h1><a href="#" rel="modal:close"> X </a> </div>
 			</div> 
 			<div>
 				<strong style="display: inline;">作成者</strong>
@@ -103,52 +130,23 @@
 			</div>		
 			
 			<button class="ui primary button" id="send_alert"
-					style="width:100%; height:50px; text-align:center; margin-top: 10px;">
+					style="width:100%; height:50px; text-align:center; margin-top: 20px;">
 					신고하기
 			</button>
 			
 		</div>	 
 	</div>	
-	
-	<div class="ui modal">
-  <i class="close icon"></i>
-  <div class="header">
-    Profile Picture
-  </div>
-  <div class="content">
-    <div class="ui medium image">
-      <img src="/images/avatar/large/chris.jpg">
-    </div>
-    <div class="description">
-      <div class="ui header">We've auto-chosen a profile image for you.</div>
-      <p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your registered e-mail address.</p>
-      <p>Is it okay to use this photo?</p>
-    </div>
-  </div>
-  <div class="actions">
-    <div class="ui black button">
-      Nope
-    </div>
-    <div class="ui positive right labeled icon button">
-      Yep, that's me
-      <i class="checkmark icon"></i>
-    </div>
-  </div>
-</div>
-	
+
+
 	</body>
 	    
 	<script>
-	$('.standard.test.modal')
-	  .modal('show')
-	;
-            
-            $(function(){ 
-            	//신고하기-신고모달창 팝업실시(포스트/기업리뷰/댓글 공통활용)
-            	//컨트롤러의 loadAlertReasonList 를 통해 신고이유 리스트들을 로드. 
-            	$("#alert_start_post").on("click", function(){
-            		var alertType ="0006";
-            	    $.ajax({
+	//신고하기-신고모달창 팝업실시(포스트/기업리뷰/댓글 공통활용)
+  	//컨트롤러의 loadAlertReasonList 를 통해 신고이유 리스트들을 로드. 
+		$(function(){ 		
+           	$("#alert_start_post").on("click", function(){
+          		var alertType ="0006";
+           	    $.ajax({
             	         type : "POST",
             	         url  : "/blind/loadAlertReasonList",
             	         data : { alertType },
@@ -168,15 +166,18 @@
             				$(alert_reason_list).html(""); //초기화
             				
             				//신고할 리스트들을 추가시작
-            				$(alert_reason_list).append("<ul>");
+            				$(alert_reason_list).append("<div align='left'>");
+            			 	$(alert_reason_list).append("<ul style='display: inline-block; width:100%;'>");
             				$.each(result, function (key, value) {	
-            					$(alert_reason_list).append("<li style='list-style:none;margin-right: 100px;'><input type='radio' name='alert_post_reason'  value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</li>");
-            				});
+            					$(alert_reason_list).append("<li><input type='radio' name='alert_post_reason'  value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</li>");
+         					});
             				$(alert_reason_list).append("</ul>");
+            				$(alert_reason_list).append("</div>");
             				$(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
 
             				//신고모달창 팝업
-            				modal('alert_modal');
+            				$('#alert_modal').modal({ closable: false });
+            				$('#alert_modal').modal('show');
             	         },
             	         error: function(){
             	            alert("에러");
@@ -213,15 +214,6 @@
             			});
             			
             		}
-            	});
-
-
-            	$("input[name='alert_post_reason']").change (function () {
-                    //라디오 버튼 값을 가져온다.
-                    console.log("aaaaa");
-               		var selectAlertReason = $('input[name="alert_post_reason"]:checked').val();
-                                    
-                    alert(selectAlertReason);            
             	});
             	
             });
