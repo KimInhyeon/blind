@@ -10,7 +10,7 @@
         <title>Alert Modal jsStyle</title>
 
         <style>
-            #my_modal {
+            #alert_modal {
                 display: none;
                 width: 300px;
                 padding: 20px 60px;
@@ -19,7 +19,7 @@
                 border-radius: 3px;
             }
 
-            #my_modal .modal_close_btn {
+            #alert_modal .modal_close_btn {
                 position: absolute;
                 top: 10px;
                 right: 10px;
@@ -28,70 +28,202 @@
     </head>
 
     <body>
-    
-    
-            <button id="popup_open_btn">alert</button>
-        <div id="my_modal">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Expedita dolore eveniet laborum repellat sit distinctio, ipsa rem dicta alias velit? Repellat doloribus mollitia dolorem
-            voluptatum ex reiciendis aut in incidunt?
-            <a class="modal_close_btn">X</a>
-        </div>
+		<!-- 게시글 가안입니다. 신고시 제목과 닉네임 전송을 묘사하기 위한 샘플 목적으로 만들어졌습니다. -->
+		<table class="ui celled table" style="width:100%;margin:20px;">
+		  <thead>
+		    <tr>
+		    	<th>분류(전송시 구분값)</th>
+			    <th>정보1</th>
+			    <th>정보2</th>
+			    <th>글 제목</th>
+			    <th>작성자 닉네임</th>
+			    <th>신고모달버튼</th>
+		  	</tr>
+		  </thead>
+		  <tbody>
+		    <tr>	   
+			    <td data-label="alert_type"> post(0006)	</td>
+				<td data-label="code_data"> post_id : ${postId} </td>
+		    	<td data-label="code_data"> user_id(신고자 유저id) : ${userId} </td>
+		      	<td data-label="title">
+			      	<div id="sample_post_title">
+						<h3>this is sample_post_title.</h3>
+					</div>
+				</td>
+		        <td data-label="writer_nick_name">
+		     		<div id="sample_nickname_writer">
+						<p>o****</p>
+					</div>
+			  </td>
+		      <td data-label="alert_button">
+		     		<button id="alert_start_post" value="0006">신고하기(포스트버전)</button>
+		      </td>
+		    </tr>
+		    <tr>	   
+			    <td data-label="alert_type"> 企業レビュー(0008)	</td>
+				<td data-label="code_data"> company_review_id : ${companyReviewId} </td>
+		    	<td data-label="code_data"> user_id(신고자 유저id) : ${userId} </td>
+		      	<td data-label="title">
+			      	<div id="sample_company_review_title"> <!-- 신고 모달화면에 띄우기 용 -->
+						<h3>this is sample_company_review_title.</h3>
+					</div>
+				</td>
+		        <td data-label="writer_nick_name">
+		     		<div id="sample_nickname_writer">
+						<p>o****</p>
+					</div>
+			  </td>
+		      <td data-label="alert_button">
+		     		<button id="alert_start_review" value="0008">申告する(企業レビュー)</button>
+		      </td>
+		    </tr>
+		  </tbody>
+		</table>
+		
+	<!-- 신고에 대한 모달창(신고모달은 공통으로 활용) -->
+	<div id="alert_modal">
+		<div class="warp_alert_modal">
+			<div class="inf_post_title">
+				<h1 style="display:inline;">申告する(ポスト)</h1>
+				<div style="float:right;"> <h1><a href="#" rel="modal:close"> X </a></h1> </div>
+			</div> 
+			<div>
+				<strong style="display: inline;">作成者</strong>
+				<div id="alertTitle"><!-- 신고할 포스트의 제목이 jquery를 통해 입력됩니다. --></div>
+			</div> 
+			<div>
+				<strong>タイトル</strong> 
+				<div id="nickName"><!-- 신고할 포스트의 닉네임이 jquery를 통해 입력됩니다. --></div>
+			</div>
+		 	
+			<div class="ui inverted divider"></div>
+
+			<div id="alert_reason_list">
+				<!-- 제이쿼리(alert_post)를 통해 로드한 신고리스트들을 출력합니다. -->
+			</div>		
+			
+			<button class="ui primary button" id="send_alert"
+					style="width:100%; height:50px; text-align:center; margin-top: 10px;">
+					신고하기
+			</button>
+			
+		</div>	 
+	</div>	
+	
+	<div class="ui modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Profile Picture
+  </div>
+  <div class="content">
+    <div class="ui medium image">
+      <img src="/images/avatar/large/chris.jpg">
+    </div>
+    <div class="description">
+      <div class="ui header">We've auto-chosen a profile image for you.</div>
+      <p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your registered e-mail address.</p>
+      <p>Is it okay to use this photo?</p>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="ui black button">
+      Nope
+    </div>
+    <div class="ui positive right labeled icon button">
+      Yep, that's me
+      <i class="checkmark icon"></i>
+    </div>
+  </div>
+</div>
+	
+	</body>
+	    
+	<script>
+	$('.standard.test.modal')
+	  .modal('show')
+	;
+            
+            $(function(){ 
+            	//신고하기-신고모달창 팝업실시(포스트/기업리뷰/댓글 공통활용)
+            	//컨트롤러의 loadAlertReasonList 를 통해 신고이유 리스트들을 로드. 
+            	$("#alert_start_post").on("click", function(){
+            		var alertType ="0006";
+            	    $.ajax({
+            	         type : "POST",
+            	         url  : "/blind/loadAlertReasonList",
+            	         data : { alertType },
+            	         dataType: "json",
+            	         success: function(result){
+            	          	//모달창에 데이터들을 입력하기 위한 코드
+            	     
+            	            //1.신고할 포스트의 제목과 작성자 닉네임을 로드 및 삽입.
+            				//  포스트의 글과 닉네임을 해당페이지에서 바로 modal에게로 전달하기 위한 코드.
+            				var alertTitle = $('#sample_post_title').text(); 
+            				var nickName =  $('#sample_nickname_writer').text();		
+
+            				document.getElementById("alertTitle").innerHTML=alertTitle;
+            				document.getElementById("nickName").innerHTML=nickName;
+
+            				//2.신고할 사항들의 리스트
+            				$(alert_reason_list).html(""); //초기화
+            				
+            				//신고할 리스트들을 추가시작
+            				$(alert_reason_list).append("<ul>");
+            				$.each(result, function (key, value) {	
+            					$(alert_reason_list).append("<li style='list-style:none;margin-right: 100px;'><input type='radio' name='alert_post_reason'  value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</li>");
+            				});
+            				$(alert_reason_list).append("</ul>");
+            				$(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
+
+            				//신고모달창 팝업
+            				modal('alert_modal');
+            	         },
+            	         error: function(){
+            	            alert("에러");
+            	         }            
+            		});
+
+            	});
+            	
+            	//1.2.신고 모달창의 '신고하기'버튼 클릭시 신고이유 선택여부 확인.
+            	$("#send_alert").on("click", function(){
+            		var reportReasonCode = $('input[name="alert_post_reason"]:checked').val();
+            		var alertType =0006; //맨처음 화면에서 alert_post 값이 넘어오지 않아서 전송버튼 클릭시로 변경.
+            		if(typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null){ 
+            			alert("申告する理由を選んでください。"); //선택된 신고사항이 없기에 선택을 요청
+            		}else{
+            			alert("신고시작。");
+            		    $.ajax({
+            		         type : "POST",
+            		         url  : "/blind/sendAlert",
+            		         data : { postId : ${postId}
+            						 ,userId : ${userId}
+            						 ,reportReasonCode
+            						 ,alertType
+            						 ,report_reason_content : $("#report_reason_content").val()
+            		         },
+            		         dataType: "json",
+            		         success: function(){
+            		            console.log("신고완료");
+            		 			alert("신고완료。");
+            		         },
+            		         error: function(){
+            		            alert("신고에러");
+            		         }            
+            			});
+            			
+            		}
+            	});
 
 
-
-        <script>
-            function modal(id) {
-                var zIndex = 9999;
-                var modal = document.getElementById(id);
-
-                // 모달 div 뒤에 희끄무레한 레이어
-                var bg = document.createElement('div');
-                bg.setStyle({
-                    position: 'fixed',
-                    zIndex: zIndex,
-                    left: '0px',
-                    top: '0px',
-                    width: '100%',
-                    height: '100%',
-                    overflow: 'auto',
-                    // 레이어 색갈은 여기서 바꾸면 됨
-                    backgroundColor: 'rgba(0,0,0,0.4)'
-                });
-                document.body.append(bg);
-
-                // 닫기 버튼 처리, 시꺼먼 레이어와 모달 div 지우기
-                modal.querySelector('.modal_close_btn').addEventListener('click', function() {
-                    bg.remove();
-                    modal.style.display = 'none';
-                });
-
-                modal.setStyle({
-                    position: 'fixed',
-                    display: 'block',
-                    boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-
-                    // 시꺼먼 레이어 보다 한칸 위에 보이기
-                    zIndex: zIndex + 1,
-
-                    // div center 정렬
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    msTransform: 'translate(-50%, -50%)',
-                    webkitTransform: 'translate(-50%, -50%)'
-                });
-            }
-
-            // Element 에 style 한번에 오브젝트로 설정하는 함수 추가
-            Element.prototype.setStyle = function(styles) {
-                for (var k in styles) this.style[k] = styles[k];
-                return this;
-            };
-
-            document.getElementById('popup_open_btn').addEventListener('click', function() {
-                // 모달창 띄우기
-                modal('my_modal');
+            	$("input[name='alert_post_reason']").change (function () {
+                    //라디오 버튼 값을 가져온다.
+                    console.log("aaaaa");
+               		var selectAlertReason = $('input[name="alert_post_reason"]:checked').val();
+                                    
+                    alert(selectAlertReason);            
+            	});
+            	
             });
-        </script>
-    </body>
+	</script>
 </html>
