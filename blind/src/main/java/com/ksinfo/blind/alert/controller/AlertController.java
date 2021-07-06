@@ -118,11 +118,41 @@ public class AlertController {
 		
 		
 	    //selectAlertReason(신고사유 코드번호)는 신고시 추가되므로 생략.
-		
-	    
-
 
 		mav.setViewName("main/alert/test_alert");
 		return mav;	
 	}
+	
+	
+	//신고하기 테스트 페이지로 이동
+	@RequestMapping("/alert/test_alert_modal_style2")  
+	public ModelAndView test_alert_modal_style2(ModelAndView mav){	
+		logger.info("test_alert_modal_style2 페이지 이동");
+		
+		//	List<PostDto> searchResultPostsSelectTopic = searchService.getPostSelectTopic(selectBoardId, searchKeyword);
+		//	mav.addObject("searchResultPosts",searchResultPosts);			//검색어와 관련된 포스트(게시글)들 전달.
+		
+		//임의의 데이터 추가.
+		//1.현 사용자의 id
+		int userId = 9990; 			//신고자의 id(닉네임이 아님)
+		mav.addObject("userId",userId);		
+		
+		//2.포스트신고관련 필요정보
+		int postId = 1000;			//게시글의 id
+		mav.addObject("postId",postId);		
+		
+		//3.기업리뷰 신고관련 필요정보 
+	    int companyReviewId = 2000;//기업리뷰글의 id
+		mav.addObject("companyReviewId",companyReviewId);		
+
+		//4.댓글 신고관련 	
+	    int replyId = 3000;		   //댓글의 id
+		mav.addObject("replyId",replyId);		
+		
+		
+	    //selectAlertReason(신고사유 코드번호)는 신고시 추가되므로 생략.
+
+	mav.setViewName("main/alert/test_alert_modal_style2");
+	return mav;	
+}
 }

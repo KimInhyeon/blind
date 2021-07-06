@@ -8,14 +8,14 @@
 <html lang="jp">
 <head>
 	<!-- Remember to include jQuery :) -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-	
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 	<!-- jQuery Modal -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
-	<meta charset="UTF-8">
-	<title></title>
+<meta charset="UTF-8">
+<title></title>
+
 <style>
 	.ui.grid > .row { padding-bottom: 0; }
 	.ui.table thead th { padding: 0; }
@@ -24,78 +24,31 @@
 	.ui.modal > .actions { text-align: center; }
 	.modal_alert_post{ float: left; }
 	.inf_post > * { margin-top: 15px; }
-	input[type="radio"] { margin-top: 20px; }
-    
-    #modal.modal-overlay {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            left: 0;
-            top: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            backdrop-filter: blur(1.5px);
-            -webkit-backdrop-filter: blur(1.5px);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
-        #modal .modal-window {
-            background: rgba( 69, 139, 197, 0.70 );
-            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-            backdrop-filter: blur( 13.5px );
-            -webkit-backdrop-filter: blur( 13.5px );
-            border-radius: 10px;
-            border: 1px solid rgba( 255, 255, 255, 0.18 );
-            width: 400px;
-            height: 500px;
-            position: relative;
-            top: -100px;
-            padding: 10px;
-        }
-        #modal .title {
-            padding-left: 10px;
-            display: inline;
-            text-shadow: 1px 1px 2px gray;
-            color: white;
-            
-        }
-        #modal .title h2 {
-            display: inline;
-        }
-        #modal .close-area {
-            display: inline;
-            float: right;
-            padding-right: 10px;
-            cursor: pointer;
-            text-shadow: 1px 1px 2px gray;
-            color: white;
-        }
-        
-        #modal .content {
-            margin-top: 20px;
-            padding: 0px 10px;
-            text-shadow: 1px 1px 2px gray;
-            color: white;
-        }
+
+	.noclose .ui-dialog-titlebar-close 
+	{ 
+	    display:none; 
+	} 
 </style>	
 	
 <script>
-
+$(".warp_alert_modal").modal({
+	backdrop:'static',
+	closable: false
+});
 $(function(){ 
+
 	//신고하기-신고모달창 팝업실시(포스트/기업리뷰/댓글 공통활용)
 	//컨트롤러의 loadAlertReasonList 를 통해 신고이유 리스트들을 로드. 
-	$("#alert_start").on("click", function(){
-		//var alertType ="0006";
+	$("#alert_start_post").on("click", function(){
+		var alertType ="0006";
 	    $.ajax({
 	         type : "POST",
 	         url  : "/blind/loadAlertReasonList",
 	         data : { alertType },
 	         dataType: "json",
 	         success: function(result){
+
 	          	//모달창에 데이터들을 입력하기 위한 코드
 	     
 	            //1.신고할 포스트의 제목과 작성자 닉네임을 로드 및 삽입.
@@ -115,7 +68,7 @@ $(function(){
 				});
 				$(alert_reason_list).append("</ul>");
 				$(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
-				
+
 				//신고모달창 팝업
 				$(".warp_alert_modal").modal('show');
 	         },
@@ -123,8 +76,8 @@ $(function(){
 	            alert("에러");
 	         }            
 		});
+
 	});
-	
 	
 	//1.2.신고 모달창의 '신고하기'버튼 클릭시 신고이유 선택여부 확인.
 	$("#send_alert").on("click", function(){
@@ -155,7 +108,8 @@ $(function(){
 			
 		}
 	});
-	
+
+
 	$("input[name='alert_post_reason']").change (function () {
         //라디오 버튼 값을 가져온다.
         console.log("aaaaa");
@@ -232,9 +186,7 @@ $(function(){
 		<div class="warp_alert_modal">
 			<div class="inf_post_title">
 				<h1 style="display:inline;">申告する(ポスト)</h1>
-				<div style="float:right;">
-					<h1><a href="#" rel="modal:close"> X </a></h1>  
-				</div>
+				<div style="float:right;"> <h1><a href="#" rel="modal:close"> X </a></h1> </div>
 			</div> 
 			<div>
 				<strong style="display: inline;">作成者</strong>
