@@ -14,7 +14,7 @@
                 display: none;
                 width: 400px;
                 height : auto;
-                padding: 50px 50px;
+                padding: 20px 20px;
                 background-color: #ffffff;
                 border-radius: 3px;
             }
@@ -25,11 +25,11 @@
                 right: 10px;
             }
             
-            li{
+             #alert_modal div{
 	            list-style:none;
 	            margin-bottom:15px;
-	            float:left;
             }
+            
         </style>
     </head>
 
@@ -112,7 +112,7 @@
 		<div class="warp_alert_modal">
 			<div class="inf_post_title">
 				<h2 style="display:inline;">申告する(ポスト)</h2>
-				<div style="float:right;"> <h1><a href="#" rel="modal:close"> X </a> </div>
+				<div style="float:right;"> <a href="#" rel="modal:close"> X </a> </div>
 			</div> 
 			<div>
 				<strong style="display: inline;">作成者</strong>
@@ -141,6 +141,8 @@
 	</body>
 	    
 	<script>
+
+	
 	//신고하기-신고모달창 팝업실시(포스트/기업리뷰/댓글 공통활용)
   	//컨트롤러의 loadAlertReasonList 를 통해 신고이유 리스트들을 로드. 
 		$(function(){ 		
@@ -166,15 +168,11 @@
             				$(alert_reason_list).html(""); //초기화
             				
             				//신고할 리스트들을 추가시작
-            				$(alert_reason_list).append("<div align='left'>");
-            			 	$(alert_reason_list).append("<ul style='display: inline-block; width:100%;'>");
             				$.each(result, function (key, value) {	
-            					$(alert_reason_list).append("<li><input type='radio' name='alert_post_reason'  value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</li>");
+            					$(alert_reason_list).append("<div  align='left'><input type='radio' name='alert_post_reason'  value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</div>");
          					});
-            				$(alert_reason_list).append("</ul>");
-            				$(alert_reason_list).append("</div>");
-            				$(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
-
+            				$(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;'> </textarea>");
+            				//라디오버튼 변경시마다 코드값을 못받아서 disable의 해제가 불가. $(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
             				//신고모달창 팝업
             				$('#alert_modal').modal({ closable: false });
             				$('#alert_modal').modal('show');
@@ -207,6 +205,7 @@
             		         success: function(){
             		            console.log("신고완료");
             		 			alert("신고완료。");
+                				$('#alert_modal').modal('hide');
             		         },
             		         error: function(){
             		            alert("신고에러");
@@ -215,6 +214,17 @@
             			
             		}
             	});
+            	
+            	
+            	//맞는 코드인데 작동을 못하고 있음.
+            	$("input[name='alert_post_reason']:radio").change(function () {
+                    //라디오 버튼 값을 가져온다.
+                    alert('qqqqq');
+            		var reportReasonCode = $('input[name="alert_post_reason"]:checked').val();
+                    console(reportReasonCode);          
+                    alert(reportReasonCode);            
+            	});
+
             	
             });
 	</script>
