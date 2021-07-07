@@ -14,7 +14,7 @@ public class PostReportDto {
 	private String recCreateDate;			//	, rec_create_date
 	private int  recUpdateUserId;			//	, rec_update_user_id
 	private String recUpdateDate;			//	, rec_update_date
-	private char  logical_del_flag;			//	, logical_del_flag
+	private char  logicalDelFlag;			//	, logical_del_flag
 	
 	
 	
@@ -97,12 +97,13 @@ public class PostReportDto {
 	public void setRecUpdateDate(String recUpdateDate) {
 		this.recUpdateDate = recUpdateDate;
 	}
-	public char getLogical_del_flag() {
-		return logical_del_flag;
+	public char getLogicalDelFlag() {
+		return logicalDelFlag;
 	}
-	public void setLogical_del_flag(char logical_del_flag) {
-		this.logical_del_flag = logical_del_flag;
+	public void setLogicalDelFlag(char logicalDelFlag) {
+		this.logicalDelFlag = logicalDelFlag;
 	}
+	
 		
 		
 	
