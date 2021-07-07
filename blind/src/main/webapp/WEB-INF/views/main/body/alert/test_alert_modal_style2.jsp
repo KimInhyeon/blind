@@ -18,12 +18,6 @@
                 background-color: #ffffff;
                 border-radius: 3px;
             }
-
-            #alert_modal .modal_close_btn {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-            }
             
              #alert_modal div{
 	            list-style:none;
@@ -31,6 +25,20 @@
             }
 
         </style>
+        <script>
+    	$(document).ready(function(){
+    		  $('.test').click (function () {
+    	             //라디오 버튼 값을 가져온다.
+    	             alert('qqqqq');
+    	           var reportReasonCode = $('input[name="alert_post_reason"]:checked').val();
+    	             console(reportReasonCode);          
+    	             alert(reportReasonCode);            
+    	        });
+    		});
+    	function test(){
+			  alert('test 11:53');
+		  }
+        </script>
     </head>
 
     <body>
@@ -63,7 +71,8 @@
 					</div>
 			  </td>
 		      <td data-label="alert_button">
-		     		<button id="alert_modal_start_post" value="0006">신고하기(포스트버전)</button>
+		     		<button class="alert_modal_start_post" onclick="alertModalStartPost(this.value)" value="0006">신고하기(포스트버전)</button>
+		     		
 		      </td>
 		    </tr>
 		  <!-- 2.기업리뷰 신고 예제 -->
@@ -82,7 +91,7 @@
 					</div>
 			  </td>
 		      <td data-label="alert_button">
-		     		<button id="alert_modal_start_review" value="0008">申告する(企業レビュー)</button>
+		     		<button class="alert_modal_start_post" onclick="alertModalStartPost(this.value)" value="0008">申告する(企業レビュー)</button>
 		      </td>
 		    </tr>	    
 		    <!-- 3.댓글 신고 예제 -->
@@ -101,7 +110,7 @@
 					</div>
 			  </td>
 		      <td data-label="alert_button">
-		     		<button id="alert_modal_start_reply" value="0012">申告する(コメント)</button>
+		     		<button class="alert_modal_start_post" onclick="alertModalStartPost(this.value)" value="0012">申告する(コメント)</button>
 		      </td>
 		    </tr>
 		  </tbody>
@@ -112,7 +121,7 @@
 		<div class="warp_alert_modal">
 			<div class="inf_post_title">
 				<h2 style="display:inline;">申告する(ポスト)</h2>
-				<div style="float:right;"> <a href="#" rel="modal:close"> X </a> </div> <!--  -->
+      		    <div style="float:right;" id="modal_close_btn">X</div> <!--  -->
 			</div> 
 			<div>
 				<strong style="display: inline;">作成者</strong>
@@ -136,145 +145,58 @@
 			
 		</div>	 
 	</div>	
-
+	<input type="text" value="" id="currentAlertType">
 	</body>
 	    
 	<script>
+   	function alertModalStartPost(alertType){
+
+  		alert("alert_modal_start_post - alertType : "+alertType);
+  		document.getElementById("currentAlertType").value = alertType;
+  		$.ajax({
+    	         type : "POST",
+    	         url  : "/blind/loadAlertReasonList",
+    	         data : { alertType },
+    	         dataType: "json",
+    	         success: function(result){
+    	          	//모달창에 데이터들을 입력하기 위한 코드
+    	     
+    	            //1.신고할 포스트의 제목과 작성자 닉네임을 로드 및 삽입.
+    				//  포스트의 글과 닉네임을 해당페이지에서 바로 modal에게로 전달하기 위한 코드.
+    				var alertTitle = $('#sample_post_title').text(); 
+    				var nickName =  $('#sample_nickname_writer').text();		
+
+    				document.getElementById("alertTitle").innerHTML=alertTitle;
+    				document.getElementById("nickName").innerHTML=nickName;
+
+    				//2.신고할 사항들의 리스트
+    				$(alert_reason_list).html(""); //초기화
+    				
+    				//신고할 리스트들을 추가시작
+    				$.each(result, function (key, value) {	
+    					$(alert_reason_list).append("<div align='left'><input type='radio' onclick='test();' name='alert_post_reason' id=" + value.reportReasonCode + " value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</div>");
+ 					});
+    				//$(alert_reason_list).append("<textarea maxlength=400 id='report_reason_content' style='width:100%; height:150px; resize: none;'> </textarea>");
+    				 $(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
+    				//신고모달창 팝업
+    				$('#alert_modal').modal({ closable: false });
+    				$('#alert_modal').modal('show');
+    	         },
+    	         error: function(){
+    	            alert("에러");
+    	         }            
+    		});
+    	};
 	//신고하기-신고모달창 팝업실시(포스트/기업리뷰/댓글 공통활용)
   	//1.1.컨트롤러의 loadAlertReasonList 를 통해 신고이유 리스트들을 로드. 
 		$(function(){ 		
-           	$("#alert_modal_start_post").on("click", function(){
-          		var alertType =$('#alert_modal_start_post').val();
-          		alert("alert_modal_start_post - alertType : "+alertType);
-           	    $.ajax({
-            	         type : "POST",
-            	         url  : "/blind/loadAlertReasonList",
-            	         data : { alertType },
-            	         dataType: "json",
-            	         success: function(result){
-            	          	//모달창에 데이터들을 입력하기 위한 코드
-            	     
-            	            //1.신고할 포스트의 제목과 작성자 닉네임을 로드 및 삽입.
-            				//  포스트의 글과 닉네임을 해당페이지에서 바로 modal에게로 전달하기 위한 코드.
-            				var alertTitle = $('#sample_post_title').text(); 
-            				var nickName =  $('#sample_nickname_writer').text();		
-
-            				document.getElementById("alertTitle").innerHTML=alertTitle;
-            				document.getElementById("nickName").innerHTML=nickName;
-
-            				//2.신고할 사항들의 리스트
-            				$(alert_reason_list).html(""); //초기화
-            				
-            				//신고할 리스트들을 추가시작
-            				$.each(result, function (key, value) {	
-            					$(alert_reason_list).append("<div  align='left'><input type='radio' name='alert_post_reason'  value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</div>");
-         					});
-            				$(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;'> </textarea>");
-            				//라디오버튼 변경시마다 코드값을 못받아서 disable의 해제가 불가. $(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
-            				//신고모달창 팝업
-            				$('#alert_modal').modal({ closable: false });
-            				$('#alert_modal').modal('show');
-            	         },
-            	         error: function(){
-            	            alert("에러");
-            	         }            
-            		});
-
-            	});
-
-           	//이름이 겹쳐서 진행 안되는 것으로 추정. 따라서 여기서는 alert_modal_start뒤에 _review를 붙여서 구별 		
-			//1.2.신고하기-신고모달창 팝업실시
-           	$("#alert_modal_start_review").on("click", function(){
-              		var alertType =$('#alert_modal_start_review').val();
-              		alert("alert_modal_start_review - alertType : "+alertType);
-               	    $.ajax({
-                	         type : "POST",
-                	         url  : "/blind/loadAlertReasonList",
-                	         data : { alertType },
-                	         dataType: "json",
-                	         success: function(result){
-                	          	//모달창에 데이터들을 입력하기 위한 코드
-                	     
-                	            //1.신고할 포스트의 제목과 작성자 닉네임을 로드 및 삽입.
-                				//  포스트의 글과 닉네임을 해당페이지에서 바로 modal에게로 전달하기 위한 코드.
-                				var alertTitle = $('#sample_post_title').text(); 
-                				var nickName =  $('#sample_nickname_writer').text();		
-
-                				document.getElementById("alertTitle").innerHTML=alertTitle;
-                				document.getElementById("nickName").innerHTML=nickName;
-
-                				//2.신고할 사항들의 리스트
-                				$(alert_reason_list).html(""); //초기화
-                				
-                				//신고할 리스트들을 추가시작
-                				$.each(result, function (key, value) {	
-                					$(alert_reason_list).append("<div  align='left'><input type='radio' name='alert_post_reason'  value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</div>");
-             					});
-                				$(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;'> </textarea>");
-                				//라디오버튼 변경시마다 코드값을 못받아서 disable의 해제가 불가. $(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
-                				//신고모달창 팝업
-                				$('#alert_modal').modal({ closable: false });
-                				$('#alert_modal').modal('show');
-                	         },
-                	         error: function(){
-                	            alert("에러");
-                	         }            
-                		});
-                	});
-            	
-               	//이름이 겹쳐서 진행 안되는 것으로 추정. 따라서 여기서는 alert_modal_start뒤에 _review를 붙여서 구별 		
-               	//1.3.
-               	$("#alert_modal_start_reply").on("click", function(){
-              		var alertType =$('#alert_modal_start_reply').val();
-              		alert("alert_modal_start_reply - alertType : "+alertType);
-               	    $.ajax({
-                	         type : "POST",
-                	         url  : "/blind/loadAlertReasonList",
-                	         data : { alertType },
-                	         dataType: "json",
-                	         success: function(result){
-                	          	//모달창에 데이터들을 입력하기 위한 코드
-                	     
-                	            //1.신고할 포스트의 제목과 작성자 닉네임을 로드 및 삽입.
-                				//  포스트의 글과 닉네임을 해당페이지에서 바로 modal에게로 전달하기 위한 코드.
-                				var alertTitle = $('#sample_post_title').text(); 
-                				var nickName =  $('#sample_nickname_writer').text();		
-
-                				document.getElementById("alertTitle").innerHTML=alertTitle;
-                				document.getElementById("nickName").innerHTML=nickName;
-
-                				//2.신고할 사항들의 리스트
-                				$(alert_reason_list).html(""); //초기화
-                				
-                				//신고할 리스트들을 추가시작
-                				$.each(result, function (key, value) {	
-                					$(alert_reason_list).append("<div  align='left'><input type='radio' name='alert_post_reason'  value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</div>");
-             					});
-                				$(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;'> </textarea>");
-                				//라디오버튼 변경시마다 코드값을 못받아서 disable의 해제가 불가. $(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
-                				//신고모달창 팝업
-                				$('#alert_modal').modal({ closable: false });
-                				$('#alert_modal').modal('show');
-                	         },
-                	         error: function(){
-                	            alert("에러");
-                	         }            
-                		});
-                	});           	
-           	
-           	
-           	
            	//신고 모달창 팝업 끝
-           	
            	
             	//1.2.신고 모달창의 '신고하기'버튼 클릭시 신고이유 선택여부 확인.
             	$("#send_alert").on("click", function(){
             		var reportReasonCode = $('input[name="alert_post_reason"]:checked').val();
             		
-            		//
-            		//var alertType =$('#alert_modal_start_post').val();
-              		var alertType =$('#alert_modal_start_review').val();
-              		//var alertType =$('#alert_modal_start_reply').val();             		
+            		var alertType =$('#currentAlertType').val();            		
 
             		//alert("send 전 체크 1.alert_modal_start_post   : "+$('#alert_modal_start_post').val());
               		//alert("send 전 체크 2.alert_modal_start_review : "+$('#alert_modal_start_review').val());
@@ -309,16 +231,12 @@
             		}
             	});
      
-            	
-            	//맞는 코드인데 작동을 못하고 있음.
-            	$("input[name='alert_post_reason']:radio").change(function () {
-                    //라디오 버튼 값을 가져온다.
-                    alert('qqqqq');
-            		var reportReasonCode = $('input[name="alert_post_reason"]:checked').val();
-                    console(reportReasonCode);          
-                    alert(reportReasonCode);            
-            	});
+            	       	
+                $("#modal_close_btn").on("click", function(){
+                    $('#alert_modal').modal('hide');
+                });
             	
             });
+
 	</script>
 </html>
