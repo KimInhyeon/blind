@@ -7,7 +7,7 @@
 <html lang="jp">
     <head>
         <meta charset="UTF-8" />
-        <title>Alert Modal jsStyle</title>
+        <title>Alert Modal</title>
 
         <style>
             #alert_modal {
@@ -25,9 +25,6 @@
             }
 
         </style>
-        <script>
-
-        </script>
     </head>
 
     <body>
@@ -35,12 +32,12 @@
 		<table class="ui celled table" style="width:100%;margin:20px;">
 		  <thead>
 		    <tr>
-		    	<th>분류(전송시 구분값)</th>
-			    <th>정보1</th>
-			    <th>정보2</th>
-			    <th>글 제목</th>
-			    <th>작성자 닉네임</th>
-			    <th>신고모달버튼</th>
+		    	<th>分類(区分値)</th>
+			    <th>情報1</th>
+			    <th>情報2</th>
+			    <th>文のタイトル</th>
+			    <th>作成者のニックネーム</th>
+			    <th>申告する ボタン</th>
 		  	</tr>
 		  </thead>
 		  <tbody>
@@ -60,7 +57,7 @@
 					</div>
 			  </td>
 		      <td data-label="alert_button">
-		     		<button class="alert_modal_start_post" onclick="alertModalStartPost(this.value)" value="0006">신고하기(포스트버전)</button>
+		     		<button class="alert_modal_start" onclick="alertModalStart(this.value)" value="0006">申告する（ポスト）</button>
 		     		
 		      </td>
 		    </tr>
@@ -80,7 +77,7 @@
 					</div>
 			  </td>
 		      <td data-label="alert_button">
-		     		<button class="alert_modal_start_post" onclick="alertModalStartPost(this.value)" value="0008">申告する(企業レビュー)</button>
+		     		<button class="alert_modal_start" onclick="alertModalStart(this.value)" value="0008">申告する(企業レビュー)</button>
 		      </td>
 		    </tr>	    
 		    <!-- 3.댓글 신고 예제 -->
@@ -99,7 +96,7 @@
 					</div>
 			  </td>
 		      <td data-label="alert_button">
-		     		<button class="alert_modal_start_post" onclick="alertModalStartPost(this.value)" value="0012">申告する(コメント)</button>
+		     		<button class="alert_modal_start" onclick="alertModalStart(this.value)" value="0012">申告する(コメント)</button>
 		      </td>
 		    </tr>
 		  </tbody>
@@ -109,55 +106,44 @@
 	<div id="alert_modal" data-backdrop="static" data-keyboard="false">
 		<div class="warp_alert_modal">
 			<div class="inf_post_title">
-				<h2 style="display:inline;">申告する(ポスト)</h2>
+				<h2 style="display:inline;">申告する</h2>
       		    <div style="float:right;" id="modal_close_btn">X</div> <!--  -->
 			</div> 
-			<div>
-				<strong style="display: inline;">作成者</strong>
-				<div id="alertTitle"><!-- 신고할 포스트의 제목이 jquery를 통해 입력됩니다. --></div>
-			</div> 
-			<div>
-				<strong>タイトル</strong> 
-				<div id="nickName"><!-- 신고할 포스트의 닉네임이 jquery를 통해 입력됩니다. --></div>
+			
+			<div align='left'>
+				<span>作成者</span> 
+				<span id="nickName"><!-- 신고할 포스트의 닉네임이 jquery를 통해 입력됩니다. --></span>
 			</div>
+			<div align='left'>
+				<span style="display: inline;">タイトル</span>
+				<span id="alertTitle"><!-- 신고할 포스트의 제목이 jquery를 통해 입력됩니다. --></span>
+			</div> 
 		 	
 			<div class="ui inverted divider"></div>
 
 			<div id="alert_reason_list">
 				<!-- 제이쿼리(alert_post)를 통해 로드한 신고리스트들을 출력합니다. -->
 			</div>		
+			
 			<div id="alert_reason_textarea">
 				<!-- 제이쿼리(alert_post)를 . -->
 			</div>		
 			
 			<button class="ui primary button" id="send_alert"
 					style="width:100%; height:50px; text-align:center; margin-top: 20px;">
-					신고하기
+					申告する
 			</button>
-			
 		</div>	 
 	</div>	
-	<input type="text" value="" id="currentAlertType">
+
+	<input type="hidden" value="" id="currentAlertType"> <!-- 신고종류(포스트/기업리뷰/댓글)를 구분하는 값을 임시저장. -->
+
 	</body>
 	    
 	<script>
-	function textOnOff(){ //report_reason_content(textarea)의 입력 활성화/비활성화 설정
-        var reportReasonCode = $('input[name="alert_post_reason"]:checked').val();        
-   		alert(reportReasonCode);    //선택한 값 확인용
-   		if(reportReasonCode ==20){
-		 	 $(alert_reason_textarea).html(""); //초기화
-			 $(alert_reason_textarea).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;'> </textarea>");
-		}else{
-		 	 $(alert_reason_textarea).html(""); //초기화		
-			 $(alert_reason_textarea).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
-		}
-			
-	}
-	
-	
-   	function alertModalStartPost(alertType){
-
-  		alert("alert_modal_start_post - alertType : "+alertType);
+	//1.신고모달창 팝업실시(포스트/기업리뷰/댓글 공통활용)
+   	function alertModalStart(alertType){
+  		//alert("alert_modal_start_post - alertType : "+alertType); //신고구분값 확인용
   		document.getElementById("currentAlertType").value = alertType;
   		$.ajax({
     	         type : "POST",
@@ -176,39 +162,35 @@
     				document.getElementById("nickName").innerHTML=nickName;
 
     				//2.신고할 사항들의 리스트
-    				$(alert_reason_list).html(""); //초기화
+    				$(alert_reason_list).html(""); //신고목록(라디오버튼)을 출력할 부분 초기화
+    				$(alert_reason_textarea).html(""); //기타입력시 부분 초기화.
     				
     				//신고할 리스트들을 추가시작
     				$.each(result, function (key, value) {	
     					$(alert_reason_list).append("<div align='left'><input type='radio' onclick='textOnOff();' name='alert_post_reason' id=" + value.reportReasonCode + " value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</div>");
  					});
-    				//$(alert_reason_list).append("<textarea maxlength=400 id='report_reason_content' style='width:100%; height:150px; resize: none;'> </textarea>");
     				 $(alert_reason_textarea).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
-    				//신고모달창 팝업
-    				$('#alert_modal').modal({ closable: false });
+
+    				 //신고모달창 팝업
+    				$('#alert_modal').modal({ closable: false }); //모달밖을 클릭해도 닫히지 않도록 설정.
     				$('#alert_modal').modal('show');
     	         },
     	         error: function(){
-    	            alert("에러");
+    	            alert("もダルのエラーです。");
     	         }            
     		});
     	};
-	//신고하기-신고모달창 팝업실시(포스트/기업리뷰/댓글 공통활용)
-  	//1.1.컨트롤러의 loadAlertReasonList 를 통해 신고이유 리스트들을 로드. 
-		$(function(){ 		
-           	//신고 모달창 팝업 끝
-           	
-            	//1.2.신고 모달창의 '신고하기'버튼 클릭시 신고이유 선택여부 확인.
-            	$("#send_alert").on("click", function(){
-            		var reportReasonCode = $('input[name="alert_post_reason"]:checked').val();
-            		
-            		var alertType =$('#currentAlertType').val();            		
 
-              		
-              		if(typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null){ 
-            			alert("申告する理由を選んでください。"); //선택된 신고사항이 없기에 선택을 요청
-            		}else{
-            			alert("신고시작。");
+    	//2.신고하기 모션(포스트/기업리뷰/댓글 공통활용)
+ 		$(function(){ 		
+        	$("#send_alert").on("click", function(){
+            	var reportReasonCode = $('input[name="alert_post_reason"]:checked').val();            		
+            	var alertType =$('#currentAlertType').val();            		
+    		
+          		if(typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null){ 
+            		alert("申告する理由を選んでください。"); //선택된 신고사항이 없기에 선택을 요청
+            	}else{
+            		alert("受付中です。少々お待ちください。");
             		    $.ajax({
             		         type : "POST",
             		         url  : "/blind/sendAlert",
@@ -222,23 +204,36 @@
             		         },
             		         dataType: "json",
             		         success: function(){
-            		            console.log("신고완료");
-            		 			alert("신고완료。");
+            		 			alert("申告の受付を完了しました。");
                 				$('#alert_modal').modal('hide');
             		         },
             		         error: function(){
-            		            alert("신고에러");
+            		            alert("エラーが発生しました。");
             		         }            
             			});
             		}
             	});
      
-            	       	
-                $("#modal_close_btn").on("click", function(){
+                $("#modal_close_btn").on("click", function(){ //신고되면 모달창을 닫도록 함.
                     $('#alert_modal').modal('hide');
                 });
             	
-            });
-
+		});
+		
+ 		//report_reason_content(textarea)의 입력 활성화/비활성화 설정
+		function textOnOff(){ 
+	        var reportReasonCode = $('input[name="alert_post_reason"]:checked').val();        
+	        //alert(reportReasonCode);    //선택한 값 확인용
+	   		if(reportReasonCode ==20){
+	   			//その外인 경우에는 textarea 활성화
+			 	 $(alert_reason_textarea).html(""); //초기화
+				 $(alert_reason_textarea).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;'> </textarea>");
+			}else{
+				//その外가 아닌 라디오버튼들이 클릭시 textarea 비활성화
+			 	 $(alert_reason_textarea).html(""); //초기화		
+				 $(alert_reason_textarea).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
+			}
+				
+		}
 	</script>
 </html>

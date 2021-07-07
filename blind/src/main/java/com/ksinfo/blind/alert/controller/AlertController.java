@@ -32,54 +32,51 @@ public class AlertController {
 
 	@Autowired AlertService alertService;  
 	
-	
-	//1.신고버튼(포스트신고) 클릭시 해당 신고
-	//1.1. 신고하기 팝업창 					
+	//1.신고버튼 클릭시 해당 신고유형에 맞는 신고리스트들을 리턴.			
 	@RequestMapping(value="/loadAlertReasonList",method=RequestMethod.POST)
-	   @ResponseBody
-	   public List<ReportReasonDto> loadAlertReasonList(@RequestParam Map<String, Object> param){ 
-	      logger.info("loadAlertReasonList 시작.");
-	      logger.info("입력된 신고 유형(0006:포스트/0008:기업리뷰/0012:포스트댓글)에 따라 신고사유들을 리턴.");
+	@ResponseBody
+	public List<ReportReasonDto> loadAlertReasonList(@RequestParam Map<String, Object> param){ 
+		logger.info("loadAlertReasonList 시작.");
+	    logger.info("입력된 신고 유형(0006:포스트/0008:기업리뷰/0012:포스트댓글)에 따라 신고사유들을 리턴.");
 
-	      logger.info("alertType : "+param.get("alertType"));
-	      String alertType = (String) param.get("alertType"); //형변환 (Object->String) 
+	    logger.info("alertType : "+param.get("alertType"));
+	    String alertType = (String) param.get("alertType"); //형변환 (Object->String) 
 	      
-	      //입력된 신고유형은 xml의 where문을 활용하여 분류실시.(따라서 switch문 실시않음)
-	      List<ReportReasonDto> alertReasonList = alertService.getAlertReasonList( alertType );
+	    //입력된 신고유형은 xml의 where문을 활용하여 분류실시.(따라서 switch문 실시않음)
+	    List<ReportReasonDto> alertReasonList = alertService.getAlertReasonList( alertType );
 	     
-	      return alertReasonList;   
-	   }
+		logger.info("신고유형 따라 신고사유들을 리턴.");
+	    logger.info("loadAlertReasonList 종료.");
+		return alertReasonList;   
+	}
 
-
-	//수신된 신고사항을 DB에 저장
+	//2.수신된 신고사항을 DB에 저장
 	@RequestMapping(value="/sendAlert",method=RequestMethod.POST)
-	   @ResponseBody
-	   public int receiveAlert(@RequestParam Map<String, Object> param){ 
-	      logger.info("receiveAlert 시작.");			
+	@ResponseBody
+	public int receiveAlert(@RequestParam Map<String, Object> param){ 
+		logger.info("receiveAlert 시작.");			
 	      
-	      //수신된 정보 확인
-	      logger.info("postId : "+param.get("postId")); 						//게시글의 id
-	      logger.info("companyReviewId : "+param.get("companyReviewId")); 		//기업리뷰글 id
-	      logger.info("replyId : "+param.get("replyId")); 						//댓글 id	
-	      logger.info("userId : "+param.get("userId")); 						//신고자의 id(닉네임이 아님)
-	      logger.info("selectAlertReason : "+param.get("reportReasonCode"));	//신고사유 코드번호
-	      logger.info("alertType : "+param.get("alertType"));					//신고유형(1:포스트/2:기업리뷰/3:포스트댓글)
-	      logger.info("reportReasonContent : "+param.get("report_reason_content"));		//textarea의 작성내용.
-
-	      logger.info("companyReviewId :"+param.get("report_reason_content"));	
+	    //수신된 정보 확인위한 로그코드
+	    logger.info("postId : "+param.get("postId")); 							//게시글의 id
+	    logger.info("companyReviewId : "+param.get("companyReviewId")); 			//기업리뷰글 id
+	    logger.info("replyId : "+param.get("replyId")); 							//댓글 id	
+        logger.info("userId : "+param.get("userId")); 							//신고자의 id(닉네임이 아님)
+	    logger.info("selectAlertReason : "+param.get("reportReasonCode"));		//신고사유 코드번호
+	    logger.info("alertType : "+param.get("alertType"));						//신고유형(1:포스트/2:기업리뷰/3:포스트댓글)
+	    logger.info("reportReasonContent : "+param.get("report_reason_content"));	//textarea의 작성내용.
+	
 	      
-	      // 작성의 편의 및 PostReportDto의 변수에 맞도록 정정. 
-	      int postId = Integer.parseInt(param.get("postId").toString()) ;
-	      int companyReviewId = Integer.parseInt(param.get("companyReviewId").toString()) ;
-	      int replyId = Integer.parseInt(param.get("replyId").toString())
-	    		  ;
-	      int userId = Integer.parseInt(param.get("userId").toString()) ;
-	      String reportReasonCode = param.get("reportReasonCode").toString();
-	      String alertType = param.get("alertType").toString();
-	      String reportReasonContent = param.get("report_reason_content").toString();
+	    // 작성의 편의 및 Post/review/reply ReportDto에 맞도록 변수를 저장. 
+	    int postId = Integer.parseInt(param.get("postId").toString()) ;
+	    int companyReviewId = Integer.parseInt(param.get("companyReviewId").toString()) ;
+	    int replyId = Integer.parseInt(param.get("replyId").toString());
+	    int userId = Integer.parseInt(param.get("userId").toString());
+	    String reportReasonCode = param.get("reportReasonCode").toString();
+	    String alertType = param.get("alertType").toString();
+	    String reportReasonContent = param.get("report_reason_content").toString();
 	      
-	      switch(alertType) {
-	      	case "0006" :
+	    switch(alertType) {
+	    	case "0006" :  //post신고
 	      		logger.info("post신고로 확인, POST_REPORT_MGT에 insert시작."); 	
 	      		PostReportDto postReport = new PostReportDto();  
 	      		postReport.setPostId(postId);
@@ -88,9 +85,10 @@ public class AlertController {
 	      		postReport.setReportReasonContent(reportReasonContent);
 	      		
 	      		alertService.setPostReport(postReport);
+	      		logger.info("POST_REPORT_MGT insert종료."); 	
 	      		break;
 	      		
-	      	case "0008" :
+	      	case "0008" :  //기업리뷰 신고
 	      		logger.info("review(기업리뷰)신고로 확인, REVIEW_REPORT_MGT에 insert시작."); 	
 	      		ReviewReportDto reviewReport = new ReviewReportDto();  
 	      		reviewReport.setCompanyReviewId(companyReviewId);
@@ -99,9 +97,10 @@ public class AlertController {
 	      		reviewReport.setReportReasonContent(reportReasonContent);
 	      		
 	      		alertService.setReviewReport(reviewReport);	
+	      		logger.info("REVIEW_REPORT_MGT insert종료."); 	
 	      		break;
 
-	      	case "0012" :
+	      	case "0012" :  //댓글 신고
 	    		logger.info("reply신고로 확인, REPLY_REPORT_MGT에 insert시작."); 		    	  
 	      		ReplyReportDto replyReport = new ReplyReportDto();  
 	      		replyReport.setReplyId(replyId);
@@ -110,6 +109,7 @@ public class AlertController {
 	      		replyReport.setReportReasonContent(reportReasonContent);
 	      		
 	      		alertService.setReplyReport(replyReport);
+	    		logger.info("REPLY_REPORT_MGT insert종료."); 		    	  	      		
 	      		break;
 	      	
 	      	default :
@@ -120,12 +120,9 @@ public class AlertController {
 	      return 1; //여기에서는 성공했다는 의미로 ajax에게 알리기 위해 1을 리턴.
 	}
 	
-	
 	//신고하기 테스트 페이지로 이동
-	@RequestMapping("/alert/test_alert")  
-	public ModelAndView test_alert(ModelAndView mav){	
-		logger.info("test_alert 페이지 이동");
-		
+	@RequestMapping("/alert/test_alert_modal")  
+	public ModelAndView test_alert_modal_style2(ModelAndView mav){			
 		//	List<PostDto> searchResultPostsSelectTopic = searchService.getPostSelectTopic(selectBoardId, searchKeyword);
 		//	mav.addObject("searchResultPosts",searchResultPosts);			//검색어와 관련된 포스트(게시글)들 전달.
 		
@@ -146,43 +143,10 @@ public class AlertController {
 	    int replyId = 3000;		   //댓글의 id
 		mav.addObject("replyId",replyId);		
 		
-		
 	    //selectAlertReason(신고사유 코드번호)는 신고시 추가되므로 생략.
 
-		mav.setViewName("main/alert/test_alert");
+		logger.info("test_alert_modal 페이지 이동");
+		mav.setViewName("main/alert/test_alert_modal");
 		return mav;	
 	}
-	
-	
-	//신고하기 테스트 페이지로 이동
-	@RequestMapping("/alert/test_alert_modal_style2")  
-	public ModelAndView test_alert_modal_style2(ModelAndView mav){	
-		logger.info("test_alert_modal_style2 페이지 이동");
-		
-		//	List<PostDto> searchResultPostsSelectTopic = searchService.getPostSelectTopic(selectBoardId, searchKeyword);
-		//	mav.addObject("searchResultPosts",searchResultPosts);			//검색어와 관련된 포스트(게시글)들 전달.
-		
-		//임의의 데이터 추가.
-		//1.현 사용자의 id
-		int userId = 9990; 			//신고자의 id(닉네임이 아님)
-		mav.addObject("userId",userId);		
-		
-		//2.포스트신고관련 필요정보
-		int postId = 1000;			//게시글의 id
-		mav.addObject("postId",postId);		
-		
-		//3.기업리뷰 신고관련 필요정보 
-	    int companyReviewId = 2000;//기업리뷰글의 id
-		mav.addObject("companyReviewId",companyReviewId);		
-
-		//4.댓글 신고관련 	
-	    int replyId = 3000;		   //댓글의 id
-		mav.addObject("replyId",replyId);		
-		
-		
-	    //selectAlertReason(신고사유 코드번호)는 신고시 추가되므로 생략.
-
-	mav.setViewName("main/alert/test_alert_modal_style2");
-	return mav;	
-}
 }
