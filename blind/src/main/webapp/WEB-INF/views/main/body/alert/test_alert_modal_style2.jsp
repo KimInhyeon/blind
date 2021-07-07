@@ -26,18 +26,7 @@
 
         </style>
         <script>
-    	$(document).ready(function(){
-    		  $('.test').click (function () {
-    	             //라디오 버튼 값을 가져온다.
-    	             alert('qqqqq');
-    	           var reportReasonCode = $('input[name="alert_post_reason"]:checked').val();
-    	             console(reportReasonCode);          
-    	             alert(reportReasonCode);            
-    	        });
-    		});
-    	function test(){
-			  alert('test 11:53');
-		  }
+
         </script>
     </head>
 
@@ -137,6 +126,9 @@
 			<div id="alert_reason_list">
 				<!-- 제이쿼리(alert_post)를 통해 로드한 신고리스트들을 출력합니다. -->
 			</div>		
+			<div id="alert_reason_textarea">
+				<!-- 제이쿼리(alert_post)를 . -->
+			</div>		
 			
 			<button class="ui primary button" id="send_alert"
 					style="width:100%; height:50px; text-align:center; margin-top: 20px;">
@@ -149,6 +141,20 @@
 	</body>
 	    
 	<script>
+	function textOnOff(){ //report_reason_content(textarea)의 입력 활성화/비활성화 설정
+        var reportReasonCode = $('input[name="alert_post_reason"]:checked').val();        
+   		alert(reportReasonCode);    //선택한 값 확인용
+   		if(reportReasonCode ==20){
+		 	 $(alert_reason_textarea).html(""); //초기화
+			 $(alert_reason_textarea).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;'> </textarea>");
+		}else{
+		 	 $(alert_reason_textarea).html(""); //초기화		
+			 $(alert_reason_textarea).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
+		}
+			
+	}
+	
+	
    	function alertModalStartPost(alertType){
 
   		alert("alert_modal_start_post - alertType : "+alertType);
@@ -174,10 +180,10 @@
     				
     				//신고할 리스트들을 추가시작
     				$.each(result, function (key, value) {	
-    					$(alert_reason_list).append("<div align='left'><input type='radio' onclick='test();' name='alert_post_reason' id=" + value.reportReasonCode + " value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</div>");
+    					$(alert_reason_list).append("<div align='left'><input type='radio' onclick='textOnOff();' name='alert_post_reason' id=" + value.reportReasonCode + " value=" + value.reportReasonCode + ">"+ value.reportReasonContents+"</div>");
  					});
     				//$(alert_reason_list).append("<textarea maxlength=400 id='report_reason_content' style='width:100%; height:150px; resize: none;'> </textarea>");
-    				 $(alert_reason_list).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
+    				 $(alert_reason_textarea).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
     				//신고모달창 팝업
     				$('#alert_modal').modal({ closable: false });
     				$('#alert_modal').modal('show');
@@ -198,10 +204,6 @@
             		
             		var alertType =$('#currentAlertType').val();            		
 
-            		//alert("send 전 체크 1.alert_modal_start_post   : "+$('#alert_modal_start_post').val());
-              		//alert("send 전 체크 2.alert_modal_start_review : "+$('#alert_modal_start_review').val());
-              		//alert("send 전 체크 3.alert_modal_start_reply   : "+$('#alert_modal_start_reply').val() );              		
-            		
               		
               		if(typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null){ 
             			alert("申告する理由を選んでください。"); //선택된 신고사항이 없기에 선택을 요청
