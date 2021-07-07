@@ -88,7 +88,7 @@
 		    <!-- 3.댓글 신고 예제 -->
 		    <tr>	   
 			    <td data-label="alert_type"> コメント(0012)	</td>
-				<td data-label="code_data"> company_review_id : ${companyReviewId} </td>
+				<td data-label="code_data"> reply_id : ${replyId} </td>
 		    	<td data-label="code_data"> user_id(신고자 유저id) : ${userId} </td>
 		      	<td data-label="title">
 			      	<div id="sample_company_review_title"> <!-- 신고 모달화면에 띄우기 용 -->
@@ -274,7 +274,7 @@
             		//
             		//var alertType =$('#alert_modal_start_post').val();
               		var alertType =$('#alert_modal_start_review').val();
-              		//var alertType =$('#alert_modal_start_review').val();             		
+              		//var alertType =$('#alert_modal_start_reply').val();             		
 
             		//alert("send 전 체크 1.alert_modal_start_post   : "+$('#alert_modal_start_post').val());
               		//alert("send 전 체크 2.alert_modal_start_review : "+$('#alert_modal_start_review').val());
@@ -289,6 +289,8 @@
             		         type : "POST",
             		         url  : "/blind/sendAlert",
             		         data : { postId : ${postId}
+            		    			 ,companyReviewId : ${ companyReviewId }
+            		    			 ,replyId : ${replyId}
             						 ,userId : ${userId}
             						 ,reportReasonCode
             						 ,alertType

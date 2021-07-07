@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ksinfo.blind.alert.dto.PostReportDto;
+import com.ksinfo.blind.alert.dto.ReplyReportDto;
 import com.ksinfo.blind.alert.dto.ReportReasonDto;
+import com.ksinfo.blind.alert.dto.ReviewReportDto;
 import com.ksinfo.blind.alert.mapper.AlertMapper;
 import com.ksinfo.blind.alert.service.AlertService;
 import com.ksinfo.blind.search.controller.SearchController;
@@ -57,23 +59,27 @@ public class AlertController {
 	      
 	      //수신된 정보 확인
 	      logger.info("postId : "+param.get("postId")); 						//게시글의 id
+	      logger.info("companyReviewId : "+param.get("companyReviewId")); 		//기업리뷰글 id
+	      logger.info("replyId : "+param.get("replyId")); 						//댓글 id	
 	      logger.info("userId : "+param.get("userId")); 						//신고자의 id(닉네임이 아님)
 	      logger.info("selectAlertReason : "+param.get("reportReasonCode"));	//신고사유 코드번호
 	      logger.info("alertType : "+param.get("alertType"));					//신고유형(1:포스트/2:기업리뷰/3:포스트댓글)
 	      logger.info("reportReasonContent : "+param.get("report_reason_content"));		//textarea의 작성내용.
 
+	      logger.info("companyReviewId :"+param.get("report_reason_content"));	
 	      
 	      // 작성의 편의 및 PostReportDto의 변수에 맞도록 정정. 
 	      int postId = Integer.parseInt(param.get("postId").toString()) ;
+	      int companyReviewId = Integer.parseInt(param.get("companyReviewId").toString()) ;
+	      int replyId = Integer.parseInt(param.get("replyId").toString())
+	    		  ;
 	      int userId = Integer.parseInt(param.get("userId").toString()) ;
 	      String reportReasonCode = param.get("reportReasonCode").toString();
-	      int alertType = Integer.parseInt(param.get("alertType").toString()) ;
+	      String alertType = param.get("alertType").toString();
 	      String reportReasonContent = param.get("report_reason_content").toString();
 	      
-	      
-	      //신고유형(v포스트)에 따라 신고를 저장할 테이블을 구분
-	      switch( alertType ) {
-	      	case 0006:	//대상 테이블(1)포스트 -> POST_REPORT_MGT에 저장
+	      switch(alertType) {
+	      	case "0006" :
 	      		logger.info("post신고로 확인, POST_REPORT_MGT에 insert시작."); 	
 	      		PostReportDto postReport = new PostReportDto();  
 	      		postReport.setPostId(postId);
@@ -83,11 +89,35 @@ public class AlertController {
 	      		
 	      		alertService.setPostReport(postReport);
 	      		break;
-	      	default: 
-	      		logger.info("정의되지 않은 신고유형입니다."); 	
+	      		
+	      	case "0008" :
+	      		logger.info("review(기업리뷰)신고로 확인, REVIEW_REPORT_MGT에 insert시작."); 	
+	      		ReviewReportDto reviewReport = new ReviewReportDto();  
+	      		reviewReport.setCompanyReviewId(companyReviewId);
+	      		reviewReport.setUserId(userId);
+	      		reviewReport.setReportReasonCode(reportReasonCode);
+	      		reviewReport.setReportReasonContent(reportReasonContent);
+	      		
+	      		alertService.setReviewReport(reviewReport);	
 	      		break;
-	      }		      
-	      return 1;
+
+	      	case "0012" :
+	    		logger.info("reply신고로 확인, REPLY_REPORT_MGT에 insert시작."); 		    	  
+	      		ReplyReportDto replyReport = new ReplyReportDto();  
+	      		replyReport.setReplyId(replyId);
+	      		replyReport.setUserId(userId);
+	      		replyReport.setReportReasonCode(reportReasonCode);
+	      		replyReport.setReportReasonContent(reportReasonContent);
+	      		
+	      		alertService.setReplyReport(replyReport);
+	      		break;
+	      	
+	      	default :
+	      		logger.info("정의되지 않은 신고유형입니다."); 
+	      		break;
+	      }
+	
+	      return 1; //여기에서는 성공했다는 의미로 ajax에게 알리기 위해 1을 리턴.
 	}
 	
 	
