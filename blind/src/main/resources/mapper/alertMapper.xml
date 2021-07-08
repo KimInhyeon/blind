@@ -21,7 +21,6 @@ INSERT INTO blind.post_report_mgt(
 	, report_reason_content
 	, verify_flag
 	, complete_flag
-	, reject_reason
 	, rec_create_user_id
 	, rec_create_date
 	, rec_update_user_id
@@ -36,7 +35,6 @@ INSERT INTO blind.post_report_mgt(
 	, #{reportReasonContent} --, report_reason_content
 	, 0 --, verify_flag :게시글 신고 승인플래그(0:미승인, 1:승인)
 	, 0 --, complete_flag 처리구분플래그(0:미처리, 1:처리)
-	, '' --, reject_reason : 승인거절 사유
 	, #{userId} --, rec_create_user_id
 	, now() --, rec_create_date
 	, #{userId} --, rec_update_user_id
@@ -56,7 +54,6 @@ INSERT INTO blind.review_report_mgt( --기업리뷰 신고접수
   , report_reason_content 	--character varying(400)
   , verify_flag 			--character(1) not null
   , complete_flag 			--character(1) not null
-  , reject_reason 			--character varying(100)
   , rec_create_user_id 		--bigint not null
   , rec_create_date 		--timestamp not null
   , rec_update_user_id 		--bigint not null
@@ -71,7 +68,6 @@ INSERT INTO blind.review_report_mgt( --기업리뷰 신고접수
 	, #{reportReasonContent} --, report_reason_content
 	, 0 --, verify_flag :게시글 신고 승인플래그(0:미승인, 1:승인)
 	, 0 --, complete_flag 처리구분플래그(0:미처리, 1:처리)
-	, '' --, reject_reason : 승인거절 사유
 	, #{userId} --, rec_create_user_id
 	, now() --, rec_create_date
 	, #{userId} --, rec_update_user_id
@@ -92,7 +88,6 @@ INSERT INTO blind.REPLY_REPORT_MGT (
   , report_reason_content 	--character varying(400)
   , verify_flag 			--character(1) not null
   , complete_flag 			--character(1) not null
-  , reject_reason 			--character varying(100)
   , rec_create_user_id 		--bigint not null
 	
   , rec_create_date 		--timestamp not null
@@ -108,7 +103,6 @@ INSERT INTO blind.REPLY_REPORT_MGT (
   , #{reportReasonContent}		--, report_reason_content character varying(400)
   ,0							--, verify_flag character(1) not null
   ,0							--, complete_flag character(1) not null
-  ,''							--, reject_reason character varying(100)
   , #{userId}					--, rec_create_user_id bigint not null
   ,now()						--, rec_create_date timestamp not null
   , #{userId}					--, rec_update_user_id bigint not null

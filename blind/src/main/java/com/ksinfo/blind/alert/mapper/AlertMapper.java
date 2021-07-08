@@ -13,9 +13,9 @@ import java.util.List;
 @Repository
 @Mapper 
 public interface AlertMapper {
-	List<ReportReasonDto> getAlertReasonList(String alertType);
+	List<ReportReasonDto> getAlertReasonList(String alertType);	//신고목록을 리턴(게시글/기업리뷰/댓글 조금씩 다름)
 
-	void setPostReport(PostReportDto postReport);    //게시글 신고등록
-	void setReviewReport(ReviewReportDto reviewReport);  //기업리뷰 신고등록
+	void setPostReport(PostReportDto postReport);    	//게시글 신고등록
+	void setReviewReport(ReviewReportDto reviewReport); //기업리뷰 신고등록
 	void setReplyReport(ReplyReportDto replyReport);    //댓글 신고등록
 }

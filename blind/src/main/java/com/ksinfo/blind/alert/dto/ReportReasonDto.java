@@ -1,29 +1,19 @@
 package com.ksinfo.blind.alert.dto;
 
 public class ReportReasonDto {
-	//관련테이블 : REPORT_REASON_MST
 
-	private int reportReasonId; 				//report_reason_id / 신고사유아이디 
-	private String  reportReasonCode;				//report_reason_code / 신고사유코드
-	private String reportReasonContents; 		//report_reason_contents / 신고사유내용
-	private char logicalDelFlag;				// logical_del_flag 논리삭제플래그(0:미삭제, 1:삭제)
-	private String reportScreenCode;											//report_screen_code :신고화면(0006포스트, 0008기업리뷰,0012 댓글)
-	
-	
-	
-	public String getReportScreenCode() {
-		return reportScreenCode;
-	}
-	public void setReportScreenCode(String reportScreenCode) {
-		this.reportScreenCode = reportScreenCode;
-	}
+    private int reportReasonId;                 
+    private String  reportReasonCode;           
+    private String reportReasonContents;        
+    private char logicalDelFlag;                
+    private String reportScreenCode;
+    
 	public int getReportReasonId() {
 		return reportReasonId;
 	}
 	public void setReportReasonId(int reportReasonId) {
 		this.reportReasonId = reportReasonId;
 	}
-
 	public String getReportReasonCode() {
 		return reportReasonCode;
 	}
@@ -42,7 +32,10 @@ public class ReportReasonDto {
 	public void setLogicalDelFlag(char logicalDelFlag) {
 		this.logicalDelFlag = logicalDelFlag;
 	}
-
-
-
+	public String getReportScreenCode() {
+		return reportScreenCode;
+	}
+	public void setReportScreenCode(String reportScreenCode) {
+		this.reportScreenCode = reportScreenCode;
+	}            
 }
