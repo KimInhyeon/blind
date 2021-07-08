@@ -43,10 +43,6 @@
 			   padding: 0;
 			}
 			
-			body {
-			   padding: 2rem;
-			}
-			
 			.tit {
 			   padding: 6px 0 8px;
 			   font-size: 150%;
@@ -199,12 +195,12 @@
    <!-- 검색창 -->
    <div class="inputSearchKeyword">    
    		<form>
-        <div class="ui fluid massive left icon input">
-				  <input type="text" placeholder="Search"
+        <div class="ui fluid massive left icon input" >
+				  <input type="text" placeholder="Search" style="border-radius : 50px"
 					     name="searchKeyword" value=${pastSearchKeyword}> 
-	    		<i class="search icon"></i>
+	    		<i class="search icon" ></i>
 	  			<div class="results"></div>
-			</div>
+		</div>
    		</form>
    </div>
 
