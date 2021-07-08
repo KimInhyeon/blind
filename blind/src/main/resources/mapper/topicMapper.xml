@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.topicMain.mapper.TopicMapper">
+	<select id="getTopicMainList"
+		resultType="com.ksinfo.blind.topicMain.dto.TopicMainDto">
+		SELECT
+		board_id,
+		board_topic_name,
+		board_order,
+		closed_flag,
+		anonymous_flag,
+		TO_CHAR(board_create_date,'YYYY-MM-DD')AS
+		board_create_date,
+		TO_CHAR(board_update_date,'YYYY-MM-DD')AS
+		board_update_date
+		FROM blind.board_mgt;
+	</select>
+
+	<select id="getPostListBySearchKeyword"
+		resultType="com.ksinfo.blind.topicMain.dto.PostDto"
+		parameterType="String">
+		SELECT
+		post.post_id,
+		post.user_id,
+		post.post_title,
+		post.post_blind_flag,
+		post.post_contents,
+		TO_CHAR(post.post_create_date,'YYYY-MM-DD') AS
+		post_create_date,
+		TO_CHAR(post.post_update_date,'YYYY-MM-DD') AS
+		post_update_date,
+		board.board_topic_name,
+		post_count_inf.post_count,
+		company_name
+		FROM blind.post_mgt post
+		INNER
+		JOIN blind.board_mgt board
+		ON post.board_id = board.board_id
+		JOIN blind.post_count_inf
+		ON post.post_id = post_count_inf.post_id
+		JOIN blind.company_mgt company
+		ON post.user_id = company.user_id
+		<if test="searchKeyword neq '-1'">
+			where board.board_id = cast(#{searchKeyword} AS integer)
+		</if>
+		ORDER BY post.post_update_date
+		fetch first 30 rows only;
+		<!-- SELECT post_id, user_id, post_title, post_blind_flag, post_contents, 
+			TO_CHAR(post_create_date,'YYYY-MM-DD')AS post_create_date, TO_CHAR(post_update_date,'YYYY-MM-DD')AS 
+			post_update_date, post_password FROM blind.post_mgt INNER JOIN blind.board_mgt 
+			where board_id = cast(#{searchKeyword} AS Integer); -->
+
+	</select>
+
+
+</mapper>

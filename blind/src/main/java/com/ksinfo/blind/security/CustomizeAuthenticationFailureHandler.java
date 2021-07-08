@@ -33,8 +33,6 @@ public class CustomizeAuthenticationFailureHandler implements AuthenticationFail
        }
        
        req.setAttribute("errorMsg", errorMsg);
-       
-       System.out.println(errorMsg);
        req.getRequestDispatcher("/loginError").forward(req, res);
 	}
 
