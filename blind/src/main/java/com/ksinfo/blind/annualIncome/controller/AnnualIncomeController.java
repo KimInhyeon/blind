@@ -9,9 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ksinfo.blind.annualIncome.dto.companyDto;
-import com.ksinfo.blind.annualIncome.dto.jobGroupDto;
-import com.ksinfo.blind.annualIncome.dto.annualIncomeByJobGroupDto;
+import com.ksinfo.blind.annualIncome.dto.CompanyDto;
+import com.ksinfo.blind.annualIncome.dto.JobGroupDto;
+import com.ksinfo.blind.annualIncome.dto.AnnualIncomeByJobGroupDto;
 import com.ksinfo.blind.annualIncome.service.AnnualIncomeService;
 
 
@@ -30,12 +30,12 @@ public class AnnualIncomeController {
 		selectCompany = "トヨタ自動車株式会社"; //여기서는 도요타 자동차에서 하는 것으로 전제하고 진행함.
 
 		//본코드
-		List<companyDto> companyProfile = annualIncomeService.getCompanyProfile(selectCompany);
+		List<CompanyDto> companyProfile = annualIncomeService.getCompanyProfile(selectCompany);
 		//기업프로필 수신. searchService.getSearchCompany(searchKeyword);를 활용.
 		//지금은 기업이름(String)으로 하고있지만 기업Id(int)로 하는것이 나은지 논의 필요.
 		
-		List<jobGroupDto> jobGroupList = annualIncomeService.getJobGroupList();
-		List<annualIncomeByJobGroupDto> annualIncomeData =annualIncomeService.getAnnualIncomeData(companyProfile.get(0).getCompanyId(),"-1"); //-1 : 전체직군 선택시 값.
+		List<JobGroupDto> jobGroupList = annualIncomeService.getJobGroupList();
+		List<AnnualIncomeByJobGroupDto> annualIncomeData =annualIncomeService.getAnnualIncomeData(companyProfile.get(0).getCompanyId(),"-1"); //-1 : 전체직군 선택시 값.
 		
 		mav.addObject("companyProfile",companyProfile);
 		mav.addObject("jobGroupList",jobGroupList);

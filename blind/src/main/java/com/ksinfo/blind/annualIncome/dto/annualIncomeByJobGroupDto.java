@@ -1,6 +1,6 @@
 package com.ksinfo.blind.annualIncome.dto;
 
-public class annualIncomeByJobGroupDto {
+public class AnnualIncomeByJobGroupDto {
 	private int minAnnualIncome;	//직군별 최저임금
 	private int avgAnnualIncome;	//직군별 평균임금
 	private int maxAnnualIncome;	//직군별 최대임금

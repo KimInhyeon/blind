@@ -1,6 +1,6 @@
 package com.ksinfo.blind.annualIncome.dto;
 
-public class companyDto {
+public class CompanyDto {
 	//4.COMPANY_MGT
 	private int companyId;		//company_id bigint GENERATED ALWAYS AS IDENTITY
 	private int userId;			//user_id bigint not null						

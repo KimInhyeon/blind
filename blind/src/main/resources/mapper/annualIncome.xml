@@ -3,7 +3,7 @@
 <mapper namespace="com.ksinfo.blind.annualIncome.mapper.AnnualIncomeMapper">
 <!-- 1.회사관련 xml -->
 <!-- 1.1.회사의 프로필 정보 수신 -->
-<select id="getCompanyProfile" parameterType="String" resultType="com.ksinfo.blind.annualIncome.dto.companyDto"> 
+<select id="getCompanyProfile" parameterType="String" resultType="com.ksinfo.blind.annualIncome.dto.CompanyDto"> 
 SELECT 
     company_id
     ,company_name
@@ -13,7 +13,7 @@ FROM blind.company_mgt
 </select>
 
 <!-- 직군들 리턴 -->
-<select id="getJobGroupList" resultType="com.ksinfo.blind.annualIncome.dto.jobGroupDto"> 
+<select id="getJobGroupList" resultType="com.ksinfo.blind.annualIncome.dto.JobGroupDto"> 
 select 
 	job_group_code
 	, job_group_name
@@ -23,7 +23,7 @@ order by job_group_code ASC;
 
 
 <!-- 선택한 직군에 대한 연봉정보리턴(최소/평균/최대) -->
-<select id="getAnnualIncomeData" parameterType="java.util.Map" resultType="com.ksinfo.blind.annualIncome.dto.annualIncomeByJobGroupDto"> 
+<select id="getAnnualIncomeData" parameterType="java.util.Map" resultType="com.ksinfo.blind.annualIncome.dto.AnnualIncomeByJobGroupDto"> 
 --blind_0018_22번-기능2.select box에 나오는 직군을 선택시 해당직군의 정보
 select min("blind".salary_rank_mgt.salary) as "minAnnualIncome"         	 --blind_0018_24번(최소임금 출력)
    	,round(avg("blind".salary_rank_mgt.salary),0) as "avgAnnualIncome" --blind_0018_25번(평균임금 출력. 소수점은 출력않도록 설정)

@@ -1,6 +1,6 @@
 package com.ksinfo.blind.annualIncome.dto;
 
-public class jobGroupDto {
+public class JobGroupDto {
 	//"blind".JOB_GROUP_MST(직군마스터 테이블)
 	private int jobGroupId; 		//job_group_id bigint GENERATED ALWAYS AS IDENTITY
 	private String jobGroupCode;	//, job_group_code character(2) not null
