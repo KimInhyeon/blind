@@ -4,11 +4,41 @@
 
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
+<head>
     <meta charset="UTF-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Insert title here</title>
+	
+	<script>	
+	$(function(){
+		//1개의 직군을 선택하면 선택한 직군에 따라 연봉값들을 리턴.
+		$("#selectGroupList").on('change', function(){	
+			var companyId = ${companyProfile[0].companyId};
+			alert("companyId : "+companyId);
+			var jobGroupCode= $("#selectGroupList option:selected").val();
+			alert("jobGroupCode:"+jobGroupCode);
+			
+	    	$.ajax({
+				type:"POST",
+			    url: "viewAnnualIncomeBySelectedJobGroupCode",
+				data : { companyId      //기업id(기업구분용)
+						 ,jobGroupCode 	//-1:전체직군. -1이외는 선택된 직군코드에 대한 직군연봉만 출력.
+				 	   },
+				dataType:"json",
+				success: function(result){
+					alert("success");
+				},
+			    error:function(request,status,error){
+		   	    	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+					//출처: https://shonm.tistory.com/454 [정윤재의 정리노트]
+				}				
+			});
+		}); 	
+	}); 	
+	</script>	
+
 </head>
+
 <body>
 	<div>
 		<div> <h3>${companyProfile[0].companyName}</h3>の給料情報 </div>
@@ -17,7 +47,7 @@
 
 		<!-- 직군별 연봉정보 출력 탭 -->
 		<div>
-			<!-- selectBox : 직군들 출력 및 택1가능.-->
+			<!-- 직군들 출력 및 택1가능. -->
 			<select id="selectGroupList" style="width:50%;height:25px;">
 				<option value="-1">職群全体</option> <!-- 전체는 무조건 사용되므로 무조건 적용. -->
 				<c:forEach items="${jobGroupList}" var="menuData">

@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ksinfo.blind.annualIncome.dto.CompanyDto;
@@ -22,6 +24,17 @@ public class AnnualIncomeController {
 	private static final Logger logger = LoggerFactory.getLogger(AnnualIncomeController.class);
 
 	@Autowired 	AnnualIncomeService annualIncomeService; 
+
+	@RequestMapping(value = "/annual_income/viewAnnualIncomeBySelectedJobGroupCode", method = RequestMethod.POST, produces="application/json")
+	@ResponseBody 	
+	public List<AnnualIncomeByJobGroupDto> viewAnnualIncomeBySelectedJobGroupCode(int companyId, String jobGroupCode) {
+		logger.info("viewAnnualIncomeBySelectedJobGroupCode start");
+		List<AnnualIncomeByJobGroupDto> annualIncomeData = annualIncomeService.getAnnualIncomeData(companyId,jobGroupCode); 
+		return annualIncomeData;
+	}
+	
+	
+	
 	
 	@RequestMapping("/annual_income/annual_income")
 	public ModelAndView annualIncome(String selectCompany, ModelAndView mav) {
@@ -44,5 +57,7 @@ public class AnnualIncomeController {
 		mav.setViewName("main/annual_income/annual_income");
 		return mav;
 	}
+	
+	
 
 }
