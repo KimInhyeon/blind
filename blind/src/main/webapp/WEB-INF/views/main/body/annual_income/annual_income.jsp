@@ -26,7 +26,26 @@
 				 	   },
 				dataType:"json",
 				success: function(result){
-					alert("success");
+					
+					//초기화
+					$(annual_income_table).html("");
+					//리턴받은 해당 직군의 값으로 재구성
+					$(annual_income_table).append("<table class='ui celled table'>"
+											+"<thead>"
+												+"<tr>"								
+													+"<th>type</th>"
+													+"<th>中央値給料</th>"
+													+"<th>範囲</th>"
+												+"</tr>"
+											+"</thead>"
+											+"<tbody>" 											
+							    				+"<tr>"
+													+"<td> 契約給料 </td>"
+										    		+"<td>" + result[0].avgAnnualIncome + "</td>"
+										   	 		+"<td>" + result[0].minAnnualIncome + "~" + result[0].maxAnnualIncome + "</td>"
+										   	 	+"</tr>"
+									 		+"</tbody>"
+										+"</table>");		 
 				},
 			    error:function(request,status,error){
 		   	    	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -63,7 +82,7 @@
 					<div style="float:left; margin:10px;"> 最大値給料  ${ annualIncomeData[0].maxAnnualIncome } </div>
 				</div>			
 				<!-- 연봉정보 표 -->
-				<div>					
+				<div id="annual_income_table">					
 					<table class="ui celled table">
 						<thead>
 		    				<tr>

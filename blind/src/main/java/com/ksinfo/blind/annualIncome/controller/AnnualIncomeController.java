@@ -29,7 +29,11 @@ public class AnnualIncomeController {
 	@ResponseBody 	
 	public List<AnnualIncomeByJobGroupDto> viewAnnualIncomeBySelectedJobGroupCode(int companyId, String jobGroupCode) {
 		logger.info("viewAnnualIncomeBySelectedJobGroupCode start");
+		logger.info("companyId :"+companyId);
+		logger.info("jobGroupCode :"+jobGroupCode);
 		List<AnnualIncomeByJobGroupDto> annualIncomeData = annualIncomeService.getAnnualIncomeData(companyId,jobGroupCode); 
+
+		logger.info("viewAnnualIncomeBySelectedJobGroupCode end");
 		return annualIncomeData;
 	}
 	
