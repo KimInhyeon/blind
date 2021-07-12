@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.annualIncome.mapper.AnnualIncomeMapper">
+<!-- 1.회사관련 xml -->
+<!-- 1.1.회사의 프로필 정보 수신 -->
+<select id="getCompanyProfile" parameterType="String" resultType="com.ksinfo.blind.annualIncome.dto.CompanyDto"> 
+    SELECT 
+    company_id
+    ,company_name
+    ,company_address
+     FROM blind.company_mgt	
+    where company_name= #{selectCompany};
+</select>
+
+
+
+
+</mapper>
