@@ -130,7 +130,7 @@
 		<!-- 직군별 연봉정보 출력 탭 -->
 		<div style="margin-top:2%; float:left;">
 			<!-- 직군들 출력 및 택1가능. -->
-			<select class="ui search dropdown" id="selectGroupList" style="width:489px; margin-left:2%;">
+			<select class="ui dropdown" id="selectGroupList" style="width:489px; margin-left:2%;">
 				<option value="-1">職群全体</option> <!-- 전체는 무조건 사용되므로 무조건 적용. -->
 				
 				<!-- 아래의 c:forEach 반복문에서 DB에서 로드한 직군들을 출력. -->
