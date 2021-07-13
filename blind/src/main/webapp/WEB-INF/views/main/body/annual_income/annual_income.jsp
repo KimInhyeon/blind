@@ -20,7 +20,7 @@
 	#container {
 	    position:relative;
 	    width:489px;
-	    height:120px;
+	    height:110px;
 		background:#555566; 
 	}
 	#container div {
@@ -128,16 +128,22 @@
 		</div>
 		
 		<!-- 직군별 연봉정보 출력 탭 -->
-		<div>
+		<div style="margin-top:2%; float:left;">
 			<!-- 직군들 출력 및 택1가능. -->
-			<select class="ui search dropdown" id="selectGroupList">
+			<select class="ui search dropdown" id="selectGroupList" style="width:489px; margin-left:2%;">
 				<option value="-1">職群全体</option> <!-- 전체는 무조건 사용되므로 무조건 적용. -->
 				
 				<!-- 아래의 c:forEach 반복문에서 DB에서 로드한 직군들을 출력. -->
 				<!-- 입력연봉값이 1개라도 없는 경우에는 비활성화처리하여 클릭되지 않도록 -->
 				<c:forEach items="${jobGroupList}" var="menuData">
-					<option value="${menuData.jobGroupCode}"> ${menuData.jobGroupName} </option>
-
+				<c:choose>
+					<c:when test="${menuData.disableFlag eq '1' }">
+						<option value="${menuData.jobGroupCode}"> ${menuData.jobGroupName} </option>
+					</c:when>
+					<c:otherwise>
+						<option value="${menuData.jobGroupCode}" disabled> ${menuData.jobGroupName} &lt; Coming Soon &gt;</option>
+					</c:otherwise>
+				</c:choose>
 				</c:forEach>
 			</select>	
 			

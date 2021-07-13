@@ -51,8 +51,33 @@ public class AnnualIncomeController {
 		//기업프로필 수신. searchService.getSearchCompany(searchKeyword);를 활용.
 		//지금은 기업이름(String)으로 하고있지만 기업Id(int)로 하는것이 나은지 논의 필요.
 		
+		//등록되어있는 직군이름들을 로드.
 		List<JobGroupDto> jobGroupList = annualIncomeService.getJobGroupList();
-		List<AnnualIncomeByJobGroupDto> annualIncomeData =annualIncomeService.getAnnualIncomeData(companyProfile.get(0).getCompanyId(),"-1"); //-1 : 전체직군 선택시 값.
+		
+		//선택한 기업의 모든 직군의 연봉(최대/최소/중앙)정보를 로드. JobGroupDto의 disableFlag 설정하고자 select
+		List<AnnualIncomeByJobGroupDto> annualIncomeAllJobGroup
+			= annualIncomeService.getAnnualIncomeAllJobGroup(companyProfile.get(0).getCompanyId());
+
+		
+		//0(char형)으로 flag 초기화 실시.
+		for(int i=0; i<jobGroupList.size();i++){ //모든 직군들을 확인.
+			jobGroupList.get(i).setDisableFlag('0');
+		}
+		
+		
+		for(int i=0; i<jobGroupList.size();i++){ //모든 직군들을 확인.
+			for(int j=0; j<annualIncomeAllJobGroup.size();j++){
+				if(jobGroupList.get(i).getJobGroupCode().equals(annualIncomeAllJobGroup.get(j).getJobGroupCode()) ){
+					jobGroupList.get(i).setDisableFlag('1');
+					break;
+				}
+			}	
+		}
+		
+		
+		//선택한 기업의 전체직군의  연봉(최대/최소/중앙)정보를 로드. JobGroupDto의 disableFlag 설정하고자 select
+		List<AnnualIncomeByJobGroupDto> annualIncomeData 
+			= annualIncomeService.getAnnualIncomeData(companyProfile.get(0).getCompanyId(),"-1"); //-1 : 전체직군 선택시 값.
 		
 		mav.addObject("companyProfile",companyProfile);
 		mav.addObject("jobGroupList",jobGroupList);

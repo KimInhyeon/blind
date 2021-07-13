@@ -15,4 +15,5 @@ public interface AnnualIncomeMapper {
 	List<CompanyDto> getCompanyProfile(String selectCompany);
 	List<JobGroupDto> getJobGroupList();		
 	List<AnnualIncomeByJobGroupDto> getAnnualIncomeData(java.util.Map<String, Object> paramMap);
-}
+	List<AnnualIncomeByJobGroupDto> getAnnualIncomeAllJobGroup(int companyId);
+} 

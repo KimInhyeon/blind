@@ -35,5 +35,7 @@ public class AnnualIncomeService {
 		return mapper.getAnnualIncomeData(paramMap);		
 	}
 	
-	
+	public 	List<AnnualIncomeByJobGroupDto> getAnnualIncomeAllJobGroup(int companyId){
+		return mapper.getAnnualIncomeAllJobGroup(companyId);			
+	}
 }
