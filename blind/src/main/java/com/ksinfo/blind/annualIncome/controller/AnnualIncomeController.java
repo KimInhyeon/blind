@@ -44,7 +44,7 @@ public class AnnualIncomeController {
 	public ModelAndView annualIncome(String selectCompany, ModelAndView mav) {
 		
 		//임시코드(테스트를 위해 임시 설정)
-		selectCompany = "トヨタ自動車株式会社"; //여기서는 도요타 자동차에서 하는 것으로 전제하고 진행함.
+		selectCompany = "トヨタ自動車株式会社"; //여기서는 유저가 도요타 자동차 프로필에서 연봉탭으로 이동하는 것으로 전제하고 진행함.
 
 		//본코드
 		List<CompanyDto> companyProfile = annualIncomeService.getCompanyProfile(selectCompany);
