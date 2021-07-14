@@ -10,35 +10,41 @@
 	<title>Insert title here</title>
 	
 	<style>
-	#income_table{
-	    width:489px;
+	
+	#income_table{  /*연봉차트 밑의 연봉 테이블*/
+	    width:489px; 
 	    margin-top:2%;
 		clear: both;	
 	}
 	
-	#container {
+	
+	#annual_income_graph_wrap {
 	    position:relative;
-	    width:489px;
-	    height:110px;
-		background:#555566; 
+	    width:500px;
+	    height:60px;
 	}
-	#container div {
-	    width:200px;
+
+	
+	#annual_income_graph_bar {
+	    width:500px;
+	    text-align : center;
 	}
-	#left {
+	
+	#annual_income_graph_min {
+	    width:70px;			/* 텍스트 구간설정 */
 	    position:absolute;
-	    left:0%;
-	    bottom:0px;
+	    left:2%;			/* 텍스트 배치위치 조정*/
 	}
-	#center {
+	#annual_income_graph_median {
+	    width:70px;			/* 텍스트 구간설정 */
 	    position:absolute;
-	    left:45%;
-	    bottom:0px;
+	    left:47%;			/* 텍스트 배치위치 조정*/
 	}
-	#right {
+	#annual_income_graph_max {
+	    width:70px;			/* 텍스트 구간설정 */
 	    position:absolute;
-	    left:90%;
-	    bottom:0px;
+	    left:88%;			/* 텍스트 배치위치 조정*/
+	    text-align:right;	/*오른쪽 들여쓰기적용*/    
 	}
 	</style>
 
@@ -47,9 +53,9 @@
 		//1개의 직군을 선택하면 선택한 직군에 따라 연봉값들을 리턴.
 		$("#selectGroupList").on('change', function(){	
 			var companyId = ${companyProfile[0].companyId};
-			alert("companyId : "+companyId);
+			//alert("companyId : "+companyId);
 			var jobGroupCode= $("#selectGroupList option:selected").val();
-			alert("jobGroupCode:"+jobGroupCode);
+			//alert("jobGroupCode:"+jobGroupCode);
 			
 	    	$.ajax({
 				type:"POST",
@@ -60,18 +66,19 @@
 				dataType:"json",
 				success: function(result){
 
-					//1.그래프 밑의 연봉정보(annual_income_graph) 업데이트
-					$(annual_income_graph).html("");//초기화
+					//1.그래프 밑의 연봉정보(annual_income_graph_undertext) 업데이트
+					$(annual_income_graph_undertext).html("");//초기화
 					//리턴받은 해당 직군의 값으로 재구성
-					$(annual_income_graph).append("<div id='left'>"
+					//css style을 각 div마다 직접기입.(초기의 css가 적용되지 않음)
+					$(annual_income_graph_undertext).append("<div id='annual_income_graph_min' style='width:70px; position:absolute; left:2%;'>"
 														+"最小" 
 														+"<div>" + result[0].minAnnualIncome + "万円</div>" 
 							    					+"</div>"
-							    					+"<div id='center'>"
+							    					+"<div id='annual_income_graph_median' style='width:70px; position:absolute; left:47%;'>"
 														+"中央"  
 														+"<div>" + result[0].avgAnnualIncome + "万円</div>"
 							    					+"</div>"
-							    					+"<div id='right'>"
+							    					+"<div id='annual_income_graph_max' style='width:70px; position:absolute; left:84%; text-align:right; '>"
 														+"最大"  
 														+"<div>" + result[0].maxAnnualIncome +"万円</div>"
 								    				+"</div>");
@@ -83,24 +90,26 @@
 					$(annual_income_table).append("<table class='ui celled table'  id='income_table'>"
 											+"<thead>"
 												+"<tr>"								
-													+"<th>type</th>"
+													+"<th>報償</th>"
 													+"<th>中央値給料</th>"
 													+"<th>範囲</th>"
 												+"</tr>"
 											+"</thead>"
 											+"<tbody>" 											
 							    				+"<tr>"
-													+"<td> 契約給料 </td>"
-										    		+"<td>" + result[0].avgAnnualIncome + "</td>"
-										   	 		+"<td>" + result[0].minAnnualIncome + "~" + result[0].maxAnnualIncome + "</td>"
+													+"<td> 給料 </td>"
+										    		+"<td>" + result[0].avgAnnualIncome +" 万円" + "</td>"
+										   	 		+"<td>" + result[0].minAnnualIncome +" 万円" + " ~ " + result[0].maxAnnualIncome + " 万円" + "</td>"
 										   	 	+"</tr>"
 									 		+"</tbody>"
 										+"</table>");		 
 				},
 			    error:function(request,status,error){
-			    	//에러를 파악하기 위한 코드 기입.
-		   	    	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-					//출처: https://shonm.tistory.com/454 [정윤재의 정리노트]
+		   	    	alert("システムエラーです。管理者にお問い合わせください。");
+			    	
+			    	//에러내용출력 코드.
+		   	    	//alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			    	
 				}				
 			});
 		}); 	
@@ -111,7 +120,7 @@
 
 <body>
 	<div style="margin:3%;"> <!-- 전체적 공통 여백 적용 -->
-		<div style="margin-top:1.3%;"> <!-- 시작부분과  -->
+		<div style="margin-top:1.3%;">
 			<div> 
 				<span style = " font-size:1.5em; ">
 					${companyProfile[0].companyName}
@@ -149,38 +158,39 @@
 			<!-- 연봉정보가 나오는 영역 -->
 			<div style="margin:2%;"> 
 				<!--  그라데이션 bar 및 연봉정보 -->
-				<div>
-					<div id="container">
-						<img src="${pageContext.request.contextPath}/resources/images/annual_income_image.jpg"/>
-	    				<div id="annual_income_graph">	
-		    				<div id="left">
+				<div id="annual_income_graph_wrap">
+						<div id="annual_income_graph_bar">
+							<img src="${pageContext.request.contextPath}/resources/images/annual_income_image.png"
+							style="margin-left: auto; margin-right: auto;"/>
+						</div>
+	    				<div id="annual_income_graph_undertext">	
+		    				<div id="annual_income_graph_min">
 								最小  
 								<div>${ annualIncomeData[0].minAnnualIncome }万円</div> 
 		    				</div>
-		    				<div id="center">
+		    				<div id="annual_income_graph_median">
 								中央  
 								<div>${ annualIncomeData[0].avgAnnualIncome }万円</div>
 		    				</div>
-		    				<div id="right">
+		    				<div id="annual_income_graph_max" style="margin-left:-20px;">
 								最大  
 								<div>${ annualIncomeData[0].maxAnnualIncome }万円</div>
 		    				</div>    
 	    				</div>
-					</div>
 				</div>			
 					<!-- 연봉정보 표 -->
 					<div id="annual_income_table">					
 						<table class="ui celled table" id="income_table">
 							<thead>
 			    				<tr>
-			    					<th>type</th>
+			    					<th>報償	</th>
 						    		<th>中央値給料</th>
 							    	<th>範囲</th>
 							  	</tr>
 							 </thead>
 							 <tbody>
 				    			<tr>
-									<td> 契約給料 </td>
+									<td> 給料 </td>
 								    <td> ${ annualIncomeData[0].avgAnnualIncome } 万円 </td>
 								    <td> ${ annualIncomeData[0].minAnnualIncome } 万円 ~ ${ annualIncomeData[0].maxAnnualIncome } 万円</td>
 								</tr>

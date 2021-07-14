@@ -17,8 +17,8 @@ public class AnnualIncomeService {
 	@Autowired
 	public AnnualIncomeMapper mapper;
 	
-	public List<CompanyDto> getCompanyProfile(String selectCompany){
-		return mapper.getCompanyProfile(selectCompany);
+	public List<CompanyDto> getCompanyProfile(int selectCompanyId){
+		return mapper.getCompanyProfile(selectCompanyId);
 	}
 
 	public List<JobGroupDto> getJobGroupList(){
@@ -35,7 +35,7 @@ public class AnnualIncomeService {
 		return mapper.getAnnualIncomeData(paramMap);		
 	}
 	
-	public 	List<AnnualIncomeByJobGroupDto> getAnnualIncomeAllJobGroup(int companyId){
-		return mapper.getAnnualIncomeAllJobGroup(companyId);			
+	public 	List<JobGroupDto> getJobGroupInCompany(int companyId){
+		return mapper.getJobGroupInCompany(companyId);			
 	}
 }

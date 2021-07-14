@@ -12,8 +12,9 @@ import com.ksinfo.blind.annualIncome.dto.AnnualIncomeByJobGroupDto;
 @Repository
 @Mapper
 public interface AnnualIncomeMapper {
-	List<CompanyDto> getCompanyProfile(String selectCompany);
-	List<JobGroupDto> getJobGroupList();		
+	List<CompanyDto> getCompanyProfile(int selectCompanyId);
 	List<AnnualIncomeByJobGroupDto> getAnnualIncomeData(java.util.Map<String, Object> paramMap);
-	List<AnnualIncomeByJobGroupDto> getAnnualIncomeAllJobGroup(int companyId);
+
+	List<JobGroupDto> getJobGroupList();		
+	List<JobGroupDto> getJobGroupInCompany(int companyId);
 } 
