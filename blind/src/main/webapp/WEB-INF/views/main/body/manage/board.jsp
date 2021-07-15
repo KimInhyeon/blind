@@ -79,7 +79,7 @@
 							<select class="ui compact selection dropdown fluid" onchange="getBoardList()">
 								<option value="2">全部</option>
 								<option value="0">一般</option>
-								<option value="1">匿名</option>
+								<option value="1">マスキング</option>
 							</select>
 						</th>
 						<th>トピック名</th>
@@ -173,7 +173,6 @@
 	</div>
 </div>
 </div>
-</body>
 <script>
 	let lastOrder;
 
@@ -332,13 +331,26 @@
 	}
 
 	function checkBoardInfo(order, topicName, closedFlag) {
-		if (order.value.length < 1) {
+		let newOrder = order.value.trim();
+		if (newOrder.length < 1) {
 			alert("順位を入力してください");
 			order.focus();
 			return false;
+		} else {
+			newOrder = Number(newOrder);
+			if (newOrder < 1 || newOrder >  Number(document.getElementById("order").getAttribute("max"))) {
+				alert("正しい順位を入力してください");
+				order.focus();
+				return false;
+			}
 		}
-		if (topicName.value.length < 1) {
+		const newTopicNameLength = topicName.value.trim().length;
+		if (newTopicNameLength < 1) {
 			alert("トピック名を入力してください");
+			topicName.focus();
+			return false;
+		} else if (newTopicNameLength > 30) {
+			alert("トピック名は30文字以下にしてください");
 			topicName.focus();
 			return false;
 		}
@@ -480,10 +492,10 @@
 						}
 					}
 					history.replaceState(tbody.innerHTML, "");
-					alert("生成に成功しました");
+					alert("更新に成功しました");
 					$("#boardInfo").modal("hide");
 				} else if (result > -1) {
-					alert("生成に失敗しました");
+					alert("更新に失敗しました");
 				}
 			});
 		}
@@ -562,6 +574,7 @@
 				}
 			}).then(function (response) {
 				if (response.ok) {
+					response.redirect()
 					return response.json();
 				} else {
 					throw response.status;
@@ -600,4 +613,5 @@
 		};
 	};
 </script>
+</body>
 </html>

@@ -5,8 +5,7 @@
 		SELECT COUNT(*)
 		FROM blind.company_mgt AS co
 		<if test="searchTarget eq 'businessTypeName'">
-			INNER JOIN blind.business_type_mst AS bu
-				ON co.business_type_code = bu.business_type_code
+			INNER JOIN blind.business_type_mst USING(business_type_code)
 		</if>
 		WHERE co.logical_del_flag = '0'
 		<if test="verifyFlag neq '3'">
@@ -33,7 +32,7 @@
 			verify_flag AS verifyFlag,
 			closing_flag AS closingFlag,
 			company_name AS companyName,
-			co.business_type_code AS businessTypeCode,
+			business_type_code AS businessTypeCode,
 			company_address AS companyAddress,
 			TO_CHAR(founding_date, 'YYYY-MM-DD') AS foundingDate,
 			workers_count AS workersCount,
@@ -43,11 +42,9 @@
 			user_nickName AS userNickName,
 			TO_CHAR(app_date, 'YYYY-MM-DD') AS appDate
 		FROM blind.company_mgt AS co
-			INNER JOIN blind.user_mgt AS us
-				ON co.user_id = us.user_id
+			INNER JOIN blind.user_mgt USING(user_id)
 		<if test="searchTarget eq 'businessTypeName'">
-			INNER JOIN blind.business_type_mst
-				ON co.business_type_code = business_type_mst.business_type_code
+			INNER JOIN blind.business_type_mst USING(business_type_code)
 		</if>
 		WHERE co.logical_del_flag = '0'
 		<if test="verifyFlag neq '3'">
@@ -66,7 +63,10 @@
 			</choose>
 			) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 		</if>
-		ORDER BY companyId;
+		ORDER BY companyId
+		<if test="verifyFlag neq '0'">
+			DESC
+		</if>;
 	</select>
 
 	<select id="getBusinessTypeList" resultType="com.ksinfo.blind.manage.vo.BusinessTypeVO">
@@ -79,33 +79,20 @@
 	</select>
 
 	<insert id="applyCompany" parameterType="com.ksinfo.blind.manage.dto.CompanyDto">
-		INSERT INTO blind.company_mgt
-		VALUES (
-			DEFAULT,
-			#{userId},
-			#{companyName},
-			#{businessTypeCode},
-			#{companyAddress},
-			#{foundingDate},
-			#{workersCount},
-			now(),
-			#{companyDomain},
-			#{companyHomepage},
-			#{companyExplain},
-			#{verifyFlag},
-			#{closingFlag},
-			#{userId},
-			now(),
-			#{userId},
-			now(),
-			'0'
+		INSERT INTO blind.company_mgt (
+			user_id, company_name, business_type_code, company_address, founding_date, workers_count,
+			app_date, company_domain, company_homepage, company_explain, verify_flag, closing_flag,
+			rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			#{userId}, #{companyName}, #{businessTypeCode}, #{companyAddress}, #{foundingDate}, #{workersCount},
+			NOW(), #{companyDomain}, #{companyHomepage}, #{companyExplain}, #{verifyFlag}, #{closingFlag},
+			#{userId}, NOW(), #{userId}, NOW(), '0'
 		);
 	</insert>
 
 	<update id="updateCompany" parameterType="com.ksinfo.blind.manage.dto.CompanyDto">
 		UPDATE blind.company_mgt
-		SET
-			company_name = #{companyName},
+		SET	company_name = #{companyName},
 			business_type_code = #{businessTypeCode},
 			company_address = #{companyAddress},
 			founding_date = #{foundingDate},
@@ -115,17 +102,19 @@
 			company_explain = #{companyExplain},
 			closing_flag = #{closingFlag},
 			rec_update_user_id = #{userId},
-			rec_update_date = now()
+			rec_update_date = NOW()
 		WHERE company_id = #{companyId}
 			AND logical_del_flag = '0';
 	</update>
 
 	<update id="verifyCompany" parameterType="com.ksinfo.blind.manage.dto.CompanyVerifyDto">
 		UPDATE blind.company_mgt
-		SET
-			verify_flag = #{verifyFlag},
+		SET	verify_flag = #{verifyFlag},
+		<if test="reason neq null">
+			reject_reason = #{reason},
+		</if>
 			rec_update_user_id = #{userId},
-			rec_update_date = now()
+			rec_update_date = NOW()
 		WHERE logical_del_flag = '0'
 			AND company_id IN
 			<foreach collection="companyIdList" item="companyId" open="(" close=")" separator=",">
