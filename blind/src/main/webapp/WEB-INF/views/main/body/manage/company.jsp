@@ -226,7 +226,6 @@
 		<div class="actions"><button class="ui primary button" onclick="rejectCompanyList()">却下</button></div>
 	</div>
 </div>
-</body>
 <script>
 	const companyList = [];
 	<c:forEach var="company" items="${companyList}">
@@ -799,4 +798,5 @@
 		});
 	};
 </script>
+</body>
 </html>

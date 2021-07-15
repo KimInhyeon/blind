@@ -26,29 +26,22 @@ CREATE FUNCTION blind.create_board(
 ) RETURNS BIGINT AS $$
 	DECLARE
 		new_board_id BIGINT;
-		now TIMESTAMP := now();
+		now TIMESTAMP := NOW();
 	BEGIN
-		INSERT INTO blind.board_mgt VALUES (
-			DEFAULT,
-			new_name,
-			new_order,
-			'0',
-			new_flag,
-			now,
-			now,
-			user_id,
-			now,
-			user_id,
-			now,
-			'0'
-		) RETURNING board_id INTO new_board_id;
 		UPDATE blind.board_mgt
 		SET	board_order = board_order + 1,
 			board_update_date = now,
 			rec_update_user_id = user_id,
 			rec_update_date = now
 		WHERE board_order >= new_order
-			AND closed_flag = '0' AND board_id <> new_board_id AND logical_del_flag = '0';
+			AND closed_flag = '0' AND logical_del_flag = '0';
+		INSERT INTO blind.board_mgt (
+			board_topic_name, board_order, closed_flag, anonymous_flag, board_create_date, board_update_date,
+			rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			new_name, new_order, '0', new_flag, now, now,
+			user_id, now, user_id, now, '0'
+		) RETURNING board_id INTO new_board_id;
 		RETURN new_board_id;
 	END;
 $$ LANGUAGE plpgsql;
@@ -60,12 +53,11 @@ $$ LANGUAGE plpgsql;
 	</select>
 <!--
 CREATE PROCEDURE blind.update_board(
-	origin_id BIGINT, new_name VARCHAR(30), new_order INTEGER,
-	new_closed CHAR(1), new_anonymous CHAR(1), user_id BIGINT
+	origin_id BIGINT, new_name VARCHAR(30), new_order INTEGER, new_closed CHAR(1), new_anonymous CHAR(1), user_id BIGINT
 ) LANGUAGE plpgsql AS $$
 	DECLARE
-		now TIMESTAMP := now();
 		old_order INTEGER;
+		now TIMESTAMP := NOW();
 	BEGIN
 		IF new_closed = '1' THEN
 			UPDATE blind.board_mgt
@@ -73,8 +65,8 @@ CREATE PROCEDURE blind.update_board(
 				board_update_date = now,
 				rec_update_user_id = user_id,
 				rec_update_date = now
-			WHERE board_order >= new_order
-				AND closed_flag = '0' AND board_id <> origin_id AND logical_del_flag = '0';
+			WHERE board_order > new_order
+				AND closed_flag = '0' AND logical_del_flag = '0';
 		ELSIF (SELECT closed_flag FROM blind.board_mgt WHERE board_id = origin_id) = '1' THEN
 			UPDATE blind.board_mgt
 			SET	board_order = board_order + 1,
@@ -82,7 +74,7 @@ CREATE PROCEDURE blind.update_board(
 				rec_update_user_id = user_id,
 				rec_update_date = now
 			WHERE board_order >= new_order
-				AND closed_flag = '0' AND board_id <> origin_id AND logical_del_flag = '0';
+				AND closed_flag = '0' AND logical_del_flag = '0';
 		ELSE
 			SELECT board_order INTO old_order FROM blind.board_mgt WHERE board_id = origin_id;
 			IF new_order < old_order THEN
@@ -91,16 +83,16 @@ CREATE PROCEDURE blind.update_board(
 					board_update_date = now,
 					rec_update_date = now,
 					rec_update_user_id = user_id
-				WHERE board_order BETWEEN new_order AND old_order
-					AND closed_flag = '0' AND board_id <> origin_id AND logical_del_flag = '0';
+				WHERE board_order >= new_order AND board_order < old_order
+					AND closed_flag = '0' AND logical_del_flag = '0';
 			ELSIF new_order > old_order THEN
 				UPDATE blind.board_mgt
 				SET board_order = board_order - 1,
 					board_update_date = now,
 					rec_update_date = now,
 					rec_update_user_id = user_id
-				WHERE board_order BETWEEN old_order AND new_order
-					AND closed_flag = '0' AND board_id <> origin_id AND logical_del_flag = '0';
+				WHERE board_order > old_order AND board_order <= new_order
+					AND closed_flag = '0' AND logical_del_flag = '0';
 			END IF;
 		END IF;
 		UPDATE blind.board_mgt
