@@ -35,11 +35,14 @@
 		FROM blind.post_mgt post
 		INNER
 		JOIN blind.board_mgt board
-		ON post.board_id = board.board_id
+		ON
+		post.board_id = board.board_id
 		JOIN blind.post_count_inf
-		ON post.post_id = post_count_inf.post_id
+		ON post.post_id
+		= post_count_inf.post_id
 		JOIN blind.company_mgt company
-		ON post.user_id = company.user_id
+		ON post.user_id
+		= company.user_id
 		<if test="searchKeyword neq '-1'">
 			where board.board_id = cast(#{searchKeyword} AS integer)
 		</if>
@@ -52,5 +55,43 @@
 
 	</select>
 
+	<select id="getPostDetail"
+		resultType="com.ksinfo.blind.topicMain.dto.PostDetailDto"
+		parameterType="long">
+		SELECT
+		post.post_id,
+		post.user_id,
+		post.post_title,
+		post.post_blind_flag,
+		post.post_contents,
+		TO_CHAR(post.post_create_date,'YYYY-MM-DD') AS
+		post_create_date,
+		TO_CHAR(post.post_update_date,'YYYY-MM-DD') AS
+		post_update_date,
+		board.board_topic_name,
+		post_count_inf.post_count,
+		company_name
+		FROM
+		blind.post_mgt post
+		INNER
+		JOIN blind.board_mgt board
+		ON post.board_id =
+		board.board_id
+		JOIN blind.post_count_inf
+		ON post.post_id =
+		post_count_inf.post_id
+		JOIN blind.company_mgt company
+		ON post.user_id =
+		company.user_id
+		where post.post_id =#{postId};
+	</select>
+
+	<!-- 조회수 올리기 -->
+	<update id="updatePostCount" parameterType="long">
+		update
+		blind.post_count_inf set post_count = post_count + 1
+		where post_id =
+		#{postId};
+	</update>
 
 </mapper>

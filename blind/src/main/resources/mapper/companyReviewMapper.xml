@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.companyReview.mapper.CompanyReviewMapper">
+<select id="companySearch" parameterType="String" resultType="com.ksinfo.blind.companyReview.dto.CompanyDto"> 
+ SELECT
+	company_id
+	,user_id
+	,company_name
+	,business_type_code
+	,company_address
+	,founding_date
+	,workers_count
+	,app_date
+	,company_domain
+	,company_homepage
+	,company_explain
+	,verify_flag
+	,closing_flag
+ FROM
+  blind.company_mgt
+ WHERE 
+  company_name like '%' || #{paramString} || '%'
+</select>
+
+<select id="companySearchAll" resultType="com.ksinfo.blind.companyReview.dto.CompanyDto"> 
+ SELECT
+	company_id
+	,user_id
+	,company_name
+	,business_type_code
+	,company_address
+	,founding_date
+	,workers_count
+	,app_date
+	,company_domain
+	,company_homepage
+	,company_explain
+	,verify_flag
+	,closing_flag
+ FROM
+  blind.company_mgt
+
+</select>
+	
+	
+	
+	
+<select id="companySearchPopular" resultType="com.ksinfo.blind.companyReview.dto.CompanyMainViewDto">
+SELECT	
+	c2.company_id
+	,c2.company_name
+	,round(avg(c1.all_point),0) as all_point
+	,round(avg(c1.all_point),1) as real_all_point 
+	
+FROM
+	blind.company_review_mgt as c1,
+	blind.company_mgt as c2
+where
+	c1.company_id = c2.company_id
+
+GROUP BY
+	c2.company_id,c2.company_name
+	
+ORDER BY 
+	all_point desc
+    fetch first 9 rows only
+</select>
+
+<insert id="companyReviewJoin" parameterType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">
+insert into
+	blind.company_review_mgt(
+		company_review_id
+		,user_id
+		,company_id
+		,job_group_code
+		,all_point
+		,career_point
+		,work_life_balance_point
+		,pay_point
+		,company_culture_point
+		,head_point
+		,simple_comment
+		,advantages
+		,disadvantages
+		,resign_reason
+		,work_start_date
+		,work_end_date
+		,work_area
+		,verify_flag
+		,complete_flag
+	    , rec_create_user_id
+        , rec_create_date
+        , rec_update_user_id
+        , rec_update_date
+        , logical_del_flag
+	
+	)values(
+		default
+		,#{userId}
+		,#{companyId}
+		,#{jobGroupCode}
+		,#{allPoint}
+		,#{careerPoint}
+		,#{workLifeBalancePoint}
+		,#{payPoint}
+		,#{companyCulturePoint}
+		,#{headPoint}
+		,#{simpleComment}
+		,#{advantages}
+		,#{disadvantages}
+		,#{resignReason}
+		,#{workStartDate}
+		,#{workEndDate}
+		,#{workArea}
+		,'0'
+		,'0'
+	    , 1
+        , now()
+        , 0
+        , now()
+        , '0'	
+	) 
+	
+	
+	
+</insert>
+
+
+
+
+</mapper>

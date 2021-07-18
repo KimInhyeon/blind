@@ -5,40 +5,38 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>KSINFOSYS BLIND</title>
-        <style>
-            #searchbox{border-radius:50px; font-size:23px;}
-            #searchbox::placeholder{font-size:18px;}
-            .maintit{padding: 6px 0; font-size: 20px; font-weight: 700; float:left;}
-            .titline{border: 0; height:2px; background: #dfe1e4;}
-            #searchicon{padding-left:70px;}
-            .maintopicbest{padding-top:8px;}
-            .maintit span{padding-left:5px;}
-            .topicbesttit{padding-top:50px;}
-            #topicbestlabel{background:white; border:solid 1px #dfe1e4; margin-bottom:10px;}
-            .seemore a {color:gray;}
-            .topicbest span{color:gray;}
-            .topicbest i{color:gray;}
-        </style>
+<style>
+    #searchbox{border-radius:50px; font-size:23px;}
+    #searchbox::placeholder{font-size:18px;}
+    .maintit{padding: 6px 0; font-size: 20px; font-weight: 700; float:left;}
+    .titline{border: 0; height:2px; background: #dfe1e4;}
+    #searchicon{padding-left:70px;}
+    .maintopicbest{padding-top:8px;}
+    .maintit span{padding-left:5px;}
+    .topicbesttit{padding-top:50px;}
+    #topicbestlabel{background:white; border:solid 1px #dfe1e4; margin-bottom:10px;}
+    .seemore a {color:gray;}
+    .topicbest span{color:gray;}
+    .topicbest i{color:gray;}
+</style>
+<script>        
+	function goSearch(){
+		var searchKeyword = $("#searchbox").val();
+		alert(searchKeyword);		
+		location.href='${pageContext.request.contextPath}/search?searchKeyword=' + searchKeyword;
+	}
+</script>
 </head>
 	<body>
-	<h2>MAIN PAGE</h2>
-	<a href="${pageContext.request.contextPath}/login">ログインSample</a><br/>
-	<a href="${pageContext.request.contextPath}/registMember">会員登録Sample</a><br/>
-	<a href="${pageContext.request.contextPath}/manage">管理者</a><br/>
-	<a href="${pageContext.request.contextPath}/bookmark">ブックマーク</a><br/>
-	<a href="${pageContext.request.contextPath}/mytopic">私のトピック</a><br/>
-	<a href="${pageContext.request.contextPath}/mytask">進行中のテスク</a><br/>
-	<a href="${pageContext.request.contextPath}/directory">ディレクトリ</a><br/>
-
  		    <div class="ui container">
             <div class="ui fluid massive left icon input" style="margin-top:30px;">
-                <input type="text" placeholder="関心のある内容を検索してください。" id="searchbox">
+                <input type="text" placeholder="関心のある内容を検索してください。" id="searchbox" onKeypress="javascript:if(event.keyCode==13) {goSearch()}">
                 <i class="search icon" id="searchicon"></i>
             </div>
 			
             <div class="topicbesttit">
                  <div class="maintit"><i class="chess queen icon"></i><span>トピックベスト</span><br style="clear:both;"></div>
-                 <div class="seemore" style="float:right; padding-top:15px;"><a href="http://naver.com">もっと見る＞</a><br style="clear:both;"></div>
+                 <div class="seemore" style="float:right; padding-top:15px;"><a href="${pageContext.request.contextPath}/searchBoardName?searchKeyword=-1">もっと見る＞</a><br style="clear:both;"></div>
                   <hr class="titline" style="margin-top:45px;">
             </div>
             
@@ -53,7 +51,7 @@
                 </div>
                 <div class="ui horizontal list">
                     <a class="item" href="#"><div class="ui mini horizontal label" id="topicbestlabel">${topicbest.boardTopicname }</div></a>
-                    <a class="item"href="http://naver.com"><span style="color:black; margin-left:-5px;">${topicbest.postTitle }</span></a><br>
+                    <a class="item"href="${pageContext.request.contextPath}/topicDetail?postId=${topicbest.postId}"><span style="color:black; margin-left:-5px;">${topicbest.postTitle }</span></a><br>
                 </div>   
             </div>
         </c:forEach>
@@ -79,7 +77,7 @@
         	<c:set var="rowCount" value="0" /> 
                 <div class="maintopictit" style="padding-top:50px;">
                     <div class="maintit"><i class="money icon"></i><span>${topicSub.boardTopicname }</span><br style="clear:both;"></div>
-                    <div class="seemore" style="float:right; padding-top:15px;"><a>もっと見る＞</a><br style="clear:both;"></div>
+                    <div class="seemore" style="float:right; padding-top:15px;"><a href="${pageContext.request.contextPath}/searchBoardName?searchKeyword=${topicSub.boardId}">もっと見る＞</a><br style="clear:both;"></div>
                      <hr class="titline" style="margin-top:45px;">
                </div>
          
@@ -92,13 +90,13 @@
                         </div>
                         </c:if>
                         <div class="ui horizontal list" style="padding-left:10px;">
-                            <a class="item"href="http://naver.com"><span style="color:black; margin-left:-5px;">${topicSub.postTitle }</span></a><br>
+                            <a class="item"href="${pageContext.request.contextPath}/topicDetail?postId=${topicSub.postId}"><span style="color:black; margin-left:-5px;">${topicSub.postTitle }</span></a><br>
                         </div>   
                     </div>
                 <c:if test="${topicSub.recordCount eq 1 || topicSub.recordCount eq 0}">
                 	</div>
                 	</div>
-                </c:if> 
+                </c:if>
                </c:when>
             <c:when test="${subtitleveri ne topicSub.boardId}">
             		<div class="topicbest">
@@ -106,14 +104,14 @@
                             <i class="eye icon item" style="position:absolute; right:60px;"></i><span class="item" style="padding:0 10px;">${topicSub.postCount }</span>
                         </div>
                         <div class="ui horizontal list" style="padding-left:10px;">
-                            <a class="item"href="http://naver.com"><span style="color:black; margin-left:-5px;">${topicSub.postTitle }</span></a><br>
+                            <a class="item"href="${pageContext.request.contextPath}/topicDetail?postId=${topicSub.postId}"><span style="color:black; margin-left:-5px;">${topicSub.postTitle }</span></a><br>
                         </div>   
                     </div>
                     <c:set var="rowCount" value="${rowCount+1 }" /> 
-                <c:if test="${rowCount eq 4}">
+                <c:if test="${rowCount eq 4 || topicSub.recordCount-1 eq rowCount}">
                 	</div>
                 	</div>
-                </c:if>                     
+                </c:if>           
             </c:when>
             	
             </c:choose>

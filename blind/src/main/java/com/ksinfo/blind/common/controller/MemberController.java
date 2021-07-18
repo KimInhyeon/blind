@@ -1,17 +1,9 @@
 package com.ksinfo.blind.common.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,23 +36,25 @@ public class MemberController  {
     }
 	
 	@RequestMapping(value = "/loginSuccess")
-    public ModelAndView loginSuccess() {
+    public ModelAndView loginSuccess(@AuthenticationPrincipal Account account) {
         ModelAndView mv = new ModelAndView();
         
-        SecurityContext context = SecurityContextHolder.getContext(); 
-        
-        Authentication authentication = context.getAuthentication(); 
-        
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities(); 
-        Iterator<? extends GrantedAuthority> iter = authorities.iterator(); 
-        
-        List<String> strAuth = new ArrayList<String>();
-        
-        while (iter.hasNext()) { 
-        	GrantedAuthority auth = iter.next();
-        	strAuth.add(auth.getAuthority()); 
-        }
-        mv.addObject("auth", strAuth.get(0));
+		/*
+		 * SecurityContext context = SecurityContextHolder.getContext();
+		 * 
+		 * Authentication authentication = context.getAuthentication();
+		 * 
+		 * Collection<? extends GrantedAuthority> authorities =
+		 * authentication.getAuthorities(); Iterator<? extends GrantedAuthority> iter =
+		 * authorities.iterator();
+		 * 
+		 * List<String> strAuth = new ArrayList<String>();
+		 * 
+		 * while (iter.hasNext()) { GrantedAuthority auth = iter.next();
+		 * strAuth.add(auth.getAuthority()); }
+		 */
+        mv.addObject("userId", account.getUserId());
+        mv.addObject("auth", account.getUserAuth());
         mv.setViewName("main/member/loginSuccess");
         return mv;
     }

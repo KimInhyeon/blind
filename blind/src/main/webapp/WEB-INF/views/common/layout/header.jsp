@@ -50,10 +50,26 @@
 		<a href="${pageContext.request.contextPath}/main"><img
 				src="${pageContext.request.contextPath}/resources/images/logo.png" style="margin-left:-25px"/></a>
 	</div>
-	<a class="browse item" href="javascript:location.href='${pageContext.request.contextPath}/topicMain'"
+	<a class="browse item" href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=-1'"
 	   style="color: black">トピック</a>
-	<a class="browse item" href="javascript:location.href='${pageContext.request.contextPath}/companyMain'"
+	<a class="browse item" href="javascript:location.href='${pageContext.request.contextPath}/companyReviewMain'"
 	   style="color: black">企業情報</a>
+    <div class="right menu">
+    <div class="ui dropdown item">TestMenu<i class="dropdown icon"></i>
+    	<div class="menu">
+		<a class="item" href="${pageContext.request.contextPath}/login">ログインSample</a><br/>
+		<a class="item" href="${pageContext.request.contextPath}/registMember">会員登録Sample</a><br/>
+		<a class="item" href="${pageContext.request.contextPath}/manage/company">管理者(企業管理)</a><br/>
+		<a class="item" href="${pageContext.request.contextPath}/manage/board">管理者(トピック管理)</a><br/>
+		<a class="item" href="${pageContext.request.contextPath}/manage/report">管理者(申告管理)</a><br/>
+		<a class="item" href="${pageContext.request.contextPath}/bookmark">ブックマーク</a><br/>
+		<a class="item" href="${pageContext.request.contextPath}/mytopic">私のトピック</a><br/>
+		<a class="item" href="${pageContext.request.contextPath}/mytask">進行中のテスク</a><br/>
+		<a class="item" href="${pageContext.request.contextPath}/directory">ディレクトリ</a><br/>      
+		</div>
+    </div>
+    </div>
+	
 	<!--  Message Area -->
 	<c:if test="${not empty exception.message}">
 		<div class="ui negative message" style="width: 350px!important;font-size: 0.6em !important; position:absolute;

@@ -47,7 +47,7 @@
         , #{username}
         , #{userNickname}
         , now()
-        , null
+        , 0
         , #{auth}
         , 0
         , 1

@@ -3,65 +3,77 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8">
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <style>
-            body{padding:2rem;}
-           .tit{padding: 6px 0 8px; font-size: 150%; font-weight: 700;}
-           #direc{padding:15px; width:100%; background-color:#f2f2f3;}
-           #direc a{color:black; padding:5px;}
-           .dir_category{padding-bottom:20px;}
-           #dir_searchtext{padding: 12px 0;}
-           #dir_searchtext::placeholder{font-size:17px;}
-           .dirkey{padding:40px 0px;}
-           .dirkey li a{font-weight:500; color:black; font-size:15px;}
-           .dirkey ul li{line-height:220%;}
-           .dirpaging{text-align:center; padding-top:20px;}
-           
-           .company_review_sample > * {
-           		padding:5px;
-           }
-           
-           html, body {
-			   position: relative;
-			   height: 100%;
-			}
-			
-			body {
-			   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-			   font-size: 14px;
-			   color: #000;
-			   margin: 0;
-			   padding: 0;
-			}
-			
-			body {
-			   padding: 2rem;
-			}
-			
-			.tit {
-			   padding: 6px 0 8px;
-			   font-size: 150%;
-			   font-weight: 700;
-			}
-			
-			.bookmarkcontent a {
-			   color: black;
-			   display: block;
-			   padding-bottom: 8px;
-			}
-			
-			.bookmarkcontent a span {
-			   font-size: 80%;
-			}
-			
-			.bookmarkcontent p {
-			   padding-top: 12px;
-			   font-size: 90%;
-			}
-			           
-        </style>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+    body{padding:2rem;}
+   .tit{padding: 6px 0 8px; font-size: 150%; font-weight: 700;}
+   #direc{padding:15px; width:100%; background-color:#f2f2f3;}
+   #direc a{color:black; padding:5px;}
+   .dir_category{padding-bottom:20px;}
+   #dir_searchtext{padding: 12px 0;}
+   #dir_searchtext::placeholder{font-size:17px;}
+   .dirkey{padding:40px 0px;}
+   .dirkey li a{font-weight:500; color:black; font-size:15px;}
+   .dirkey ul li{line-height:220%;}
+   .dirpaging{text-align:center; padding-top:20px;}
+   
+   .company_review_sample > * {
+   		padding:5px;
+   }
+   
+   html, body {
+	   position: relative;
+	   height: 100%;
+	}
+	
+	body {
+	   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+	   font-size: 14px;
+	   color: #000;
+	   margin: 0;
+	   padding: 0;
+	}
+	
+	body {
+	   padding: 2rem;
+	}
+	
+	.tit {
+	   padding: 6px 0 8px;
+	   font-size: 150%;
+	   font-weight: 700;
+	}
+	
+	.bookmarkcontent a {
+	   color: black;
+	   display: block;
+	   padding-bottom: 8px;
+	}
+	
+	.bookmarkcontent a span {
+	   font-size: 80%;
+	}
+	
+	.bookmarkcontent p {
+	   padding-top: 12px;
+	   font-size: 90%;
+	}
+	
+    #searchbox{border-radius:50px; font-size:23px;}
+    #searchbox::placeholder{font-size:18px;}
+    .maintit{padding: 6px 0; font-size: 20px; font-weight: 700; float:left;}
+    .titline{border: 0; height:2px; background: #dfe1e4;}
+    #searchicon{padding-left:70px;}
+    .maintopicbest{padding-top:8px;}
+    .maintit span{padding-left:5px;}
+    .topicbesttit{padding-top:50px;}
+    #topicbestlabel{background:white; border:solid 1px #dfe1e4; margin-bottom:10px;}
+    .seemore a {color:gray;}
+    .topicbest span{color:gray;}
+    .topicbest i{color:gray;}
+</style>
 	
 	
 	<script>
@@ -193,7 +205,7 @@
    <div class="inputSearchKeyword">    
    		<form>
         <div class="ui fluid massive left icon input">
-				  <input type="text" placeholder="Search"
+				  <input type="text" placeholder="Search" id="searchbox"
 					     name="searchKeyword" value=${pastSearchKeyword}> 
 	    		<i class="search icon"></i>
 	  			<div class="results"></div>

@@ -103,6 +103,7 @@ body {
 .swiper-container {
 	width: 100%;
 	height: 100%;
+	cursor: url('./resources/images/cursor.cur'), auto;
 }
 
 .swiper-slide {
@@ -170,68 +171,19 @@ body {
 
 	<div class="swiper-container">
 		<div class="swiper-wrapper">
-			<div class="swiper-slide">
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=-1'">トピック全体</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=7'">${topicMainMessage[1].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=8'">${topicMainMessage[2].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=9'">${topicMainMessage[3].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=10'">${topicMainMessage[4].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=11'">${topicMainMessage[5].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=12'">${topicMainMessage[6].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-			</div>
-			<div class="swiper-slide">
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=13'">${topicMainMessage[7].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=14'">${topicMainMessage[8].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=15'">${topicMainMessage[9].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=16'">${topicMainMessage[10].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=17'">${topicMainMessage[11].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=18'">${topicMainMessage[12].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=19'">${topicMainMessage[13].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-			</div>
-			<div class="swiper-slide">
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=20'">${topicMainMessage[14].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=21'">${topicMainMessage[15].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=22'">${topicMainMessage[16].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=23'">${topicMainMessage[17].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=24'">${topicMainMessage[18].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=25'">${topicMainMessage[19].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=26'">${topicMainMessage[20].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-			</div>
-			<div class="swiper-slide">
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=27'">${topicMainMessage[21].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=28'">${topicMainMessage[22].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=29'">${topicMainMessage[23].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=30'">${topicMainMessage[24].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=31'">${topicMainMessage[25].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-				<a
-					href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=32'">${topicMainMessage[26].boardTopicName }</a>&nbsp;&nbsp;&nbsp;
-			</div>
+		    <c:set var="i" value="0" />
+		    <c:forEach items="${topicMainMessage }" var="topicMainMessage" varStatus="status">
+		    	<c:if test="${i%7==0}">
+		    		<div class="swiper-slide">
+		    		<i class="angle double left icon"></i>
+		    	</c:if>
+					<a href="javascript:location.href='${pageContext.request.contextPath}/searchBoardName?searchKeyword=${topicMainMessage.boardId}'">${topicMainMessage.boardTopicName}</a>&nbsp;&nbsp;&nbsp;
+					<c:set var="i" value="${i+1 }"/>
+		    	<c:if test="${i%7==0 || i==listSize}">
+		    		<i class="angle double right icon"></i>
+		    		</div>
+		    	</c:if>
+			</c:forEach>
 		</div>
 	</div>
 	<!-- Initialize Swiper -->
@@ -254,8 +206,8 @@ body {
 					<div class="eight wide column"
 						style="border-color: #d4d4d5; border-width: thin !important; border-style: inset;">
 						<!-- 두개의 쿼리문을 조인해서 사용하자 -->
-						<a href=""><span>${searchResultPosts.boardTopicName }</span></a> <a
-							href=""><span style="font-size: 130%; font-weight: 700;">${searchResultPosts.postTitle }</span></a>
+						<a href=""><span>${searchResultPosts.boardTopicName }</span></a> 
+						<a href="/blind/topicDetail?postId=${searchResultPosts.postId }"><span style="font-size: 130%; font-weight: 700;">${searchResultPosts.postTitle }</span></a>
 						<div class="ui grid">
 							<div class="thirteen wide column">
 								<a href=""><p>${searchResultPosts.postContents }</p></a>
