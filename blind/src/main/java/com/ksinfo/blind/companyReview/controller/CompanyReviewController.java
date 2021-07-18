@@ -16,6 +16,7 @@ import com.ksinfo.blind.companyReview.dto.CompanyJoinDto;
 import com.ksinfo.blind.companyReview.dto.CompanyMainViewDto;
 import com.ksinfo.blind.companyReview.service.CompanyReviewService;
 import com.ksinfo.blind.companyReview.service.CompanyReviewWriteService;
+import com.ksinfo.blind.util.MessageUtils;
 
 @Controller
 public class CompanyReviewController {
@@ -23,6 +24,9 @@ public class CompanyReviewController {
 	CompanyReviewService companyReviewService;
 	@Autowired
 	CompanyReviewWriteService companyReviewWriteService;
+	@Autowired
+	MessageUtils msg;
+	
 	@RequestMapping(value = "companyReviewMain", method = RequestMethod.GET)
 	public ModelAndView companyReviewMain(HttpServletRequest req) throws Exception {
 		ModelAndView mav = new ModelAndView();
@@ -98,7 +102,15 @@ public class CompanyReviewController {
 		  inputDto.setWorkArea(workArea);
 		  int insertCount = companyReviewWriteService.companyReviewJoin(inputDto);
 		  
-		  mav.setViewName("main/companyReview/companyReviewWrite"); 
+		  if (insertCount > 0) {
+			  String message = msg.getMessage("BLIND_SCS_MSG_001");
+			  mav.addObject("successMessage", message);
+		  } else {
+			  String message = msg.getMessage("BLIND_ERR_MSG_001");
+			  mav.addObject("exceptionMessage", message);
+		  }
+		  
+		  mav.setViewName("main/companyReview/companyReviewWrite");
 		  return mav;
 	 }
 	   
