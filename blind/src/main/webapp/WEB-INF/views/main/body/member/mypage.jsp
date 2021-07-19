@@ -31,7 +31,7 @@
 	/*id(#)를 활용하여 개별속성부여*/	
 
 	
-	/* 1. 마이페이지 전체 적용css ---------------------------------------------------------------------- */
+	/* 1. 마이페이지 전체 일괄적용css ---------------------------------------------------------------------- */
 	/* 1.1. 마이페이지 전체를 감싸는 div */
 	#mypage_wrap{ 				
 		text-align:center;	 		/*자식 div에게 'display: inline-block;' 속성을 줘야 가운데 정렬이 적용된다.*/
@@ -41,6 +41,11 @@
 	a {
 	  text-decoration-line: none;	/*<a>의 밑줄속성 삭제*/
 	}
+	
+	/* 1.3.폰트 옵션 모음*/
+	 .mypage_common_font{
+	 	font-size: 1.2em;
+	 }
 	
 	
 	
@@ -55,7 +60,7 @@
 	/* 3.메인(유저프로필, 버튼들) -----------------------------------------------------------------------*/
 
 	/* 3.0. 메인 전체를 적용 */
-	.mypage_main_warp{
+	.mypage_main_wrap{
 		text-align:center; 					/*내부에 배치되는 중앙정렬할 div에게 display: inline-block; 속성을 줘야 적용된다.*/
 	}
 
@@ -80,11 +85,7 @@
 
 	/* 4. 옵션적 css(각 항목마다 필요따라 선택적 활용.) --------------------------------------------------------------- */
 
-	/* 4.1.폰트 옵션 모음*/
-	 .mypage_common_font{
-	 	font-size: 1.2em;
-	 	margin:2%;
-	 }
+
 	
 	/*4.2.정렬 옵션 모음*/
 	/*4.2.1. 정렬 옵션-우측정렬모음*/
@@ -98,11 +99,42 @@
 		display: inline-block;
 	}	
 	
-	.mypage_button_options{
+
+
+
+	.mypage_main_Explanation_textmargin{
 		text-align:left;
 		margin:3%;
 	}
 
+
+	/* 7월19일 버튼들의 공통css정리----------------------------------------------------- */
+
+	.mypage_buttontap_name{
+		text-align:left;
+		margin:3%;
+	}
+
+	.mypage_buttontap_wrap{
+		text-align:left;
+		margin:3%;
+	}
+
+	.mypage_button_style_wrap{
+		background-color: #ffffff; 
+		margin: 2%; 
+		padding: 1.5%;			
+	} 	
+
+	.mypage_button_style_button_name{
+		display: inline-block;
+		position:absolute;" 
+	} 	
+	
+	.mypage_button_style_button_icon{
+		text-align: right;
+		font-size: 1.5em;
+	} 
 
 	</style>
 </head>
@@ -121,8 +153,7 @@
 			</div>
 		</div>
 		<div id="mypage_main_warp">
-			<!-- 메인1. 유저 프로필(닉네임,메일,근무기업) -->				
-			<div id="mypage_main_user_profile">
+			<div id="mypage_main_user_profile">					<!-- 메인1. 유저 프로필(닉네임,메일,근무기업) -->				
 	      		<c:choose>
 	        		<c:when test = "${user_auth eq 'RM     ' }">								<!-- 정회원 프로필 -->
 	
@@ -154,7 +185,7 @@
 							<div>（汎用のメール）</div>
 						</div>
 				
-						<div id="mypage_main_Explanation"> 				<!-- 유저의 토픽/기업리뷰/연봉탭 관련 활동안내 리스트 -->
+						<div id="mypage_main_Explanation"> 				<!-- 일반회원은 인증이 필요하다는 안내페이지로 대체. -->
 							<div style="margin-left:13%; margin-top:5%; vertical-align:bottom ;">
 								<div style="float:left; vertical-align: bottom; margin-top: 6%;">
 									<i class="lock icon"  style="float:left; font-size: 2.5em; position:static;" ></i>
@@ -163,7 +194,7 @@
 									企業のメールで認証して正會員にならば、全サービスを利用することができます。
 								</div>
 							</div>
-							<div style="margin-left: 25%; margin-top: 10%;">
+							<div style="margin-left: 25%; margin-top: 10%; text-align: left;">
 								<div class="mypage_main_Explanation_textmargin">
 									<i class="check circle icon"></i>
 									トピックにポストを書く
@@ -194,56 +225,123 @@
 	         		</c:otherwise>
 	      		</c:choose>
 
-			<!-- main구성 : 2.각종 버튼탭(버튼모음) -->
-			<div id="mypage_button_warp"> 
-				<div style="text-align:left; margin:3%;">
-					アカウントの情報変更
-				</div>	
-				<div class="mypage_button_options" style="margin:3%;"> 	
-					<div style="background-color: #ffffff;">
-						<div style="display: inline-block;position:absolute;"> 
-							企業メールを認証する
+
+			<div id="mypage_button_warp"> 			<!-- main구성 : 2.각종 버튼탭(버튼모음) -->
+
+				<div id="mypage_button_update_certification_and_income">
+					<div class="mypage_buttontap_name"> 												
+						アカウントの情報変更
+					</div>	
+					<div class="mypage_buttontap_wrap"> 												
+						<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_button_name"> 								
+								企業メールを認証する
+							</div>
+							<div class="mypage_button_style_button_icon">	
+								<i class="chevron right icon"></i>
+							</div>											
 						</div>
-						<div class="mypage_option_align_target_right" style="text-align: right;font-size: 1.5em; margin: 2.5%;">
-							<i class="chevron right icon"></i>
-						</div>											
+	
+						<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_button_name"> 								
+								私の年俸ランキング
+							</div>
+							<div class="mypage_button_style_button_icon">
+								<i class="chevron right icon"></i>
+							</div>								
+						</div>							
 					</div>
+				</div>	
 
-					<div style="background-color: #ffffff;">
-						<div style="display: inline-block;position:absolute;"> 
-							私の年俸ランキング
-						</div>
-						<div class="mypage_option_align_target_right" style="text-align: right;font-size: 1.5em; margin: 2.5%;">
-	
-							<i class="chevron right icon"></i>
-						</div>								
-					</div>							
-				</div>
-	
-
-				
 				<div id="mypage_buttontap_invite_and_weblogin"> <!-- 버튼탭2. 타인초대 및 웹로그인 -->
+					<div class="mypage_buttontap_name"> 												
+						招待、Webログイン
+					</div>	
+					<div class="mypage_buttontap_wrap"> 												
+						<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_button_name"> 								
+								招待する
+							</div>
+							<div class="mypage_button_style_button_icon">	
+								<i class="chevron right icon"></i>
+							</div>											
+						</div>
+	
+						<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_button_name"> 								
+								Webブラウザログイン
+							</div>
+							<div class="mypage_button_style_button_icon">
+								<i class="chevron right icon"></i>
+							</div>								
+						</div>							
+					</div>
+				</div>	
 
-				</div> 
+
 
 				<div id="mypage_buttontap_writedpost_and_bookmark"> <!-- 버튼탭3. 로그인한 회원이 작성한 포스트/기업리뷰, 즐겨핯기한 포스트 리스트출력-->
-
+					<div class="mypage_buttontap_name"> 												
+						私が書いたポスト、ブックマーク
+					</div>	
+					
+					<div class="mypage_buttontap_wrap"> 												
+						<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_button_name"> 								
+								私が書いたポスト
+							</div>
+							<div class="mypage_button_style_button_icon">	
+								<i class="chevron right icon"></i>
+							</div>											
+						</div>
+	
+						<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_button_name"> 								
+								ブックマーク
+							</div>
+							<div class="mypage_button_style_button_icon">
+								<i class="chevron right icon"></i>
+							</div>								
+						</div>							
+					
+						<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_button_name"> 								
+								企業レビュー
+							</div>
+							<div class="mypage_button_style_button_icon">
+								<i class="chevron right icon"></i>
+							</div>								
+						</div>							
+					</div>
 				</div> 
 
 				<div id="mypage_buttontap_writedpost_and_bookmark"> <!-- 버튼탭4. 고객센터-->
-
+					<div class="mypage_buttontap_name"> 												
+						カスタマーセンター
+					</div>	
+					
+					<div class="mypage_buttontap_wrap"> 												
+						<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_button_name"> 								
+								お問い合わせ・バグの報告
+							</div>
+							<div class="mypage_button_style_button_icon">	
+								<i class="chevron right icon"></i>
+							</div>											
+						</div>
+	
+						<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_button_name"> 								
+								申告した内容/申告された内容を確認
+							</div>
+							<div class="mypage_button_style_button_icon">
+								<i class="chevron right icon"></i>
+							</div>								
+						</div>									
+					</div>
 				</div> 
-
-
 			</div>
-
-			</div>
-			
 		</div>
-
-		
-
-
 	</div>
 </body>
 </html>
