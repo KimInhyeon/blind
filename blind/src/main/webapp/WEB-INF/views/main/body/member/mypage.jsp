@@ -97,59 +97,98 @@
 
 		display: inline-block;
 	}	
+	
+	.mypage_main_Explanation_textmargin{
+		text-align:left;
+		margin:3%;
+	}
+
 
 	
-</style>
+	</style>
 </head>
+
+
+
 <body>
 	<div id="mypage_wrap" >
 		<div class="mypage_header mypage_option_align_right_wrap" >
 			<div style="display: inline;">
-				My Page
+				<span>My Page</span>
+				${account.userAuth}
 			</div>												<!-- [차후 수정사항] 1줄내에 Mypage글자와 로그아웃 아이콘 배치되도록 할것. -->
 			<div class="mypage_option_align_right_target">
 				<a><i class="sign out alternate icon"></i></a>
 			</div>
 		</div>
-		
-		
-		
 		<div id="mypage_main_warp">
-
 			<!-- 메인1. 유저 프로필(닉네임,메일,근무기업) -->				
 			<div id="mypage_main_user_profile">
-	      		<c:set var = "user_auth" scope = "session" value = "${user_auth}" /> 	<!-- 유저의 계급을 수신. -->
 	      		<c:choose>
-	        		<c:when test = "${user_auth eq 'RM' }">								<!-- 정회원 프로필 -->
+	        		<c:when test = "${user_auth eq 'RM     ' }">								<!-- 정회원 프로필 -->
+	
 						<div id="mypage_main_user_profile_nick_and_mail"> 	
-							<div style="display: inline-block;">
-								<div>
-									${user_nickName }
-								</div>
-								<div class="mypage_option_align_target_right" style="display: inline;">
+							<div style="display: inline-block;"> <!-- 유저의 닉네임 -->
+								<div>${user_nick_name}</div>
+								<div class="mypage_option_align_target_right" style="display: inline; text-align: right"><!-- 유저 아이콘 -->
 									<a><i class="user circle icon"></i></a>
 								</div>
 							</div>
 				
-							<div>정회원 이메일</div>
-							<div>소속 기업명</div>
+							<div>${user_company_name}</div>
 						</div>
 				
 						<div id="mypage_main_user_activity"> 				<!-- 유저의 토픽/기업리뷰/연봉탭 관련 활동안내 리스트 -->
 						</div>
 	   		    	</c:when>
-	         		
-	        		<c:when test = "${user_auth eq 'NM' }">
-						<div id="mypage_main_user_profile_nick_and_mail"> 	<!-- 유저의 프로필 -->
-							<div class="mypage_common_font">회원 닉네임</div>
-							<div><a><i class="user circle icon"></i></a></div>
-							<div class="mypage_common_font">회원 이메일</div>
-							<div class="mypage_common_font">（汎用のメール）</div>
+	
+					<c:when test = "${user_auth eq 'NM     ' }">	<!-- 일반회원 프로필 -->
+	
+						<div id="mypage_main_user_profile_nick_and_mail" style="margin:3%;"> 	
+							<div style="display: inline-block;position:absolute;"> <!-- 유저의 닉네임 -->
+									${user_nick_name}
+							</div>
+							<div class="mypage_option_align_target_right" style="text-align: right;font-size: 2.5em;"><!-- 유저 아이콘 -->
+								<a><i class="user circle icon"></i></a>
+							</div>			
+									
+							<div>（汎用のメール）</div>
 						</div>
 				
-						<div id="mypage_main_user_activity"> 				<!-- 유저의 토픽/기업리뷰/연봉탭 관련 활동안내 리스트 -->
+						<div id="mypage_main_Explanation"> 				<!-- 유저의 토픽/기업리뷰/연봉탭 관련 활동안내 리스트 -->
+							<div style="margin-left:13%; margin-top:5%; vertical-align:bottom ;">
+								<div style="float:left; vertical-align: bottom; margin-top: 6%;">
+									<i class="lock icon"  style="float:left; font-size: 2.5em; position:static;" ></i>
+								</div>
+								<div style="width:70%;">
+									企業のメールで認証して正會員にならば、全サービスを利用することができます。
+								</div>
+							</div>
+							<div style="margin-left: 25%; margin-top: 10%;">
+								<div class="mypage_main_Explanation_textmargin">
+									<i class="check circle icon"></i>
+									トピックにポストを書く
+								</div>
+								<div class="mypage_main_Explanation_textmargin">
+									<i class="check circle icon"></i>
+									企業のレビューを読む
+								</div>
+								<div class="mypage_main_Explanation_textmargin">
+									<i class="check circle icon"></i>
+									企業のレビューを書く
+								</div>
+								<div class="mypage_main_Explanation_textmargin">
+									<i class="check circle icon"></i>
+									企業のレビューを書く
+								</div>		
+							</div>									
+								<button class="ui primary button" style="margin:5%;">
+									正會員認証を始める
+								</button>
+									
+					
 						</div>
-	        	 	</c:when>
+	   		    	</c:when>
 	         		
 	         		<c:otherwise>
 						<!-- 로그인 않은 상태로 파악. alert창 알림 후 로그인페이지로 이동처리. -->
@@ -157,6 +196,7 @@
 
 	      		</c:choose>
 			</div>
+
 						
 			<!-- main구성 : 2.각종 버튼탭(버튼모음) -->
 			<div id="mypage_buttontap"> 
@@ -182,6 +222,7 @@
 		</div>
 
 		
+
 
 	</div>
 </body>

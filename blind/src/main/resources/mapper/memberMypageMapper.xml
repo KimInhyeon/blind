@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.member.mapper.MemberMypageMapper">
+
+<select id="getUsersCompanyName" parameterType="int" resultType="String"> 
+select 
+	"blind".company_mgt.company_name
+from 
+	"blind".company_mgt
+where "blind".company_mgt.company_id = #{companyId};
+</select>
+
+</mapper>
