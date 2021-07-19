@@ -98,13 +98,12 @@
 		display: inline-block;
 	}	
 	
-	.mypage_main_Explanation_textmargin{
+	.mypage_button_options{
 		text-align:left;
 		margin:3%;
 	}
 
 
-	
 	</style>
 </head>
 
@@ -193,16 +192,35 @@
 	         		<c:otherwise>
 						<!-- 로그인 않은 상태로 파악. alert창 알림 후 로그인페이지로 이동처리. -->
 	         		</c:otherwise>
-
 	      		</c:choose>
-			</div>
 
-						
 			<!-- main구성 : 2.각종 버튼탭(버튼모음) -->
-			<div id="mypage_buttontap"> 
-				<div id="mypage_buttontap_account_update"> <!-- 버튼탭1. 계정정보변경(기업메일인증, 연봉) -->
+			<div id="mypage_button_warp"> 
+				<div style="text-align:left; margin:3%;">
+					アカウントの情報変更
+				</div>	
+				<div class="mypage_button_options" style="margin:3%;"> 	
+					<div style="background-color: #ffffff;">
+						<div style="display: inline-block;position:absolute;"> 
+							企業メールを認証する
+						</div>
+						<div class="mypage_option_align_target_right" style="text-align: right;font-size: 1.5em; margin: 2.5%;">
+							<i class="chevron right icon"></i>
+						</div>											
+					</div>
 
-				</div> 
+					<div style="background-color: #ffffff;">
+						<div style="display: inline-block;position:absolute;"> 
+							私の年俸ランキング
+						</div>
+						<div class="mypage_option_align_target_right" style="text-align: right;font-size: 1.5em; margin: 2.5%;">
+	
+							<i class="chevron right icon"></i>
+						</div>								
+					</div>							
+				</div>
+	
+
 				
 				<div id="mypage_buttontap_invite_and_weblogin"> <!-- 버튼탭2. 타인초대 및 웹로그인 -->
 
@@ -216,6 +234,8 @@
 
 				</div> 
 
+
+			</div>
 
 			</div>
 			
