@@ -34,10 +34,7 @@ public class MemberMypageController {
 		mav.addObject("user_company_name",userCompanyName);
 
 		
-		
-		
-		//출력할 페이지 설정
-		
+		//출력할 페이지 설정		
 		if(userAuth.equals("ROLE_RM")) {
 			mav.setViewName("main/member/mypageRegular");	//레귤러(정회원) 아닌 경우에는 일반회원의 마이페이지로 리턴.
 			return mav;			
@@ -45,10 +42,40 @@ public class MemberMypageController {
 
 		mav.setViewName("main/member/mypageNormal");
 		return mav;
-			
 
-		
 		//레귤러 회원/일반회원으로 각각 이동할 페이지 구분하여 생성
 
 	}
+	
+	
+	//이메일 인증페이지로 이동
+	@RequestMapping(value="certification")
+	public ModelAndView Certification(@AuthenticationPrincipal Account account, ModelAndView mav) {
+
+		mav.setViewName("main/member/certification");
+		return mav;
+	}
+	
+	
+	//연봉등록 탭으로 이동.(단 정회원만 가능. 일반회원시 이메일 인증페이지로 이동.
+	@RequestMapping(value="registerAnnualIncome")
+	public ModelAndView RegisterAnnualIncome(@AuthenticationPrincipal Account account, ModelAndView mav) {
+		//로그인한 유저의 정보
+		String userAuth = account.getUserAuth();
+
+		//출력할 페이지 설정		
+		if(userAuth.equals("ROLE_RM")) {	//정회원인 경우 연봉등록페이지로 이동			
+			mav.setViewName("main/member/registerAnnualIncome");	//레귤러(정회원) 아닌 경우에는 일반회원의 마이페이지로 리턴.
+			return mav;			
+		}
+
+		//일반회원인 경우 이메일 인증페이지로 이동.(팝업옵션 ajax를 만들어서 유저에게 안내를 할 수 있도록 합시다.)
+		int explain_flag=1;
+		mav.addObject("explain_flag",explain_flag);
+		mav.setViewName("main/member/certification");
+		return mav;
+
+			}	
+
+
 }

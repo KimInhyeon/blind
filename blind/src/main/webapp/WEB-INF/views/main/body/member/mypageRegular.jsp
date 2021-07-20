@@ -8,6 +8,9 @@
     <meta charset="UTF-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<script>
+aaaaaa
+</script>
 <style>
 	/*사용하는 기기의 스크린화면별 동적CSS*/
 	/*@media screen and (max-width:1799px) {

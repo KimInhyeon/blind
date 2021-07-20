@@ -94,7 +94,12 @@
 		margin: 2%;
 	} 	
 
-	/* 7월19일 버튼들의 공통css정리----------------------------------------------------- */
+	.mypage_main_textmargin{ /**/
+			font-size: 1.0em;
+			margin: 3%;
+	}
+
+
 
 	.mypage_buttontap_name{ /*각 버튼탭들의 정렬설정(좌측정렬)*/
 		text-align:left;
@@ -121,6 +126,7 @@
 		text-align: right;
 		font-size: 1.5em;
 	} 
+
 
 	</style>
 
@@ -184,19 +190,21 @@
 						</div>		
 					</div>									
 								
-					<button class="ui primary button" style="margin:5%;">
+					<button class="ui primary button" style="margin:5%;"
+							 onclick="location.href='${pageContext.request.contextPath}/certification';"> 	
 						正會員認証を始める
 					</button>
 				</div>
 	   		 		
 				<div id="mypage_button_warp"> 			<!-- main구성 : 2.각종 버튼탭(버튼모음) -->
 					<div id="mypage_button_update_certification_and_income">
-						<div class="mypage_buttontap_name"> 												
+						<div class="mypage_buttontap_name">												
 							アカウントの情報変更
 						</div>	
 						<div class="mypage_buttontap_wrap"> 												
-							<div class="mypage_button_style_wrap"> 	
-								<div class="mypage_button_style_button_name"> 								
+							<div class="mypage_button_style_wrap"
+			 					 style=" cursor: pointer;" onclick="location.href='${pageContext.request.contextPath}/certification';"> 	
+								<div class="mypage_button_style_button_name"> 	
 									企業メールを認証する
 								</div>
 								<div class="mypage_button_style_button_icon">	
@@ -204,7 +212,8 @@
 								</div>											
 							</div>
 		
-							<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_wrap"
+								 style=" cursor: pointer;" onclick="location.href='${pageContext.request.contextPath}/registerAnnualIncome';"> 					
 								<div class="mypage_button_style_button_name"> 								
 									私の年俸ランキング
 								</div>
