@@ -115,6 +115,7 @@
 		background-color: #ffffff; 
 		margin: 2%; 
 		padding: 1.5%;			
+		cursor: pointer;
 	} 	
 
 	.mypage_button_style_button_name{ /* 버튼의 '>'아이콘이 우측으로 정렬할 수 있도록 라인설정*/
@@ -130,6 +131,15 @@
 
 	</style>
 
+
+	<script>
+		$(function(){ 		
+        	$("#intro_popup_service_center").on("click", function(){
+        		alert("고객 센터에 연락주세요.");	
+        	})  	
+		});
+	
+	</script>
 </head>
 
 
@@ -203,7 +213,7 @@
 						</div>	
 						<div class="mypage_buttontap_wrap"> 												
 							<div class="mypage_button_style_wrap"
-			 					 style=" cursor: pointer;" onclick="location.href='${pageContext.request.contextPath}/certification';"> 	
+			 					 onclick="location.href='${pageContext.request.contextPath}/certification';"> 	
 								<div class="mypage_button_style_button_name"> 	
 									企業メールを認証する
 								</div>
@@ -213,7 +223,7 @@
 							</div>
 		
 							<div class="mypage_button_style_wrap"
-								 style=" cursor: pointer;" onclick="location.href='${pageContext.request.contextPath}/registerAnnualIncome';"> 					
+								 onclick="location.href='${pageContext.request.contextPath}/registerAnnualIncome';"> 					
 								<div class="mypage_button_style_button_name"> 								
 									私の年俸ランキング
 								</div>
@@ -225,12 +235,13 @@
 					</div>	
 	
 					<div id="mypage_buttontap_invite_and_weblogin"> <!-- 버튼탭2. 타인초대 및 웹로그인 -->
-						<div class="mypage_buttontap_name"> 												
+						<div class="mypage_buttontap_name">
 							招待、Webログイン
 						</div>	
 						<div class="mypage_buttontap_wrap"> 												
-							<div class="mypage_button_style_wrap"> 	
-								<div class="mypage_button_style_button_name"> 								
+							<div class="mypage_button_style_wrap"
+								 onclick="location.href='${pageContext.request.contextPath}/invite';"> 												
+								<div class="mypage_button_style_button_name">
 									招待する
 								</div>
 								<div class="mypage_button_style_button_icon">	
@@ -239,7 +250,8 @@
 							</div>
 		
 							<div class="mypage_button_style_wrap"> 	
-								<div class="mypage_button_style_button_name"> 								
+								<div class="mypage_button_style_button_name"
+									 onclick="location.href='${pageContext.request.contextPath}/weblogin';"> 																						
 									Webブラウザログイン
 								</div>
 								<div class="mypage_button_style_button_icon">
@@ -255,8 +267,9 @@
 						</div>	
 						
 						<div class="mypage_buttontap_wrap"> 												
-							<div class="mypage_button_style_wrap"> 	
-								<div class="mypage_button_style_button_name"> 								
+							<div class="mypage_button_style_wrap"
+								 onclick="location.href='${pageContext.request.contextPath}/viewlistwritedpost';"> 					
+								<div class="mypage_button_style_button_name">
 									私が書いたポスト
 								</div>
 								<div class="mypage_button_style_button_icon">	
@@ -264,7 +277,8 @@
 								</div>											
 							</div>
 		
-							<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_wrap"
+								 onclick="location.href='${pageContext.request.contextPath}/viewlistmybookmark';"> 												
 								<div class="mypage_button_style_button_name"> 								
 									ブックマーク
 								</div>
@@ -273,7 +287,8 @@
 								</div>								
 							</div>							
 						
-							<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_wrap"
+								 onclick="location.href='${pageContext.request.contextPath}/viewlistwritedcompanyreview';"> 		
 								<div class="mypage_button_style_button_name"> 								
 									企業レビュー
 								</div>
@@ -290,16 +305,16 @@
 							カスタマーセンター
 						</div>	
 						
-						<div class="mypage_buttontap_wrap"> 												
-							<div class="mypage_button_style_wrap"> 	
-								<div class="mypage_button_style_button_name"> 								
+						<div class="mypage_buttontap_wrap"> 	
+							<div class="mypage_button_style_wrap" id="intro_popup_service_center">
+								<div class="mypage_button_style_button_name"> 		
 									お問い合わせ・バグの報告
 								</div>
 								<div class="mypage_button_style_button_icon">	
 									<i class="chevron right icon"></i>
 								</div>											
 							</div>
-		
+			
 							<div class="mypage_button_style_wrap"> 	
 								<div class="mypage_button_style_button_name"> 								
 									申告した内容/申告された内容を確認
@@ -307,14 +322,13 @@
 								<div class="mypage_button_style_button_icon">
 									<i class="chevron right icon"></i>
 								</div>								
-							</div>									
-						</div>
+							</div>	
+						</div>	
 					</div>
 									 
 				</div>
 			</div>
 		</div>
-	
 	</div>
 	
 </body>
