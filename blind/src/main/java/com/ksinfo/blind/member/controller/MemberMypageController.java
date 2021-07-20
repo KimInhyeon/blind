@@ -28,14 +28,27 @@ public class MemberMypageController {
 		
 		int companyId= (int) account.getCompanyId();
 		String userCompanyName = mypageService.getUsersCompanyName(companyId);
-		
 
 		//account 자체를 그대로 전송시 password등도 같이 전송되어 보안 우려로 개별전송.
 		mav.addObject("user_nick_name",userNickname);
-		mav.addObject("user_auth",userAuth);			//table의 user_auth칼럼이 char(7)인 관계로 'RM     ' 형태로 리턴됨을 확인함.
 		mav.addObject("user_company_name",userCompanyName);
+
 		
-		mav.setViewName("main/member/mypage");
+		
+		
+		//출력할 페이지 설정
+		
+		if(userAuth.equals("ROLE_RM")) {
+			mav.setViewName("main/member/mypageRegular");	//레귤러(정회원) 아닌 경우에는 일반회원의 마이페이지로 리턴.
+			return mav;			
+		}
+
+		mav.setViewName("main/member/mypageNormal");
 		return mav;
+			
+
+		
+		//레귤러 회원/일반회원으로 각각 이동할 페이지 구분하여 생성
+
 	}
 }
