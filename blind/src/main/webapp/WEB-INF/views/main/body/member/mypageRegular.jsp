@@ -97,7 +97,19 @@ aaaaaa
 		margin: 2%;
 	} 	
 
-	/* 7월19일 버튼들의 공통css정리----------------------------------------------------- */
+	.mypage_main_textmargin{ /**/
+			font-size: 1.0em;
+			margin: 3%;
+	}
+
+	.mypage_main_user_profile_style_textalign_left{ /* 유저의 프로필 정보 토픽/기업리뷰/연봉랭크들의 글을 정렬. */
+		text-align:left;
+		margin: 2%;
+	} 	
+	
+
+
+
 
 	.mypage_buttontap_name{ /*각 버튼탭들의 정렬설정(좌측정렬)*/
 		text-align:left;
@@ -113,6 +125,7 @@ aaaaaa
 		background-color: #ffffff; 
 		margin: 2%; 
 		padding: 1.5%;			
+		cursor: pointer;
 	} 	
 
 	.mypage_button_style_button_name{ /* 버튼의 '>'아이콘이 우측으로 정렬할 수 있도록 라인설정*/
@@ -124,6 +137,7 @@ aaaaaa
 		text-align: right;
 		font-size: 1.5em;
 	} 
+
 
 	</style>
 
@@ -156,36 +170,46 @@ aaaaaa
 					</div>
 				</div>
 			
-				<div id="mypage_main_user_activity"> 				<!-- 유저의 토픽/기업리뷰/연봉탭 관련 활동안내 리스트 -->
+				<div id="mypage_main_user_activity" class="mypage_main_user_profile_style_textalign_left" > <!-- 유저의 토픽/기업리뷰/연봉탭 관련 활동안내 리스트 -->
 					君の最近の活動と結果です。
-					<div>
+					<div class="mypage_main_user_profile_style_textalign_left">
 						トピック
-						- 今月間書いたポストの数は１０個
-						- 今月間もらった「好きです」は２０個
-						- 今月間書いたポストにレブは８個
+						<div class="mypage_main_user_profile_style_textalign_left">
+							 - 今月間書いたポストの数は	 <!-- 컨트롤러 통해 값 수신하도록. -->個
+						</div>
+						<div class="mypage_main_user_profile_style_textalign_left">
+					 		- 今月間もらった「好きです」は<!-- 컨트롤러 통해 값 수신하도록. -->個
+					 	</div>
+						<div class="mypage_main_user_profile_style_textalign_left">
+							- 今月間書いたポストにレブは  <!-- 컨트롤러 통해 값 수신하도록. -->個
+						</div>
 					</div>
 
-					<div>
+					<div class="mypage_main_user_profile_style_textalign_left">
 						企業のメール
-						- 関心があるとマーク 「トヨタ車」に新しいレビューが登録しました！
+						<div class="mypage_main_user_profile_style_textalign_left">
+							- 関心があるとマーク 「トヨタ車」に新しいレビューが登録しました！
+						</div>
 					</div>
 			
-					<div>
+					<div class="mypage_main_user_profile_style_textalign_left">
 						給料ランク
-						- 今月間給料ランクの順位が上位10％中に入りました！おめでとう！
+						<div class="mypage_main_user_profile_style_textalign_left">
+							- 今月間給料ランクの順位が上位 <!-- 컨트롤러 통해 값 수신하도록. -->％中に入りました！おめでとう！
+						</div>
 					</div>
 
 				</div>
 
 				<div id="mypage_button_warp"> 			<!-- main구성 : 2.각종 버튼탭(버튼모음) -->
-	
 					<div id="mypage_button_update_certification_and_income">
-						<div class="mypage_buttontap_name"> 												
+						<div class="mypage_buttontap_name">												
 							アカウントの情報変更
 						</div>	
 						<div class="mypage_buttontap_wrap"> 												
-							<div class="mypage_button_style_wrap"> 	
-								<div class="mypage_button_style_button_name"> 								
+							<div class="mypage_button_style_wrap"
+			 					 onclick="location.href='${pageContext.request.contextPath}/certification';"> 	
+								<div class="mypage_button_style_button_name"> 	
 									企業メールを認証する
 								</div>
 								<div class="mypage_button_style_button_icon">	
@@ -193,7 +217,8 @@ aaaaaa
 								</div>											
 							</div>
 		
-							<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_wrap"
+								 onclick="location.href='${pageContext.request.contextPath}/registerAnnualIncome';"> 					
 								<div class="mypage_button_style_button_name"> 								
 									私の年俸ランキング
 								</div>
@@ -205,12 +230,13 @@ aaaaaa
 					</div>	
 	
 					<div id="mypage_buttontap_invite_and_weblogin"> <!-- 버튼탭2. 타인초대 및 웹로그인 -->
-						<div class="mypage_buttontap_name"> 												
+						<div class="mypage_buttontap_name">
 							招待、Webログイン
 						</div>	
 						<div class="mypage_buttontap_wrap"> 												
-							<div class="mypage_button_style_wrap"> 	
-								<div class="mypage_button_style_button_name"> 								
+							<div class="mypage_button_style_wrap"
+								 onclick="location.href='${pageContext.request.contextPath}/invite';"> 												
+								<div class="mypage_button_style_button_name">
 									招待する
 								</div>
 								<div class="mypage_button_style_button_icon">	
@@ -219,7 +245,8 @@ aaaaaa
 							</div>
 		
 							<div class="mypage_button_style_wrap"> 	
-								<div class="mypage_button_style_button_name"> 								
+								<div class="mypage_button_style_button_name"
+									 onclick="location.href='${pageContext.request.contextPath}/weblogin';"> 																						
 									Webブラウザログイン
 								</div>
 								<div class="mypage_button_style_button_icon">
@@ -229,16 +256,15 @@ aaaaaa
 						</div>
 					</div>	
 	
-	
-	
 					<div id="mypage_buttontap_writedpost_and_bookmark"> <!-- 버튼탭3. 로그인한 회원이 작성한 포스트/기업리뷰, 즐겨핯기한 포스트 리스트출력-->
 						<div class="mypage_buttontap_name"> 												
 							私が書いたポスト、ブックマーク
 						</div>	
 						
 						<div class="mypage_buttontap_wrap"> 												
-							<div class="mypage_button_style_wrap"> 	
-								<div class="mypage_button_style_button_name"> 								
+							<div class="mypage_button_style_wrap"
+								 onclick="location.href='${pageContext.request.contextPath}/viewlistwritedpost';"> 					
+								<div class="mypage_button_style_button_name">
 									私が書いたポスト
 								</div>
 								<div class="mypage_button_style_button_icon">	
@@ -246,7 +272,8 @@ aaaaaa
 								</div>											
 							</div>
 		
-							<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_wrap"
+								 onclick="location.href='${pageContext.request.contextPath}/viewlistmybookmark';"> 												
 								<div class="mypage_button_style_button_name"> 								
 									ブックマーク
 								</div>
@@ -255,7 +282,8 @@ aaaaaa
 								</div>								
 							</div>							
 						
-							<div class="mypage_button_style_wrap"> 	
+							<div class="mypage_button_style_wrap"
+								 onclick="location.href='${pageContext.request.contextPath}/viewlistwritedcompanyreview';"> 		
 								<div class="mypage_button_style_button_name"> 								
 									企業レビュー
 								</div>
@@ -272,16 +300,16 @@ aaaaaa
 							カスタマーセンター
 						</div>	
 						
-						<div class="mypage_buttontap_wrap"> 												
-							<div class="mypage_button_style_wrap"> 	
-								<div class="mypage_button_style_button_name"> 								
+						<div class="mypage_buttontap_wrap"> 	
+							<div class="mypage_button_style_wrap" id="intro_popup_service_center">
+								<div class="mypage_button_style_button_name"> 		
 									お問い合わせ・バグの報告
 								</div>
 								<div class="mypage_button_style_button_icon">	
 									<i class="chevron right icon"></i>
 								</div>											
 							</div>
-		
+			
 							<div class="mypage_button_style_wrap"> 	
 								<div class="mypage_button_style_button_name"> 								
 									申告した内容/申告された内容を確認
@@ -289,10 +317,12 @@ aaaaaa
 								<div class="mypage_button_style_button_icon">
 									<i class="chevron right icon"></i>
 								</div>								
-							</div>									
-						</div>
+							</div>	
+						</div>	
 					</div>				 
 				</div>
+				
+				
 			</div>
 		</div>
 	</div>
