@@ -13,11 +13,12 @@
 		board_create_date,
 		TO_CHAR(board_update_date,'YYYY-MM-DD')AS
 		board_update_date
-		FROM blind.board_mgt;
+		FROM blind.board_mgt
+		ORDER BY board_order ASC;
 	</select>
 
 	<select id="getPostListBySearchKeyword"
-		resultType="com.ksinfo.blind.topicMain.dto.PostDto"
+		resultType="com.ksinfo.blind.topicMain.dto.PostDto" 
 		parameterType="String">
 		SELECT
 		post.post_id,
@@ -31,7 +32,7 @@
 		post_update_date,
 		board.board_topic_name,
 		post_count_inf.post_count,
-		company_name
+		coalesce(cm_name.company_name,'会社名無し') as company_name
 		FROM blind.post_mgt post
 		INNER
 		JOIN blind.board_mgt board
@@ -40,12 +41,23 @@
 		JOIN blind.post_count_inf
 		ON post.post_id
 		= post_count_inf.post_id
-		JOIN blind.company_mgt company
-		ON post.user_id
-		= company.user_id
+		INNER JOIN
+	    	(
+	    	SELECT
+		  	  inner_um.user_id AS user_id
+		  	  ,inner_cm.company_name AS company_name
+			FROM
+		      blind.user_mgt inner_um
+			LEFT JOIN
+		      blind.company_mgt inner_cm
+			ON
+		      inner_cm.company_id = inner_um.company_id
+	    	) cm_name
+		ON
+	    post.user_id = cm_name.user_id
 		<if test="searchKeyword neq '-1'">
 			where board.board_id = cast(#{searchKeyword} AS integer)
-		</if>
+		</if>		
 		ORDER BY post.post_update_date
 		fetch first 30 rows only;
 		<!-- SELECT post_id, user_id, post_title, post_blind_flag, post_contents, 
@@ -70,7 +82,7 @@
 		post_update_date,
 		board.board_topic_name,
 		post_count_inf.post_count,
-		company_name
+		coalesce(cm_name.company_name,'会社名無し') as company_name
 		FROM
 		blind.post_mgt post
 		INNER
@@ -80,9 +92,20 @@
 		JOIN blind.post_count_inf
 		ON post.post_id =
 		post_count_inf.post_id
-		JOIN blind.company_mgt company
-		ON post.user_id =
-		company.user_id
+		INNER JOIN
+	    	(
+	    	SELECT
+		  	  inner_um.user_id AS user_id
+		  	  ,inner_cm.company_name AS company_name
+			FROM
+		      blind.user_mgt inner_um
+			LEFT JOIN
+		      blind.company_mgt inner_cm
+			ON
+		      inner_cm.company_id = inner_um.company_id
+	    	) cm_name
+		ON
+	    post.user_id = cm_name.user_id			
 		where post.post_id =#{postId};
 	</select>
 

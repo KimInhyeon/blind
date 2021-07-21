@@ -19,19 +19,23 @@
     .topicbest span{color:gray;}
     .topicbest i{color:gray;}
 </style>
-<script>        
+<script>
 	function goSearch(){
 		var searchKeyword = $("#searchbox").val();
-		alert(searchKeyword);		
+		
+		if (searchKeyword === "" || searchKeyword === null || searchKeyword === undefined) {
+			return false;
+		}
+		
 		location.href='${pageContext.request.contextPath}/search?searchKeyword=' + searchKeyword;
 	}
 </script>
 </head>
 	<body>
  		    <div class="ui container">
-            <div class="ui fluid massive left icon input" style="margin-top:30px;">
+            <div class="ui fluid massive left icon input" onclick="goSearch();">
                 <input type="text" placeholder="関心のある内容を検索してください。" id="searchbox" onKeypress="javascript:if(event.keyCode==13) {goSearch()}">
-                <i class="search icon" id="searchicon"></i>
+                <i class="search link icon" id="searchicon" onclick="goSearch();"></i>
             </div>
 			
             <div class="topicbesttit">
@@ -104,7 +108,7 @@
                             <i class="eye icon item" style="position:absolute; right:60px;"></i><span class="item" style="padding:0 10px;">${topicSub.postCount }</span>
                         </div>
                         <div class="ui horizontal list" style="padding-left:10px;">
-                            <a class="item"href="${pageContext.request.contextPath}/topicDetail?postId=${topicSub.postId}"><span style="color:black; margin-left:-5px;">${topicSub.postTitle }</span></a><br>
+                            <a class="item" href="${pageContext.request.contextPath}/topicDetail?postId=${topicSub.postId}"><span style="color:black; margin-left:-5px;">${topicSub.postTitle }</span></a><br>
                         </div>   
                     </div>
                     <c:set var="rowCount" value="${rowCount+1 }" /> 

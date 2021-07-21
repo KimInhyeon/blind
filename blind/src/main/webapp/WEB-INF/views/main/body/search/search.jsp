@@ -7,7 +7,6 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <style>
-    body{padding:2rem;}
    .tit{padding: 6px 0 8px; font-size: 150%; font-weight: 700;}
    #direc{padding:15px; width:100%; background-color:#f2f2f3;}
    #direc a{color:black; padding:5px;}
@@ -35,12 +34,8 @@
 	   margin: 0;
 	   padding: 0;
 	}
-	
-	body {
-	   padding: 2rem;
-	}
-	
-	.tit {
+
+		.tit {
 	   padding: 6px 0 8px;
 	   font-size: 150%;
 	   font-weight: 700;
@@ -78,7 +73,6 @@
 	
 	<script>
 	function bookmarkSet(postId){
-		//alert(postId); //postid를 컨트롤러에게 넘겨줘서 북마크 처리가능.
 		var bookmarkId = "#bookmarkSet"+postId;
 		$(bookmarkId).html("<a><i class='bookmark icon'></i></a>");
 	}
@@ -87,7 +81,7 @@
 		//1개의 토픽을 선택시 해당 토픽만 출력하도록 하는 제이쿼리 함수.
 		$("#viewPostsSelectedTopic").on('change', function(){	
 			var checkTopicNum= $("#viewPostsSelectedTopic option:selected").val();
-			//alert("checkTopicNum:"+checkTopicNum);
+			
 	    	$.ajax({
 				type:"POST",
 			    url: "viewPostsSelectedTopic",
@@ -96,7 +90,6 @@
 				 	   },
 				dataType:"json",
 				success: function(result){
-					//alert("success");
 
 					//포스트리스트의 화면재구성 시작
 					//주요틀 재구성
@@ -140,7 +133,7 @@
 	
 		$("#sortPosts").on('change', function(){
 			var checkTopicNum= $("#viewPostsSelectedTopic option:selected").val();
-			//alert("checkTopicNum:"+checkTopicNum);
+			
 			$.ajax({
 				type:"POST",
 			    url: "sortPosts",
@@ -150,7 +143,7 @@
 					   },
 				dataType:"json",
 				success: function(result){
-					//alert("success");
+					
 
 					//포스트리스트의 화면재구성 시작
 					//주요틀 재구성
@@ -259,7 +252,7 @@
 								<c:when test="${empty companyReviews}">
 									<div>この企業のレビューはありません。</div>
 									<div>一番に作成しませんか。</div>
-									<div style="float:Right;">　<a href="">この企業のレビューを作成する</a>　</div>　
+									<div style="float:Right;"><button class="mini ui blue button" onclick="javascript:{location.href='/blind/companyReviewWrite'}">この企業のレビューを作成する</button></div>　
 								</c:when>
 								<c:otherwise>
 									<a href="">

@@ -118,7 +118,7 @@
       <table border="1">
       <tr>
          <td rowspan="3" style="border:none;"><img src="${pageContext.request.contextPath}/resources/images/company/${company3.companyId}.png" width="90px" height="90px" ></td>
-         <td style="border:none;">${company3.companyName}</td>
+         <td style="border:none;"><a href="${pageContext.request.contextPath}/companyIntroduction?companyId=${company3.companyId}">${company3.companyName}</a></td>
       </tr>
       <tr>
          <td style="border:none;">

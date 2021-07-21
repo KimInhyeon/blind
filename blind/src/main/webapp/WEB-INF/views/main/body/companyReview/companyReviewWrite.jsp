@@ -421,7 +421,7 @@
 <input type="hidden" id="hdnHeadPoint" name="hdnHeadPoint" value="-1"></input>
 <input type="hidden" id="hdnCompanyFlag" name ="hdnCompanyFlag" value="-1"></input>
 <input type="hidden" id="hdnCompanyId" name ="hdnCompanyId" value="-1"></input>
-  <input class="ui primary button" type="submit" placeholder="submit" ></input>
+<input class="ui primary button" type="submit" placeholder="submit" value="登録"></input>
  </form>
 
 </div>

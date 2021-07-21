@@ -4,6 +4,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,9 +50,29 @@ public class TopicMainController {
 	}
 
 	@RequestMapping(value = "topicDetail", method = RequestMethod.GET)
-	public ModelAndView getPost(long postId, ModelAndView mav) {
-
-		postService.updatePostCount(postId);
+	public ModelAndView getPost(HttpServletRequest request, HttpServletResponse response, long postId, ModelAndView mav) {
+		
+        Cookie[] cookies = request.getCookies();
+        
+        Cookie viewCookie = null;
+        
+        if (cookies != null && cookies.length > 0) 
+        {
+            for (int i = 0; i < cookies.length; i++)
+            {
+                if (cookies[i].getName().equals("cookie"+postId))
+                { 
+                    viewCookie = cookies[i];
+                }
+            }
+        }
+        
+        if (viewCookie == null) {
+        	Cookie newCookie = new Cookie("cookie"+ postId, "|" + postId + "|");
+        	response.addCookie(newCookie);
+        	postService.updatePostCount(postId);
+        }
+		
 		mav.addObject("postDetailDto", postService.postDetailView(postId));
 		mav.setViewName("main/topicMain/topicDetail");
 
