@@ -104,12 +104,8 @@ aaaaaa
 
 	.mypage_main_user_profile_style_textalign_left{ /* 유저의 프로필 정보 토픽/기업리뷰/연봉랭크들의 글을 정렬. */
 		text-align:left;
-		margin: 2%;
+		margin:4%;
 	} 	
-	
-
-
-
 
 	.mypage_buttontap_name{ /*각 버튼탭들의 정렬설정(좌측정렬)*/
 		text-align:left;
@@ -137,7 +133,6 @@ aaaaaa
 		text-align: right;
 		font-size: 1.5em;
 	} 
-
 
 	</style>
 
@@ -175,10 +170,10 @@ aaaaaa
 					<div class="mypage_main_user_profile_style_textalign_left">
 						トピック
 						<div class="mypage_main_user_profile_style_textalign_left">
-							 - 今月間書いたポストの数は	 <!-- 컨트롤러 통해 값 수신하도록. -->個
+							 - 今月間書いたポストの数は ${user_post_counts_this_month} 個
 						</div>
 						<div class="mypage_main_user_profile_style_textalign_left">
-					 		- 今月間もらった「好きです」は<!-- 컨트롤러 통해 값 수신하도록. -->個
+					 		- 今月間もらった「好きです」は ${like_count_this_month}個
 					 	</div>
 						<div class="mypage_main_user_profile_style_textalign_left">
 							- 今月間書いたポストにレブは  <!-- 컨트롤러 통해 값 수신하도록. -->個
@@ -186,7 +181,7 @@ aaaaaa
 					</div>
 
 					<div class="mypage_main_user_profile_style_textalign_left">
-						企業のメール
+						企業のレビュー
 						<div class="mypage_main_user_profile_style_textalign_left">
 							- 関心があるとマーク 「トヨタ車」に新しいレビューが登録しました！
 						</div>

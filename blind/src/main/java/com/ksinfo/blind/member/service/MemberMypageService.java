@@ -14,4 +14,17 @@ public class MemberMypageService {
 	public String getUsersCompanyName(int companyId) {
 		return mapper.getUsersCompanyName(companyId);
 	}
+	
+	public int getPostCountsThisMonth(int userId) {
+		return  mapper.getPostCountsThisMonth(userId);
+	}
+	
+	public int getPostLikeCountThisMonth(int userId) {
+		return  mapper.getPostLikeCountThisMonth(userId);
+	}
+
+	/*DB의 데이터를 먼저 작성후 테스트 진행예정
+	public int getPostReplyCountThisMonth(int userId) {
+		return  mapper.getPostReplyCountThisMonth(userId);
+	}*/
 }

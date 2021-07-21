@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ksinfo.blind.member.mapper.MemberMypageMapper">
 
+<!-- 1.유저가 근무하는 회사의 이름 가져오기 -->
 <select id="getUsersCompanyName" parameterType="int" resultType="String"> 
 select 
 	"blind".company_mgt.company_name
@@ -10,4 +11,48 @@ from
 where "blind".company_mgt.company_id = #{companyId};
 </select>
 
+
+<!-- 2.유저가 이번 달에 작성한 포스트의 갯수를 리턴 -->
+<select id="getPostCountsThisMonth" parameterType="int" resultType="int"> 
+<![CDATA[ 
+SELECT 
+	count("blind".post_mgt.post_create_date) 
+FROM 
+	"blind".post_mgt
+where
+	"blind".post_mgt.user_id =  #{userId}
+and
+
+	to_char("blind".post_mgt.post_create_date, 'YYYY-MM-DD') >= to_char( now() , 'YYYY-MM-01') 
+and
+	to_char("blind".post_mgt.post_create_date, 'YYYY-MM-DD') <= to_char( now() , 'YYYY-MM-31'); 
+]]>
+<!-- 부등호(>=, <=)사용시 <![CDATA[ 를 활용하는 것도 방법임을 확인. -->
+</select>
+
+
+<!-- 3.유저가 이번달에 작성한 포스트들이 얻은 좋아요의 갯수를 카운트하여 리턴.  -->
+<select id="getPostLikeCountThisMonth" parameterType="int" resultType="int"> 
+SELECT DISTINCT
+	count(blind.post_recommend_inf.post_id)
+FROM 
+	blind.post_recommend_inf	
+LEFT JOIN blind.post_mgt
+	ON blind.post_mgt.post_id = blind.post_recommend_inf.post_id
+where 
+	blind.post_mgt.user_id = #{userId}  -- 조건1.작성자 본인의 글인지를 확인
+and
+	to_char("blind".post_mgt.post_create_date, 'YYYY-MM-DD') &gt;= to_char( now() , 'YYYY-MM-01') <!-- &gt;= >=기호이다. >가 마크업 관련으로 인식되어 이스케이프 활용. -->
+and
+	to_char("blind".post_mgt.post_create_date, 'YYYY-MM-DD') &lt;= to_char( now() , 'YYYY-MM-31');<!-- &gt;= <=기호이다. <가 마크업 관련으로 인식되어 이스케이프 활용. -->
+	<!-- 대리님께 postgreSQL의 마지막 날짜를 구하는 법 여쭤볼것. 2월처럼 매달 마지막이 28일등 31일이 마지막이 아닌경우 에러우려됨. -->
+</select>
+
+
+<!-- 유저가 이번 달에 작성한 글에 대한 댓글의 갯수 카운트 -->
+<!-- 
+<select id="getPostReplyCountThisMonth" parameterType="int" resultType="int"> 
+
+</select>
+ -->
 </mapper>

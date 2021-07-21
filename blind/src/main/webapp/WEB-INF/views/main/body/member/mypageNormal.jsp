@@ -95,8 +95,10 @@
 	} 	
 
 	.mypage_main_textmargin{ /**/
-			font-size: 1.0em;
-			margin: 3%;
+		font-size: 1.0em;
+		
+		margin-left: -15%;
+		margin-top: 7%;
 	}
 
 
@@ -155,7 +157,7 @@
 		</div>
 		<div id="mypage_main_wrap">
 			<div id="mypage_main_user_profile">					<!-- 메인1. 유저 프로필(닉네임,메일,근무기업) -->				
-	 			<div class="mypage_main_user_profile_style_wrap"> 
+				<div class="mypage_main_user_profile_style_wrap"> 
 					<div class="mypage_main_user_profile_style_nick_names">
 						${user_nick_name}
 					</div>
@@ -163,13 +165,15 @@
 					<div class="mypage_main_user_profile_style_user_icon"><!-- 유저 아이콘 -->
 						<a><i class="user circle icon"></i></a>
 					</div>
-													
-					<div>（汎用のメール）</div>
+								
+					<div class="mypage_main_user_profile_style_company_names">
+						（汎用のメール）
+					</div>
 				</div>
 				
 				<div id="mypage_main_Explanation"> 				<!-- 일반회원은 인증이 필요하다는 안내페이지로 대체. -->
-					<div style="margin-left:13%; margin-top:5%; vertical-align:bottom ;">
-						<div style="float:left; vertical-align: bottom; margin-top: 3%;">
+					<div style="margin-left:13%; margin-top:10%; vertical-align:bottom ;">
+						<div style="float:left; vertical-align: bottom; margin-top:5%;">
 							<i class="lock icon"  style="float:left; font-size: 2.5em; position:static;" ></i>
 						</div>
 				
