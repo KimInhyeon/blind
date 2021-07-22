@@ -197,7 +197,7 @@ aaaaaa
 					<div class="mypage_main_user_profile_style_textalign_left">
 						給料ランク
 						<div class="mypage_main_user_profile_style_textalign_left">
-							- 今月間給料ランクの順位が上位 <!-- 컨트롤러 통해 값 수신하도록. -->％中に入りました！おめでとう！
+							- 今月間給料ランクの順位が上位 ${my_rank_percent} ％中に入りました！
 						</div>
 					</div>
 

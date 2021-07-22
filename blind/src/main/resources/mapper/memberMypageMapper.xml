@@ -48,10 +48,20 @@ and
 </select>
 
 
-<!-- 유저가 이번 달에 작성한 글에 대한 댓글의 갯수 카운트 -->
+<!-- 4.유저가 이번 달에 작성한 글에 대한 댓글의 갯수 카운트 -->
 <!-- 
 <select id="getPostReplyCountThisMonth" parameterType="int" resultType="int"> 
 
 </select>
  -->
+ 
+<!-- 5.유저가 이번 달에 작성한 글에 대한 댓글의 갯수 카운트 -->
+<select id="getSalaryRankingData" parameterType="int" resultType="com.ksinfo.blind.member.dto.SalaryRankDto"> 
+select 
+   user_id 
+  , ROW_NUMBER() over(order by salary desc) AS salaryranking
+from
+	"blind".SALARY_RANK_MGT;
+</select>
+ 
 </mapper>

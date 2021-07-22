@@ -1,5 +1,8 @@
 package com.ksinfo.blind.member.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ksinfo.blind.member.dto.SalaryRankingDto;
 import com.ksinfo.blind.member.service.MemberMypageService;
 import com.ksinfo.blind.security.Account;
 
@@ -18,7 +22,6 @@ public class MemberMypageController {
 	private static final Logger logger = LoggerFactory.getLogger(MemberMypageController.class);	
 
 	@Autowired MemberMypageService mypageService;
-	
 
 	@RequestMapping(value="/member/mypage")
 	public ModelAndView Mypage(@AuthenticationPrincipal Account account, ModelAndView mav) {
@@ -26,16 +29,28 @@ public class MemberMypageController {
 		//로그인한 유저의 정보
 		String userNickname = account.getUserNickname();
 		String userAuth = account.getUserAuth();
+		int userId = (int) account.getUserId();
 		
-		//공통정보(닉네임) mav에 저장(일반회원 경우 프로필이 회원인증안내 텍스트로 대체되므로 닉네임만 전달하면 됨)
+		
+		List<SalaryRankingDto> salaryRankingData = mypageService.getSalaryRankingData(); 
+		int myRankNumber=salaryRankingData.size();//초기화 설정. 0으로 초기화시 연산에러 나므로 순위를 맨 뒤에 두로록 설정.
+
+		for(int i=0; i<salaryRankingData.size(); i++) {
+			if(salaryRankingData.get(i).getUserId() == userId){
+				 myRankNumber=salaryRankingData.get(i).getSalaryRanking();
+			}
+		}
+		
+		int myRankPercent = (myRankNumber/salaryRankingData.size() )*100 ;	//유저에게 리턴되는 정보. 연봉랭크에서 상위 00% 출력시 랭크숫자값을 리턴.
+																		//상위랭크계산법 : (나의순위/전체인원수)x100
+		
+		//공통정보(닉네임) mav에 저장(일반회원 경우 프로필이 '정회원 인증안내'로 대체되므로 닉네임만 전달하면 됨)
 		int companyId= (int) account.getCompanyId();		
 		String userCompanyName = mypageService.getUsersCompanyName(companyId);
 		mav.addObject("user_nick_name",userNickname);
 
 		//출력할 페이지 설정		
 		if(userAuth.equals("ROLE_RM")) {	//정회원인 경우
-			int userId = (int) account.getUserId();
-			
 			
 			int userPostCountsThisMonth= mypageService.getPostCountsThisMonth(userId);
 			int postLikeCountThisMonth = mypageService.getPostLikeCountThisMonth(userId); 
@@ -50,6 +65,10 @@ public class MemberMypageController {
 			mav.addObject("like_count_this_month",postLikeCountThisMonth);
 			
 			//mav.addObject("reply_count_this_month",postReplyCountThisMonth); DB 데이터 제작 후 태스트 진행
+			
+			mav.addObject("my_rank_percent",myRankPercent);
+			
+			
 			
 			
 			mav.setViewName("main/member/mypageRegular");	//레귤러(정회원) 아닌 경우에는 일반회원의 마이페이지로 리턴.

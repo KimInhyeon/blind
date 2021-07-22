@@ -1,8 +1,11 @@
 package com.ksinfo.blind.member.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ksinfo.blind.member.dto.SalaryRankingDto;
 import com.ksinfo.blind.member.mapper.MemberMypageMapper;
 
 @Service
@@ -27,4 +30,9 @@ public class MemberMypageService {
 	public int getPostReplyCountThisMonth(int userId) {
 		return  mapper.getPostReplyCountThisMonth(userId);
 	}*/
+
+	public List<SalaryRankingDto> getSalaryRankingData(){
+		return mapper.getSalaryRankingData();
+	}
+
 }
