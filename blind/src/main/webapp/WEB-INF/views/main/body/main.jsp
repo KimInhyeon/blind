@@ -33,7 +33,7 @@
 </head>
 	<body>
  		    <div class="ui container">
-            <div class="ui fluid massive left icon input" onclick="goSearch();">
+            <div class="ui fluid massive left icon input">
                 <input type="text" placeholder="関心のある内容を検索してください。" id="searchbox" onKeypress="javascript:if(event.keyCode==13) {goSearch()}">
                 <i class="search link icon" id="searchicon" onclick="goSearch();"></i>
             </div>

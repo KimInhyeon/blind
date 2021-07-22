@@ -46,7 +46,7 @@
 						<option value="reporter">通報者</option>
 					</select>
 					<input type="text" placeholder="キーワードを入力" id="searchKeyword">
-					<i class="search icon"></i>
+					<i class="search link icon" id="searchIcon"></i>
 				</div>
 			</div>
 		</div>
@@ -436,6 +436,7 @@
 		const type = searchParams.get("type");
 		const searchKeywordParameter = searchParams.get("searchKeyword");
 		const searchKeyword = document.getElementById("searchKeyword");
+		const searchIcon = document.getElementById("searchIcon");
 		if (verifyFlag !== null) {
 			document.getElementById("verifyFilter").value = verifyFlag;
 		}
@@ -466,7 +467,19 @@
 				}
 			}
 		});
-
+		searchIcon.addEventListener("click", function (event) {
+			const trimSearchKeyword = searchKeyword.value.trim();
+			if (trimSearchKeyword.length > 0) {
+				const searchParams = new URLSearchParams(location.search);
+				searchParams.delete("page");
+				searchParams.set("searchTarget", document.getElementById("searchTarget").value);
+				searchParams.set("searchKeyword", trimSearchKeyword);
+				getReportList(searchParams);
+			} else {
+				alert("キーワードを入力してください");
+			}
+		});
+		
 		// モーダル
 		$(".ui.modal").modal({
 			duration: 100,

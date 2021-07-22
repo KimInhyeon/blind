@@ -86,7 +86,7 @@
 						<option value="companyDomain">ドメイン</option>
 					</select>
 					<input type="text" placeholder="キーワードを入力" id="searchKeyword">
-					<i class="search icon"></i>
+					<i class="search link icon" id="searchIcon"></i>
 				</div>
 			</div>
 		</div>
@@ -666,6 +666,7 @@
 		const searchParams = new URLSearchParams(location.search);
 		const searchTarget = document.getElementById("searchTarget");
 		const inputSearchKeyword = document.getElementById("searchKeyword");
+		const inputSearchIcon = document.getElementById("searchIcon");
 		const searchTargetParameter = searchParams.get("searchTarget");
 		if (searchTargetParameter !== null) {
 			const searchKeyword = searchParams.get("searchKeyword");
@@ -689,6 +690,17 @@
 				}
 			}
 		});
+		inputSearchIcon.addEventListener("click", function (event) {
+			const searchKeyword = inputSearchKeyword.value.trim();
+			if (searchKeyword.length > 0) {
+				searchParams.delete("page");
+				searchParams.set("searchTarget", searchTarget.value);
+				searchParams.set("searchKeyword", searchKeyword);
+				location.search = searchParams.toString();
+			} else {
+				alert("キーワードを入力してください");
+			}
+		});		
 		const verifyFilter = document.getElementById("verifyFilter");
 		const verifyFlag = searchParams.get("verifyFlag");
 		if (verifyFlag !== null) {

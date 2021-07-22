@@ -98,8 +98,13 @@
 					$.each(result, function (key, value) {	
 						var hideUserNick =  value.userNickName.substring(0,1)+'****';
 						var postCreateDate = value.postCreateDate.substring(5,7)+'.'+value.postCreateDate.substring(8,10);
+						var boarderHtml = "<div class='eight wide column' style='border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;border-right-style: inset;'>";
 						
-						$(postList).append("<div class='eight wide column' style='border-color: #d4d4d5; border-width: thin !important; border-style: inset;　border-collapse: collapse !important;'>"
+						if (key%2==1) {
+							boarderHtml = "<div class='eight wide column' style='border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;'>";
+						}
+						
+						$(postList).append(boarderHtml
 	                								+"<a href=''><span>"+ value.boardTopicName +"</span></a>"	
 	                								+"<a href=''><span style='font-size: 130%; font-weight: 700;'>" +value.postTitle + "</span></a>"
 	                								+"<div class='ui grid'>"
@@ -152,8 +157,13 @@
 					$.each(result, function (key, value) {	
 						var hideUserNick =  value.userNickName.substring(0,1)+'****';
 						var postCreateDate = value.postCreateDate.substring(5,7)+'.'+value.postCreateDate.substring(8,10);
+						var boarderHtml = "<div class='eight wide column' style='border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;border-right-style: inset;'>";
 						
-						$(postList).append("<div class='eight wide column' style='border-color: #d4d4d5; border-width: thin !important; border-style: inset;'>"
+						if (key%2==1) {
+							boarderHtml = "<div class='eight wide column' style='border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;'>";
+						}
+						
+						$(postList).append(boarderHtml
 	                								+"<a href=''><span>"+ value.boardTopicName +"</span></a>"	
 	                								+"<a href=''><span style='font-size: 130%; font-weight: 700;'>" +value.postTitle + "</span></a>"
 	                								+"<div class='ui grid'>"
@@ -185,6 +195,16 @@
 			});
 		}); 
 	});
+		
+	function goSearch(){
+		var searchKeyword = $("#searchbox").val();
+		
+		if (searchKeyword === "" || searchKeyword === null || searchKeyword === undefined) {
+			return false;
+		}
+		
+		location.href='${pageContext.request.contextPath}/search?searchKeyword=' + searchKeyword;
+	}
 	</script>
 	
    <title>検索結果 page</title>
@@ -198,9 +218,8 @@
    <div class="inputSearchKeyword">    
    		<form>
         <div class="ui fluid massive left icon input">
-				  <input type="text" placeholder="Search" id="searchbox"
-					     name="searchKeyword" value=${pastSearchKeyword}> 
-	    		<i class="search icon"></i>
+				<input type="text" placeholder="Search" id="searchbox" name="searchKeyword" value=${pastSearchKeyword}> 
+	    		<i class="search link icon" id="searchicon" onclick="goSearch();"></i>
 	  			<div class="results"></div>
 			</div>
    		</form>
@@ -299,9 +318,14 @@
 			</div>   		
 		 <hr width = "100%" color = "#000000" size = "5"></hr>
 			<!-- 게시글(포스트)들 출력 -->
-				<div class="ui internally celled grid" id="postList" >
-					<c:forEach items="${searchResultPosts}" var="posts" >
-							<div class="eight wide column" style="border-color: #d4d4d5; border-width: thin !important; border-style: inset;">
+				<div class="ui internally grid" id="postList" style="box-shadow: none; margin: 0; width: 100%;">
+					<c:forEach items="${searchResultPosts}" var="posts" varStatus="status">
+						<c:if test="${status.index%2==0}">
+							<div class="eight wide column" style="border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;border-right-style: inset;">
+						</c:if>	
+						<c:if test="${status.index%2==1}">
+							<div class="eight wide column" style="border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;">
+						</c:if>
 								<a href=""><span>${posts.boardTopicName }</span></a>	
 								<a href=""><span style="font-size: 130%; font-weight: 700;">${posts.postTitle}</span></a>
 									<div class="ui grid">

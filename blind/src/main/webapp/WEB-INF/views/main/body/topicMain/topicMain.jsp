@@ -200,11 +200,15 @@ body {
 			<!--fit 되는 얇은 선-->
 		</div>
 		<div class="bookmarkcontent">
-			<div class="ui internally celled grid">
-				<c:forEach items="${searchResultPosts }" var="searchResultPosts">
+			<div class="ui internally grid" style="box-shadow: none; margin: 0; width: 100%;">
+				<c:forEach items="${searchResultPosts }" var="searchResultPosts" varStatus="status">
 					<!--1행-->
-					<div class="eight wide column"
-						style="border-color: #d4d4d5; border-width: thin !important; border-style: inset;">
+					<c:if test="${status.index%2==0}">
+						<div class="eight wide column" style="border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;border-right-style: inset;">
+					</c:if>	
+					<c:if test="${status.index%2==1}">
+						<div class="eight wide column" style="border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;">
+					</c:if>					
 						<!-- 두개의 쿼리문을 조인해서 사용하자 -->
 						<a href=""><span>${searchResultPosts.boardTopicName }</span></a> 
 						<a href="/blind/topicDetail?postId=${searchResultPosts.postId }"><span style="font-size: 130%; font-weight: 700;">${searchResultPosts.postTitle }</span></a>
