@@ -35,7 +35,8 @@ public class BoardService {
 			boardMapper.updateBoard(board);
 			return 1;
 		} catch (Exception e) {
-			return 0;
+			e.printStackTrace();
 		}
+		return 0;
 	}
 }

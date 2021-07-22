@@ -69,7 +69,8 @@ public class ReportService {
 			reportMapper.verifyReport(verifyData);
 			return true;
 		} catch (Exception e) {
-			return false;
+			e.printStackTrace();
 		}
+		return false;
 	}
 }

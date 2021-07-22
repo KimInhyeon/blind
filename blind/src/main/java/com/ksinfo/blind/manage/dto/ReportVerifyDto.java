@@ -9,13 +9,21 @@ public final class ReportVerifyDto {
 	private final String reason;
 	private final List<Report> reportList;
 
-	private static final class Report {
+	public static final class Report {
 		private final char type;
 		private final long targetId;
 
-		private Report(char type, long targetId) {
+		public Report(char type, long targetId) {
 			this.type = type;
 			this.targetId = targetId;
+		}
+
+		public char getType() {
+			return type;
+		}
+
+		public long getTargetId() {
+			return targetId;
 		}
 	}
 
@@ -56,7 +64,7 @@ public final class ReportVerifyDto {
 		return reason;
 	}
 
-	public List<Report> getVerifyList() {
+	public List<Report> getReportList() {
 		return reportList;
 	}
 }
