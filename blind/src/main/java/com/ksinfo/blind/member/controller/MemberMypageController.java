@@ -29,8 +29,9 @@ public class MemberMypageController {
 		//로그인한 유저의 정보
 		String userNickname = account.getUserNickname();
 		String userAuth = account.getUserAuth();
-		int userId = (int) account.getUserId();
+	//	int userId = (int) account.getUserId();
 		
+		int userId = 29;
 		
 		List<SalaryRankingDto> salaryRankingData = mypageService.getSalaryRankingData(); 
 		int myRankNumber=salaryRankingData.size();//초기화 설정. 0으로 초기화시 연산에러 나므로 순위를 맨 뒤에 두로록 설정.
@@ -38,6 +39,7 @@ public class MemberMypageController {
 		for(int i=0; i<salaryRankingData.size(); i++) {
 			if(salaryRankingData.get(i).getUserId() == userId){
 				 myRankNumber=salaryRankingData.get(i).getSalaryRanking();
+				 break;
 			}
 		}
 		
