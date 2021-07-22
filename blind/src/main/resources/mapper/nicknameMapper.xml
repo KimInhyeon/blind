@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.common.mapper.NicknameMapper">
+	<select id="checkNickname" resultType="_boolean">
+		SELECT COUNT(*)
+		FROM blind.user_mgt
+		WHERE user_nickname = #{nickname}
+			AND last_generation_flag = '1'
+			AND logical_del_flag = '0';
+	</select>
+<!--
+CREATE FUNCTION blind.change_nickname(
+	login_user_id BIGINT, new_user_generation INTEGER, old_user_password CHAR(68), old_user_email CHAR(64),
+	old_user_nickname VARCHAR(30), old_company_id BIGINT, old_user_auth CHAR(7), old_reported_count INTEGER
+) RETURNS TABLE (
+	userId BIGINT,
+	userGeneration INTEGER,
+	lastGenerationFlag CHAR(1),
+	userPassword CHAR(68),
+	userEmail CHAR(64),
+	userNickname VARCHAR(30),
+	nicknameChangeDate DATE,
+	companyId BIGINT,
+	userAuth CHAR(7),
+	reportedCount INTEGER
+) AS $$
+	DECLARE
+		now TIMESTAMP := NOW();
+	BEGIN
+		UPDATE blind.user_mgt
+		SET last_generation_flag = '0',
+			rec_update_user_id = login_user_id,
+			rec_update_date = now
+		WHERE user_id = login_user_id;
+		INSERT INTO blind.user_mgt (
+			user_generation, last_generation_flag, user_password, user_email, user_nickname,
+			nickname_change_date, company_id, user_auth, reported_count, rec_create_user_id,
+			rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			new_user_generation, '1', old_user_password, old_user_email, old_user_nickname,
+			now, old_company_id, old_user_auth, old_reported_count, login_user_id,
+			now, login_user_id, now, '0'
+		) RETURNING user_id INTO login_user_id;
+		RETURN QUERY
+			SELECT
+				user_id,
+				user_generation,
+				last_generation_flag,
+				user_password,
+				user_email,
+				user_nickname,
+				nickname_change_date,
+				company_id,
+				user_auth,
+				reported_count
+			FROM blind.user_mgt
+			WHERE user_id = login_user_id;
+	END;
+$$ LANGUAGE plpgsql;
+-->
+	<select id="changeNickname"	parameterType="com.ksinfo.blind.common.dto.NicknameChangeDto"
+		resultType="com.ksinfo.blind.security.Account" statementType="CALLABLE"
+	>
+		{CALL blind.change_nickname(
+			#{userId}, #{userGeneration}, #{userPassword}, #{userEmail}, #{userNickname}, #{companyId}, #{userAuth}, #{reportedCount}
+		)}
+	</select>
+</mapper>
