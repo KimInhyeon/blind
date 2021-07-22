@@ -15,7 +15,7 @@
 
 
 <body>
-타인 초대 페이지(invite)
+신고한/신고당한 내역리스트 페이지(viewmyalertlist)
 </body>
 </html>
 

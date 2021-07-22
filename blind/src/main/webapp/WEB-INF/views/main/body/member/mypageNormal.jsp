@@ -255,7 +255,7 @@
 		
 							<div class="mypage_button_style_wrap"> 	
 								<div class="mypage_button_style_button_name"
-									 onclick="location.href='${pageContext.request.contextPath}/weblogin';"> 																						
+									 onclick="location.href='${pageContext.request.contextPath}/webLogin';"> 																						
 									Webブラウザログイン
 								</div>
 								<div class="mypage_button_style_button_icon">
@@ -272,7 +272,7 @@
 						
 						<div class="mypage_buttontap_wrap"> 												
 							<div class="mypage_button_style_wrap"
-								 onclick="location.href='${pageContext.request.contextPath}/viewlistwritedpost';"> 					
+								 onclick="location.href='${pageContext.request.contextPath}/viewListWritedPost';"> 					
 								<div class="mypage_button_style_button_name">
 									私が書いたポスト
 								</div>
@@ -282,7 +282,7 @@
 							</div>
 		
 							<div class="mypage_button_style_wrap"
-								 onclick="location.href='${pageContext.request.contextPath}/viewlistmybookmark';"> 												
+								 onclick="location.href='${pageContext.request.contextPath}/viewListMyBookmark';"> 												
 								<div class="mypage_button_style_button_name"> 								
 									ブックマーク
 								</div>
@@ -292,7 +292,7 @@
 							</div>							
 						
 							<div class="mypage_button_style_wrap"
-								 onclick="location.href='${pageContext.request.contextPath}/viewlistwritedcompanyreview';"> 		
+								 onclick="location.href='${pageContext.request.contextPath}/viewListWritedCompanyReview';"> 		
 								<div class="mypage_button_style_button_name"> 								
 									企業レビュー
 								</div>
@@ -318,9 +318,10 @@
 									<i class="chevron right icon"></i>
 								</div>											
 							</div>
-			
-							<div class="mypage_button_style_wrap"> 	
-								<div class="mypage_button_style_button_name"> 								
+							
+							<div class="mypage_button_style_wrap"
+									 onclick="location.href='${pageContext.request.contextPath}/viewMyAlertList';"> 
+								<div class="mypage_button_style_button_name">
 									申告した内容/申告された内容を確認
 								</div>
 								<div class="mypage_button_style_button_icon">

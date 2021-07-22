@@ -15,7 +15,7 @@
 
 
 <body>
-연봉정보 등록 탭	
+연봉정보 등록페이지(registerAnnualIncome)
 </body>
 </html>
 

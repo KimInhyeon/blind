@@ -64,7 +64,8 @@ public class MemberMypageController {
 	}
 	
 	
-	//이메일 인증페이지로 이동
+	//1.계정정보 수정
+	//1.1.이메일 인증페이지로 이동(회원등급 제한없음)
 	@RequestMapping(value="certification")
 	public ModelAndView Certification(@AuthenticationPrincipal Account account, ModelAndView mav) {
 
@@ -72,8 +73,7 @@ public class MemberMypageController {
 		return mav;
 	}
 	
-	
-	//연봉등록 탭으로 이동.(단 정회원만 가능. 일반회원시 이메일 인증페이지로 이동.
+	//1.2.연봉등록 페이지로 이동.(단 정회원만 가능. 일반회원시 이메일 인증페이지로 이동.
 	@RequestMapping(value="registerAnnualIncome")
 	public ModelAndView RegisterAnnualIncome(@AuthenticationPrincipal Account account, ModelAndView mav) {
 		//로그인한 유저의 정보
@@ -92,5 +92,101 @@ public class MemberMypageController {
 		return mav;
 
 	}	
+	
+	//2.초대, 웹로그인
+	//2.1. 초대하기 페이지로 이동(회원등급 제한없음)
+	@RequestMapping(value="invite")
+	public ModelAndView Invite(@AuthenticationPrincipal Account account, ModelAndView mav) {
 
+		mav.setViewName("main/member/invite");
+		return mav;
+	}	
+	
+	//2.2. 웹로그인 페이지로 이동(일반회원불가. 일반회원은 인증페이지로 리턴.)
+	@RequestMapping(value="webLogin")
+	public ModelAndView WebLogin(@AuthenticationPrincipal Account account, ModelAndView mav) {
+		//로그인한 유저의 정보
+		String userAuth = account.getUserAuth();
+
+		//출력할 페이지 설정		
+		if(userAuth.equals("ROLE_RM")) {	//정회원인 경우 연봉등록페이지로 이동			
+			mav.setViewName("main/member/webLogin");
+			return mav;
+		}
+
+		//일반회원인 경우 이메일 인증페이지로 이동.
+		int explain_flag=1;	//explain_flag : 정회원만 이용할 수 있는 페이지를 일반회원이 접속시 '인증(main/member/certification)'페이지로 보내고 안내 팝업창을 띄우도록 하는 신호값.
+		mav.addObject("explain_flag",explain_flag);
+		mav.setViewName("main/member/certification");
+		return mav;
+	}	
+	
+	//3.내가 작성한 포스트, 북마크, 기업리뷰
+	//3.1. 내가 작성한 포스트들 보기 페이지로 이동(일반회원불가. 일반회원은 인증페이지로 리턴)
+	@RequestMapping(value="viewListWritedPost")
+	public ModelAndView ViewListWritedPost(@AuthenticationPrincipal Account account, ModelAndView mav) {
+		//로그인한 유저의 정보
+		String userAuth = account.getUserAuth();
+
+		//출력할 페이지 설정		
+		if(userAuth.equals("ROLE_RM")) {	//정회원인 경우 연봉등록페이지로 이동			
+			mav.setViewName("main/member/viewListWritedPost");
+			return mav;
+		}
+
+		//일반회원인 경우 이메일 인증페이지로 이동.
+		int explain_flag=1;	//explain_flag : 정회원만 이용할 수 있는 페이지를 일반회원이 접속시 '인증(main/member/certification)'페이지로 보내고 안내 팝업창을 띄우도록 하는 신호값.
+		mav.addObject("explain_flag",explain_flag);
+		mav.setViewName("main/member/certification");
+		return mav;
+	}	
+	
+	//3.2. 나의 북마크(즐겨찾기) 리스트 보기 페이지 이동.(일반회원불가. 일반회원은 인증페이지로 리턴)
+	@RequestMapping(value="viewListMyBookmark")
+	public ModelAndView ViewListmyBookmark(@AuthenticationPrincipal Account account, ModelAndView mav) {
+		//로그인한 유저의 정보
+		String userAuth = account.getUserAuth();
+
+		//출력할 페이지 설정		
+		if(userAuth.equals("ROLE_RM")) {	//정회원인 경우 연봉등록페이지로 이동			
+			mav.setViewName("main/member/viewListMyBookmark");
+			return mav;
+		}
+
+		//일반회원인 경우 이메일 인증페이지로 이동.
+		int explain_flag=1;	//explain_flag : 정회원만 이용할 수 있는 페이지를 일반회원이 접속시 '인증(main/member/certification)'페이지로 보내고 안내 팝업창을 띄우도록 하는 신호값.
+		mav.addObject("explain_flag",explain_flag);
+		mav.setViewName("main/member/certification");
+		return mav;
+	}	
+		
+	//3.3. 나의 기업리뷰 리스트 보기 페이지 이동.(일반회원불가. 일반회원은 인증페이지로 리턴)
+	@RequestMapping(value="viewListWritedCompanyReview")
+	public ModelAndView ViewListWritedCompanyReview(@AuthenticationPrincipal Account account, ModelAndView mav) {
+		//로그인한 유저의 정보
+		String userAuth = account.getUserAuth();
+
+		//출력할 페이지 설정		
+		if(userAuth.equals("ROLE_RM")) {	//정회원인 경우 연봉등록페이지로 이동			
+			mav.setViewName("main/member/viewListWritedCompanyReview");
+			return mav;
+		}
+
+		//일반회원인 경우 이메일 인증페이지로 이동.
+		int explain_flag=1;	//explain_flag : 정회원만 이용할 수 있는 페이지를 일반회원이 접속시 '인증(main/member/certification)'페이지로 보내고 안내 팝업창을 띄우도록 하는 신호값.
+		mav.addObject("explain_flag",explain_flag);
+		mav.setViewName("main/member/certification");
+		return mav;
+	}	
+
+	
+	
+	
+	//4. 나의 신고한/신고당한 내역페이지 이동.
+	@RequestMapping(value="viewMyAlertList")
+	public ModelAndView ViewMyAlertList(@AuthenticationPrincipal Account account, ModelAndView mav) {
+		mav.setViewName("main/member/viewMyAlertList");
+		return mav;
+	}		
+	
 }
