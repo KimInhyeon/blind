@@ -10,6 +10,7 @@ import com.ksinfo.blind.search.dto.BoardDto;
 import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
 import com.ksinfo.blind.search.dto.PostDto;
+import com.ksinfo.blind.search.dto.companyVoteResultDto;
 
 
 @Repository
@@ -35,6 +36,9 @@ public interface SearchMapper {
 	//2.3.2. ��õ�� ����
 	List<PostDto> getSortPostByRecommend(java.util.Map<String, Object> paramMap); //��õ������ 1���� ������ ����Ʈ�� ����. 
 
-	//
-	void setCompanyRecommendVote(java.util.Map<String, Object> paramMap);
+	//기업선호도 관련
+	void setCompanyRecommendVote(java.util.Map<String, Object> paramMap); 		//사용자의 기업선호(추천/비추천) 값을 추가.
+	List<companyVoteResultDto> getCompanyRecommendVoteResult(int companyId); 	//투표한 유저에게 기업의선호도를 출력하기 위해 good/bad 출력.
+	
+	
 }

@@ -244,9 +244,9 @@ insert into "blind".COMPANY_RECOMMEND_INF (
   , good
   , bad 
 )values(
- Default   --  company_recommend_id bigint GENERATED ALWAYS AS IDENTITY
-, #{userId}     --  , user_id bigint not null
-, #{companyId}         --  , company_id bigint not null
+ Default  				 --  company_recommend_id bigint GENERATED ALWAYS AS IDENTITY
+, #{userId}  			 --  , user_id bigint not null
+, #{companyId}      	 --  , company_id bigint not null
 <if test="companyVoteValue eq 1"> <!-- 1:기업 추천 -->
 	, 1        -- , good integer not null
 	, 0        -- , bad integer not null
@@ -257,6 +257,28 @@ insert into "blind".COMPANY_RECOMMEND_INF (
 	, 1        -- , bad integer not null
 </if>
 );
+</select>
+
+
+<!--  기업의 good/bad투표수 리턴.(기업추천 투표한 유저에게 기업선호도 출력위함) -->
+<select id="getCompanyRecommendVoteResult" parameterType="int" resultType="com.ksinfo.blind.search.dto.companyVoteResultDto"> 
+select DISTINCT
+	(select
+		count(*) as voteCountOfGood
+	from "blind".COMPANY_RECOMMEND_INF
+	where 
+		"blind".COMPANY_RECOMMEND_INF.company_id = #{companyId} 
+	and
+		"blind".COMPANY_RECOMMEND_INF.good =1)
+	,(select
+		count(*) as voteCountOfBad
+	from "blind".COMPANY_RECOMMEND_INF
+	where 
+		"blind".COMPANY_RECOMMEND_INF.company_id = #{companyId} 
+	and
+		"blind".COMPANY_RECOMMEND_INF.bad =1)
+
+from "blind".COMPANY_RECOMMEND_INF
 </select>
 
 </mapper>

@@ -17,6 +17,7 @@ import com.ksinfo.blind.search.dto.BoardDto;
 import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
 import com.ksinfo.blind.search.dto.PostDto;
+import com.ksinfo.blind.search.dto.companyVoteResultDto;
 import com.ksinfo.blind.search.service.SearchService;
 import com.ksinfo.blind.security.Account;
 
@@ -29,10 +30,10 @@ public class SearchController {
 	@Autowired SearchService searchService;  // SearchService.java에서 선언된 DB의 자료형  
 	
 
-	 //유저가 검색된 기업에 대하여 근무를 추천/비추천 버튼 클릭한 값에 따라 추천/비추천 한 정보를 insert실시.
+	 //유저가 검색된 기업에 대하여 근무를 추천/비추천 버튼 클릭한 값에 따라 추천/비추천 한 정보를 insert실시 및 기업의 추천도를 리턴.
 	@RequestMapping(value = "companyRecommendVote", method = RequestMethod.POST)
 	@ResponseBody 	
-	public int companyRecommendPush(int companyId, @AuthenticationPrincipal Account account, int companyVoteValue) {
+	public List<companyVoteResultDto> companyRecommendPush(int companyId, @AuthenticationPrincipal Account account, int companyVoteValue) {
 		
 			//로그인한 유저인지 체크(로그인 않은 유저의 경우에는 로그인 페이지로 이동하는 등의 조처를 하도록 작성예정.
 			int userId = (int) account.getUserId();
@@ -40,7 +41,9 @@ public class SearchController {
 			// companyRecommendValue : 기업추천여부를 갖는 값.( 1:기업추천 / 0:기업 비추천)				
 			searchService.setCompanyRecommendVote(userId, companyId, companyVoteValue);			
 
-			return 1; //성공시 flag 개념으로 1을 성공의 개념으로 리턴.
+			List<companyVoteResultDto> companyRecommendVoteResult = searchService.getCompanyRecommendVoteResult(companyId);
+			
+			return companyRecommendVoteResult; //투표에 참여한 유저에게 기업의 선호도를 출력하기 위한 값들을 리턴.
 	}
 	
 	

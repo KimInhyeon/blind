@@ -10,6 +10,7 @@ import com.ksinfo.blind.search.dto.BoardDto;
 import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
 import com.ksinfo.blind.search.dto.PostDto;
+import com.ksinfo.blind.search.dto.companyVoteResultDto;
 import com.ksinfo.blind.search.mapper.SearchMapper;
 
 @Service 
@@ -56,6 +57,7 @@ public class SearchService {
 		return mapper.getSortPostByRecommend(paramMap);					
 	}
 
+	//유저가 선택한 해당기업에 대한 추천/비추천 값을 추가. 
 	public void setCompanyRecommendVote(int userId, int companyId, int companyVoteValue){
 		
 		java.util.Map<String, Object> paramMap = new HashMap<String, Object>(); 
@@ -68,5 +70,9 @@ public class SearchService {
 		mapper.setCompanyRecommendVote(paramMap);							
 	}
 	
-
+	//기업선호도 투표한 유저에게 결과(기업선호도)를 출력하기 위해 리턴.
+	public List<companyVoteResultDto> getCompanyRecommendVoteResult(int companyId){
+		return mapper.getCompanyRecommendVoteResult(companyId);
+	}
+	
 }
