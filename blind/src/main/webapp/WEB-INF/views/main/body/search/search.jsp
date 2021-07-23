@@ -78,6 +78,25 @@
 	}
 	
 	$(function(){
+		//기업추천여부(기업에 일하고 싶은가 여부) - 좋아요 버튼 클릭시
+		$(".company_recommend_button").on('click', function(){			
+			//alert("companyId :"+"${searchResultCompany[0].companyId}"  ); 
+			$.ajax({
+				type:"POST",
+			    url: "companyRecommendVote",
+				data : { companyId : ${searchResultCompany[0].companyId}
+						,companyRecommendValue : $(this).val()//기업추천여부. 1:기업추천 0:기업비추천
+				 	   },
+				dataType:"json",
+				success: function(result){
+					alert("정상작동"); 
+				},
+				error: function(){
+					alert("에러");
+				}				
+			});
+		}); 
+		
 		//1개의 토픽을 선택시 해당 토픽만 출력하도록 하는 제이쿼리 함수.
 		$("#viewPostsSelectedTopic").on('change', function(){	
 			var checkTopicNum= $("#viewPostsSelectedTopic option:selected").val();
@@ -258,10 +277,10 @@
 					<div class="ui stacked segment" style="margin:60px;">
 						<div class="ui stacked segment" style="height: auto; width: 100%;margin:10px;" >
 							${searchResultCompany[0].companyName}は働きたい企業ですか
-							<button style="color: blue;" class="ui icon button">
+							<button style="color: blue;" class="ui icon button company_recommend_button" value="1">
 								<i class="thumbs up outline icon"></i>
 							</button>
-							<button style="color: red;" class="ui icon button" >
+							<button style="color: red;" class="ui icon button company_recommend_button" value="0">
 								<i class="thumbs down outline icon"></i>
 							</button>
 						</div>
