@@ -90,10 +90,13 @@
 				 	   },
 				dataType:"json",
 				success: function(result){ //투표결과(기업선호도)를 출력하도록 변경.
-					alert("정상작동"); 
-					alert("companyName : "+ companyName ); 
-					alert("voteCountOfGood : "+ result[0].voteCountOfGood ); 
-					alert("voteCountOfBad : "+ result[0].voteCountOfBad ); 
+					
+					//제작 중 확인용 코드.
+					//alert("정상작동"); 
+					//alert("companyName : "+ companyName ); 
+					//alert("voteCountOfGood : "+ result[0].voteCountOfGood ); 
+					//alert("voteCountOfBad : "+ result[0].voteCountOfBad ); 
+					
 					//초기화(기업선호도 투표를 위한 추천/비추천 버튼등을 삭제)
 					$(company_vote_and_recommend_percent).html("");
 					

@@ -2,21 +2,22 @@ package com.ksinfo.blind.search.dto;
 
 public class companyVoteResultDto {
 
-	private int voteCountOfGood;
-	private int voteCountOfBad;
+	private float voteCountOfGood;
+	private float voteCountOfBad;
 	
-	public int getVoteCountOfGood() {
+	public float getVoteCountOfGood() {
 		return voteCountOfGood;
 	}
-	public void setVoteCountOfGood(int voteCountOfGood) {
+	public void setVoteCountOfGood(float voteCountOfGood) {
 		this.voteCountOfGood = voteCountOfGood;
 	}
-	public int getVoteCountOfBad() {
+	public float getVoteCountOfBad() {
 		return voteCountOfBad;
 	}
-	public void setVoteCountOfBad(int voteCountOfBad) {
+	public void setVoteCountOfBad(float voteCountOfBad) {
 		this.voteCountOfBad = voteCountOfBad;
 	}
+	
 
 
 }
