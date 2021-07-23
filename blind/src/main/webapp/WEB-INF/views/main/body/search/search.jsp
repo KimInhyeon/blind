@@ -81,8 +81,7 @@
 		//기업추천여부(기업에 일하고 싶은가 여부) - 좋아요 버튼 클릭시
 		$(".company_recommend_button").on('click', function(){		
 			
-			//var companyName = ${searchResultCompany[0].companyName};  //기업명 저장. append할 때 로드하여 기업명 출력시 사용.
-			
+			var companyName = '${searchResultCompany[0].companyName}';  //기업명 저장. append할 때 로드하여 기업명 출력시 사용.
 			$.ajax({
 				type:"POST",
 			    url: "companyRecommendVote",
@@ -92,17 +91,18 @@
 				dataType:"json",
 				success: function(result){ //투표결과(기업선호도)를 출력하도록 변경.
 					alert("정상작동"); 
+					alert("companyName : "+ companyName ); 
 					alert("voteCountOfGood : "+ result[0].voteCountOfGood ); 
-					
+					alert("voteCountOfBad : "+ result[0].voteCountOfBad ); 
 					//초기화(기업선호도 투표를 위한 추천/비추천 버튼등을 삭제)
 					$(company_vote_and_recommend_percent).html("");
 					
-					$(company_vote_and_recommend_percent).append(// companyName +"は働きたい企業ですか"+	
-																 "<button style='color: blue;' class='ui icon button company_recommend_button'" + result[0].voteCountOfGood + ">"
-																 +"<i class='thumbs up outline icon'></i>"
+					$(company_vote_and_recommend_percent).append( companyName +"は働きたい企業ですか"
+																 +"<button style='color: blue;' class='ui icon button company_recommend_button'>"
+																 +"<i class='thumbs up outline icon'></i>" + result[0].voteCountOfGood
 																 +"</button>"
-																 +"<button style='color: red;' class='ui icon button company_recommend_button'" + result[0].voteCountOfBad + ">"
-																 +"<i class='thumbs down outline icon'></i>"
+																 +"<button style='color: red;' class='ui icon button company_recommend_button'>"
+																 +"<i class='thumbs down outline icon'></i>" + result[0].voteCountOfBad
 																 +"</button>"
 					);	                
 				},

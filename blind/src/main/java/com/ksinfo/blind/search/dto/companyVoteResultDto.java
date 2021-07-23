@@ -11,11 +11,11 @@ public class companyVoteResultDto {
 	public void setVoteCountOfGood(int voteCountOfGood) {
 		this.voteCountOfGood = voteCountOfGood;
 	}
-	public int getVoteCountOfbad() {
+	public int getVoteCountOfBad() {
 		return voteCountOfBad;
 	}
-	public void setVoteCountOfbad(int voteCountOfbad) {
-		this.voteCountOfBad = voteCountOfbad;
+	public void setVoteCountOfBad(int voteCountOfBad) {
+		this.voteCountOfBad = voteCountOfBad;
 	}
 
 
