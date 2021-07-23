@@ -102,10 +102,10 @@
 					
 					$(company_vote_and_recommend_percent).append( companyName +"は働きたい企業ですか"
 																 +"<button style='color: blue;' class='ui icon button company_recommend_button'>"
-																 +"<i class='thumbs up outline icon'></i>" + result[0].voteCountOfGood
+																 +"<i class='thumbs up outline icon'></i>" + result[0].voteCountOfGood+'%'
 																 +"</button>"
 																 +"<button style='color: red;' class='ui icon button company_recommend_button'>"
-																 +"<i class='thumbs down outline icon'></i>" + result[0].voteCountOfBad
+																 +"<i class='thumbs down outline icon'></i>" + result[0].voteCountOfBad+'%'
 																 +"</button>"
 					);	                
 				},
