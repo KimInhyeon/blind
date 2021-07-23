@@ -138,7 +138,7 @@ aaaaaa
 	<script>
 		$(function(){ 		
         	$("#intro_popup_service_center").on("click", function(){
-        		alert("고객 센터에 연락주세요.");	
+        		alert("service@blind.comにメールを送ってください。");	
         	})  	
 		});
 	

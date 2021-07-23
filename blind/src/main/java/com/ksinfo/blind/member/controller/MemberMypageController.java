@@ -30,19 +30,10 @@ public class MemberMypageController {
 		String userNickname = account.getUserNickname();
 		String userAuth = account.getUserAuth();
 		int userId = (int) account.getUserId();
+	
 		
-		List<SalaryRankingDto> salaryRankingData = mypageService.getSalaryRankingData(); 
-		int myRankNumber=salaryRankingData.size();//초기화 설정. 0으로 초기화시 연산에러 나므로 순위를 맨 뒤에 두로록 설정.
-
-		for(int i=0; i<salaryRankingData.size(); i++) {
-			if(salaryRankingData.get(i).getUserId() == userId){
-				 myRankNumber=salaryRankingData.get(i).getSalaryRanking();
-				 break;
-			}
-		}
-		
-		int myRankPercent = (myRankNumber/salaryRankingData.size() )*100 ;	//유저에게 리턴되는 정보. 연봉랭크에서 상위 00% 출력시 랭크숫자값을 리턴.
-																		//상위랭크계산법 : (나의순위/전체인원수)x100
+		float myRankNumber = mypageService.getSalaryRankingData(userId);
+																			//상위랭크계산법 : (나의순위/전체인원수)x100
 		
 		//공통정보(닉네임) mav에 저장(일반회원 경우 프로필이 '정회원 인증안내'로 대체되므로 닉네임만 전달하면 됨)
 		int companyId= (int) account.getCompanyId();		
@@ -66,7 +57,7 @@ public class MemberMypageController {
 			
 			//mav.addObject("reply_count_this_month",postReplyCountThisMonth); DB 데이터 제작 후 태스트 진행
 			
-			mav.addObject("my_rank_percent",myRankPercent);
+			mav.addObject("my_rank_percent",myRankNumber);
 			
 			
 			
@@ -109,7 +100,7 @@ public class MemberMypageController {
 		String userAuth = account.getUserAuth();
 
 		//출력할 페이지 설정		
-		if(userAuth.equals("ROLE_RM")) {	//정회원인 경우 연봉등록페이지로 이동			
+		if(userAuth.equals("ROLE_RM")) {	//정회원인 경우 연봉등록페이지로 이동											[피드백:관리자도 가능하도록 추가설정]			
 			mav.setViewName("main/member/registerAnnualIncome");	//레귤러(정회원) 아닌 경우에는 일반회원의 마이페이지로 리턴.
 			return mav;			
 		}

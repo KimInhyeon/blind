@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ksinfo.blind.member.mapper.MemberMypageMapper">
 
-<!-- 1.유저가 근무하는 회사의 이름 가져오기 -->
+<!-- 1.유저(정회원)가 근무하는 회사의 이름 가져오기 -->
 <select id="getUsersCompanyName" parameterType="int" resultType="String"> 
 select 
 	"blind".company_mgt.company_name
@@ -43,7 +43,7 @@ where
 and
 	"blind".post_mgt.post_create_date >= cast(date_trunc('month',current_date) as date) --이번달의 시작일부터
 and
-	"blind".post_mgt.post_create_date <= (date_trunc('MONTH', current_date) + INTERVAL '1 MONTH - 1 day'); 
+	"blind".post_mgt.post_create_date <= (date_trunc('MONTH', current_date) + INTERVAL '1 MONTH - 1 day'); --이번달의 마지막날까지
 ]]> 
 </select>
 
@@ -55,13 +55,25 @@ and
 </select>
  -->
  
-<!-- 5.유저가 이번 달에 작성한 글에 대한 댓글의 갯수 카운트 -->
-<select id="getSalaryRankingData" parameterType="int" resultType="com.ksinfo.blind.member.dto.SalaryRankingDto"> 
-select 
-   user_id 
-  , ROW_NUMBER() over(order by salary desc) AS salaryranking
+<!-- 5.유저의 연봉랭킹정보 -->
+<select id="getSalaryRankingData" parameterType="int" resultType="float"> 
+SELECT 
+	round( (cast(rank.salaryranking as decimal) / (SELECT count(*) from "blind".SALARY_RANK_MGT) *100),1 )
 from
-	"blind".SALARY_RANK_MGT;
+   "blind".SALARY_RANK_MGT target
+INNER JOIN    
+(
+select 
+   user_id
+   ,salary
+  , rank() over(order by salary desc) AS salaryranking 
+from
+   "blind".SALARY_RANK_MGT
+) rank  
+ON 
+  target.user_id = rank.user_id   
+where
+  target.user_id = #{userId};
 </select>
  
 </mapper>

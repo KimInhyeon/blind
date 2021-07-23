@@ -211,14 +211,14 @@
 			<div id="mypage_button_update_certification_and_income"
 				 style="background-color: #71736e;">
 				<div class="mypage_buttontap_name">												
-					새로운 패스워드
+					새로운 패스워드 확인(1번더 입력)
 				</div>	
 		
 				<div class="mypage_buttontap_wrap"> 												
 					<div class="mypage_button_style_wrap"
 						 style="margin:-3%;"> 	
 						<div class="mypage_button_style_button_name"> 	
-							신규로 설정할 비밀번호 입력창(텍스트) 
+							신규로 설정할 비밀번호 1번더 입력(텍스트) 
 						</div>
 					</div>	
 				</div>
@@ -227,7 +227,7 @@
 					<div class="mypage_button_style_wrap"
 						 style="margin:-3%;"> 	
 						<div class="mypage_button_style_button_name"> 	
-							신규로 설정할 비밀번호의 입력 조건 만족여부 체크(라벨)
+							새로운 패스워드와 일치여부 출력(라벨)
 						</div>
 					</div>
 				</div>

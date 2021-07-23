@@ -31,8 +31,8 @@ public class MemberMypageService {
 		return  mapper.getPostReplyCountThisMonth(userId);
 	}*/
 
-	public List<SalaryRankingDto> getSalaryRankingData(){
-		return mapper.getSalaryRankingData();
+	public float getSalaryRankingData(int userId){
+		return mapper.getSalaryRankingData(userId);
 	}
 
 }
