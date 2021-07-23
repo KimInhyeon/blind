@@ -29,9 +29,7 @@ public class MemberMypageController {
 		//로그인한 유저의 정보
 		String userNickname = account.getUserNickname();
 		String userAuth = account.getUserAuth();
-	//	int userId = (int) account.getUserId();
-		
-		int userId = 29;
+		int userId = (int) account.getUserId();
 		
 		List<SalaryRankingDto> salaryRankingData = mypageService.getSalaryRankingData(); 
 		int myRankNumber=salaryRankingData.size();//초기화 설정. 0으로 초기화시 연산에러 나므로 순위를 맨 뒤에 두로록 설정.
@@ -85,8 +83,18 @@ public class MemberMypageController {
 	}
 	
 	
+	
+	
 	//1.계정정보 수정
-	//1.1.이메일 인증페이지로 이동(회원등급 제한없음)
+	//1.1.개인정보(비밀번호)수정 페이지로 이동.
+	@RequestMapping(value="accountUpdate")
+	public ModelAndView AccountUpdate(@AuthenticationPrincipal Account account, ModelAndView mav) {
+
+		mav.setViewName("main/member/accountUpdate");
+		return mav;
+	}
+	
+	//1.2.이메일 인증페이지로 이동(회원등급 제한없음)
 	@RequestMapping(value="certification")
 	public ModelAndView Certification(@AuthenticationPrincipal Account account, ModelAndView mav) {
 
@@ -94,7 +102,7 @@ public class MemberMypageController {
 		return mav;
 	}
 	
-	//1.2.연봉등록 페이지로 이동.(단 정회원만 가능. 일반회원시 이메일 인증페이지로 이동.
+	//1.3.연봉등록 페이지로 이동.(단 정회원만 가능. 일반회원시 이메일 인증페이지로 이동.
 	@RequestMapping(value="registerAnnualIncome")
 	public ModelAndView RegisterAnnualIncome(@AuthenticationPrincipal Account account, ModelAndView mav) {
 		//로그인한 유저의 정보

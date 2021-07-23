@@ -163,8 +163,9 @@ aaaaaa
 						${user_nick_name}
 					</div>
 							
-					<div class="mypage_main_user_profile_style_user_icon"><!-- 유저 아이콘 -->
-						<a><i class="user circle icon"></i></a>
+					<div class="mypage_main_user_profile_style_user_icon"
+						 onclick="location.href='${pageContext.request.contextPath}/accountUpdate';"> 	
+						<i class="user circle icon"></i><!-- 유저 아이콘 -->
 					</div>
 								
 					<div class="mypage_main_user_profile_style_company_names">
