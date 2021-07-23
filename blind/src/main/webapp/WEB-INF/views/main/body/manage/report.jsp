@@ -58,7 +58,7 @@
 						<input type="checkbox" class="ui checkbox" onclick="checkAllReportRows(this.checked)">
 					</th>
 					<th style="width: 5%;">
-						<select class="ui compact selection dropdown fluid" id="verifyFilter" onchange="getReportListByChangedFilter(this, 'verifyFlag')">
+						<select class="ui compact selection dropdown fluid" id="verifyFilter">
 							<option value="0">待機</option>
 							<option value="1">承認</option>
 							<option value="2">却下</option>
@@ -66,7 +66,7 @@
 						</select>
 					</th>
 					<th style="width: 8%;">
-						<select class="ui compact selection dropdown fluid" id="typeFilter" onchange="getReportListByChangedFilter(this, 'type')">
+						<select class="ui compact selection dropdown fluid" id="typeFilter">
 							<option value="1">ポスト</option>
 							<option value="2">コメント</option>
 							<option value="3">レビュー</option>
@@ -115,22 +115,26 @@
 					</tr>
 				</c:forEach>
 				<script>
+					function setVerifiedColor(verifyFlag) {
+						switch (verifyFlag.innerText) {
+							case "承認":
+								verifyFlag.closest("tr").className = "positive";
+								break;
+							case "却下":
+								verifyFlag.closest("tr").className = "negative";
+								break;
+							default:
+								verifyFlag.closest("tr").removeAttribute("class");
+								break;
+						}
+					}
+
 					(function () {
 						const tbody = document.querySelector("tbody");
 						if (tbody.childElementCount > 0) {
-							const td = document.querySelectorAll("td");
-							for (let i = td.length - 8; i > -1; i -= 9) {
-								switch (td[i].innerText) {
-									case "承認":
-										td[i].closest("tr").className = "positive";
-										break;
-									case "却下":
-										td[i].closest("tr").className = "negative";
-										break;
-									default:
-										break;
-								}
-							}
+							document.querySelectorAll(".verifyFlag").forEach(function (verifyFlag) {
+								setVerifiedColor(verifyFlag);
+							});
 						} else {
 							tbody.innerHTML = "<tr><td class=\"center aligned\" colspan=\"9\">データが存在しません</td></tr>";
 						}
@@ -202,20 +206,6 @@
 	</div>
 </div>
 <script>
-	function setVerifiedColor(verifyFlag) {
-		switch (verifyFlag.innerText) {
-			case "承認":
-				verifyFlag.closest("tr").className = "positive";
-				break;
-			case "却下":
-				verifyFlag.closest("tr").className = "negative";
-				break;
-			default:
-				verifyFlag.closest("tr").removeAttribute("class");
-				break;
-		}
-	}
-
 	function checkReportRow(checkbox) {
 		if (checkbox.checked) {
 			checkbox.closest("tr").setAttribute("class", "warning");
@@ -251,19 +241,6 @@
 		const url = new URL(location.href);
 		url.search = searchParams;
 		location.href = url;
-	}
-
-	function getReportListByChangedFilter(element, filterName) {
-		const searchParams = new URLSearchParams(location.search);
-		if (element.value === "0") {
-			searchParams.delete(filterName);
-		} else {
-			searchParams.set(filterName, element.value);
-		}
-		searchParams.delete("page");
-		searchParams.delete("searchTarget");
-		searchParams.delete("searchKeyword");
-		getReportList(searchParams);
 	}
 
 	function getReportListByPage(page) {
@@ -432,54 +409,57 @@
 	onload = function () {
 		// 検索
 		const searchParams = new URLSearchParams(location.search);
-		const verifyFlag = searchParams.get("verifyFlag");
-		const type = searchParams.get("type");
-		const searchKeywordParameter = searchParams.get("searchKeyword");
-		const searchKeyword = document.getElementById("searchKeyword");
-		const searchIcon = document.getElementById("searchIcon");
-		if (verifyFlag !== null) {
-			document.getElementById("verifyFilter").value = verifyFlag;
+		const verifyFilter = document.getElementById("verifyFilter");
+		const typeFilter = document.getElementById("typeFilter");
+		const inputSearchKeyword = document.getElementById("searchKeyword");
+		if (searchParams.has("verifyFlag")) {
+			verifyFilter.value =  searchParams.get("verifyFlag");
 		}
-		if (type !== null) {
-			document.getElementById("typeFilter").value = type;
+		if (searchParams.has("type")) {
+			typeFilter.value = searchParams.get("type");
 		}
-		if (searchKeywordParameter !== null) {
-			searchKeyword.value = searchKeywordParameter;
-			const searchTarget = document.getElementById("searchTarget");
-			const searchTargetParameter = searchParams.get("searchTarget");
-			for (let i = searchTarget.options.length - 1; i > -1; --i) {
-				if (searchTarget.options[i].value === searchTargetParameter) {
-					searchTarget.options[i].selected = true;
-				}
+		if (searchParams.has("searchKeyword")) {
+			inputSearchKeyword.value = searchParams.get("searchKeyword");
+			document.getElementById("searchTarget").value = searchParams.get("searchTarget");
+		}
+		const getReportListByChangedFilter = function (filterName, filterValue) {
+			if (filterValue === "0") {
+				searchParams.delete(filterName);
+			} else {
+				searchParams.set(filterName, filterValue);
 			}
+			searchParams.delete("page");
+			searchParams.delete("searchTarget");
+			searchParams.delete("searchKeyword");
+			getReportList(searchParams);
 		}
-		searchKeyword.addEventListener("keydown", function (event) {
-			if (event.key === "Enter") {
-				const searchKeyword = this.value.trim();
-				if (searchKeyword.length > 0) {
-					const searchParams = new URLSearchParams(location.search);
-					searchParams.delete("page");
-					searchParams.set("searchTarget", document.getElementById("searchTarget").value);
-					searchParams.set("searchKeyword", searchKeyword);
-					getReportList(searchParams);
-				} else {
-					alert("キーワードを入力してください");
-				}
-			}
+		verifyFilter.addEventListener("change", function () {
+			getReportListByChangedFilter("verifyFlag", this.value);
 		});
-		searchIcon.addEventListener("click", function (event) {
-			const trimSearchKeyword = searchKeyword.value.trim();
-			if (trimSearchKeyword.length > 0) {
+		typeFilter.addEventListener("change", function () {
+			getReportListByChangedFilter("type", this.value);
+		});
+		const search = function () {
+			const searchKeyword = inputSearchKeyword.value.trim();
+			if (searchKeyword.length > 0) {
 				const searchParams = new URLSearchParams(location.search);
 				searchParams.delete("page");
 				searchParams.set("searchTarget", document.getElementById("searchTarget").value);
-				searchParams.set("searchKeyword", trimSearchKeyword);
+				searchParams.set("searchKeyword", searchKeyword);
 				getReportList(searchParams);
 			} else {
 				alert("キーワードを入力してください");
 			}
+		};
+		inputSearchKeyword.addEventListener("keydown", function (event) {
+			if (event.key === "Enter") {
+				search();
+			}
 		});
-		
+		document.getElementById("searchIcon").addEventListener("click", function () {
+			search();
+		});
+
 		// モーダル
 		$(".ui.modal").modal({
 			duration: 100,
