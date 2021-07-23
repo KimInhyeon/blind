@@ -85,7 +85,7 @@
 				type:"POST",
 			    url: "companyRecommendVote",
 				data : { companyId : ${searchResultCompany[0].companyId}
-						,companyRecommendValue : $(this).val()//기업추천여부. 1:기업추천 0:기업비추천
+						,companyVoteValue : $(this).val()//기업추천여부. 1:기업추천 0:기업비추천
 				 	   },
 				dataType:"json",
 				success: function(result){

@@ -234,4 +234,29 @@ where blind.post_mgt.post_title like '%'|| #{searchKeyword} ||'%'
 ORDER BY recommend_count DESC;
 </select>		 
 
+
+<!-- 기업추천 투표값 추가   -->
+<select id="setCompanyRecommendVote" parameterType="java.util.Map"> 
+insert into "blind".COMPANY_RECOMMEND_INF (
+  company_recommend_id
+  , user_id
+  , company_id 
+  , good
+  , bad 
+)values(
+ Default   --  company_recommend_id bigint GENERATED ALWAYS AS IDENTITY
+, #{userId}     --  , user_id bigint not null
+, #{companyId}         --  , company_id bigint not null
+<if test="companyVoteValue eq 1"> <!-- 1:기업 추천 -->
+	, 1        -- , good integer not null
+	, 0        -- , bad integer not null
+</if>
+
+<if test="companyVoteValue eq 0"> <!-- 0:기업 비추천 -->
+	, 0        -- , good integer not null
+	, 1        -- , bad integer not null
+</if>
+);
+</select>
+
 </mapper>

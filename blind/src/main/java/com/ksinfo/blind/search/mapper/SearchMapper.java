@@ -35,7 +35,6 @@ public interface SearchMapper {
 	//2.3.2. ��õ�� ����
 	List<PostDto> getSortPostByRecommend(java.util.Map<String, Object> paramMap); //��õ������ 1���� ������ ����Ʈ�� ����. 
 
-	
-	
-
+	//
+	void setCompanyRecommendVote(java.util.Map<String, Object> paramMap);
 }

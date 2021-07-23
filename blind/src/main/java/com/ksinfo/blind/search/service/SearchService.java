@@ -55,5 +55,18 @@ public class SearchService {
 		paramMap.put("boardId", selectBoardId);		
 		return mapper.getSortPostByRecommend(paramMap);					
 	}
+
+	public void setCompanyRecommendVote(int userId, int companyId, int companyVoteValue){
+		
+		java.util.Map<String, Object> paramMap = new HashMap<String, Object>(); 
+
+		//COMPANY_RECOMMEND_INF에 기업추천/비추천을 위해 필요한 정보들을 준비.
+		paramMap.put("userId", userId); 					
+		paramMap.put("companyId", companyId);				
+		paramMap.put("companyVoteValue", companyVoteValue);		
+		
+		mapper.setCompanyRecommendVote(paramMap);							
+	}
 	
+
 }
