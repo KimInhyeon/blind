@@ -18,6 +18,10 @@
          blind.post_mgt pm
       ON
          um.user_id = pm.user_id
+	  AND
+	     um.last_generation_flag = '1'
+	  AND 
+	     um.logical_del_flag = '0'			 
       INNER JOIN
          blind.board_mgt bm
       ON
@@ -26,12 +30,16 @@
          blind.company_mgt cm
       ON
          um.company_id = cm.company_id
+	  AND
+	     um.last_generation_flag = '1'
+	  AND 
+	     um.logical_del_flag = '0'		         
       WHERE 
          um.user_id = #{userId}
 UNION ALL
    SELECT 
       2 as mytopicType
-        ,(select um.user_nickName from blind.user_mgt um where um.user_id = rm.user_id) as userNickName
+        ,(select um.user_nickName from blind.user_mgt um where um.user_id = rm.user_id	AND um.last_generation_flag = '1' AND um.logical_del_flag = '0') as userNickName
         ,coalesce(cm_name.company_name,'会社名無し') as companyName
         ,pm.post_title as postTitle
         ,null as boardTopicname
@@ -64,6 +72,10 @@ UNION ALL
 		    blind.company_mgt inner_cm
 		  ON
 		    inner_cm.company_id = inner_um.company_id
+	      WHERE
+	        inner_um.last_generation_flag = '1'
+	      AND 
+	        inner_um.logical_del_flag = '0'			    
 		 ) cm_name
 	  ON
 	     rm.user_id = cm_name.user_id
@@ -72,7 +84,7 @@ UNION ALL
 UNION ALL
    SELECT
    		3 as mytopicType
-		,(select um.user_nickName from blind.user_mgt um where um.user_id = pri.user_id) as userNickName
+		,(select um.user_nickName from blind.user_mgt um where um.user_id = pri.user_id	AND um.last_generation_flag = '1' AND um.logical_del_flag = '0') as userNickName
         ,coalesce(cm_name.company_name,'会社名無し') as companyName
         ,pm.post_title as postTitle
         ,null as boardTopicname
@@ -86,6 +98,10 @@ UNION ALL
 		blind.post_mgt pm
 	ON
 		pm.user_id = um.user_id
+	AND
+	    um.last_generation_flag = '1'
+	AND 
+	    um.logical_del_flag = '0'			
 	INNER JOIN
 		blind.post_recommend_inf pri
 	ON
@@ -101,6 +117,10 @@ UNION ALL
 		  blind.company_mgt inner_cm
 		ON
 		  inner_cm.company_id = inner_um.company_id
+        WHERE
+          inner_um.last_generation_flag = '1'
+        AND 
+          inner_um.logical_del_flag = '0'				  
 	    ) cm_name
 	ON
 	  pri.user_id = cm_name.user_id		
@@ -110,7 +130,7 @@ UNION ALL
 UNION ALL
 	SELECT
    		4 as mytopicType
-		,(select um.user_nickName from blind.user_mgt um where um.user_id = prm.user_id) as userNickName
+		,(select um.user_nickName from blind.user_mgt um where um.user_id = prm.user_id	AND um.last_generation_flag = '1' AND um.logical_del_flag = '0') as userNickName
         ,coalesce(cm_name.company_name,'会社名無し') as companyName
         ,pm.post_title as postTitle
         ,null as boardTopicname
@@ -140,12 +160,16 @@ UNION ALL
 		  blind.company_mgt inner_cm
 		ON
 		  inner_cm.company_id = inner_um.company_id
+        WHERE
+          inner_um.last_generation_flag = '1'
+        AND 
+          inner_um.logical_del_flag = '0'		  
 	    ) cm_name
 	ON
 	  prm.user_id = cm_name.user_id		
 	WHERE
 		um.user_id = #{userId}
-
+		
 order by order_createdate desc
 
 </select>

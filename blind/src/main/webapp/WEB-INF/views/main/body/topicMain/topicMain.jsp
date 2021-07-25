@@ -214,20 +214,17 @@ body {
 						<a href="/blind/topicDetail?postId=${searchResultPosts.postId }"><span style="font-size: 130%; font-weight: 700;">${searchResultPosts.postTitle }</span></a>
 						<div class="ui grid">
 							<div class="thirteen wide column">
-								<a href=""><p>${searchResultPosts.postContents }</p></a>
+								<a href="/blind/topicDetail?postId=${searchResultPosts.postId }"><p>${searchResultPosts.postContents }</p></a>
 							</div>
 							<div class="three wide column">
 								<img class="ui tiny right floated image" src="bookmarkimage.png">
 
 							</div>
-							<a href=""><span>${searchResultPosts.companyName }・${searchResultPosts.userId }</span></a>
+							<a href="/blind/companyIntroduction?companyId=${searchResultPosts.companyId}"><span>${searchResultPosts.companyName }・${searchResultPosts.userId }</span></a>
 							<div class="ui left floated horizontal list">
-								<a class="item" href="http://naver.com"><i class="eye icon"></i><span
-									style="padding: 0 5px;">${searchResultPosts.postCount }</span></a>
-								<a class="item" href="http://naver.com"><i
-									class="thumbs up outline icon"></i><span
-									style="padding-left: 5px;">0</span></a> <a class="item" href="#"><i
-									class="comment outline icon"></i><span style="padding: 0 5px;">0</span></a>
+								<a class="item" href="/blind/topicDetail?postId=${searchResultPosts.postId }"><i class="eye icon"></i><span style="padding: 0 5px;">${searchResultPosts.postCount }</span></a>
+								<a class="item" href="/blind/topicDetail?postId=${searchResultPosts.postId }"><i class="thumbs up outline icon"></i><span style="padding-left: 5px;">0</span></a>
+								<a class="item" href="/blind/topicDetail?postId=${searchResultPosts.postId }"><i class="comment outline icon"></i><span style="padding: 0 5px;">${searchResultPosts.replyCount }</span></a>
 							</div>
 							<div class="ui right floated horizontal list">
 								<a class="item" href="http://naver.com"><span

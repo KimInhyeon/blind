@@ -171,7 +171,7 @@
           </td>
       </tr>
       <tr >
-         <td style="border:none;"><a href=>掲示板</a>　<a href=>年収</a>　<a href=>レビュー</a>　<a href=>採用</a></td>
+         <td style="border:none;"><a href="${pageContext.request.contextPath}/companyShowReview?companyId=${company3.companyId }">掲示板</a>　<a href="${pageContext.request.contextPath}/annualIncome/annualIncome?selectCompanyId=${company3.companyId }">年収</a>　<a href="/blind/companyShowReview?companyId=${company3.companyId }">レビュー</a>　<a href="/blind/companyShowReview?companyId=${company3.companyId }">ニュース</a></td>
       </tr>
       </table>	 
 	 </td>

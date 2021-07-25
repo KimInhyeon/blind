@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.annualIncome.mapper.AnnualIncomeMapper">
+<!-- 1.회사관련 xml -->
+<!-- 1.1.회사의 프로필 정보 수신 -->
+<select id="getCompanyProfile" parameterType="int" resultType="com.ksinfo.blind.annualIncome.dto.CompanyDto"> 
+SELECT 
+    company_id
+    ,company_name
+    ,company_address
+FROM blind.company_mgt	
+    where company_id= #{selectCompanyId};
+</select>
+
+<!-- 1.직군명들을 리턴 -->
+<select id="getJobGroupList" resultType="com.ksinfo.blind.annualIncome.dto.JobGroupDto"> 
+select 
+	job_group_code
+	, job_group_name
+from "blind".job_group_mst
+order by job_group_code ASC;
+</select>
+
+<!-- 2.직군코드별 연봉. nnualIncomeController.java에서 출력여부(JobGroupDto의 disableFlag)를 정하기위헤 select 실시.
+	(jsp에 출력하여 사용자게에 보여주려는 용도가 아님) -->
+
+<select id="getJobGroupInCompany" parameterType="int"  resultType="com.ksinfo.blind.annualIncome.dto.JobGroupDto"> 
+select DISTINCT
+	"blind".salary_rank_mgt.job_group_code    	 
+from "blind".salary_rank_mgt
+inner join "blind".user_mgt 
+    on "blind".salary_rank_mgt.user_id = "blind".user_mgt.user_id
+left join "blind".job_group_mst
+	on "blind".job_group_mst.job_group_code = "blind".salary_rank_mgt.job_group_code
+
+where "blind".user_mgt.company_id = #{companyId}--1개의 기업으로 선택.
+order by "blind".salary_rank_mgt.job_group_code ASC;
+</select>
+
+<!-- 3.선택한 직군에 대한 연봉정보리턴(최소/평균/최대) -->
+<select id="getAnnualIncomeData" parameterType="java.util.Map" resultType="com.ksinfo.blind.annualIncome.dto.AnnualIncomeByJobGroupDto"> 
+--blind_0018_22번-기능2.select box에 나오는 직군을 선택시 해당직군의 정보
+select min("blind".salary_rank_mgt.salary) as "minAnnualIncome"         	 --blind_0018_24번(최소임금 출력)
+   	,round(avg("blind".salary_rank_mgt.salary),0) as "avgAnnualIncome" --blind_0018_25번(평균임금 출력. 소수점은 출력않도록 설정)
+  	,max("blind".salary_rank_mgt.salary) as "maxAnnualIncome"     	 --blind_0018_26번(최소 급여를 출력)
+from "blind".salary_rank_mgt
+left join "blind".user_mgt
+    on "blind".salary_rank_mgt.user_id = "blind".user_mgt.user_id
+left join "blind".company_mgt
+   on "blind".company_mgt.company_id = "blind".user_mgt.company_id
+
+where "blind".company_mgt.company_id = #{companyId}  --1개의 기업으로 선택.
+<if test="jobGroupCode neq -1"> -- 전체직군(-1)이외의 특정직군 선택시.
+and "blind".salary_rank_mgt.job_group_code = #{jobGroupCode} -- 해당 기업내 선택한 직군에 대한 연봉정보만을 리턴. 
+</if>
+--group by "blind".job_group_mst.job_group_code 
+--order by "blind".job_group_mst.job_group_code ASC;
+
+</select>
+
+</mapper>

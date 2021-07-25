@@ -13,7 +13,9 @@ public class PostDto {
 	private String boardTopicName;
 	private long postCountId;
 	private long postCount;
+	private long replyCount;
 	private String companyName;
+	private long companyId;
 
 	public long getPostId() {
 		return postId;
@@ -103,5 +105,19 @@ public class PostDto {
 		this.companyName = companyName;
 	}
 
-	
+	public long getReplyCount() {
+		return replyCount;
+	}
+
+	public void setReplyCount(long replyCount) {
+		this.replyCount = replyCount;
+	}
+
+	public long getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(long companyId) {
+		this.companyId = companyId;
+	}
 }

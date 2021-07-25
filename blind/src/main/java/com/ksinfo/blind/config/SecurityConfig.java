@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/manage/**").hasRole("SV")
 			.antMatchers("/companyReview/**", "/topicMain/**").hasAnyRole("SV","RM","NM")
 			.antMatchers("/manage/**").hasRole("SV")
-			.antMatchers("/", "/main", "/registMember").permitAll()
+			.antMatchers("/", "/main", "/registMember", "/testAndroidAccess").permitAll()
 			.anyRequest().authenticated()
 			.and().csrf().disable()
 		.formLogin()

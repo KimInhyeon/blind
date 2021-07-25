@@ -32,32 +32,49 @@
 		post_update_date,
 		board.board_topic_name,
 		post_count_inf.post_count,
-		coalesce(cm_name.company_name,'会社名無し') as company_name
+		reply_count_inf.reply_count,
+		coalesce(cm_name.company_name,'会社名無し') as company_name,
+		cm_name.company_id as company_id
 		FROM blind.post_mgt post
-		INNER
-		JOIN blind.board_mgt board
-		ON
-		post.board_id = board.board_id
-		JOIN blind.post_count_inf
-		ON post.post_id
-		= post_count_inf.post_id
+		INNER JOIN 
+		  blind.board_mgt board
+		ON 
+		  post.board_id = board.board_id
+		LEFT JOIN 
+		  blind.post_count_inf
+		ON 
+		  post.post_id = post_count_inf.post_id
+		LEFT JOIN
+		  (
+		  SELECT
+		    COUNT(post_id) AS reply_count
+			, post_id  
+		  FROM 	  
+		    blind.reply_mgt
+		  GROUP BY
+		    post_id
+		  ) reply_count_inf
+		ON 
+		  post.post_id = reply_count_inf.post_id		
 		INNER JOIN
 	    	(
 	    	SELECT
 		  	  inner_um.user_id AS user_id
 		  	  ,inner_cm.company_name AS company_name
+		  	  ,inner_cm.company_id AS company_id
 			FROM
 		      blind.user_mgt inner_um
 			LEFT JOIN
 		      blind.company_mgt inner_cm
 			ON
 		      inner_cm.company_id = inner_um.company_id
+			WHERE
+			  inner_um.last_generation_flag = '1'
+			AND 
+			  inner_um.logical_del_flag = '0'			      
 	    	) cm_name
 		ON
 	    post.user_id = cm_name.user_id
-		<if test="searchKeyword neq '-1'">
-			where board.board_id = cast(#{searchKeyword} AS integer)
-		</if>		
 		ORDER BY post.post_update_date
 		fetch first 30 rows only;
 		<!-- SELECT post_id, user_id, post_title, post_blind_flag, post_contents, 
@@ -80,9 +97,11 @@
 		post_create_date,
 		TO_CHAR(post.post_update_date,'YYYY-MM-DD') AS
 		post_update_date,
+		board.board_id,
 		board.board_topic_name,
 		post_count_inf.post_count,
-		coalesce(cm_name.company_name,'会社名無し') as company_name
+		coalesce(cm_name.company_name,'会社名無し') as company_name,
+		cm_name.company_id as company_id
 		FROM
 		blind.post_mgt post
 		INNER
@@ -97,12 +116,17 @@
 	    	SELECT
 		  	  inner_um.user_id AS user_id
 		  	  ,inner_cm.company_name AS company_name
+		  	  ,inner_cm.company_id AS company_id
 			FROM
 		      blind.user_mgt inner_um
 			LEFT JOIN
 		      blind.company_mgt inner_cm
 			ON
 		      inner_cm.company_id = inner_um.company_id
+			WHERE
+			  inner_um.last_generation_flag = '1'
+			AND 
+			  inner_um.logical_del_flag = '0'			      
 	    	) cm_name
 		ON
 	    post.user_id = cm_name.user_id			
@@ -117,4 +141,55 @@
 		#{postId};
 	</update>
 
+	<insert id="insertReply"
+		parameterType="com.ksinfo.blind.topicMain.dto.ReplyDto">
+		INSERT INTO blind.reply_mgt(
+		reply_id, post_id,
+		target_reply_id, user_id, reply_contents, reply_blind_flag,
+		rec_create_user_id, rec_create_date, rec_update_user_id,
+		rec_update_date, logical_del_flag)
+		VALUES (default, #{postId},
+		#{targetReplyId}, #{userId}, #{replyContents},
+		'0', #{userId}, now(),
+		#{userId}, now(), '0');
+	</insert>
+
+	<select id="readReply"
+		resultType="com.ksinfo.blind.topicMain.dto.ReplyResultDto"
+		parameterType="long">
+		SELECT 
+		  reply_id
+		  , post_id
+		  , reply.user_id,
+		  reply_contents,
+		  TO_CHAR(reply.rec_create_date,'YYYY-MM-DD') AS
+		  rec_create_date FROM blind.reply_mgt reply
+		INNER JOIN
+	    	(
+	    	SELECT
+		  	  inner_um.user_id AS user_id
+		  	  ,inner_cm.company_name AS company_name
+			FROM
+		      blind.user_mgt inner_um
+			LEFT JOIN
+		      blind.company_mgt inner_cm
+			ON
+		      inner_cm.company_id = inner_um.company_id
+			WHERE
+			  inner_um.last_generation_flag = '1'
+			AND 
+			  inner_um.logical_del_flag = '0'	
+	    	) cm_name
+		ON
+	    reply.user_id = cm_name.user_id				
+		where post_id = #{postId}
+		order by reply_id desc;
+	</select>
+
+	<select id="replyCount" resultType="long" parameterType="long">
+		select
+		count(*) as cnt
+		from blind.reply_mgt
+		where post_id = #{postId}
+	</select>
 </mapper>

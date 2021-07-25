@@ -11,9 +11,11 @@ public class PostDetailDto {
 	private String postContents;
 	private Date postCreateDate;
 	private Date postUpdateDate;
+	private long boardId;
 	private String boardTopicName;
 	private long postCount;
 	private String companyName;
+	private long companyId;
 
 	public long getPostId() {
 		return postId;
@@ -95,4 +97,19 @@ public class PostDetailDto {
 		this.companyName = companyName;
 	}
 
+	public long getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(long companyId) {
+		this.companyId = companyId;
+	}
+
+	public long getBoardId() {
+		return boardId;
+	}
+
+	public void setBoardId(long boardId) {
+		this.boardId = boardId;
+	}
 }

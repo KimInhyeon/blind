@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.companyIntroduction.mapper.CompanyIntroductionMapper">
+<select id="companyIntro"  parameterType="long" resultType="com.ksinfo.blind.companyIntroduction.dto.CompanyIntroductionDto"> 
+SELECT
+   c1.company_id AS company_id
+   ,c1.company_name
+   ,c2.business_type_name
+   ,c2.business_type_code
+   ,c1.company_address
+   ,c1.founding_date
+   ,c1.workers_count
+   ,c1.app_date
+   ,c1.company_domain
+   ,c1.company_homepage
+   ,c1.company_explain
+   ,c3.real_all_point
+ FROM
+   blind.company_mgt as c1
+ INNER JOIN
+   blind.business_type_mst as c2
+ ON 
+   c1.business_type_code = c2.business_type_code
+ INNER JOIN
+   (
+    SELECT
+      inner_c1.company_id AS company_id
+      ,round(avg(inner_c3.all_point),1) AS real_all_point 
+    FROM
+      blind.company_mgt as inner_c1
+      ,blind.company_review_mgt as inner_c3
+    WHERE 
+      inner_c1.company_id = inner_c3.company_id
+      AND inner_c3.verify_flag ='1'
+	  AND inner_c3.complete_flag='1' 
+	  And inner_c3.logical_del_flag='0'
+    Group By
+       inner_c1.company_id
+   ) c3
+ ON
+   c1.company_id = c3.company_id
+ WHERE
+   c1.company_id = #{companyId}
+ 
+</select>
+
+
+
+<select id="reviewCount" parameterType="java.lang.Long" resultType="int"> 
+	select
+		count(*)
+	from
+		blind.company_review_mgt
+	where	
+		company_id=#{companyId}
+	AND verify_flag ='1'
+	AND complete_flag='1' 
+	And logical_del_flag='0'
+</select>
+
+<select id="companyAveragePoint" parameterType="java.lang.Long" resultType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">
+
+	
+SELECT	
+	c2.company_id
+	,c2.company_name
+	,round(avg(c1.all_point),1) as real_all_point 
+	,round(avg(c1.all_point),0) as all_point
+	,round(avg(c1.career_point),1) as career_point 
+	,round(avg(c1.work_life_balance_point),1) as work_life_balance_point 
+	,round(avg(c1.career_point),1) as pay_point 
+	,round(avg(c1.career_point),1) as company_culture_point
+	,round(avg(c1.head_point),1) as head_point
+FROM
+	blind.company_review_mgt as c1,
+	blind.company_mgt as c2
+where
+	c1.company_id = #{companyId}
+	AND
+	c2.company_id = c1.company_id 
+	AND c1.verify_flag ='1'
+	  AND c1.complete_flag='1' 
+	  And c1.logical_del_flag='0'
+GROUP BY
+	c2.company_id,c2.company_name
+
+    
+
+</select>
+</mapper>

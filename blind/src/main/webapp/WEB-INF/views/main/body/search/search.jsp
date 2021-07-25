@@ -78,6 +78,37 @@
 	}
 	
 	$(function(){
+		//기업추천여부(기업에 일하고 싶은가 여부) - 좋아요 버튼 클릭시
+		$(".company_recommend_button").on('click', function(){		
+			
+			var companyName = '${searchResultCompany[0].companyName}';  //기업명 저장. append할 때 로드하여 기업명 출력시 사용.
+			$.ajax({
+				type:"POST",
+			    url: "companyRecommendVote",
+				data : { companyId : ${searchResultCompany[0].companyId}
+						,companyVoteValue : $(this).val()//기업추천여부. 1:기업추천 0:기업비추천
+				 	   },
+				dataType:"json",
+				success: function(result){ //투표결과(기업선호도)를 출력하도록 변경.
+					
+					//초기화(기업선호도 투표를 위한 추천/비추천 버튼등을 삭제)
+					$(company_vote_and_recommend_percent).html("");
+					
+					$(company_vote_and_recommend_percent).append( companyName +"は働きたい企業ですか"
+																 +"<button style='color: blue;' class='ui icon button company_recommend_button'>"
+																 +"<i class='thumbs up outline icon'></i>" + result[0].voteCountOfGood+'%'
+																 +"</button>"
+																 +"<button style='color: red;' class='ui icon button company_recommend_button'>"
+																 +"<i class='thumbs down outline icon'></i>" + result[0].voteCountOfBad+'%'
+																 +"</button>"
+					);	                
+				},
+				error: function(){
+					alert("에러");
+				}				
+			});
+		}); 
+		
 		//1개의 토픽을 선택시 해당 토픽만 출력하도록 하는 제이쿼리 함수.
 		$("#viewPostsSelectedTopic").on('change', function(){	
 			var checkTopicNum= $("#viewPostsSelectedTopic option:selected").val();
@@ -245,7 +276,7 @@
 										${searchResultCompany[0].companyName} 
 										<i class="star icon"></i>
 										<div style="display: flex;">
-											<a href=""><span>レビュー</span></a>
+											<a href="${pageContext.request.contextPath}/companyShowReview?companyId=${searchResultCompany[0].companyId}"><span>レビュー</span></a>
 											<a href=""><span>企業ポスト</span></a>
 											<a href=""><span>給料</span></a>
 										</div>
@@ -254,14 +285,14 @@
 						</div>
 					</div>
 	
-					<!-- 검색결과1.2. 일하고 싶은 기업인지 추천/비추천버튼 -->
+					<!-- 검색결과1.2. 일하고 싶은 기업인지 추천/비추천버튼 출력. 투표완료시 투표결과(기업선호도)를 출력하는 페이지로 변경. -->
 					<div class="ui stacked segment" style="margin:60px;">
-						<div class="ui stacked segment" style="height: auto; width: 100%;margin:10px;" >
+						<div class="ui stacked segment" style="height: auto; width: 100%;margin:10px;" id="company_vote_and_recommend_percent" >
 							${searchResultCompany[0].companyName}は働きたい企業ですか
-							<button style="color: blue;" class="ui icon button">
+							<button style="color: blue;" class="ui icon button company_recommend_button" value="1">
 								<i class="thumbs up outline icon"></i>
 							</button>
-							<button style="color: red;" class="ui icon button" >
+							<button style="color: red;" class="ui icon button company_recommend_button" value="0">
 								<i class="thumbs down outline icon"></i>
 							</button>
 						</div>

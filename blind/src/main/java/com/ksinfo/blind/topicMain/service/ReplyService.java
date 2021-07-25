@@ -5,20 +5,22 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ksinfo.blind.topicMain.dto.TopicMainDto;
+import com.ksinfo.blind.topicMain.dto.ReplyDto;
+import com.ksinfo.blind.topicMain.dto.ReplyResultDto;
 import com.ksinfo.blind.topicMain.mapper.TopicMapper;
 
 @Service
-public class TopicMainService {
-
+public class ReplyService {
+	
 	@Autowired
 	public TopicMapper mapper;
-
-	public List<TopicMainDto> getTopicMainList() {
-		return mapper.getTopicMainList();
+	
+	public void insertReply(ReplyDto dto) {
+		mapper.insertReply(dto);
 	}
 
-	public long replyCount(long postId) {
-		return mapper.replyCount(postId);
+	public List<ReplyResultDto> readReply(long postId) {
+		return mapper.readReply(postId);
 	}
+	
 }

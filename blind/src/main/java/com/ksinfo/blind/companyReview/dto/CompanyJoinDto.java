@@ -11,6 +11,13 @@ public class CompanyJoinDto {
 	private int payPoint;
 	private int companyCulturePoint;
 	private int headPoint;
+	private float realAllPoint;
+	public float getRealAllPoint() {
+		return realAllPoint;
+	}
+	public void setRealAllPoint(float realAllPoint) {
+		this.realAllPoint = realAllPoint;
+	}
 	private String workStartDate;
 	private String workEndDate;
 	private String simpleComment;

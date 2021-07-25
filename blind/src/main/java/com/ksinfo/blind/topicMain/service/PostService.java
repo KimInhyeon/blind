@@ -28,4 +28,5 @@ public class PostService {
 	public void updatePostCount(long postId) {
 		mapper.updatePostCount(postId);
 	}
+
 }
