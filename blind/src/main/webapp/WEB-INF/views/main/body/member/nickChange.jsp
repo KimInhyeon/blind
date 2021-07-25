@@ -21,7 +21,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="five wide column ui message" id="nicknameCheckMessage">ニックネームは3か月ごとに変更できます。</div>
+			<div class="five wide column" id="nicknameCheckMessage"></div>
 			<div class="two wide column">
 				<button class="ui positive button disabled" id="nicknameSubmit" onclick="nickChangeSubmit(this)">変更</button>
 			</div>
@@ -35,7 +35,7 @@
 		const newNickname = nickname.value.trim();
 		const nicknameSubmit = document.getElementById("nicknameSubmit");
 		const nicknameCheckMessage = document.getElementById("nicknameCheckMessage");
-		if (newNickname.toLowerCase() === "${userNickname}".toLowerCase()) {
+		if (newNickname === "${userNickname}") {
 			nicknameSubmit.className = "ui positive button disabled";
 			nicknameCheckMessage.className = "five wide column ui negative message";
 			nicknameCheckMessage.innerText = "同じニックネームです。";
@@ -61,9 +61,9 @@
 					} else {
 						throw response.status;
 					}
-				}).then(function (isDuplicated) {
+				}).then(function (isImpossibleNickname) {
 					const nicknameCheckMessage = document.getElementById("nicknameCheckMessage");
-					if (isDuplicated) {
+					if (isImpossibleNickname) {
 						nicknameCheckMessage.className = "five wide column ui negative message";
 						nicknameCheckMessage.innerText = "使えないニックネームです。";
 						nicknameSubmit.className = "ui positive button disabled";
@@ -101,8 +101,8 @@
 					const nicknameCheckMessage = document.getElementById("nicknameCheckMessage");
 					nickname.closest("div").className = "ui transparent huge icon input disabled";
 					nicknameSubmit.className = "ui positive button disabled";
-					nicknameCheckMessage.className = "five wide column ui message";
-					nicknameCheckMessage.innerText = "ニックネームは3か月ごとに変更できます。";
+					nicknameCheckMessage.className = "five wide column";
+					nicknameCheckMessage.innerText = "";
 					alert("ニックネームの変更に成功しました");
 				} else {
 					alert("ニックネームの変更に失敗しました。");
@@ -135,8 +135,8 @@
 			nicknameSubmit.className = "ui positive button disabled";
 			inputDiv.className = "ui transparent huge icon input disabled";
 			nickname.value = "${userNickname}";
-			nicknameCheckMessage.className = "five wide column ui message";
-			nicknameCheckMessage.innerText = "ニックネームは3か月ごとに変更できます。";
+			nicknameCheckMessage.className = "five wide column";
+			nicknameCheckMessage.innerText = "";
 		};
 
 		nickname.addEventListener("keyup", function (event) {
@@ -163,10 +163,14 @@
 					nickname.value = userNickname;
 				} else if (target !== nickname && target !== nicknameSubmit) {
 					resetNickname(inputDiv, nickname);
+					nickname.blur();
 				}
 			} else if (event.target === inputDiv) {
 				nicknameCheckMessage.className = "five wide column ui negative message";
 				nicknameCheckMessage.innerText = "ニックネームは3か月ごとに変更できます。";
+			} else {
+				nicknameCheckMessage.className = "five wide column";
+				nicknameCheckMessage.innerText = "";
 			}
 		});
 	};

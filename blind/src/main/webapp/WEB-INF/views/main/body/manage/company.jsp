@@ -656,78 +656,65 @@
 						"<td class=\"center aligned\">" + companyList[i].appDate + "</td></tr>";
 			}
 			document.querySelector("tbody").innerHTML = html;
-		}
-		const verifyFlagList = document.getElementsByClassName("verifyFlag");
-		for (let i = verifyFlagList.length - 1; i > -1; --i) {
-			setVerifiedColor(verifyFlagList[i]);
+			document.querySelectorAll(".verifyFlag").forEach(function (verifyFlag) {
+				setVerifiedColor(verifyFlag);
+			});
 		}
 
 		// 検索
+		const url = new URL(location.href);
 		const searchParams = new URLSearchParams(location.search);
+		const verifyFilter = document.getElementById("verifyFilter");
+		const closingFilter = document.getElementById("closingFilter");
 		const searchTarget = document.getElementById("searchTarget");
 		const inputSearchKeyword = document.getElementById("searchKeyword");
-		const inputSearchIcon = document.getElementById("searchIcon");
-		const searchTargetParameter = searchParams.get("searchTarget");
-		if (searchTargetParameter !== null) {
-			const searchKeyword = searchParams.get("searchKeyword");
-			for (let i = searchTarget.options.length - 1; i > -1; --i) {
-				if (searchTarget.options[i].value === searchTargetParameter) {
-					searchTarget.options[i].selected = true;
-				}
-			}
-			inputSearchKeyword.value = searchKeyword;
+		if (searchParams.has("verifyFlag")) {
+			verifyFilter.value = searchParams.get("verifyFlag");
 		}
-		inputSearchKeyword.addEventListener("keydown", function (event) {
-			if (event.key === "Enter") {
-				const searchKeyword = inputSearchKeyword.value.trim();
-				if (searchKeyword.length > 0) {
-					searchParams.delete("page");
-					searchParams.set("searchTarget", searchTarget.value);
-					searchParams.set("searchKeyword", searchKeyword);
-					location.search = searchParams.toString();
-				} else {
-					alert("キーワードを入力してください");
-				}
+		if (searchParams.has("closingFlag")) {
+			closingFilter.value = searchParams.get("closingFlag");
+		}
+		if (searchParams.has("searchTarget")) {
+			inputSearchKeyword.value = searchParams.get("searchKeyword");
+			document.getElementById("searchTarget").value = searchParams.get("searchTarget");
+		}
+		const getCompanyListByChangedFilter = function (flagName, flag) {
+			if (flag === "0") {
+				searchParams.delete(flagName);
+			} else {
+				searchParams.set(flagName, flag);
 			}
+			searchParams.delete("page");
+			searchParams.delete("searchTarget");
+			searchParams.delete("searchKeyword");
+			url.search = searchParams;
+			location.href = url;
+		};
+		verifyFilter.addEventListener("change", function () {
+			getCompanyListByChangedFilter("verifyFlag", this.value);
 		});
-		inputSearchIcon.addEventListener("click", function (event) {
+		closingFilter.addEventListener("change", function () {
+			getCompanyListByChangedFilter("closingFlag", this.value);
+		});
+		const search = function () {
 			const searchKeyword = inputSearchKeyword.value.trim();
 			if (searchKeyword.length > 0) {
 				searchParams.delete("page");
 				searchParams.set("searchTarget", searchTarget.value);
 				searchParams.set("searchKeyword", searchKeyword);
-				location.search = searchParams.toString();
+				url.search = searchParams;
+				location.href = url;
 			} else {
 				alert("キーワードを入力してください");
 			}
-		});		
-		const verifyFilter = document.getElementById("verifyFilter");
-		const verifyFlag = searchParams.get("verifyFlag");
-		if (verifyFlag !== null) {
-			verifyFilter.options[Number(verifyFlag)].selected = true;
-		}
-		verifyFilter.addEventListener("change", function () {
-			searchParams.delete("page");
-			if (verifyFilter.value === "0") {
-				searchParams.delete("verifyFlag");
-			} else {
-				searchParams.set("verifyFlag", this.value);
+		};
+		inputSearchKeyword.addEventListener("keydown", function (event) {
+			if (event.key === "Enter") {
+				search();
 			}
-			location.search = searchParams.toString();
 		});
-		const closingFilter = document.getElementById("closingFilter");
-		const closingFlag = searchParams.get("closingFlag");
-		if (closingFlag !== null) {
-			document.getElementById("closingFilter").options[Number(closingFlag)].selected = true;
-		}
-		closingFilter.addEventListener("change", function () {
-			searchParams.delete("page");
-			if (closingFlag === "0") {
-				searchParams.delete("closingFlag");
-			} else {
-				searchParams.set("closingFlag", this.value);
-			}
-			location.search = searchParams.toString();
+		document.getElementById("searchIcon").addEventListener("click", function () {
+			search();
 		});
 
 		// ページナビゲーター
@@ -785,6 +772,7 @@
 		businessType.forEach(function (name, code) {
 			html += "<option value =\"" + code + "\">" + code + ". " + name + "</option>";
 		});
+		document.getElementById("businessTypeCode").innerHTML = html;
 		document.getElementById("foundingDate").setAttribute("max", new Date().toISOString().substring(0, 10));
 		$("#comInfo").modal({
 			duration: 100,
@@ -798,7 +786,6 @@
 				}
 			}
 		});
-		document.getElementById("businessTypeCode").innerHTML = html;
 		$("#rejection").modal({
 			duration: 100,
 			closable: false
