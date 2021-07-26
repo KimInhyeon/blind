@@ -44,10 +44,12 @@ public class SearchController {
 			List<CompanyVoteResultDto> companyRecommendVoteResult = searchService.getCompanyRecommendVoteResult(companyId);
 			
 			//선호도를 %로 출력하기 위한 코드. xml에서 SQL을 통해 %로 바로 리턴되도록 수정하는대로 삭제할 예정.
-			float tempDenominator = companyRecommendVoteResult.get(0).getVoteCountOfGood()+ companyRecommendVoteResult.get(0).getVoteCountOfBad();
-			companyRecommendVoteResult.get(0).setVoteCountOfGood( (companyRecommendVoteResult.get(0).getVoteCountOfGood()/ tempDenominator) * 100 );
-			companyRecommendVoteResult.get(0).setVoteCountOfBad(  (companyRecommendVoteResult.get(0).getVoteCountOfBad() / tempDenominator) * 100 );
+			float tempDenominator = companyRecommendVoteResult.get(0).getVoteCountOfGood()+ companyRecommendVoteResult.get(0).getVoteCountOfBad();//추천갯수들을 받아옴
 			
+			//추천 갯수를 %로 변경하기 위한 작업실시
+			companyRecommendVoteResult.get(0).setVoteCountOfGood( Math.round((companyRecommendVoteResult.get(0).getVoteCountOfGood()/ tempDenominator) * 100) );
+			companyRecommendVoteResult.get(0).setVoteCountOfBad( Math.round((companyRecommendVoteResult.get(0).getVoteCountOfBad() / tempDenominator) * 100) );
+						
 			return companyRecommendVoteResult; //투표에 참여한 유저에게 기업의 선호도를 출력하기 위한 값들을 리턴.
 	}
 	
