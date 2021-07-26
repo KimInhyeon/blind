@@ -20,6 +20,9 @@
   blind.company_mgt
  WHERE 
   company_name like '%' || #{paramString} || '%'
+ AND verify_flag = '1'
+ AND closing_flag = '0'
+ AND logical_del_flag = '0'  
 </select>
 
 <select id="companySearchAll" resultType="com.ksinfo.blind.companyReview.dto.CompanyDto"> 

@@ -136,7 +136,7 @@ UNION ALL
         ,null as boardTopicname
         ,to_char(prm.post_report_date,'YYYY.MM.DD') as createDate
 		,prm.post_report_date as order_createDate
-        ,(select count (*) from blind.post_report_mgt prm) as reportedCount
+        ,(select count (*) from blind.post_report_mgt prm WHERE prm.verify_flag = '1' AND prm.complete_flag = '1') as reportedCount
         ,um.user_nickName as postReportNickName
 	FROM
 		blind.user_mgt um

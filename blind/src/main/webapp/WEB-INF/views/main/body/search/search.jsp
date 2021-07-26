@@ -136,12 +136,12 @@
 						}
 						
 						$(postList).append(boarderHtml
-	                								+"<a href=''><span>"+ value.boardTopicName +"</span></a>"	
-	                								+"<a href=''><span style='font-size: 130%; font-weight: 700;'>" +value.postTitle + "</span></a>"
+	                								+"<a href='searchBoardName?searchKeyword=" + value.boardId + "'><span>"+ value.boardTopicName +"</span></a>"	
+	                								+"<a href='topicDetail?postId=" + value.postId + "'><span style='font-size: 130%; font-weight: 700;'>" +value.postTitle + "</span></a>"
 	                								+"<div class='ui grid'>"
 			                							+"<div class='thirteen wide column'>"
-			                								+"<a href=''><p>"+ value.postContents + "</p></a>"
-			                								+"<a href=''><p>"+ value.companyName + "-" + hideUserNick +"</p></a>"
+			                								+"<a href='topicDetail?postId=" + value.postId + "'><p>"+ value.postContents + "</p></a>"
+			                								+"<a href='companyIntroduction?companyId=" + value.companyId + "'><p>"+ value.companyName + "-" + hideUserNick +"</p></a>"
 			                							+"</div>"
 			    										+"<div class='three wide column'>"
 			    											+"<img class='ui tiny right floated image' src='bookmarkimage.png'>"
@@ -195,12 +195,12 @@
 						}
 						
 						$(postList).append(boarderHtml
-	                								+"<a href=''><span>"+ value.boardTopicName +"</span></a>"	
-	                								+"<a href=''><span style='font-size: 130%; font-weight: 700;'>" +value.postTitle + "</span></a>"
+	                								+"<a href='searchBoardName?searchKeyword=" + value.boardId + "'><span>" + value.boardTopicName + "</span></a>"	
+	                								+"<a href='topicDetail?postId=" + value.postId + "'><span style='font-size: 130%; font-weight: 700;'>" +value.postTitle + "</span></a>"
 	                								+"<div class='ui grid'>"
 			                							+"<div class='thirteen wide column'>"
-			                								+"<a href=''><p>"+ value.postContents + "</p></a>"
-			                								+"<a href=''><p>"+ value.companyName + "-" + hideUserNick +"</p></a>"
+			                								+"<a href='topicDetail?postId=" + value.postId + "'><p>"+ value.postContents + "</p></a>"
+			                								+"<a href='companyIntroduction?companyId=" + value.companyId + "'><p>"+ value.companyName + "-" + hideUserNick +"</p></a>"
 			                							+"</div>"
 			    										+"<div class='three wide column'>"
 			    											+"<img class='ui tiny right floated image' src='bookmarkimage.png'>"
@@ -357,12 +357,12 @@
 						<c:if test="${status.index%2==1}">
 							<div class="eight wide column" style="border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;">
 						</c:if>
-								<a href=""><span>${posts.boardTopicName }</span></a>	
-								<a href=""><span style="font-size: 130%; font-weight: 700;">${posts.postTitle}</span></a>
+								<a href="searchBoardName?searchKeyword=${posts.boardId}"><span>${posts.boardTopicName }</span></a>	
+								<a href="topicDetail?postId=${posts.postId}"><span style="font-size: 130%; font-weight: 700;">${posts.postTitle}</span></a>
 									<div class="ui grid">
 										<div class="thirteen wide column">
-											<a href=""><p>${posts.postContents}</p></a>
-											<a href=""><p> ${posts.companyName} 
+											<a href="topicDetail?postId=${posts.postId}"><p>${posts.postContents}</p></a>
+											<a href="companyIntroduction?companyId=${posts.companyId}"><p> ${posts.companyName} 
 	  												 	   - ${fn:substring(posts.userNickName,0,1)} ****</p></a>
 										</div>
 										<div class="three wide column">
@@ -371,9 +371,11 @@
 									</div>
 
 						 	<div style="padding:10px; line-heigh:top;">
-						 		 <i class="eye icon" style="margin:0px 5px 0px 5px;"></i>${posts.postCount} <!-- margin: top, right, bottom, left;  -->
-								 <i class="thumbs up outline icon" style="margin:0px 5px 0px 5px;"></i> ${posts.recommendCount}
-								 <i class="comment outline icon"  style="margin:0px 5px 0px 5px;"></i>  ${posts.replyCount}
+						 	<div style="display:flex;">
+						 		 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="eye icon" style="margin:0px 5px 0px 5px;"></i>${posts.postCount}</a>
+						 		 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="thumbs up outline icon" style="margin:0px 5px 0px 5px;"></i> ${posts.recommendCount}</a>
+								 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="comment outline icon"  style="margin:0px 5px 0px 5px;"></i>  ${posts.replyCount}</a>
+							</div>	 
 						  		<div style="float:Right;">
 							 		${fn:substring(posts.postCreateDate,5,7)}.${fn:substring(posts.postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(posts.postCreateDate,0,10)} -->
 							   		<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">

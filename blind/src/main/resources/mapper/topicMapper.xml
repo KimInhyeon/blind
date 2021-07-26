@@ -30,6 +30,7 @@
 		post_create_date,
 		TO_CHAR(post.post_update_date,'YYYY-MM-DD') AS
 		post_update_date,
+		board.board_id,
 		board.board_topic_name,
 		post_count_inf.post_count,
 		reply_count_inf.reply_count,

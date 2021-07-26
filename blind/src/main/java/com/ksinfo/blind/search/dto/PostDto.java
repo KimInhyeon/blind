@@ -2,29 +2,30 @@ package com.ksinfo.blind.search.dto;
 
 public class PostDto {
 	
-	//2.POST_MGT //°Ô½Ã±Û°ü¸® Å×ÀÌºíÀÇ º¯¼ö
+	//2.POST_MGT //ï¿½Ô½Ã±Û°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	private int postId;			 	 //post_id bigint GENERATED ALWAYS AS IDENTITY
-	private int userId;				 //user_id bigint 					  	   //°Ô½Ã±Û ÀÛ¼º À¯ÀúÀÇ id.Á÷Á¢·Îµå°¡ ¾Æ´Ï¶ó, ÀÛ¼ºÀ¯ÀúÀÇ ÀÏÄ¡¸¦ ÆÄ¾Ç À§ÇÔ.
-	private int boardId;				 //board_id 
-	private String postTitle;		     //post_title character varying(200)   	   //°Ô½Ã±ÛÀÇ Á¦¸ñ
-	private char   postBlindFlag;		 //post_blind_flag character(1) 		   //Ç¥½Ã¿©ºÎ. ÀÌ°Íµµ È®ÀÎÇØ¾ß ÇÑ´Ù.
-	private String postContents;  	 	 //post_contents text 					   //°Ô½Ã±ÛÀÇ ³»¿ë
-	private String postCreateDate; 		 //post_create_date timestamp 			   //»ý¼ºÀÏ
-	private String postUpdateDate; 		 //post_update_date timestamp not null 	   //°»½ÅÀÏ
-	private char   logicalDelFlag; 	 //logical_del_flag character(1) not null  //³í¸®»èÁ¦ ÇÃ·¡±×(1ÀÌ¸é »èÁ¦)
-	private String recommendCount;   //±ÛÀÇ ÃßÃµ¼ö
-	private String replyCount;       //±ÛÀÇ ´ñ±Û¼ö
+	private int userId;				 //user_id bigint 					  	   //ï¿½Ô½Ã±ï¿½ ï¿½Û¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ id.ï¿½ï¿½ï¿½ï¿½ï¿½Îµå°¡ ï¿½Æ´Ï¶ï¿½, ï¿½Û¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ä¾ï¿½ ï¿½ï¿½ï¿½ï¿½.
+	private int boardId;				 //board_id
+	private long companyId;				 //board_id 
+	private String postTitle;		     //post_title character varying(200)   	   //ï¿½Ô½Ã±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	private char   postBlindFlag;		 //post_blind_flag character(1) 		   //Ç¥ï¿½Ã¿ï¿½ï¿½ï¿½. ï¿½Ì°Íµï¿½ È®ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½Ñ´ï¿½.
+	private String postContents;  	 	 //post_contents text 					   //ï¿½Ô½Ã±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	private String postCreateDate; 		 //post_create_date timestamp 			   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	private String postUpdateDate; 		 //post_update_date timestamp not null 	   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	private char   logicalDelFlag; 	 //logical_del_flag character(1) not null  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½(1ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½)
+	private String recommendCount;   //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ãµï¿½ï¿½
+	private String replyCount;       //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Û¼ï¿½
 	
-	//Å¸ Dto Âü°íÀÛ¼º
-	//PostCountInfDto¿Í µ¿ÀÏ
+	//Å¸ Dto ï¿½ï¿½ï¿½ï¿½ï¿½Û¼ï¿½
+	//PostCountInfDtoï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	private String postCountId;		  //post_count_id bigint GENERATED ALWAYS AS IDENTITY
 	private String postCount;  		//post_count bigint not null		
-	//BOARD_MGT ÅäÇÈ(°Ô½ÃÆÇ)°ü¸® Å×ÀÌºíÀÇ º¯¼ö
+	//BOARD_MGT ï¿½ï¿½ï¿½ï¿½(ï¿½Ô½ï¿½ï¿½ï¿½)ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	private String  boardTopicName; 
-	//USER_MGT À¯Àú Å×ÀÌºíÀÇ º¯¼ö
+	//USER_MGT ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	private String userNickName;		// user_nickName character varying(30)
-	//ÀÓÀÇÃß°¡
-	private String companyName;		//Æ÷½ºÆ®¸¦ ÀÛ¼ºÇÑ À¯Àú°¡ ±Ù¹«ÇÏ´Â È¸»çÀÌ¸§
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ß°ï¿½
+	private String companyName;		//ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Û¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¹ï¿½ï¿½Ï´ï¿½ È¸ï¿½ï¿½ï¿½Ì¸ï¿½
 	
 	
 	public int getPostId() {
@@ -123,8 +124,14 @@ public class PostDto {
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
+	public long getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(long companyId) {
+		this.companyId = companyId;
+	}
 	
-	// get/set ¼±¾ð¸ðÀ½
+	// get/set ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 }

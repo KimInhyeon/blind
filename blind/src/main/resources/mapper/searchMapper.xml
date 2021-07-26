@@ -49,8 +49,11 @@ where blind.company_review_mgt.company_id = #{companyId};
 <select id="getSearchPosts" resultType="com.ksinfo.blind.search.dto.PostDto"> 
 SELECT DISTINCT
    blind.board_mgt.board_topic_name           --토픽(게시판)명
+   ,blind.board_mgt.board_id
+   ,blind.post_mgt.post_id
    ,blind.post_mgt.post_title                 --게시글 주제
    ,blind.post_mgt.post_contents              --게시글 내용
+   ,blind.company_mgt.company_id
    ,blind.company_mgt.company_name          --근무기업명
    ,blind.user_mgt.user_nickname              --작성자의 닉네임
    ,COALESCE(blind.post_count_inf.post_count, 0) AS post_count   --글의 조회수
@@ -105,8 +108,11 @@ order by blind.post_mgt.post_create_date DESC;
 <select id="getPostSelectTopic" parameterType="java.util.Map" resultType="com.ksinfo.blind.search.dto.PostDto"> 
 SELECT DISTINCT
    blind.board_mgt.board_topic_name           --토픽(게시판)명
+   ,blind.board_mgt.board_id
+   ,blind.post_mgt.post_id
    ,blind.post_mgt.post_title                 --게시글 주제
    ,blind.post_mgt.post_contents              --게시글 내용
+   ,blind.company_mgt.company_id
    ,blind.company_mgt.company_name          --근무기업명
    ,blind.user_mgt.user_nickname              --작성자의 닉네임
    ,COALESCE(blind.post_count_inf.post_count, 0) AS post_count      --글의 조회수
@@ -150,8 +156,11 @@ ORDER BY post_mgt.post_create_date DESC;
 <select id="getSortPostBylatestDate" parameterType="java.util.Map" resultType="com.ksinfo.blind.search.dto.PostDto"> 
 SELECT DISTINCT
    blind.board_mgt.board_topic_name           --토픽(게시판)명
+   ,blind.board_mgt.board_id
+   ,blind.post_mgt.post_id
    ,blind.post_mgt.post_title                 --게시글 주제
    ,blind.post_mgt.post_contents              --게시글 내용
+   ,blind.company_mgt.company_id
    ,blind.company_mgt.company_name            --근무기업명
    ,blind.user_mgt.user_nickname              --작성자의 닉네임
    ,COALESCE(blind.post_count_inf.post_count, 0) AS post_count   --글의 조회수
@@ -194,8 +203,11 @@ ORDER BY post_create_date DESC;
 <select id="getSortPostByRecommend" parameterType="java.util.Map" resultType="com.ksinfo.blind.search.dto.PostDto"> 
 SELECT DISTINCT
    blind.board_mgt.board_topic_name           --토픽(게시판)명
+   ,blind.board_mgt.board_id
+   ,blind.post_mgt.post_id
    ,blind.post_mgt.post_title                 --게시글 주제
    ,blind.post_mgt.post_contents              --게시글 내용
+   ,blind.company_mgt.company_id   
    ,blind.company_mgt.company_name            --근무기업명
    ,blind.user_mgt.user_nickname              --작성자의 닉네임
    ,COALESCE(blind.post_count_inf.post_count, 0) AS post_count   --글의 조회수

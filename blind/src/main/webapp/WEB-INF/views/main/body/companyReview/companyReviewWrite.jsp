@@ -21,27 +21,19 @@
 			
 			 var resultHtml="";
 
-
 			 $('#selectList').html("");
 			
 			 if(companyName != ""){
 				 
 				 $.each(result, function (key, value) {	
-					  console.log(key);
-					  console.log(value.companyName);
 					  resultHtml = resultHtml + '<div class="item" style="display:flex;" onclick="companyNameClick(\''+value.companyId+'★'+value.companyName+'\')"><img class="ui avatar image" src="${pageContext.request.contextPath}/resources/images/company/'+value.companyId+'.png"><div class="content"><div class="header">'+value.companyName+'</div></div></div>'					  
 				});
 					 $('#selectList').append(resultHtml);
-					 
-					 
-					 
-					 
-					 
+ 
 				}else{
-					
-					
+
 					 $('#companyImg').html("");
-						resultHtml = resultHtml + '<img src="${pageContext.request.contextPath}/resources/images/logo1.png" width="90" height="90""></img>';
+						resultHtml = resultHtml + '<img src="${pageContext.request.contextPath}/resources/images/company/0.png" width="90" height="90""></img>';
 						$('#companyImg').append(resultHtml);
 					
 				}
@@ -58,11 +50,9 @@
 		
 		var companyArr = companyInfo.split('★');//리턴형이 어레이 배열형
 		
-		var resultHtml1 = "";
-	    $('#companyImg').html("");
-		resultHtml1 = resultHtml1 + '<img  src="${pageContext.request.contextPath}/resources/images/company/'+companyArr[0]+'.png" width="90" height="90""></img>';
+		var imgPath = "${pageContext.request.contextPath}/resources/images/company/" +companyArr[0]+ ".png";
+	    $("#companyReviewImg").attr("src", imgPath);
 		 
-		$('#companyImg').append(resultHtml1);
 		$('#companyName').val(companyArr[1]); 		 
 		$('#selectList').html("");		 
 		$('#hdnCompanyFlag').val(1);
@@ -80,24 +70,24 @@
 
 	$(document).ready(function () {
 
-	    $("input[name='rating2']").click(function () {
-	    	var careerPoint = $("input[name=rating2]:checked").val();
+	    $("div[id='ratingCareerPoint']").click(function () {
+	    	var careerPoint = $("#ratingCareerPoint").children(".active").length;
 	    	document.getElementById("hdnCareerPoint").value = careerPoint;        
 	    });
-	    $("input[name='rating3']").click(function () {
-	    	var workLifeBalancePoint = $("input[name=rating3]:checked").val();
+	    $("div[id='ratingWorkLifeBalancePoint']").click(function () {
+	    	var workLifeBalancePoint = $("#ratingWorkLifeBalancePoint").children(".active").length;
 	    	document.getElementById("hdnWorkLifeBalancePoint").value = workLifeBalancePoint;        
 	    });
-	    $("input[name='rating4']").click(function () {
-	    	var payPoint = $("input[name=rating4]:checked").val();
+	    $("div[id='ratingPayPoint']").click(function () {
+	    	var payPoint = $("#ratingPayPoint").children(".active").length;
 	    	document.getElementById("hdnPayPoint").value = payPoint;        
 	    });
-	    $("input[name='rating5']").click(function () {
-	    	var companyCulturePoint = $("input[name=rating5]:checked").val();
+	    $("div[id='ratingCompanyCulturePoint']").click(function () {
+	    	var companyCulturePoint = $("#ratingCompanyCulturePoint").children(".active").length;
 	    	document.getElementById("hdnCompanyCulturePoint").value = companyCulturePoint;        
 	    });
-	    $("input[name='rating6']").click(function () {
-	    	var headPoint = $("input[name=rating6]:checked").val();
+	    $("div[id='ratingHeadPoint']").click(function () {
+	    	var headPoint = $("#ratingHeadPoint").children(".active").length;
 	    	document.getElementById("hdnHeadPoint").value = headPoint;        
 	    }); 
 	});
@@ -175,59 +165,34 @@
 	}
 
 </script>
+
 </head>
 
 
 <style>
-	.star-rating{
-	display: flex;
-	flex-direction:row-reverse;
-	font-size:2.25rem;
-	line-height:2.5rem;
-	justify-content:space-around;
-	padding: 0 0.2em;
-	text-align: center;
-	width: 5em;	
-	}
 
-	/*기존 라디오 버튼 사라짐*/
-	.star-rating input{
-	display: none;
-	}
-	.star-rating label{
-	-webkit-text-fill-color: transparent;
-	-webkit-text-stroke-width:2.3px;
-	-webkit-text-stroke-color:#2b2a29;
-	cursor: pointer;
-	
-	}
-	
-	/*클릭시 변경*/
-	.star-rating :checked ~ label{
-	-webkit-text-fill-color: yellow;
-	}
-	
-	/*호버시 변경*/
-	.star-rating label:hover,
-	.star-rating label:hover ~ label{
-	-webkit-text-fill-color: yellow;
-	}
-	
+
 	.box1{
 	padding: 10px 15px 10px 16px;	
 	width: 200px;
 	}
  	
  	#title1{
-	padding: 38px 40px 0px ;
+	padding: 20px 0 10px 0;
 	margin-bottom: 28px;
 	}
-	 
-	.container{
-	margin-right:24px;
-	margin-left:24px;
+	.div_star{
+        padding-bottom:20px;
+    }
+    .field0{
+        font-size:15px; font-weight: 700; padding-top:5px;
+    }
+    .field{
+        font-size:15px;
+    }
+	.ui.menu{
+		margin:0;	
 	}
-	
 
 		
 </style>
@@ -235,195 +200,157 @@
 
 
 <body>
-<div class="container">
-
-<form class="ui form" id="reviewForm" name= "reviewForm" method="post" action="companyReviewWrite" onsubmit="return check();">
 
 
+<div class="ui fluid container" style="background-color: #f6f7fa;">
+    <div class="ui container" style="padding:50px 0px;">
+        <div class="ui segment" >
+        <div style="padding:40px;">
+        <form class="ui form" id="reviewForm" name= "reviewForm" method="post" action="companyReviewWrite" onsubmit="return check();">
+        <div>
+            <h2 id="title1" style="padding-bottom:30px;">企業レビューを作成</h2>
+            <img id="companyReviewImg" class="ui tiny left floated image" src ="${pageContext.request.contextPath}/resources/images/company/0.png" alt="" width="90" height="90" ></img>
+            <h4>会社名</h4>
+            <div class="ui fluid input">
+            <input type="text" class="box1" placeholder="会社名前で検索してください" id="companyName" name="companyName"><div id="selectList" style="position:absolute; background-color:#999999;"></div></input>
 
-<div>
-	<h2 id="title1">企業レビュー作成</h2>
-	<div style = "display:inline-flex;">
-	<span id="companyImg"><img src ="${pageContext.request.contextPath}/resources/images/logo1.png" alt="" width="90" height="90"></img></span>
+        </div>
 
-	<div style = "margin-left:20px;">
-	
-	<h4>会社名</h4>
-	<input type="text" class="box1" placeholder="会社名前で検索してください" id="companyName" name="companyName"><div id="selectList" style="position:absolute; background-color:#999999;"></div></input>
-	
-	</div>
-	
-	</div>
+<h4 class="ui dividing header" style="padding-top:30px;"></h4>
 
-</div>
-
-<h4 class="ui dividing header"></h4>
-
-<h3>会社評価</h3>
-<div class="field"  style="float:left; width:120px;"><label>キャリア向上</label></div>
-<div class="star-rating " id="careerPoint">
-<input type="radio" id="5-stars2" name="rating2" value="5" v-model="ratings2"/>
-<label for="5-stars2" class="star2 pr-4">★</label>
-<input type="radio" id="4-stars2" name="rating2" value="4" v-model="ratings2"/>
-<label for="4-stars2" class="star2">★</label>
-<input type="radio" id="3-stars2" name="rating2" value="3" v-model="ratings2"/>
-<label for="3-stars2" class="star2">★</label>
-<input type="radio" id="2-stars2" name="rating2" value="2" v-model="ratings2"/>
-<label for="2-stars2" class="star2">★</label>
-<input type="radio" id="1-stars2" name="rating2" value="1" v-model="ratings2"/>
-<label for="1-stars2" class="star2">★</label>
-</div>
-
-<div class="field"  style="float:left; width:120px;"><label>ワークバランス</label></div>
-<div class="star-rating space-x-4 mx-auto" id="workLifeBalancePoint">
-<input type="radio" id="5-stars3" name="rating3" value="5" v-model="ratings3"/>
-<label for="5-stars3" class="star pr-4">★</label>
-<input type="radio" id="4-stars3" name="rating3" value="4" v-model="ratings3"/>
-<label for="4-stars3" class="star">★</label>
-<input type="radio" id="3-stars3" name="rating3" value="3" v-model="ratings3"/>
-<label for="3-stars3" class="star">★</label>
-<input type="radio" id="2-stars3" name="rating3" value="2" v-model="ratings3"/>
-<label for="2-stars3" class="star">★</label>
-<input type="radio" id="1-stars3" name="rating3" value="2" v-model="ratings3"/>
-<label for="1-stars3" class="star">★</label>
-</div>
-
-<div class="field" style="float:left; width:120px;"><label>給料と福祉</label></div>
-<div class="star-rating space-x-4 mx-auto" id="payPoint">
-<input type="radio" id="5-stars4" name="rating4" value="5" v-model="ratings4"/>
-<label for="5-stars4" class="star pr-4">★</label>
-<input type="radio" id="4-stars4" name="rating4" value="4" v-model="ratings4"/>
-<label for="4-stars4" class="star">★</label>
-<input type="radio" id="3-stars4" name="rating4" value="3" v-model="ratings4"/>
-<label for="3-stars4" class="star">★</label>
-<input type="radio" id="2-stars4" name="rating4" value="2" v-model="ratings4"/>
-<label for="2-stars4" class="star">★</label>
-<input type="radio" id="1-stars4" name="rating4" value="2" v-model="ratings4"/>
-<label for="1-stars4" class="star">★</label>
-</div>
-
-<div class="field" style="float:left; width:120px;"><label>社内文化</label></div>
-<div class="star-rating space-x-4 mx-auto" id="companyCulturePoint">
-<input type="radio" id="5-stars5" name="rating5" value="5" v-model="ratings5"/>
-<label for="5-stars5" class="star pr-4">★</label>
-<input type="radio" id="4-stars5" name="rating5" value="4" v-model="ratings5"/>
-<label for="4-stars5" class="star">★</label>
-<input type="radio" id="3-stars5" name="rating5" value="3" v-model="ratings5"/>
-<label for="3-stars5" class="star">★</label>
-<input type="radio" id="2-stars5" name="rating5" value="2" v-model="ratings5"/>
-<label for="2-stars5" class="star">★</label>
-<input type="radio" id="1-stars5" name="rating5" value="2" v-model="ratings5"/>
-<label for="1-stars5" class="star">★</label>
-</div>
-
-<div class="field" style="float:left; width:120px;"><label>経営陣</label></div>
-<div class="star-rating space-x-4 mx-auto" id="headPoint">
-<input type="radio" id="5-stars6" name="rating6" value="5" v-model="ratings6"/>
-<label for="5-stars6" class="star pr-4">★</label>
-<input type="radio" id="4-stars6" name="rating6" value="4" v-model="ratings6"/>
-<label for="4-stars6" class="star">★</label>
-<input type="radio" id="3-stars6" name="rating6" value="3" v-model="ratings6"/>
-<label for="3-stars6" class="star">★</label>
-<input type="radio" id="2-stars6" name="rating6" value="2" v-model="ratings6"/>
-<label for="2-stars6" class="star">★</label>
-<input type="radio" id="1-stars6" name="rating6" value="2" v-model="ratings6"/>
-<label for="1-stars6" class="star">★</label>
-</div> 
+<h3 style="font-size:22px; padding:10px 0;">会社評価</h3>
+		<div style="padding-left:40px;">
+        <div class="field0" style="float:left; width:120px;"><label>キャリア向上</label></div>
+        <div class="div_star"> 
+            <div class="ui massive star rating" id="ratingCareerPoint" data-rating="0" data-max-rating="5"></div>
+        </div>
+        
+        <div class="field0"  style="float:left; width:120px;"><label>ワークバランス</label></div>
+        <div class="div_star"> 
+            <div class="ui massive star rating" id="ratingWorkLifeBalancePoint" data-rating="0" data-max-rating="5"></div>
+        </div>
+        
+        <div class="field0" style="float:left; width:120px;"><label>給料と福祉</label></div>
+        <div class="div_star"> 
+            <div class="ui massive star rating" id="ratingPayPoint" data-rating="0" data-max-rating="5"></div>
+        </div>
+        
+        <div class="field0" style="float:left; width:120px;"><label>社内文化</label></div>
+        <div class="div_star"> 
+            <div class="ui massive star rating" id="ratingCompanyCulturePoint" data-rating="0" data-max-rating="5"></div>
+        </div>
+        
+        <div class="field0" style="float:left; width:120px;"><label>経営陣</label></div>
+        <div class="div_star"> 
+            <div class="ui massive star rating" id="ratingHeadPoint" data-rating="0" data-max-rating="5"></div>
+        </div>
+         </div>
+        
+       
+        
+        
+ <h4 class="ui dividing header" style="margin-top:50px;"></h4>
  
 
- <h4 class="ui dividing header"></h4>
- 
- <h3>レビュー作成する</h3>
- <div class="field"><label>簡単なコメント</label>
- <input type="text" class="box1" placeholder="例:ワークバランスをよく守る部署" maxlength="60" id="oneWriteReview" name="oneWriteReview" ></input></div>
- <div class="field"><label>長点</label>
- <textarea cols="10" rows="4" placeholder="この会社に働きながら一番良かったのは何でしょうか" id="strongPoint" name="strongPoint"></textarea></div>
- <div class="field"><label>短所</label>
- <textarea cols="10" rows="4" placeholder="この会社に働きながら一番大変だったのは何でしょうか" id="weakPoint" name="weakPoint"></textarea></div>
- <div class="field"><label>転職理由</label>
- <textarea cols="10" rows="4" placeholder="この会社止めるきっかけは 何でしょうか?" id="resignReason" name="resignReason"></textarea></div>
-<h4 class="ui dividing header"></h4>
-<h3>作成社の情報</h3>
-	
-  <div class="field">
-    <label>認証状態</label>
-    
-      <div class="field">
-        <input type="text" readonly placeholder="前社員">
-      </div>
- 
-  </div>
 
-  <div class="two fields">
-    <div class="field">
-      <label>勤務開始日</label>
-    <select id= "startDate" class="ui fluid dropdown"  onchange="selectStartDate();">  
-    <option>選んでください</option>
-    <option value="2021">2021</option>
-    <option value="2020">2020</option>
-    <option value="2019">2019</option>
-    <option value="2018">2018</option>
-    <option value="2017">2017</option>
-    <option value="2016">2016</option>
-    <option value="2015">2015</option>
-    <option value="2014">2014</option>
-    <option value="2013">2013</option>
-    <option value="2012">2012</option>
-    <option value="2011">2011</option>
-    <option value="2010">2010</option>
-    <option value="2009">2009</option>
-    <option value="2008">2008</option>
-    <option value="2007">2007</option>
-    <option value="2006">2006</option>
-    <option value="2005">2005</option>
-    <option value="2004">2004</option>
-    <option value="2003">2003</option>
-    <option value="2002">2002</option>
-    <option value="2001">2001</option>
-    <option value="2000">2000</option>
-    <option value="1999">1999</option>
-    <option value="1998">1998</option>
-    <option value="1997">1997</option>
-    <option value="1996">1996</option>
-    <option value="1995">1995</option>
-    <option value="1994">1994</option>
-  </select>
-  	 
+ 
+ <h3 style="padding:15px 0; font-size:20px;">レビューを作成する</h3>
+         <div class="field"><label>簡単なコメント</label>
+         <input type="text" class="box1" placeholder="例:ワークバランスをよく守る部署" maxlength="60" id="oneWriteReview" name="oneWriteReview" ></input></div>
+         <div class="field"><label>長所</label>
+         <textarea cols="10" rows="5" placeholder="この会社に働きながら一番良かったのは何でしょうか" id="strongPoint" name="strongPoint" style="resize:none;"></textarea></div>
+         <div class="field"><label>短所</label>
+         <textarea cols="10" rows="5" placeholder="この会社に働きながら一番大変だったのは何でしょうか" id="weakPoint" name="weakPoint" style="resize:none;"></textarea></div>
+         <div class="field"><label>転職理由</label>
+         <textarea cols="10" rows="5" placeholder="この会社止めるきっかけは 何でしょうか?" id="resignReason" name="resignReason" style="resize:none;"></textarea></div>
+        <h4 class="ui dividing header" style="margin-top:50px;"></h4>
+        <h3 style="font-size:20px; padding:10px 0;">作成者の情報</h3>
+            
+          <div class="field">
+            <label>認証状態</label>
+            
+              <div class="field">
+                <input type="text" readonly placeholder="前社員">
+              </div>
+         
+          </div>
+        
+          <div class="two fields">
+            <div class="field">
+              <label>勤務開始日</label>
+            <select id= "startDate" class="ui fluid dropdown"  onchange="selectStartDate();">  
+            <option>選んでください</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020</option>
+            <option value="2019">2019</option>
+            <option value="2018">2018</option>
+            <option value="2017">2017</option>
+            <option value="2016">2016</option>
+            <option value="2015">2015</option>
+            <option value="2014">2014</option>
+            <option value="2013">2013</option>
+            <option value="2012">2012</option>
+            <option value="2011">2011</option>
+            <option value="2010">2010</option>
+            <option value="2009">2009</option>
+            <option value="2008">2008</option>
+            <option value="2007">2007</option>
+            <option value="2006">2006</option>
+            <option value="2005">2005</option>
+            <option value="2004">2004</option>
+            <option value="2003">2003</option>
+            <option value="2002">2002</option>
+            <option value="2001">2001</option>
+            <option value="2000">2000</option>
+            <option value="1999">1999</option>
+            <option value="1998">1998</option>
+            <option value="1997">1997</option>
+            <option value="1996">1996</option>
+            <option value="1995">1995</option>
+            <option value="1994">1994</option>
+          </select>
+               
+            </div>
+            <div class="field">
+            <label>勤務終業日</label>
+              
+               <select id="finishDate" class="ui fluid dropdown" onchange="selectFinishDate();">
+                <option>選んでください</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+                </select>
+                  
+            </div>
+          </div>
+         <div class="field">
+             <label>勤務先</label>
+            
+              <div class="field">
+                <input type="text" name="workArea" id = "workArea" placeholder="例: 東京">
+              </div>
+         </div>
+         
+         <h4 class="ui dividing header" style="margin-top:50px;"></h4>
+         
+         
+        <input type="hidden" id="hdnStartDate" name="hdnStartDate" value="-1"></input>	
+        <input type="hidden" id="hdnFinishDate" name="hdnFinishDate" value="-1"></input>
+        <input type="hidden" id="hdnCareerPoint" name="hdnCareerPoint" value="-1"></input>
+        <input type="hidden" id="hdnWorkLifeBalancePoint" name="hdnWorkLifeBalancePoint"  value="-1"></input>
+        <input type="hidden" id="hdnPayPoint" name="hdnPayPoint" value="-1"></input>
+        <input type="hidden" id="hdnCompanyCulturePoint" name="hdnCompanyCulturePoint" value="-1"></input>
+        <input type="hidden" id="hdnHeadPoint" name="hdnHeadPoint" value="-1"></input>
+        <input type="hidden" id="hdnCompanyFlag" name ="hdnCompanyFlag" value="-1"></input>
+        <input type="hidden" id="hdnCompanyId" name ="hdnCompanyId" value="-1"></input>
+          <button class="ui primary button" type="submit" placeholder="submit" style="padding:15px 80px; margin-top:30px;">提出</button>
+         </form>
+        </div>
+        </div>
     </div>
-    <div class="field">
-    <label>勤務終業日</label>
-      
-       <select id="finishDate" class="ui fluid dropdown" onchange="selectFinishDate();">
-        <option>選んでください</option>
-        <option value="2021">2021</option>
-        <option value="2020">2020</option>
-        </select>
-          
-    </div>
-  </div>
- <div class="field">
-     <label>勤務先</label>
-    
-      <div class="field">
-        <input type="text" name="workArea" id = "workArea" placeholder="例: 東京">
-      </div>
- </div>
- 
- <h4 class="ui dividing header"></h4>
- 
- 
-<input type="hidden" id="hdnStartDate" name="hdnStartDate" value="-1"></input>	
-<input type="hidden" id="hdnFinishDate" name="hdnFinishDate" value="-1"></input>
-<input type="hidden" id="hdnCareerPoint" name="hdnCareerPoint" value="-1"></input>
-<input type="hidden" id="hdnWorkLifeBalancePoint" name="hdnWorkLifeBalancePoint"  value="-1"></input>
-<input type="hidden" id="hdnPayPoint" name="hdnPayPoint" value="-1"></input>
-<input type="hidden" id="hdnCompanyCulturePoint" name="hdnCompanyCulturePoint" value="-1"></input>
-<input type="hidden" id="hdnHeadPoint" name="hdnHeadPoint" value="-1"></input>
-<input type="hidden" id="hdnCompanyFlag" name ="hdnCompanyFlag" value="-1"></input>
-<input type="hidden" id="hdnCompanyId" name ="hdnCompanyId" value="-1"></input>
-<input class="ui primary button" type="submit" placeholder="submit" value="登録"></input>
- </form>
-
 </div>
+<script>
+    $('.ui.rating')
+        .rating();
+</script>
 </body>
 </html>

@@ -22,7 +22,7 @@ SELECT
    blind.business_type_mst as c2
  ON 
    c1.business_type_code = c2.business_type_code
- INNER JOIN
+ LEFT JOIN
    (
     SELECT
       inner_c1.company_id AS company_id

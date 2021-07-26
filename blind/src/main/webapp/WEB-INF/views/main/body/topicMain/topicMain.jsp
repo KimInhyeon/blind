@@ -210,8 +210,8 @@ body {
 						<div class="eight wide column" style="border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;">
 					</c:if>					
 						<!-- 두개의 쿼리문을 조인해서 사용하자 -->
-						<a href=""><span>${searchResultPosts.boardTopicName }</span></a> 
-						<a href="/blind/topicDetail?postId=${searchResultPosts.postId }"><span style="font-size: 130%; font-weight: 700;">${searchResultPosts.postTitle }</span></a>
+						<a href="searchBoardName?searchKeyword=${searchResultPosts.boardId}"><span>${searchResultPosts.boardTopicName }</span></a> 
+						<a href="/blind/topicDetail?postId=${searchResultPosts.postId}"><span style="font-size: 130%; font-weight: 700;">${searchResultPosts.postTitle }</span></a>
 						<div class="ui grid">
 							<div class="thirteen wide column">
 								<a href="/blind/topicDetail?postId=${searchResultPosts.postId }"><p>${searchResultPosts.postContents }</p></a>
