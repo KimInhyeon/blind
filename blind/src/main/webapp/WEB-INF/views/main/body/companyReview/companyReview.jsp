@@ -18,7 +18,7 @@
           for(var i =0 ; i<check.length;i++){
         	  var companyArr=check[i].outerText.split('★');
         	  resultHtml = resultHtml + 
-        	  '<div style="display:flex;" onclick="companyNameClick(\''+companyArr[0]+'\');" ><img class="ui avatar image" src="${pageContext.request.contextPath}/resources/images/'+companyArr[1]+'.png"><div class="content"><div class="header">'+companyArr[0]+'</div></div></div>';
+        	  '<div style="display:flex;" onclick="companyNameClick(\''+companyArr+'\');" ><img class="ui avatar image" src="${pageContext.request.contextPath}/resources/images/'+companyArr[1]+'.png"><div class="content"><div class="header">'+companyArr[0]+'</div></div></div>';
               
               
           }
@@ -29,8 +29,12 @@
 	};
 	
     function companyNameClick(companyInfo){
+    	var companyArr = companyInfo.split(',');
+    	
     	$('#selectList').html("");
-    	$('#searchKeyword').val(companyInfo);
+    	$('#searchKeyword').val(companyArr[0]);
+    	
+    	location.href='${pageContext.request.contextPath}/companyIntroduction?companyId=' + companyArr[1];
 	 }; 
 	 
 </script>

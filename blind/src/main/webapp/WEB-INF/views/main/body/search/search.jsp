@@ -85,7 +85,7 @@
 			$.ajax({
 				type:"POST",
 			    url: "companyRecommendVote",
-				data : { companyId : ${searchResultCompany[0].companyId}
+				data : { companyId : "${searchResultCompany[0].companyId}"
 						,companyVoteValue : $(this).val()//기업추천여부. 1:기업추천 0:기업비추천
 				 	   },
 				dataType:"json",
@@ -249,7 +249,7 @@
    <div class="inputSearchKeyword">    
    		<form>
         <div class="ui fluid massive left icon input">
-				<input type="text" placeholder="Search" id="searchbox" name="searchKeyword" value=${pastSearchKeyword}> 
+				<input type="text" placeholder="Search" id="searchbox" name="searchKeyword" value="${pastSearchKeyword}"> 
 	    		<i class="search link icon" id="searchicon" onclick="goSearch();"></i>
 	  			<div class="results"></div>
 			</div>

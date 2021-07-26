@@ -33,7 +33,7 @@
 	<div class="ui grid">
 		<div class="middle aligned row">
 			<div class="left floated two wide column">
-				<h3 class="ui header">通報管理</h3>
+				<h3 class="ui header">レビュー管理</h3>
 			</div>
 			<div class="right floated six wide column right aligned">
 				<div class="ui fluid icon input">

@@ -75,6 +75,9 @@
 	    	) cm_name
 		ON
 	    post.user_id = cm_name.user_id
+	    <if test="searchKeyword neq '-1'">
+			where board.board_id = cast(#{searchKeyword} AS integer)
+		</if>	
 		ORDER BY post.post_update_date
 		fetch first 30 rows only;
 		<!-- SELECT post_id, user_id, post_title, post_blind_flag, post_contents, 

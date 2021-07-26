@@ -52,22 +52,35 @@
 	</select>
 
 	<select id="getReviewList" parameterType="com.ksinfo.blind.manage.dto.ReviewSearchDto" resultType="com.ksinfo.blind.manage.vo.ReviewVO">
-		SELECT
+	SELECT
 			company_review_id AS companyReviewId,
 			cr.verify_flag AS verifyFlag,
 			complete_flag AS completeFlag,
-			last_generation_flag AS lastGenerationFlag,
+		    um.last_generation_flag AS lastGenerationFlag,
 			ROUND(all_point) AS allPoint,
 			company_name AS companyName,
 			job_group_name AS jobGroupName,
 			simple_comment AS simpleComment,
-			user_nickname AS userNickname,
+			um.user_nickname AS userNickname,
 			TO_CHAR(cr.rec_create_date, 'YYYY-MM-DD') AS recCreateDate
 		FROM blind.company_review_mgt AS cr
-			INNER JOIN blind.user_mgt USING(user_id)
-			INNER JOIN blind.company_mgt AS co ON cr.company_id = co.company_id
+			INNER JOIN 
+			  (
+				  SELECT
+				    user_id,
+				    company_id,
+				    MAX(user_generation) AS user_generation
+				  FROM
+				    blind.user_mgt
+				  GROUP BY user_id, company_id
+			  ) um_gene
+			ON cr.user_id = um_gene.user_id
+			INNER JOIN blind.company_mgt AS co ON um_gene.company_id = co.company_id
 			INNER JOIN blind.job_group_mst USING(job_group_code)
+			INNER JOIN blind.user_mgt um ON um_gene.user_id = um.user_id
+			AND um_gene.user_generation = um.user_generation
 		WHERE cr.logical_del_flag = '0'
+		AND cr.company_id = co.company_id
 		<choose>
 			<when test="searchTarget eq 'companyName'">
 				AND LOWER(company_name) LIKE '%' || LOWER(#{searchKeyword}) || '%'
@@ -117,11 +130,24 @@
 			job_group_name AS jobGroupName,
 			simple_comment AS simpleComment
 		FROM blind.company_review_mgt AS cr
-			INNER JOIN blind.user_mgt USING(user_id)
-			INNER JOIN blind.company_mgt AS co ON cr.company_id = co.company_id
+			INNER JOIN 
+			  (
+				  SELECT
+				    user_id,
+				    company_id,
+				    MAX(user_generation) AS user_generation
+				  FROM
+				    blind.user_mgt
+				  GROUP BY user_id, company_id
+			  ) um_gene
+			ON cr.user_id = um_gene.user_id
+			INNER JOIN blind.company_mgt AS co ON um_gene.company_id = co.company_id
+			INNER JOIN blind.user_mgt um ON um_gene.user_id = um.user_id
+			AND um_gene.user_generation = um.user_generation
 			INNER JOIN blind.job_group_mst USING(job_group_code)
 		WHERE company_review_id = #{companyReviewId}
-			AND cr.logical_del_flag = '0';
+			AND cr.logical_del_flag = '0'
+			AND cr.company_id = co.company_id;
 	</select>
 
 	<update id="verifyReview" parameterType="com.ksinfo.blind.manage.dto.ReviewVerifyDto">

@@ -62,6 +62,7 @@
 		<a class="item" href="${pageContext.request.contextPath}/manage/company">管理者(企業管理)</a><br/>
 		<a class="item" href="${pageContext.request.contextPath}/manage/board">管理者(トピック管理)</a><br/>
 		<a class="item" href="${pageContext.request.contextPath}/manage/report">管理者(通報管理)</a><br/>
+		<a class="item" href="${pageContext.request.contextPath}/manage/review">管理者(レビュー管理)</a><br/>
 		<a class="item" href="${pageContext.request.contextPath}/bookmark">ブックマーク</a><br/>
 		<a class="item" href="${pageContext.request.contextPath}/mytopic">私のトピック</a><br/>
 		<a class="item" href="${pageContext.request.contextPath}/mytask">進行中のタスク</a><br/>

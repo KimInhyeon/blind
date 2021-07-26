@@ -338,7 +338,7 @@
 			return false;
 		} else {
 			newOrder = Number(newOrder);
-			if (newOrder < 1 || newOrder >  Number(document.getElementById("order").getAttribute("max"))) {
+			if (newOrder < 1) {
 				alert("正しい順位を入力してください");
 				order.focus();
 				return false;
@@ -391,7 +391,7 @@
 			"closedFlag": closedFlag.value,
 			"boardId": Number(order.dataset.id)
 		};
-		if (checkBoardInfo(order, topicName, closedFlag) && confirm("新しいトピックを生成しますか？")) {
+		if (checkBoardInfo(order, topicName, closedFlag) && confirm("更新しますか？")) {
 			boardSubmit("PATCH", board).then(function (result) {
 				if (result > 0) {
 					const tbody = document.querySelector("tbody");
@@ -574,7 +574,7 @@
 				}
 			}).then(function (response) {
 				if (response.ok) {
-					response.redirect()
+					//response.redirect()
 					return response.json();
 				} else {
 					throw response.status;

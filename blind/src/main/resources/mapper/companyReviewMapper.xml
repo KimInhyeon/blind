@@ -55,9 +55,12 @@ SELECT
 FROM
 	blind.company_review_mgt as c1,
 	blind.company_mgt as c2
-where
+WHERE
 	c1.company_id = c2.company_id
-
+AND
+    c1.verify_flag = '1'
+AND  
+    c1.complete_flag = '1'
 GROUP BY
 	c2.company_id,c2.company_name
 	

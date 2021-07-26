@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +17,7 @@ import com.ksinfo.blind.companyReview.dto.CompanyJoinDto;
 import com.ksinfo.blind.companyReview.dto.CompanyMainViewDto;
 import com.ksinfo.blind.companyReview.service.CompanyReviewService;
 import com.ksinfo.blind.companyReview.service.CompanyReviewWriteService;
+import com.ksinfo.blind.security.Account;
 import com.ksinfo.blind.util.MessageUtils;
 
 @Controller
@@ -63,7 +65,7 @@ public class CompanyReviewController {
 	}
 	
 	  @RequestMapping(value="companyReviewWrite",method = RequestMethod.POST)
-	  public ModelAndView companyReviewJoin(HttpServletRequest req) throws Exception{
+	  public ModelAndView companyReviewJoin(HttpServletRequest req, @AuthenticationPrincipal Account account) throws Exception{
 		  ModelAndView mav= new ModelAndView();
 
 		// int allPoint = Integer.parseInt(req.getParameter("hdnAllPoint")); 총점은 소수 여기서 나누기 5
@@ -82,7 +84,7 @@ public class CompanyReviewController {
 		  String workArea = (String)req.getParameter("workArea");
 		  long companyId= Long.parseLong(req.getParameter("hdnCompanyId"));
 		  CompanyJoinDto inputDto = new CompanyJoinDto();
-		  inputDto.setUserId(12345);
+		  inputDto.setUserId(account.getUserId());
 		  inputDto.setCompanyId(companyId);
 		  inputDto.setJobGroupCode("01");
 		  inputDto.setVerifyFlag((char)0);
