@@ -1,22 +1,31 @@
 package com.ksinfo.blind.common.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ksinfo.blind.common.service.MemberService;
 import com.ksinfo.blind.security.Account;
+import com.ksinfo.blind.util.MessageUtils;
 
 @Controller
 public class MemberController  {
 	
 	@Autowired
 	MemberService memberService;
+	@Autowired
+	MessageUtils msg;
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView loginView() {
@@ -75,6 +84,30 @@ public class MemberController  {
         memberService.loadUserByUsername(inputEmail);
     }
 	
+	@PostMapping(value = "/loginApp")
+	@ResponseBody
+    public Map<String, String> loginApp(HttpServletRequest request) {
+		Map<String, String> result = new HashMap<String, String>();
+		String inputEmail = request.getParameter("username");
+		String inputPw = request.getParameter("password");
+        
+		try {
+			Account account = (Account) memberService.loadUserByUsername(inputEmail);	
+			if(memberService.checkPassword(inputPw, account.getUserPassword())) {
+				result.put("message", "OK");	
+			} else {
+				String message = msg.getMessage("BLIND_ERR_MSG_003");
+				result.put("message", message);
+			}
+			
+		} catch (UsernameNotFoundException e) {
+			String message = msg.getMessage("BLIND_ERR_MSG_001");
+			result.put("message", message);
+		}
+
+		return result;
+    }
+	
 	@RequestMapping(value = "/registMember", method = RequestMethod.POST)
     public ModelAndView signIn(HttpServletRequest request) {
         ModelAndView mv = new ModelAndView();
@@ -101,5 +134,41 @@ public class MemberController  {
         
         mv.setViewName("main/main");
         return mv;
+    }
+	
+	@PostMapping("/registMemberApp")
+	@ResponseBody
+    public Map<String, String> signInApp(HttpServletRequest request) {
+        Account account = new Account();
+        Map<String, String> result = new HashMap<String, String>();
+        
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String nickName = request.getParameter("nickName");
+		String role = request.getParameter("role");
+		
+		account.setUserEmail(username);
+		account.setUserPassword(password);
+		account.setUserNickname(nickName);
+		
+		if (role.equals("NM")) {
+			account.setUserAuth("ROLE_NM");
+		} else if (role.equals("RM")) {
+			account.setUserAuth("ROLE_RM");
+		} else if (role.equals("SV")) {
+			account.setUserAuth("ROLE_SV");
+		}
+		
+		int registedCount = memberService.registNewMember(account);
+		
+		if (registedCount > 0) {
+			String message = msg.getMessage("BLIND_SCS_MSG_001");
+			result.put("message", message);
+		} else {
+			String message = msg.getMessage("BLIND_ERR_MSG_002");
+			result.put("message", message);
+		}
+        
+        return result;
     }
 }
