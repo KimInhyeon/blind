@@ -7,9 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ksinfo.blind.member.dto.SalaryRankingDto;
@@ -21,8 +24,12 @@ public class MemberMypageController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MemberMypageController.class);	
 
-	@Autowired MemberMypageService mypageService;
-
+	@Autowired 
+	MemberMypageService mypageService;
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
+	
 	@RequestMapping(value="/member/mypage")
 	public ModelAndView Mypage(@AuthenticationPrincipal Account account, ModelAndView mav) {
 	
@@ -58,10 +65,7 @@ public class MemberMypageController {
 			//mav.addObject("reply_count_this_month",postReplyCountThisMonth); DB 데이터 제작 후 태스트 진행
 			
 			mav.addObject("my_rank_percent",myRankNumber);
-			
-			
-			
-			
+
 			mav.setViewName("main/member/mypageRegular");	//레귤러(정회원) 아닌 경우에는 일반회원의 마이페이지로 리턴.
 			return mav;			
 		}
@@ -85,6 +89,22 @@ public class MemberMypageController {
 		return mav;
 	}
 	
+	
+	//1.1.1. 비밀번호수정1단계-현재비밀번호 일치여부 체크.
+	@RequestMapping(value = "checkCurrentPassword", method = RequestMethod.POST, produces="application/json")
+	@ResponseBody 	
+	public int checkCurrentPassword(@AuthenticationPrincipal Account account,String inputCurrentPassword ){ 
+		logger.info("inputCurrentPassword: " + inputCurrentPassword );
+
+		if( passwordEncoder.matches(inputCurrentPassword, account.getPassword()) ) {
+			logger.info("return 1" ); 
+			return 1; 
+ 		}  		
+		logger.info("return 0" ); 
+		return 0; 
+	}
+	
+	
 	//1.2.이메일 인증페이지로 이동(회원등급 제한없음)
 	@RequestMapping(value="certification")
 	public ModelAndView Certification(@AuthenticationPrincipal Account account, ModelAndView mav) {
@@ -98,7 +118,6 @@ public class MemberMypageController {
 	public ModelAndView RegisterAnnualIncome(@AuthenticationPrincipal Account account, ModelAndView mav) {
 		//로그인한 유저의 정보
 		String userAuth = account.getUserAuth();
-
 		//출력할 페이지 설정		
 		if(userAuth.equals("ROLE_RM")) {	//정회원인 경우 연봉등록페이지로 이동											[피드백:관리자도 가능하도록 추가설정]			
 			mav.setViewName("main/member/registerAnnualIncome");	//레귤러(정회원) 아닌 경우에는 일반회원의 마이페이지로 리턴.
@@ -200,8 +219,6 @@ public class MemberMypageController {
 	}	
 
 	
-	
-	
 	//4. 나의 신고한/신고당한 내역페이지 이동.
 	@RequestMapping(value="viewMyAlertList")
 	public ModelAndView ViewMyAlertList(@AuthenticationPrincipal Account account, ModelAndView mav) {
@@ -209,4 +226,5 @@ public class MemberMypageController {
 		return mav;
 	}		
 	
+
 }

@@ -15,4 +15,5 @@ public interface MemberMypageMapper {
 	int getPostLikeCountThisMonth(int userId);
 	//int getPostReplyCountThisMonth(int userId); //관련 데이터를 먼저 작성후 테스트.
 	float getSalaryRankingData(int userId);
+	
 }
