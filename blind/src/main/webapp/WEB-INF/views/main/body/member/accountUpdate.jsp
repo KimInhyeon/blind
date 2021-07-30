@@ -233,6 +233,21 @@
 		}); 
 		
 		
+		//4.비밀번호 갱신 실시
+		$("#logout").on('click', function(){	
+			$.ajax({
+				type:"POST",
+			    url: "logout",
+				success: function(result){
+					alert("ログアウトを完了しました。");
+					location.replace(result.url);  //로그인 페이지로 이동하도록실시.
+				},
+				error: function(){
+					alert("エラー");
+				}				
+			});
+		}); 
+		
 	}); 	
 	</script>
 </head>
@@ -244,7 +259,8 @@
 			<div style="display: inline-block; position:absolute;">
 				アカウントの情報変更
 			</div>	
-			<div class="mypage_button_style_button_icon">	
+			<div class="mypage_button_style_button_icon"
+				 id="logout">	
 				<a><i class="sign out alternate icon"></i></a>
 			</div>
 		</div>
@@ -304,7 +320,8 @@
 			</div>
 		</div>
 		
-		<input type="button" id="updateToNewPassword" value="パスワードを更新します。">
+		<input type="button" style="margin:3%;" 
+			   id="updateToNewPassword" value="パスワードを更新します。">
 	</div>
 </body>
 </html>

@@ -3,6 +3,8 @@ package com.ksinfo.blind.member.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +95,7 @@ public class MemberMypageController {
 	@RequestMapping(value = "checkCurrentPassword", method = RequestMethod.POST, produces="application/json")
 	@ResponseBody 	
 	public int checkCurrentPassword(@AuthenticationPrincipal Account account, String inputCurrentPassword ){ 
-
+		
 		//DB에서 현 유저의 비밀번호를 가져옴.
 		String currentPassword = mypageService.getCurrentPassword( (int)account.getUserId() );
 		//account.getPassword()) (@AuthenticationPrincipal Account account의 최초 로그인시의 비밀번호 보관)를 사용시 로그아웃까지 이전비밀번호가 적용됨.
@@ -250,4 +252,15 @@ public class MemberMypageController {
 	}		
 	
 
+    @RequestMapping("/logout")
+    public ModelAndView logout(HttpSession session, ModelAndView mav) {
+        session.invalidate();	//로그아웃 처리(세션아웃)
+        mav.addObject("url", "/blind/login" ); //리턴값으로 로그아웃후 이동할 페이지 값을 리턴.
+        
+        return mav;    	
+    	
+    }
+
+
+	
 }
