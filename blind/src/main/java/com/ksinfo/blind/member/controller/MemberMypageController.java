@@ -84,25 +84,48 @@ public class MemberMypageController {
 	//1.1.개인정보(비밀번호)수정 페이지로 이동.
 	@RequestMapping(value="accountUpdate")
 	public ModelAndView AccountUpdate(@AuthenticationPrincipal Account account, ModelAndView mav) {
-
 		mav.setViewName("main/member/accountUpdate");
 		return mav;
 	}
 	
 	
-	//1.1.1. 비밀번호수정1단계-현재비밀번호 일치여부 체크.
+	//1.1.1. 현재비밀번호 일치여부 체크.(jsp페이지의 첫번째 기존비밀번호 입력박스)
 	@RequestMapping(value = "checkCurrentPassword", method = RequestMethod.POST, produces="application/json")
 	@ResponseBody 	
-	public int checkCurrentPassword(@AuthenticationPrincipal Account account,String inputCurrentPassword ){ 
-		logger.info("inputCurrentPassword: " + inputCurrentPassword );
+	public int checkCurrentPassword(@AuthenticationPrincipal Account account, String inputCurrentPassword ){ 
 
-		if( passwordEncoder.matches(inputCurrentPassword, account.getPassword()) ) {
-			logger.info("return 1" ); 
-			return 1; 
+		//DB에서 현 유저의 비밀번호를 가져옴.
+		String currentPassword = mypageService.getCurrentPassword( (int)account.getUserId() );
+		//account.getPassword()) (@AuthenticationPrincipal Account account의 최초 로그인시의 비밀번호 보관)를 사용시 로그아웃까지 이전비밀번호가 적용됨.
+		//위의 이유로 비밀번호 수정시에는 DB에서 비밀번호를 가져와서 체크하는 형태로 변경.
+
+		logger.info("currentPassword : " + currentPassword );
+		
+		if( passwordEncoder.matches(inputCurrentPassword, currentPassword ) )  { //기존의 비밀번호가 일치하는지 확인
+			return 1; //1: 비밀번호가 일치함을 확인.
  		}  		
-		logger.info("return 0" ); 
-		return 0; 
+		return 0; //1: 비밀번호가 불일치함을 확인.
 	}
+	
+	
+	//1.1.2. 비밀번호갱신실시((jsp페이지의 비밀번호갱신하기 클릭시 실행)
+	@RequestMapping(value = "updateToNewPassword", method = RequestMethod.POST, produces="application/json")
+	@ResponseBody 	
+	public int updateToNewPassword(@AuthenticationPrincipal Account account, String inputCurrentPassword, String inputNewPassword){ 
+		//DB에서 현 유저의 비밀번호를 가져옴.
+		String currentPassword = mypageService.getCurrentPassword( (int)account.getUserId() );
+		//account.getPassword()) (@AuthenticationPrincipal Account account의 최초 로그인시의 비밀번호 보관)를 사용시 로그아웃까지 이전비밀번호가 적용됨.
+		//위의 이유로 비밀번호 수정시에는 DB에서 비밀번호를 가져와서 체크하는 형태로 변경.
+
+		if( passwordEncoder.matches(inputCurrentPassword, currentPassword ) )  { //현재 쓰이던 기존의 비밀번호가 일치하는지 확인
+			mypageService.updateToNewPassword( (int)account.getUserId() , inputNewPassword);
+			return 1;	//비밀번호 변경이 성공.  
+ 		} 
+		
+		return 0; 	//비밀번호 변경 실패.  
+		
+	}
+	
 	
 	
 	//1.2.이메일 인증페이지로 이동(회원등급 제한없음)

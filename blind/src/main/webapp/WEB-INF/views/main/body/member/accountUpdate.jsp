@@ -93,9 +93,18 @@
 
 	<script>
 	$(function(){
-		//1.현재의 비밀번호를 입력. 본인이 맞는지를 확인.
+	
+		//각 입력들의 조건부합 여부 체크
+		var checkFlag1_inputCurrentPassword = 0;
+	    var checkFlag2_inputNewPassword = 0;
+	    var checkFlag3_repeatNewPassword = 0;
+	    
+	    var inputCurrentPassword;
+	    var inputNewPassword;
+	   
+	      //1.현재의 비밀번호를 입력. 본인이 맞는지를 확인.
 		$("#inputCurrentPassword").on('keyup', function(){	
-			var inputCurrentPassword= $("#inputCurrentPassword").val();
+			inputCurrentPassword= $("#inputCurrentPassword").val();
 			//alert("inputNowPassword:"+inputNowPassword);
 			
 			$.ajax({
@@ -107,11 +116,13 @@
 					//입력 텍스트 창 밑에 결과(일치여부) 출력.
 					if(result ==1){
 						$(check1_current_password).html(""); //초기화(기존내용 삭제)
-						$(check1_current_password).append("パスワードが一致します。");
+						$(check1_current_password).append("<span style='color: blue;'>パスワードが一致します。</span>");
+						checkFlag1_inputCurrentPassword=1;
 					}
 					else if(result ==0){
 						$(check1_current_password).html(""); //초기화(기존내용 삭제)
-						$(check1_current_password).append("パスワードが一致しません。");
+						$(check1_current_password).append("<span style='color: red;'>パスワードが一致しません。</span>");
+						checkFlag1_inputCurrentPassword=0;
 					}
 				},
 				error: function(){
@@ -122,55 +133,106 @@
 		
 		//2.신규로 사용할 비밀번호 조건부합여부 체크
 		$("#inputNewPassword").on('keyup', function(){	
-			var inputNewPassword= $("#inputNewPassword").val();
+			inputNewPassword= $("#inputNewPassword").val();
 			//alert("inputNewPassword:"+inputNewPassword);
-
+			
 			if( inputNewPassword.search(/\s/) != -1 ){ //조건체크1. 공백불허
 				$(check2_new_password).html("");
-				$(check2_new_password).append("空白文字は使用できません。");		
+				$(check2_new_password).append("<span style='color: red;'>空白文字は使用できません。</span>");		
+				checkFlag2_inputNewPassword=0;	
 			    return false;
 			}
 			
 			else if(inputNewPassword.length<8){       //조건체크2. 8자 이상
 				$(check2_new_password).html("");
-				$(check2_new_password).append("8字以上してください。");				
-			    return false;
+				$(check2_new_password).append("<span style='color: red;'>8字以上してください。</span>");				
+				checkFlag2_inputNewPassword=0;
+				return false;
 			}
 			
 			else if(inputNewPassword.length>32){     //조건체크3. 32자 이하
 				$(check2_new_password).html("");
-				$(check2_new_password).append("32字以内にしてください。");				
-			    return false;
+				$(check2_new_password).append("<span style='color: red;'>32字以内にしてください。</span>");				
+				checkFlag2_inputNewPassword=0;
+				return false;
+			}
+			
+			else if(inputNewPassword.length>32){     //조건체크4. 기존비밀번호와 일치여부(기존비밀번호와 같을경우 불가처리)
+				$(check2_new_password).html("");
+				$(check2_new_password).append("<span style='color: red;'>既存のパスワードと同じです。</span>");				
+				checkFlag2_inputNewPassword=0;
+				return false;
 			}
 			
 			else{									//위의 모든 조건들을 통과시 
 				$(check2_new_password).html("");
-				$(check2_new_password).append("使うのができるパスワードです。");			
+				$(check2_new_password).append("<span style='color: blue;'>使うのができるパスワードです。</span>");			
+				checkFlag2_inputNewPassword=1;
 			}
-	
 		}); 
-
-	
 	
 		//3.신규 비밀번호 1번더 입력의 일치여부 확인
 		$("#repeatNewPassword").on('keyup', function(){	
 			var repeatNewPassword= $("#repeatNewPassword").val() ;
-			//alert("repeatNewPassword:" + repeatNewPassword );
+			//var inputNewPassword= $("#inputNewPassword").val() ;
 
-			var inputNewPassword= $("#inputNewPassword").val() ;
+			//alert("repeatNewPassword:" + repeatNewPassword );
 			//alert("inputNewPassword:" + inputNewPassword );
 
+			if(checkFlag1_inputCurrentPassword==1 && checkFlag2_inputNewPassword==1  ){//먼저 기존비밀번호의 확인 및 신규비밀번호의 생선조건 부합여부를 통과하였는지 체크.
+				
+				if(repeatNewPassword == inputNewPassword){
+					checkFlag3_repeatNewPassword = 1;
+					$(check3_repeat_new_password).html("");
+					$(check3_repeat_new_password).append("<span style='color: blue;'>新しいパスワードと一致します。</span>");			
+				}
+				else{
+					checkFlag3_repeatNewPassword = 0;
+					$(check3_repeat_new_password).html("");
+					$(check3_repeat_new_password).append("<span style='color: red;'>新しいパスワードと一致しません。新しいパスワードを入力してください。</span>");			
+					return false;
+				}
 			
-			if(repeatNewPassword == inputNewPassword){
+			}
+			else{	//기존비밀번호의 확인을 안 받았거나(check1), 신규비밀번호의 생선조건 부합여부(check2)를 통과않을 시 불허처리.
+				checkFlag3_repeatNewPassword = 0;
 				$(check3_repeat_new_password).html("");
-				$(check3_repeat_new_password).append("新しいパスワードと一致します。");			
+				$(check3_repeat_new_password).append("<span style='color: red;'>既存のパスワードや新規パスワードを確認してください。</span>");			
+				return false;
+			}
+		}); 
+		
+		//4.비밀번호 갱신 실시
+		$("#updateToNewPassword").on('click', function(){	
+
+			//기존의 비밀번호, 신규비밀번호, 신규비밀번호1회 재입력 까지 3가지 사항을 모두 완료한 경우에만 신규비밀번호로 업데이트 하도록 실시.
+			if(checkFlag1_inputCurrentPassword==1 && checkFlag2_inputNewPassword==1  && checkFlag3_repeatNewPassword==1 ){
+				//alert("비밀번호변경실시");
+	
+				$.ajax({
+					type:"POST",
+				    url: "updateToNewPassword",
+					data : { inputCurrentPassword,
+	 						  inputNewPassword},
+					dataType:"json",
+					success: function(result){
+						alert("비밀번호변경실시");
+					},
+					error: function(){
+						alert("エラー");
+					}				
+				});
+				
+				
 			}
 			else{
-				$(check3_repeat_new_password).html("");
-				$(check3_repeat_new_password).append("新しいパスワードと一致しません。");			
+				alert("パスワードの変更ができません。入力内容を確認してください。");			
+				return false;
 			}
-	
+
 		}); 
+		
+		
 	}); 	
 	</script>
 </head>
@@ -220,8 +282,8 @@
 						<input type="text" placeholder="8〜32字で英語、数字、特殊記号を使っているください。"style="width:100%"
 						id="inputNewPassword">
 					</div>	
-					<div class="mypage_button_style_wrap" style="margin:-3%;"
-					   	 id="check2_new_password" > 	
+					<div class="mypage_button_style_wrap" style="margin:-3%;" 
+					   	 id="check2_new_password" class="check_result_view"> 	
 					</div>
 				</div>
 
@@ -232,7 +294,7 @@
 				<div class="mypage_buttontap_wrap"> 												
 					<div class="mypage_button_style_wrap" style="margin:-3%;"> 	
 						<input type="新しいパスワードをもう一同入力してください。" style="width:100%"
-						id="repeatNewPassword">
+								id="repeatNewPassword">
 					</div>	
 					<div class="mypage_button_style_wrap" style="margin:-3%;"
 					   	 id="check3_repeat_new_password" > 
@@ -241,6 +303,8 @@
 						
 			</div>
 		</div>
+		
+		<input type="button" id="updateToNewPassword" value="パスワードを更新します。">
 	</div>
 </body>
 </html>

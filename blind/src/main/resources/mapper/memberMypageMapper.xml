@@ -75,6 +75,26 @@ ON
 where
   target.user_id = #{userId};
 </select>
+
+<!-- 6. 유저의 현재 비밀번호를 수신.(account의 비밀번호는 로그인 시점의 정보인 관계로 최신 비번이 아닐 수 있음)-->
+<select id="getCurrentPassword" parameterType="int" resultType="String"> 
+SELECT
+	user_password
+from
+ 	blind.user_mgt 
+where
+	blind.user_mgt.user_id = #{userId};
+</select>
+ 
+ 
+
+<!-- 7.유저의 비밀번호 갱신 -->
+<update id="updateToNewPassword" parameterType="java.util.Map" >
+update "blind".user_mgt
+	set user_password = #{newPassword}
+where
+	user_id = #{userId}
+</update>
  
  
 

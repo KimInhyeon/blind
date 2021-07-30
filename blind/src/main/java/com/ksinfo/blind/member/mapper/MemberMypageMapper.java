@@ -16,4 +16,6 @@ public interface MemberMypageMapper {
 	//int getPostReplyCountThisMonth(int userId); //관련 데이터를 먼저 작성후 테스트.
 	float getSalaryRankingData(int userId);
 	
+	String getCurrentPassword(int userId);	
+	void updateToNewPassword(java.util.Map<String, Object> paramMap);
 }

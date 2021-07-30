@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.ksinfo.blind.member.mapper.MemberMypageMapper;
 
+
 @Service
 public class MemberMypageService {
 	
@@ -38,6 +39,18 @@ public class MemberMypageService {
 
 	public float getSalaryRankingData(int userId){
 		return mapper.getSalaryRankingData(userId);
+	}
+	
+	public String getCurrentPassword(int userId) {
+		return mapper.getCurrentPassword(userId);	
+	}
+	
+	public void updateToNewPassword(int userId, String inputNewPassword) {
+		java.util.Map<String, Object> paramMap = new HashMap<String, Object>(); 
+		paramMap.put("userId",userId); 
+		//passwordEncoder.upgradeEncoding(inputNewPassword) ;
+		paramMap.put("newPassword", passwordEncoder.encode(inputNewPassword) );
+		mapper.updateToNewPassword(paramMap);	
 	}
 	
 }
