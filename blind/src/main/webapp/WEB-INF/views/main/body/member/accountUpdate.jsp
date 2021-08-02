@@ -326,9 +326,9 @@
 						
 			</div>
 		</div>
-		
-		<input type="button" style="margin:3%;" 
+		<button class="ui primary button" style="margin:3%;" 
 			   id="updateToNewPassword" value="パスワードを更新します。">
-	</div>
+		 	パスワードを更新します。
+		</button>
 </body>
 </html>
