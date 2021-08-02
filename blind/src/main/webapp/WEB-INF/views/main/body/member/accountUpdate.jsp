@@ -69,18 +69,18 @@
 	}
 
 
-	.mypage_buttontap_name{ /*각 버튼탭들의 정렬설정(좌측정렬)*/
+	.mypage_passwordtap_name{ /*각 버튼탭들의 정렬설정(좌측정렬)*/
 		text-align:left;
 		margin:3%;
 	}
 
 
-	.mypage_buttontap_wrap{ /*버튼탭 내에 배치되는 버튼명과 '>'아이콘을 묶어주는 영역*/
+	.mypage_passwordtap_wrap{ /*버튼탭 내에 배치되는 버튼명과 '>'아이콘을 묶어주는 영역*/
 		text-align:left;
 		margin:3%;
 	}
 
-	.mypage_button_style_wrap{ 		/*버튼 각각의 바탕배경색 및 간격설정. mypage_button_style_button_name과 mypage_button_style_button_icon을 감싸는 역할.*/
+	.mypage_password_style_wrap{ 		/*버튼 각각의 바탕배경색 및 간격설정. mypage_button_style_button_name과 mypage_button_style_button_icon을 감싸는 역할.*/
 		background-color: #ffffff; 
 		margin: 2%; 
 		padding: 1.5%;			
@@ -219,7 +219,7 @@
 	 						  inputNewPassword},
 					dataType:"json",
 					success: function(result){
-						alert("비밀번호변경실시");
+						alert("パスワードの変更が完了しました。");
 					},
 					error: function(){
 						alert("エラー");
@@ -279,47 +279,47 @@
 			<div style="background-color: #71736e; padding: 1%;">
 				
 				<!-- 1.현재의 비밀번호 입력 -->
-				<div class="mypage_buttontap_name">												
+				<div class="mypage_passwordtap_name">												
 					現在のパスワード
 				</div>
 					
-				<div class="mypage_buttontap_wrap"> 												
-					<div class="mypage_button_style_wrap" style="margin:-3%;"> 	
+				<div class="mypage_passwordtap_wrap"> 												
+					<div class="mypage_password_style_wrap" style="margin:-3%;"> 	
 					
 						<input type="password" placeholder="現在のパスワードを入力してください。"style="width:100%"
 								id="inputCurrentPassword">
 					</div>	
-					<div class="mypage_button_style_wrap" style="margin:-3%;"
+					<div class="mypage_password_style_wrap" style="margin:-3%;"
 					   	 id="check1_current_password" > 	
 					</div>
 				</div>
 
 				<!-- 2.새로 사용할 비밀번호 입력 -->
-				<div class="mypage_buttontap_name">												
+				<div class="mypage_passwordtap_name">												
 					新しいパスワード
 				</div>
 					
-				<div class="mypage_buttontap_wrap"> 												
-					<div class="mypage_button_style_wrap" style="margin:-3%;"> 	
+				<div class="mypage_passwordtap_wrap"> 												
+					<div class="mypage_password_style_wrap" style="margin:-3%;"> 	
 						<input type="password" placeholder="8〜32字で英語、数字、特殊記号を使っているください。" 
 							   style="width:100%" id="inputNewPassword">
 					</div>	
-					<div class="mypage_button_style_wrap" style="margin:-3%;" 
+					<div class="mypage_password_style_wrap" style="margin:-3%;" 
 					   	 id="check2_new_password" class="check_result_view"> 	
 					</div>
 				</div>
 
-				<div class="mypage_buttontap_name">												
+				<div class="mypage_passwordtap_name">												
 					新しいパスワード確認
 				</div>
 					
-				<div class="mypage_buttontap_wrap"> 												
-					<div class="mypage_button_style_wrap" style="margin:-3%;"> 	
+				<div class="mypage_passwordtap_wrap"> 												
+					<div class="mypage_password_style_wrap" style="margin:-3%;"> 	
 						<input type="password" 
 							   placeholder="新しいパスワードをもう一同入力してください。" style="width:100%"
 							   id="repeatNewPassword">
 					</div>	
-					<div class="mypage_button_style_wrap" style="margin:-3%;"
+					<div class="mypage_password_style_wrap" style="margin:-3%;"
 					   	 id="check3_repeat_new_password" > 
 					</div>
 				</div>
