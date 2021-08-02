@@ -35,9 +35,11 @@
 	}	
 
 	/* 1.2. <a>태그의 설정. */
-	a {
-	  text-decoration-line: none;	/*<a>의 밑줄속성 삭제*/
-	}
+    a { text-decoration: none; color: black; }
+    a:visited { text-decoration: none;color: black;  }
+    a:hover { text-decoration: none; color: black; }
+    a:focus { text-decoration: none; color: black; }
+    a:hover, a:active { text-decoration: none; color: black; }
 	
 	/* 1.3.폰트 옵션 모음*/
 	 .mypage_common_font{
@@ -55,7 +57,7 @@
 	/* 3.0. 메인 전체를 적용 */
 	/*yes*/
 	.mypage_main_wrap{
-		text-align:center; 					/*내부에 배치되는 중앙정렬할 div에게 display: inline-block; 속성을 줘야 적용된다.*/
+		text-align:center; 	/*내부에 배치되는 중앙정렬할 div에게 display: inline-block; 속성을 줘야 적용된다.*/
 	}
 
 
@@ -84,9 +86,10 @@
 		padding: 1.5%;			
 		cursor: pointer;
 	} 	
-	
+ 	 
 	.mypage_button_style_button_icon{ /*'>'아이콘의 정렬 및 폰트크기 설정.*/
-		text-align: right;
+		display:inline-block;
+		float : right;
 		font-size: 1.5em;
 	} 
 	</style>
@@ -233,7 +236,7 @@
 		}); 
 		
 		
-		//4.비밀번호 갱신 실시
+		//5. 로그아웃 실시
 		$("#logout").on('click', function(){	
 			$.ajax({
 				type:"POST",
@@ -246,7 +249,7 @@
 					alert("エラー");
 				}				
 			});
-		}); 
+		}); 	
 		
 	}); 	
 	</script>
@@ -256,12 +259,15 @@
 <body>
 	<div id="mypage_wrap" >
 		<div class="mypage_header">
-			<div style="display: inline-block; position:absolute;">
+			<div style="display: inline-block; position: absolute; left: 0; font-size: 1.5em;">
+				<a href="/blind/member/mypage"><i class="angle left icon"></i></a>
+			</div>
+			
+			<div style="display: inline-block; position: relative; ">
 				アカウントの情報変更
 			</div>	
-			<div class="mypage_button_style_button_icon"
-				 id="logout">	
-				<a><i class="sign out alternate icon"></i></a>
+			<div class="mypage_button_style_button_icon">	
+				<i class="sign out alternate icon"></i>	<!-- logout Button -->
 			</div>
 		</div>
 		
@@ -295,8 +301,8 @@
 					
 				<div class="mypage_buttontap_wrap"> 												
 					<div class="mypage_button_style_wrap" style="margin:-3%;"> 	
-						<input type="text" placeholder="8〜32字で英語、数字、特殊記号を使っているください。"style="width:100%"
-						id="inputNewPassword">
+						<input type="password" placeholder="8〜32字で英語、数字、特殊記号を使っているください。" 
+							   style="width:100%" id="inputNewPassword">
 					</div>	
 					<div class="mypage_button_style_wrap" style="margin:-3%;" 
 					   	 id="check2_new_password" class="check_result_view"> 	
@@ -309,8 +315,9 @@
 					
 				<div class="mypage_buttontap_wrap"> 												
 					<div class="mypage_button_style_wrap" style="margin:-3%;"> 	
-						<input type="新しいパスワードをもう一同入力してください。" style="width:100%"
-								id="repeatNewPassword">
+						<input type="password" 
+							   placeholder="新しいパスワードをもう一同入力してください。" style="width:100%"
+							   id="repeatNewPassword">
 					</div>	
 					<div class="mypage_button_style_wrap" style="margin:-3%;"
 					   	 id="check3_repeat_new_password" > 

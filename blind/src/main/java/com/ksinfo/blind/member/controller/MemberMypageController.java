@@ -88,8 +88,7 @@ public class MemberMypageController {
 	public ModelAndView AccountUpdate(@AuthenticationPrincipal Account account, ModelAndView mav) {
 		mav.setViewName("main/member/accountUpdate");
 		return mav;
-	}
-	
+	}	
 	
 	//1.1.1. 현재비밀번호 일치여부 체크.(jsp페이지의 첫번째 기존비밀번호 입력박스)
 	@RequestMapping(value = "checkCurrentPassword", method = RequestMethod.POST, produces="application/json")
