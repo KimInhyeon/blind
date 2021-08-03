@@ -8,9 +8,6 @@
     <meta charset="UTF-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<script>
-aaaaaa
-</script>
 <style>
 	/*사용하는 기기의 스크린화면별 동적CSS*/
 	/*@media screen and (max-width:1799px) {
@@ -36,11 +33,14 @@ aaaaaa
 		text-align:center;	 		/*자식 div에게 'display: inline-block;' 속성을 줘야 가운데 정렬이 적용된다.*/
 		width:50%;
 	}	
-
+	
 	/* 1.2. <a>태그의 설정. */
-	a {
-	  text-decoration-line: none;	/*<a>의 밑줄속성 삭제*/
-	}
+    a { text-decoration: none; color: black; }
+    a:visited { text-decoration: none;color: black;  }
+    a:hover { text-decoration: none; color: black; }
+    a:focus { text-decoration: none; color: black; }
+    a:hover, a:active { text-decoration: none; color: black; }
+	
 	
 	/* 1.3.폰트 옵션 모음*/
 	 .mypage_common_font{
@@ -122,6 +122,7 @@ aaaaaa
 		margin: 2%; 
 		padding: 1.5%;			
 		cursor: pointer;
+		padding-top: 2.5%;		/*vertical-align: middle; 처럼 정중앙배치 효과위해 적용.*/	
 	} 	
 
 	.mypage_button_style_button_name{ /* 버튼의 '>'아이콘이 우측으로 정렬할 수 있도록 라인설정*/
@@ -183,16 +184,6 @@ aaaaaa
 						<div class="mypage_main_user_profile_style_textalign_left">
 					 		- 今月間もらった「好きです」は ${like_count_this_month}個
 					 	</div>
-						<div class="mypage_main_user_profile_style_textalign_left">
-							- 今月間書いたポストにレブは  <!-- 컨트롤러 통해 값 수신하도록. -->個
-						</div>
-					</div>
-
-					<div class="mypage_main_user_profile_style_textalign_left">
-						企業のレビュー
-						<div class="mypage_main_user_profile_style_textalign_left">
-							- 関心があるとマーク 「トヨタ車」に新しいレビューが登録しました！
-						</div>
 					</div>
 			
 					<div class="mypage_main_user_profile_style_textalign_left">

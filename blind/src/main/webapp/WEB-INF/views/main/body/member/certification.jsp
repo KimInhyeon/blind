@@ -117,7 +117,7 @@
         width: auto;
         height : auto;
         padding: 20px 20px;
-        background-color: #ffffff;
+        background-color: #444444;
         border-radius: 10px;
     }
             
@@ -199,7 +199,7 @@
 			<table class="ui celled table" id="intro_user_function"  style="background-color:#333333; padding: 0.7%;">
 			  <thead>
 			    <tr >
-			    	<th style=" background-color: #333333;">
+			    	<th style=" background-color: #444444;">
 			    		<!-- (공란/기입내용없음)-->
 			    	</th>
 				    <th style="vertical-align: top; padding-top:5%;">
@@ -216,27 +216,27 @@
 			  
 			  <tbody>
 			    <tr>
-			      <td style=" background-color: #333333;">トピックのポストを読む</td>
+			      <td style=" background-color: #444444;">トピックのポストを読む</td>
 			      <td style="background-color:#555555;" >O</td>
 			      <td style="background-color:#a85032;" >O</td>
 			    </tr>
 			    <tr>
-			      <td style=" background-color: #333333;">トピックにポストを書く</td>
+			      <td style=" background-color: #444444;">トピックにポストを書く</td>
 			      <td style="background-color:#333333;" >-</td>
 			      <td style="background-color:#A60014;" >O</td>
 			    </tr>
 			    <tr>
-			      <td style=" background-color: #333333;">企業のレビューを読む</td>
+			      <td style=" background-color: #444444;">企業のレビューを読む</td>
 			      <td style="background-color:#555555;" >△</td>
 			      <td style="background-color:#a85032;" >O</td>
 			    </tr>
 			    <tr>
-			      <td style=" background-color: #333333;">企業のレビューを書く</td>
+			      <td style=" background-color: #444444;">企業のレビューを書く</td>
 			      <td style="background-color:#333333;" >-</td>
 			      <td style="background-color:#A60014;" >O</td>
 			    </tr>
 			    <tr>
-			      <td style=" background-color: #333333;">給料のランク確認</td>
+			      <td style=" background-color: #444444;">給料のランク確認</td>
 			      <td style="background-color:#555555;" >△</td>
 			      <td style="background-color:#a85032;" >O</td>
 			    </tr>
@@ -256,11 +256,11 @@
 		</div>
 		
 		<div style="margin-top:3%;" id="show_guide_agreement" >
-			<p style="text-decoration:underline; color:#333333 ">なぜ企業のメールが必要ですか。</p>
+			<p style="text-decoration:underline; color:#333333; cursor: pointer;">なぜ企業のメールが必要ですか。</p>
 		</div>
 		
 		<div style="margin-top:3%;" id="show_guide_privacy_policy" >
-			<p style="text-decoration:underline; color:#333333 ">利用規約や個人情報取り扱い</p>
+			<p style="text-decoration:underline; color:#333333; cursor: pointer;">利用規約や個人情報取り扱い</p>
 		</div>
 	</div>
 	

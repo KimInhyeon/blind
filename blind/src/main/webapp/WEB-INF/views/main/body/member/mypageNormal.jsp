@@ -35,9 +35,12 @@
 	}	
 
 	/* 1.2. <a>태그의 설정. */
-	a {
-	  text-decoration-line: none;	/*<a>의 밑줄속성 삭제*/
-	}
+    a { text-decoration: none; color: black; }
+    a:visited { text-decoration: none;color: black;  }
+    a:hover { text-decoration: none; color: black; }
+    a:focus { text-decoration: none; color: black; }
+    a:hover, a:active { text-decoration: none; color: black; }
+	
 	
 	/* 1.3.폰트 옵션 모음*/
 	 .mypage_common_font{
@@ -74,6 +77,7 @@
 		background-color: #444444; 
 		margin: 2%; 
 		padding: 1.5%;			
+		cursor: pointer;	
 	} 	
 
 	.mypage_main_user_profile_style_nick_names{ /* 유저모양의 아이콘이 우측으로 정렬할 수 있도록 라인설정*/
@@ -106,18 +110,22 @@
 	.mypage_buttontap_name{ /*각 버튼탭들의 정렬설정(좌측정렬)*/
 		text-align:left;
 		margin:3%;
+		
 	}
 
 	.mypage_buttontap_wrap{ /*버튼탭 내에 배치되는 버튼명과 '>'아이콘을 묶어주는 영역*/
 		text-align:left;
 		margin:3%;
+
 	}
+
 
 	.mypage_button_style_wrap{ 		/*버튼 각각의 바탕배경색 및 간격설정. mypage_button_style_button_name과 mypage_button_style_button_icon을 감싸는 역할.*/
 		background-color: #ffffff; 
 		margin: 2%; 
 		padding: 1.5%;			
 		cursor: pointer;
+		padding-top: 3.5%;		/*vertical-align: middle; 처럼 정중앙배치 효과위해 적용.*/	
 	} 	
 
 	.mypage_button_style_button_name{ /* 버튼의 '>'아이콘이 우측으로 정렬할 수 있도록 라인설정*/

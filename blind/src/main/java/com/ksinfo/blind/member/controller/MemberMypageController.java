@@ -39,47 +39,34 @@ public class MemberMypageController {
 		String userNickname = account.getUserNickname();
 		String userAuth = account.getUserAuth();
 		int userId = (int) account.getUserId();
-	
+			
 		
-		float myRankNumber = mypageService.getSalaryRankingData(userId);
-																			//상위랭크계산법 : (나의순위/전체인원수)x100
-		
-		//공통정보(닉네임) mav에 저장(일반회원 경우 프로필이 '정회원 인증안내'로 대체되므로 닉네임만 전달하면 됨)
-		int companyId= (int) account.getCompanyId();		
-		String userCompanyName = mypageService.getUsersCompanyName(companyId);
+		//공통정보(닉네임) mav에 저장(일반회원 경우 프로필이 '정회원 인증안내'로 대체되므로 닉네임만 전달하면 됨)	
 		mav.addObject("user_nick_name",userNickname);
 
-		//출력할 페이지 설정		
+		//출력할 페이지 설정	
 		if(userAuth.equals("ROLE_RM")) {	//정회원인 경우
-			
 			int userPostCountsThisMonth= mypageService.getPostCountsThisMonth(userId);
 			int postLikeCountThisMonth = mypageService.getPostLikeCountThisMonth(userId); 
+	
+			//account 자체를 그대로 전송시 password등도 같이 전송되어 보안 우려로 개별전송.	
+			//int companyId= (int) account.getCompanyId();	
+			//String userCompanyName = mypageService.getUsersCompanyName(companyId);
+			//mav.addObject("user_company_name",userCompanyName); //정보노출 우려로 주석처리.
 			
-			
-			//int postReplyCountThisMonth = mypageService.getPostReplyCountThisMonth(userId); DB 데이터 제작 후 태스트 진행
-			
-			//account 자체를 그대로 전송시 password등도 같이 전송되어 보안 우려로 개별전송.
-			
-			mav.addObject("user_company_name",userCompanyName);
 			mav.addObject("user_post_counts_this_month",userPostCountsThisMonth);
 			mav.addObject("like_count_this_month",postLikeCountThisMonth);
-			
-			//mav.addObject("reply_count_this_month",postReplyCountThisMonth); DB 데이터 제작 후 태스트 진행
-			
-			mav.addObject("my_rank_percent",myRankNumber);
 
-			mav.setViewName("main/member/mypageRegular");	//레귤러(정회원) 아닌 경우에는 일반회원의 마이페이지로 리턴.
+			float myRankNumber = mypageService.getSalaryRankingData(userId);//상위랭크계산법 : (나의순위/전체인원수)x100
+			mav.addObject("my_rank_percent",myRankNumber);
+			mav.setViewName("main/member/mypageRegular");
 			return mav;			
 		}
 
+		// 일반회원으로 각각 이동할 페이지 구분하여 생성	
 		mav.setViewName("main/member/mypageNormal");
 		return mav;
-
-		//레귤러 회원/일반회원으로 각각 이동할 페이지 구분하여 생성
-
 	}
-	
-	
 	
 	
 	//1.계정정보 수정

@@ -121,29 +121,33 @@
 		$("#inputNewPassword").on('keyup', function(){	
 			inputNewPassword= $("#inputNewPassword").val();
 			//alert("inputNewPassword:"+inputNewPassword);
-			
-			if( inputNewPassword.search(/\s/) != -1 ){ //조건체크1. 공백불허
+
+			//조건체크1. 공백불허
+			if( inputNewPassword.search(/\s/) != -1 ){ 
 				$(check2_new_password).html("");
 				$(check2_new_password).append("<span style='color: red;'>空白文字は使用できません。</span>");		
 				checkFlag2_inputNewPassword=0;	
 			    return false;
 			}
 			
-			else if(inputNewPassword.length<8){       //조건체크2. 8자 이상
+			//조건체크2. 8자 이상 입력체크
+			else if(inputNewPassword.length<8){      
 				$(check2_new_password).html("");
 				$(check2_new_password).append("<span style='color: red;'>8字以上してください。</span>");				
 				checkFlag2_inputNewPassword=0;
 				return false;
 			}
 			
-			else if(inputNewPassword.length>32){     //조건체크3. 32자 이하
+			//조건체크3. 32자 이하 입력체크
+			else if(inputNewPassword.length>32){     
 				$(check2_new_password).html("");
 				$(check2_new_password).append("<span style='color: red;'>32字以内にしてください。</span>");				
 				checkFlag2_inputNewPassword=0;
 				return false;
 			}
 			
-			else if(inputNewPassword.length>32){     //조건체크4. 기존비밀번호와 일치여부(기존비밀번호와 같을경우 불가처리)
+			//조건체크4. 기존비밀번호와 일치여부(기존비밀번호와 같을경우 불가처리)
+			else if(inputNewPassword.length>32){    
 				$(check2_new_password).html("");
 				$(check2_new_password).append("<span style='color: red;'>既存のパスワードと同じです。</span>");				
 				checkFlag2_inputNewPassword=0;
