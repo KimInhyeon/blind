@@ -1,7 +1,6 @@
-package com.ksinfo.blind.companyReview.dto;
+package com.ksinfo.blind.companyIntroduction.dto;
 
-public class CompanyJoinDto {
-
+public class CompanyAverageDto {
 	public long getCompanyReviewId() {
 		return companyReviewId;
 	}
@@ -32,34 +31,34 @@ public class CompanyJoinDto {
 	public void setAllPoint(float allPoint) {
 		this.allPoint = allPoint;
 	}
-	public int getCareerPoint() {
+	public float getCareerPoint() {
 		return careerPoint;
 	}
-	public void setCareerPoint(int careerPoint) {
+	public void setCareerPoint(float careerPoint) {
 		this.careerPoint = careerPoint;
 	}
-	public int getWorkLifeBalancePoint() {
+	public float getWorkLifeBalancePoint() {
 		return workLifeBalancePoint;
 	}
-	public void setWorkLifeBalancePoint(int workLifeBalancePoint) {
+	public void setWorkLifeBalancePoint(float workLifeBalancePoint) {
 		this.workLifeBalancePoint = workLifeBalancePoint;
 	}
-	public int getPayPoint() {
+	public float getPayPoint() {
 		return payPoint;
 	}
-	public void setPayPoint(int payPoint) {
+	public void setPayPoint(float payPoint) {
 		this.payPoint = payPoint;
 	}
-	public int getCompanyCulturePoint() {
+	public float getCompanyCulturePoint() {
 		return companyCulturePoint;
 	}
-	public void setCompanyCulturePoint(int companyCulturePoint) {
+	public void setCompanyCulturePoint(float companyCulturePoint) {
 		this.companyCulturePoint = companyCulturePoint;
 	}
-	public int getHeadPoint() {
+	public float getHeadPoint() {
 		return headPoint;
 	}
-	public void setHeadPoint(int headPoint) {
+	public void setHeadPoint(float headPoint) {
 		this.headPoint = headPoint;
 	}
 	public float getRealAllPoint() {
@@ -122,28 +121,16 @@ public class CompanyJoinDto {
 	public void setCompleteFlag(char completeFlag) {
 		this.completeFlag = completeFlag;
 	}
-	public java.util.Date getRecCreateDate() {
-		return recCreateDate;
-	}
-	public void setRecCreateDate(java.util.Date recCreateDate) {
-		this.recCreateDate = recCreateDate;
-	}
-	public int getHelpfulCount() {
-		return helpfulCount;
-	}
-	public void setHelpfulCount(int helpfulCount) {
-		this.helpfulCount = helpfulCount;
-	}
 	private long companyReviewId;
 	private long userId;
 	private long companyId;
 	private String jobGroupCode;
 	private float allPoint;
-	private int careerPoint;
-	private int workLifeBalancePoint;
-	private int payPoint;
-	private int companyCulturePoint;
-	private int headPoint;
+	private float careerPoint;
+	private float workLifeBalancePoint;
+	private float payPoint;
+	private float companyCulturePoint;
+	private float headPoint;
 	private float realAllPoint;
 	private String workStartDate;
 	private String workEndDate;
@@ -154,11 +141,4 @@ public class CompanyJoinDto {
 	private String disadvantages;
 	private char verifyFlag;
 	private char completeFlag;
-	private java.util.Date recCreateDate;
-	private int helpfulCount;
-
-
-
-
-
 }
