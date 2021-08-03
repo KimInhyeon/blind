@@ -168,19 +168,14 @@
         });   
 	});
 
-	
 	//본래의 서비스를 이용하려는데 정회원이 아닌관계로 본 인증페이지로 이동한 유저들에게 안내를 위해 사용하는 팝업창.
-	//정회원이 바로 들어오는 경우에는 explain_flag값이 없어서 에러로 처리됨. 이로 인해 안내용 모달페이지 작동을 못하게 막는 원인이 되어 임시 주석처리.
-
 	$(document).ready( function(){ 
 		if(${explain_flag} == 1){	//인증으로 넘기는 컨트롤러에서 플래그값을 넘긴다.
 			alert("企業のメールを通じた認証が必要です。"); 		
 		}
 	});
 
-
 </script>
-
 </head>
 
 
@@ -201,44 +196,49 @@
 		<div>
 			企業のメールで認証して正會員になり、全サービスを利用してください。
 		</div>
-			<table class="ui celled table" id="intro_user_function">
+			<table class="ui celled table" id="intro_user_function"  style="background-color:#333333; padding: 0.7%;">
 			  <thead>
-			    <tr><th></th>
-			    <th style="vertical-align: top; padding-top:5%;">
-				    <i class="lock icon" style="font-size:2em;"></i><br/>
-			    	汎用のメール<br/>
-			    	（yahoo など）
-			    </th>
-			    <th style="vertical-align: top; padding-top:5%;">
-					<i class="lock open icon"style="font-size:2em;"></i><br/>
-			    	企業のメール
-			    </th>
-			  </tr></thead>
+			    <tr >
+			    	<th style=" background-color: #333333;">
+			    		<!-- (공란/기입내용없음)-->
+			    	</th>
+				    <th style="vertical-align: top; padding-top:5%;">
+					    <i class="lock icon" style="font-size:2em;"></i><br/>
+				    	汎用のメール<br/>
+				    	（yahoo など）
+				    </th>
+				    <th style="vertical-align: top; padding-top:5%; background-color:#A60014; ">
+						<i class="lock open icon"style="font-size:2em;"></i><br/>
+				    	企業のメール
+				    </th>
+			  	</tr>
+			  </thead>
+			  
 			  <tbody>
-			    <tr style="background-color:red;">
-			      <td>トピックのポストを読む</td>
-			      <td>O</td>
-			      <td>O</td>
+			    <tr>
+			      <td style=" background-color: #333333;">トピックのポストを読む</td>
+			      <td style="background-color:#555555;" >O</td>
+			      <td style="background-color:#a85032;" >O</td>
 			    </tr>
 			    <tr>
-			      <td>トピックにポストを書く</td>
-			      <td>-</td>
-			      <td>O</td>
+			      <td style=" background-color: #333333;">トピックにポストを書く</td>
+			      <td style="background-color:#333333;" >-</td>
+			      <td style="background-color:#A60014;" >O</td>
 			    </tr>
 			    <tr>
-			      <td>企業のレビューを読む</td>
-			      <td>△</td>
-			      <td>O</td>
+			      <td style=" background-color: #333333;">企業のレビューを読む</td>
+			      <td style="background-color:#555555;" >△</td>
+			      <td style="background-color:#a85032;" >O</td>
 			    </tr>
 			    <tr>
-			      <td>企業のレビューを書く</td>
-			      <td>-</td>
-			      <td>O</td>
+			      <td style=" background-color: #333333;">企業のレビューを書く</td>
+			      <td style="background-color:#333333;" >-</td>
+			      <td style="background-color:#A60014;" >O</td>
 			    </tr>
 			    <tr>
-			      <td>給料のランク確認</td>
-			      <td>△</td>
-			      <td>O</td>
+			      <td style=" background-color: #333333;">給料のランク確認</td>
+			      <td style="background-color:#555555;" >△</td>
+			      <td style="background-color:#a85032;" >O</td>
 			    </tr>
 			  </tbody>
 			</table>
@@ -256,11 +256,11 @@
 		</div>
 		
 		<div style="margin-top:3%;" id="show_guide_agreement" >
-			なぜ企業のメールが必要ですか。
+			<p style="text-decoration:underline; color:#333333 ">なぜ企業のメールが必要ですか。</p>
 		</div>
 		
 		<div style="margin-top:3%;" id="show_guide_privacy_policy" >
-			利用規約や個人情報取り扱い
+			<p style="text-decoration:underline; color:#333333 ">利用規約や個人情報取り扱い</p>
 		</div>
 	</div>
 	
