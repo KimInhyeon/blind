@@ -134,7 +134,15 @@ public class MemberMypageController {
 	public ModelAndView Certification(@AuthenticationPrincipal Account account, ModelAndView mav) {
 
 		mav.setViewName("main/member/certification");
+		int explain_flag =0; //explain_flag : 정회원만 이용할 수 있는 페이지를 일반회원이 접속시 '인증(main/member/certification)'페이지로 보내고 안내 팝업창을 띄우도록 하는 신호값.
+							 //전송않을시 ajax 에러로 modal이 작동않게 되어 값을 전송.
+		mav.addObject("explain_flag",explain_flag);
 		return mav;
+		
+		/* 이전 코드
+		mav.setViewName("main/member/certification");
+		return mav;
+		*/
 	}
 	
 	//1.3.연봉등록 페이지로 이동.(단 정회원만 가능. 일반회원시 이메일 인증페이지로 이동.
@@ -153,7 +161,6 @@ public class MemberMypageController {
 		mav.addObject("explain_flag",explain_flag);
 		mav.setViewName("main/member/certification");
 		return mav;
-
 	}	
 	
 	//2.초대, 웹로그인

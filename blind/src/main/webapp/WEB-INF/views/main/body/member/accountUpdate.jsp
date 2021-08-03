@@ -9,24 +9,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
-	/*사용하는 기기의 스크린화면별 동적CSS*/
-	/*@media screen and (max-width:1799px) {
-		#mypage_wrap{ background-color: red; }	
-	}
-	
-	@media screen and (max-width:1199px) {
-		#mypage_wrap{ background-color: green; }
-	}
-	
-	@media screen and (max-width:899px) {
-			#mypage_wrap{ background-color: blue; }
-	}
-	
-	@media screen and (max-width:599px) {
-		#mypage_wrap{ background-color: black; }
-	}*/
-	
-	
+
 	/* 1. 마이페이지 전체 일괄적용css ---------------------------------------------------------------------- */
 	/* 1.1. 마이페이지 전체를 감싸는 div */
 	#mypage_wrap{ 				
