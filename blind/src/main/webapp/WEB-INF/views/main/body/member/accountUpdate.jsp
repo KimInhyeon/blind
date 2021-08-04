@@ -253,7 +253,7 @@
 			<div style="display: inline-block; position: relative; ">
 				アカウントの情報変更
 			</div>	
-			<div class="mypage_button_style_button_icon">	
+			<div class="mypage_button_style_button_icon" id="logout">	
 				<i class="sign out alternate icon"></i>	<!-- logout Button -->
 			</div>
 		</div>

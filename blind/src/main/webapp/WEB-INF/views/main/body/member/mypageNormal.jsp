@@ -74,10 +74,9 @@
 	}
 	
 	.mypage_main_user_profile_style_wrap{ 		/*버튼 각각의 바탕배경색 및 간격설정. mypage_button_style_button_name과 mypage_button_style_button_icon을 감싸는 역할.*/
-		background-color: #444444; 
 		margin: 2%; 
-		padding: 1.5%;			
-		cursor: pointer;	
+		padding: 3%;
+		padding-bottom: 7%;
 	} 	
 
 	.mypage_main_user_profile_style_nick_names{ /* 유저모양의 아이콘이 우측으로 정렬할 수 있도록 라인설정*/
@@ -91,6 +90,7 @@
 		font-size: 2em;
 		margin-top : 5%;
 		margin-right : 2%; 
+		cursor: pointer;
 	} 
 	
 	.mypage_main_user_profile_style_company_names{ 
@@ -125,7 +125,7 @@
 		margin: 2%; 
 		padding: 1.5%;			
 		cursor: pointer;
-		padding-top: 3.5%;		/*vertical-align: middle; 처럼 정중앙배치 효과위해 적용.*/	
+		padding-top: 2.5%;		/*vertical-align: middle; 처럼 정중앙배치 효과위해 적용.*/	
 	} 	
 
 	.mypage_button_style_button_name{ /* 버튼의 '>'아이콘이 우측으로 정렬할 수 있도록 라인설정*/
@@ -138,17 +138,30 @@
 		font-size: 1.5em;
 	} 
 
-
 	</style>
-
-
 	<script>
+		//신고안내 팝업창
 		$(function(){ 		
         	$("#intro_popup_service_center").on("click", function(){
         		alert("service@blind.comにメールを送ってください。");	
-        	})  	
-		});
-	
+        	});
+
+    		//5. 로그아웃 실시
+    		$("#logout").on('click', function(){	
+    			$.ajax({
+    				type:"POST",
+    			    url: "logout",
+    				success: function(result){
+    					alert("ログアウトを完了しました。");
+    					location.replace(result.url);  //로그인 페이지로 이동하도록실시.
+    				},
+    				error: function(){
+    					alert("エラー");
+    				}				
+    			});
+    		}); 
+			
+		}); 	
 	</script>
 </head>
 
@@ -159,69 +172,71 @@
 			<div style="display: inline-block; position:absolute;">
 				My Page
 			</div>	
-			<div class="mypage_button_style_button_icon">	
-				<a><i class="sign out alternate icon"></i></a>
+			<div class="mypage_button_style_button_icon" id="logout">	
+				<i class="sign out alternate icon"></i>	<!-- logout Button -->
 			</div>
 		</div>
 		<div id="mypage_main_wrap">
 			<div id="mypage_main_user_profile">					<!-- 메인1. 유저 프로필(닉네임,메일,근무기업) -->				
 				<div class="mypage_main_user_profile_style_wrap"> 
-					<div class="mypage_main_user_profile_style_nick_names">
+					<div style="position: inherit; float:left; color:#ffffff;">
 						${user_nick_name}
 					</div>
 							
-					<div class="mypage_main_user_profile_style_user_icon"
+					<div class="ui secondary button" style=" position: inherit; float:right; font-size:1em;"
 						 onclick="location.href='${pageContext.request.contextPath}/accountUpdate';"> 	
-						<i class="user circle icon"></i><!-- 유저 아이콘 -->
-					</div>
-								
-					<div class="mypage_main_user_profile_style_company_names">
-						（汎用のメール）
+						 	<i class="user circle icon"></i> <!-- 유저 아이콘(font-size 통해 크기조절) -->
+							情報修正	
 					</div>
 				</div>
 				
-				<div id="mypage_main_Explanation"> 				<!-- 일반회원은 인증이 필요하다는 안내페이지로 대체. -->
-					<div style="margin-left:13%; margin-top:10%; vertical-align:bottom ;">
-						<div style="float:left; vertical-align: bottom; margin-top:5%;">
-							<i class="lock icon"  style="float:left; font-size: 2.5em; position:static;" ></i>
-						</div>
-				
-						<div style="width:70%;">
-							企業のメールで認証して正會員にならば、全サービスを利用することができます。
-						</div>
-					</div>
-					
-					<div style="margin-left: 25%; margin-top: 10%; text-align: left;"> <!-- 회사메일 인증시 가능한 사항들 목록. -->
-						<div class="mypage_main_textmargin">
-							<i class="check circle icon"></i>
-							トピックにポストを書く
-						</div>
-	
-						<div class="mypage_main_textmargin">
-							<i class="check circle icon"></i>
-							企業のレビューを読む
-						</div>
+				<div id="mypage_main_Explanation" style="float:right; text-align: center;"> 	<!-- 일반회원은 인증이 필요하다는 안내페이지로 대체. -->
+					<div style="background-color: #444444; width:95%;  display: inline-block;">	<!--지정컬러로 바탕을 칠하기 위한 div영역설정 -->
+						<div style=" width:65%; display: inline-block; margin-top: 5%;margin-bottom: 5%;"> <!-- 텍스트들을 배치하기 위한 div -->
 						
-						<div class="mypage_main_textmargin">
-							<i class="check circle icon"></i>
-							企業のレビューを書く
-						</div>
+							<div style="margin-left:13%; margin-top:10%; vertical-align:bottom ; ">
+								<div style="float:left; vertical-align: bottom; margin-top:5%;">
+									<i class="lock icon"  style="float:left; font-size: 2.5em; position:static; color:#ffffff;"></i>
+								</div>
+						
+								<div style="width:70%; color:#ffffff;">
+									企業のメールで認証して正會員にならば、全サービスを利用することができます。
+								</div>
+							</div>
+
+							<div style="margin-left: 25%; margin-top: 10%; text-align: left;"> <!-- 회사메일 인증시 가능한 사항들 목록. -->
+								<div class="mypage_main_textmargin" style="color:#ffffff;">
+									<i class="check circle icon" style="color:#ffffff;"> </i>
+									トピックにポストを書く
+								</div>
 			
-						<div class="mypage_main_textmargin">
-							<i class="check circle icon"></i>
-							給料のランクに給料登録や確認
-						</div>		
-					</div>									
+								<div class="mypage_main_textmargin"  style="color:#ffffff;">
+									<i class="check circle icon" style="color:#ffffff;"></i>
+									企業のレビューを読む
+								</div>
 								
-					<button class="ui primary button" style="margin:5%;"
-							 onclick="location.href='${pageContext.request.contextPath}/certification';"> 	
-						正會員認証を始める
-					</button>
+								<div class="mypage_main_textmargin" style="color:#ffffff;">
+									<i class="check circle icon" style="color:#ffffff;"></i>
+									企業のレビューを書く
+								</div>
+					
+								<div class="mypage_main_textmargin" style="color:#ffffff;">
+									<i class="check circle icon" style="color:#ffffff;"></i>
+									給料のランクに給料登録や確認
+								</div>		
+							</div>									
+								
+							<button class="ui primary button" style="margin:5%;"
+									 onclick="location.href='${pageContext.request.contextPath}/certification';"> 	
+								正會員認証を始める
+							</button>
+						</div>
+					</div>						
 				</div>
 	   		 		
-				<div id="mypage_button_warp"> 			<!-- main구성 : 2.각종 버튼탭(버튼모음) -->
-					<div id="mypage_button_update_certification_and_income">
-						<div class="mypage_buttontap_name">												
+				<div id="mypage_button_warp" style="margin-top: 70%;"> 			<!-- main구성 : 2.각종 버튼탭(버튼모음) -->
+					<div id="mypage_button_update_	certification_and_income">
+						<div class="mypage_buttontap_name" style="color:#ffffff;">											
 							アカウントの情報変更
 						</div>	
 						<div class="mypage_buttontap_wrap"> 												
@@ -248,7 +263,7 @@
 					</div>	
 	
 					<div id="mypage_buttontap_invite_and_weblogin"> <!-- 버튼탭2. 타인초대 및 웹로그인 -->
-						<div class="mypage_buttontap_name">
+						<div class="mypage_buttontap_name" style="color:#ffffff;">
 							招待、Webログイン
 						</div>	
 						<div class="mypage_buttontap_wrap"> 												
@@ -275,7 +290,7 @@
 					</div>	
 	
 					<div id="mypage_buttontap_writedpost_and_bookmark"> <!-- 버튼탭3. 로그인한 회원이 작성한 포스트/기업리뷰, 즐겨핯기한 포스트 리스트출력-->
-						<div class="mypage_buttontap_name"> 												
+						<div class="mypage_buttontap_name" style="color:#ffffff;">												
 							私が書いたポスト、ブックマーク
 						</div>	
 						
@@ -314,7 +329,7 @@
 					</div> 
 	
 					<div id="mypage_buttontap_service_center"> <!-- 버튼탭4. 고객센터-->
-						<div class="mypage_buttontap_name"> 												
+						<div class="mypage_buttontap_name" style="color:#ffffff;"> 												
 							カスタマーセンター
 						</div>	
 						
@@ -347,4 +362,7 @@
 	</div>
 	
 </body>
+
+
+
 </html>

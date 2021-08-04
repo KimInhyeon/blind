@@ -74,9 +74,9 @@
 	}
 	
 	.mypage_main_user_profile_style_wrap{ 		/*버튼 각각의 바탕배경색 및 간격설정. mypage_button_style_button_name과 mypage_button_style_button_icon을 감싸는 역할.*/
-		background-color: #444444; 
 		margin: 2%; 
-		padding: 1.5%;			
+		padding: 3%;
+		padding-bottom: 7%;
 	} 	
 
 	.mypage_main_user_profile_style_nick_names{ /* 유저모양의 아이콘이 우측으로 정렬할 수 있도록 라인설정*/
@@ -90,6 +90,7 @@
 		font-size: 2em;
 		margin-top : 5%;
 		margin-right : 2%; 
+		cursor: pointer;
 	} 
 	
 	.mypage_main_user_profile_style_company_names{ 
@@ -137,12 +138,28 @@
 
 	</style>
 	<script>
+		//신고안내 팝업창
 		$(function(){ 		
         	$("#intro_popup_service_center").on("click", function(){
         		alert("service@blind.comにメールを送ってください。");	
-        	})  	
-		});
-	
+        	});
+
+    		//5. 로그아웃 실시
+    		$("#logout").on('click', function(){	
+    			$.ajax({
+    				type:"POST",
+    			    url: "/logout",
+    				success: function(result){
+    					alert("ログアウトを完了しました。");
+    					location.replace(result.url);  //로그인 페이지로 이동하도록실시.
+    				},
+    				error: function(){
+    					alert("エラー");
+    				}				
+    			});
+    		}); 
+			
+		}); 	
 	</script>
 </head>
 
@@ -153,51 +170,51 @@
 			<div style="display: inline-block; position:absolute;">
 				My Page
 			</div>	
-			<div class="mypage_button_style_button_icon">	
-				<a><i class="sign out alternate icon"></i></a>
+			<div class="mypage_button_style_button_icon" id="logout">	
+				<i class="sign out alternate icon"></i>	<!-- logout Button -->
 			</div>
 		</div>
 		<div id="mypage_main_wrap">
 			<div id="mypage_main_user_profile">					<!-- 메인1. 유저 프로필(닉네임,메일,근무기업) -->				
 				<div class="mypage_main_user_profile_style_wrap"> 
-					<div class="mypage_main_user_profile_style_nick_names">
+					<div style="position: inherit; float:left; color:#ffffff;">
 						${user_nick_name}
 					</div>
 							
-					<div class="mypage_main_user_profile_style_user_icon"
+					<div class="ui secondary button" style=" position: inherit; float:right; font-size:1em;
 						 onclick="location.href='${pageContext.request.contextPath}/accountUpdate';"> 	
-						<i class="user circle icon"></i><!-- 유저 아이콘 -->
-					</div>
-								
-					<div class="mypage_main_user_profile_style_company_names">
-						${user_company_name}
+						 	<i class="user circle icon" ></i> <!-- 유저 아이콘(font-size 통해 크기조절) -->
+							情報修正	
 					</div>
 				</div>
 			
-				<div id="mypage_main_user_activity" class="mypage_main_user_profile_style_textalign_left" > <!-- 유저의 토픽/기업리뷰/연봉탭 관련 활동안내 리스트 -->
-					君の最近の活動と結果です。
-					<div class="mypage_main_user_profile_style_textalign_left">
-						トピック
-						<div class="mypage_main_user_profile_style_textalign_left">
-							 - 今月間書いたポストの数は ${user_post_counts_this_month} 個
+				<div style="background-color: #444444; width:95%;  display: inline-block;">	<!--지정컬러로 바탕을 칠하기 위한 div영역설정 -->
+					<div style=" width:100%; display: inline-block; margin-top: 2%;margin-bottom: 2%;"> <!-- 텍스트들을 배치하기 위한 div -->
+						<div id="mypage_main_user_activity" class="mypage_main_user_profile_style_textalign_left" style="color:#ffffff;"> <!-- 유저의 토픽/기업리뷰/연봉탭 관련 활동안내 리스트 -->
+							私の最近の活動と結果です。
+							<div class="mypage_main_user_profile_style_textalign_left" style="color:#ffffff;">
+								トピック
+								<div class="mypage_main_user_profile_style_textalign_left" style="color:#ffffff;">
+									 - 今月間書いたポストの数は ${user_post_counts_this_month} 個
+								</div>
+								<div class="mypage_main_user_profile_style_textalign_left" style="color:#ffffff;">
+							 		- 今月間もらった「好きです」は ${like_count_this_month}個
+							 	</div>
+							</div>
+							<div class="mypage_main_user_profile_style_textalign_left">
+								給料ランク
+								<div class="mypage_main_user_profile_style_textalign_left">
+									- 今月間給料ランクの順位が上位 ${my_rank_percent} ％中に入りました！
+								</div>
+							</div>
 						</div>
-						<div class="mypage_main_user_profile_style_textalign_left">
-					 		- 今月間もらった「好きです」は ${like_count_this_month}個
-					 	</div>
 					</div>
-			
-					<div class="mypage_main_user_profile_style_textalign_left">
-						給料ランク
-						<div class="mypage_main_user_profile_style_textalign_left">
-							- 今月間給料ランクの順位が上位 ${my_rank_percent} ％中に入りました！
-						</div>
-					</div>
+				</div>
 
-				</div>
 
 				<div id="mypage_button_warp"> 			<!-- main구성 : 2.각종 버튼탭(버튼모음) -->
 					<div id="mypage_button_update_certification_and_income">
-						<div class="mypage_buttontap_name">												
+						<div class="mypage_buttontap_name" style="color:#ffffff;">											
 							アカウントの情報変更
 						</div>	
 						<div class="mypage_buttontap_wrap"> 												
@@ -224,7 +241,7 @@
 					</div>	
 	
 					<div id="mypage_buttontap_invite_and_weblogin"> <!-- 버튼탭2. 타인초대 및 웹로그인 -->
-						<div class="mypage_buttontap_name">
+						<div class="mypage_buttontap_name" style="color:#ffffff;">
 							招待、Webログイン
 						</div>	
 						<div class="mypage_buttontap_wrap"> 												
@@ -250,8 +267,9 @@
 						</div>
 					</div>	
 	
+	
 					<div id="mypage_buttontap_writedpost_and_bookmark"> <!-- 버튼탭3. 로그인한 회원이 작성한 포스트/기업리뷰, 즐겨핯기한 포스트 리스트출력-->
-						<div class="mypage_buttontap_name"> 												
+						<div class="mypage_buttontap_name" style="color:#ffffff;">												
 							私が書いたポスト、ブックマーク
 						</div>	
 						
@@ -290,7 +308,7 @@
 					</div> 
 	
 					<div id="mypage_buttontap_service_center"> <!-- 버튼탭4. 고객센터-->
-						<div class="mypage_buttontap_name"> 												
+						<div class="mypage_buttontap_name" style="color:#ffffff;">											
 							カスタマーセンター
 						</div>	
 						
