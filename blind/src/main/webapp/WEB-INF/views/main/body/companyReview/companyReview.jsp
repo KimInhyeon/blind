@@ -76,11 +76,27 @@
         .div_tab a{font-size:13px; padding-left:11px;}
         .div_tab a:first-child{padding-left:0px;}
         #bestcompanygrid .column:last-child{margin-bottom:100px;}
+
+
+		/* 기업등록신청(BLIND_0013_企業登録申請) 모달창 css */
+
+		#request_company_regist_modal { /*기업등록 신청 모달창의 크기등을 설정.*/
+        	display: none;
+            width: 40%;
+            height : auto;
+            padding: 20px 20px;
+            background-color: #ffffff;
+            border-radius: 3px;
+       }
+         
+       #request_company_regist_modal div{ /*request_company_regist_modal 내의 모든 div 옵션*/
+	   		list-style:none;
+	        margin-bottom:15px;
+       }
+		
     </style>
 
 </head>
-
-
 
 
 <body>
@@ -98,7 +114,8 @@
             </div>
 
             <div class="companyapplymain" align="center">
-                お探しの会社がありませんか。<a href="#"> <span id=apply>知りたい会社を直接申し込んでください。</span></a>
+                お探しの会社がありませんか。
+                <span id="apply" onclick="requestCompanyRegistModalStart()">知りたい会社を直接申し込んでください。</span>                
             </div>
     </div>
 
@@ -151,6 +168,38 @@ ${company.companyName}
     </div>
 </div>
 
+	<!--기업등록신청 모달창-->
+	<div id="request_company_regist_modal" data-backdrop="static" data-keyboard="false">
+		<div>
+			<div> <!-- 모달창의 헤더(제목 및 닫기버튼)배치 -->
+				<h2 style="display:inline; ;" >企業の登録申請</h2>
+	     	 	<div style="float:right;" id="modal_close_btn">X</div> 
+      		</div>
+      		    
+      		<div align='left'>  <!-- 작성을 위한 안내멘트 기입. -->
+				<h4>知りたい企業の企業名と、企業のメールを入力してください。</h4>
+			</div>
+				
+			<div> 
+				<span>企業名</span> 
+				<span>企業のメール</span> 
+			</div>
+			
+			<div>
+				<button class="ui primary button" id="send_alert"
+						style="width:20%; height:auto; text-align:center; margin-top: 20px;">
+						신청하기
+				</button>
+			</div>
+			
+			<div align='left'> 
+				お申し込みいただいた企業は、担当者の検証手続きに従って登録が進行されます。
+				<!-- 신청하신 기업은 담당자의 확인절차에 따라 등록이 진행됩니다. -->
+			</div>
+		</div>	 
+	</div>	
+
+
 <script>
     $("#searchKeyword").focus(function(){
         $(this).css("border-color", "black");
@@ -167,8 +216,59 @@ ${company.companyName}
         var aa = $("#stars").children('.selected').length;
         alert(aa);
     }
+    
+    
+    // 기업등록신청(BLIND_0013_企業登録申請) 모달창을 위한 ajax 기능.
+
+    //1.기업등록신청 모달(request_company_regist_modal)-팝업실시. 
+    function requestCompanyRegistModalStart(){
+		$('#request_company_regist_modal').modal({ closable: false }); //모달밖을 클릭해도 닫히지 않도록 설정.
+		$('#request_company_regist_modal').modal('show');
+    };
+
+
+ 	$(function(){ 	
+ 	    //2.기업등록신청 모달(request_company_regist_modal)-팝업창 닫기. 
+   		$("#modal_close_btn").on("click", function(){ //신고되면 모달창을 닫도록 함.
+      		$('#request_company_regist_modal').modal('hide');
+   		});
+ 	    
+ 	    //3.등록신청할 기업의 정보를 서버로 전송.
+    	$("#send_request_company_regist").on("click", function(){
+        	var compnay_name = $('input[name="alert_post_reason"]:checked').val();            		
+        	var compnay_email =$('#').val();            		
+		
+      		if(typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null){ 
+        		alert("申告する理由を選んでください。"); //선택된 신고사항이 없기에 선택을 요청
+        	}else{
+        		alert("okay"); //선택된 신고사항이 없기에 선택을 요청
+        		/*
+        		    $.ajax({
+        		         type : "POST",
+        		         url  : "/blind/sendAlert",
+        		         data : { 
+        		         },
+        		         dataType: "json",
+        		         success: function(result){
+        		        	if(result ==1){
+            		 			alert("申告の受付を完了しました。");
+            		 			$('#alert_modal').modal('hide');
+        		        	}
+        		        	else if (result ==0){
+            		            alert("システムのエラーです。管理者にお問い合わせください。");
+            		    	}
+        		         },
+        		         error: function(){
+        		            alert("システムのエラーです。管理者にお問い合わせください。");
+        		         }            
+        			});
+        		*/
+        		}
+        	});
+    });
 </script>
 
-
 </body>
+
+
 </html>
