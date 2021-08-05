@@ -32,6 +32,7 @@
 				dataType:"json",
 				success: function(result){
 
+
 				},
 				error: function(){
 					alert("에러");

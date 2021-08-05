@@ -190,11 +190,11 @@
 
         INSERT INTO blind.review_recommend_inf(
 
-                                                review_recommend_id
-                                              , company_review_id
-                                              , company_id
-                                              , user_id
-                                              , helpful
+               review_recommend_id
+               , company_review_id
+               , company_id
+               , user_id
+               , helpful
         )
         VALUES (
                    default
