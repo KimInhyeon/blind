@@ -170,32 +170,45 @@ ${company.companyName}
 
 	<!--기업등록신청 모달창-->
 	<div id="request_company_regist_modal" data-backdrop="static" data-keyboard="false">
-		<div>
+		<div align='center' >
 			<div> <!-- 모달창의 헤더(제목 및 닫기버튼)배치 -->
-				<h2 style="display:inline; ;" >企業の登録申請</h2>
+				<h1 style="display:inline; ;" >企業の登録申請</h1>
 	     	 	<div style="float:right;" id="modal_close_btn">X</div> 
       		</div>
       		    
-      		<div align='left'>  <!-- 작성을 위한 안내멘트 기입. -->
-				<h4>知りたい企業の企業名と、企業のメールを入力してください。</h4>
+      		<div align='left' style="margin-top:5%;width:80%;">  <!-- 작성을 위한 안내멘트 기입. -->
+				<h2>知りたい企業の企業名と、企業のメールを入力してください！</h2>
 			</div>
 				
-			<div> 
-				<span>企業名</span> 
-				<span>企業のメール</span> 
+			<div align='center'>
+				<div style="margin-top:5%;width:80%;">
+					<p align='left'>企業名</p> 
+					<div class="ui input" style="width:100%;">
+		  				<input type="text" placeholder="企業名を入力してください。"
+		  					   id="request_compnay_name">
+					</div>
+				
+					<p align='left'>企業のメール</p> 
+					<div class="ui input" style="width:100%;"
+						 id="request_compnay_email">
+		  				<input type="text" placeholder="企業のメールを入力してください。">
+					</div>
+					
+					
+					<button class="ui primary button" id="send_alert"
+							style="width:30%; height:auto; text-align:center; margin-top: 20px;">
+							申し込む
+					</button>
+
+					<div align='left'
+						style="margin-top: 4%;">
+						<h3>お申し込みいただいた企業は、担当者の検証手続きに従って登録が進行されます。</h3>
+						<!-- 신청하신 기업은 담당자의 확인절차에 따라 등록이 진행됩니다. -->
+					</div>
+				</div>
+
 			</div>
-			
-			<div>
-				<button class="ui primary button" id="send_alert"
-						style="width:20%; height:auto; text-align:center; margin-top: 20px;">
-						신청하기
-				</button>
-			</div>
-			
-			<div align='left'> 
-				お申し込みいただいた企業は、担当者の検証手続きに従って登録が進行されます。
-				<!-- 신청하신 기업은 담당자의 확인절차에 따라 등록이 진행됩니다. -->
-			</div>
+		
 		</div>	 
 	</div>	
 
@@ -235,8 +248,8 @@ ${company.companyName}
  	    
  	    //3.등록신청할 기업의 정보를 서버로 전송.
     	$("#send_request_company_regist").on("click", function(){
-        	var compnay_name = $('input[name="alert_post_reason"]:checked').val();            		
-        	var compnay_email =$('#').val();            		
+        	var request_compnay_name = $('input[name="alert_post_reason"]:checked').val();            		
+        	var request_compnay_email =$('#').val();            		
 		
       		if(typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null){ 
         		alert("申告する理由を選んでください。"); //선택된 신고사항이 없기에 선택을 요청
