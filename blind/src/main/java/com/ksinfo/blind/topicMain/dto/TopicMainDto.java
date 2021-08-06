@@ -66,5 +66,4 @@ public class TopicMainDto {
 	public void setBoardUpdateDate(Date boardUpdateDate) {
 		this.boardUpdateDate = boardUpdateDate;
 	}
-
 }

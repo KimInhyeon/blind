@@ -7,18 +7,17 @@ import com.ksinfo.blind.manage.vo.BoardVO;
 import com.ksinfo.blind.security.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class BoardController {
 	private final BoardService boardService;
 
@@ -36,30 +35,29 @@ public class BoardController {
 
 		ModelAndView modelAndView = new ModelAndView("main/manage/board");
 		modelAndView.addObject("boardList", boardList);
+		if (closedFlag == '0' && anonymousFlag == '2') {
+			modelAndView.addObject("lastOrder", boardList.size());
+		} else {
+			modelAndView.addObject("lastOrder", boardService.getLastOrder());
+		}
 
 		return modelAndView;
 	}
 
-	@ResponseBody
-	@GetMapping(value = "manage/board/list")
-	public List<BoardVO> boardList(char closedFlag, char anonymousFlag) {
+	@GetMapping(value = "manage/board", params = "ajax=true")
+	public List<BoardVO> getBoardList(
+		@RequestParam(name = "closedFlag", defaultValue = "0") char closedFlag,
+		@RequestParam(name = "anonymousFlag", defaultValue = "2") char anonymousFlag
+	) {
 		return boardService.getBoardList(closedFlag, anonymousFlag);
 	}
 
-	@ResponseBody
-	@GetMapping(value = "manage/board/order")
-	public int lastOrder() {
-		return boardService.getLastOrder();
-	}
-
-	@ResponseBody
 	@PostMapping(value = "manage/board")
 	public long createBoard(@RequestBody BoardCreateDto board, @AuthenticationPrincipal Account account) {
 		board.setUserId(account.getUserId());
 		return boardService.createBoard(board);
 	}
 
-	@ResponseBody
 	@PatchMapping(value = "manage/board")
 	public int updateBoard(@RequestBody BoardUpdateDto board, @AuthenticationPrincipal Account account) {
 		board.setUserId(account.getUserId());

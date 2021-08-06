@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.post.mapper.PostMapper">
+	<select id="getTopicList" resultType="com.ksinfo.blind.post.vo.TopicVO">
+		SELECT
+			board_id AS boardId,
+			board_topic_name AS boardTopicName
+		FROM blind.board_mgt
+		WHERE closed_flag = '0'
+			AND logical_del_flag = '0'
+		ORDER BY board_order;
+	</select>
+
+	<update id="deleteUploadedFile">
+		UPDATE blind.post_file_mgt
+		SET rec_update_user_id = #{userId},
+			rec_update_date = NOW(),
+			logical_del_flag = '1'
+		WHERE rec_create_user_id = #{userId}
+			AND logical_del_flag = '0'
+			AND
+		<choose>
+			<when test="postFileId gt 0">post_file_id</when>
+			<otherwise>post_id</otherwise>
+		</choose>
+			= #{postFileId};
+	</update>
+
+	<select id="getTotalFileSize" parameterType="com.ksinfo.blind.post.dto.PostFileDto" resultType="_long">
+		SELECT COALESCE(SUM(post_file_size), 0)
+		FROM blind.post_file_mgt
+		WHERE rec_create_user_id = #{userId}
+			AND post_id = #{postId}
+			AND logical_del_flag = '0';
+	</select>
+<!--
+CREATE FUNCTION blind.upload_file(
+	target_id BIGINT, file_url VARCHAR(2000), file_name VARCHAR(200), file_size BIGINT, user_id BIGINT
+) RETURNS BIGINT AS $$
+	DECLARE
+		now TIMESTAMP := NOW();
+	BEGIN
+		INSERT INTO blind.post_file_mgt (
+			post_id, post_file_url, post_file_origin_name, post_file_size, rec_create_user_id,
+			rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			target_id, file_url, file_name, file_size, user_id,
+			now, user_id, now, '0'
+		) RETURNING post_file_id INTO target_id;
+		RETURN target_id;
+	END;
+$$ LANGUAGE plpgsql;
+-->
+	<select id="uploadFile" parameterType="com.ksinfo.blind.post.dto.PostFileDto"
+			resultType="_long" statementType="CALLABLE">
+		{CALL blind.upload_file(#{postId}, #{postFileUrl}, #{postFileOriginName}, #{postFileSize}, #{userId})}
+	</select>
+<!--
+CREATE FUNCTION blind.write_post(
+	boardId BIGINT, userId BIGINT, title VARCHAR(200), blind_flag CHAR(1), contents TEXT
+) RETURNS BIGINT AS $$
+	DECLARE
+		now TIMESTAMP := NOW();
+	BEGIN
+		INSERT INTO blind.post_mgt (
+			board_id, user_id, post_title, post_blind_flag, post_contents, post_create_date,
+			post_update_date, rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			boardId, userId, title, blind_flag, contents, now,
+			now, userId, now, userId, now, '0'
+		) RETURNING post_id INTO boardId;
+		UPDATE blind.post_file_mgt
+		SET post_id = boardId,
+			rec_update_date = now
+		WHERE rec_create_user_id = userId
+			AND post_id = 0
+			AND logical_del_flag = '0';
+		RETURN boardId;
+	END;
+$$ LANGUAGE plpgsql;
+-->
+	<select id="writePost" parameterType="com.ksinfo.blind.post.dto.PostDto"
+			resultType="_long" statementType="CALLABLE">
+		{CALL blind.write_post(#{boardId}, #{userId}, #{title}, #{blindFlag}, #{contents})}
+	</select>
+</mapper>

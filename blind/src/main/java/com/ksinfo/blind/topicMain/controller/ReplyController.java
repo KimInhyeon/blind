@@ -1,7 +1,10 @@
 package com.ksinfo.blind.topicMain.controller;
 
-import java.util.List;
-
+import com.ksinfo.blind.security.Account;
+import com.ksinfo.blind.topicMain.dto.ReplyDto;
+import com.ksinfo.blind.topicMain.dto.ReplyResultDto;
+import com.ksinfo.blind.topicMain.service.ReplyService;
+import com.ksinfo.blind.topicMain.service.TopicMainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -11,11 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ksinfo.blind.security.Account;
-import com.ksinfo.blind.topicMain.dto.ReplyDto;
-import com.ksinfo.blind.topicMain.dto.ReplyResultDto;
-import com.ksinfo.blind.topicMain.service.ReplyService;
-import com.ksinfo.blind.topicMain.service.TopicMainService;
+import java.util.List;
 
 @Controller
 @RequestMapping("/reply/*")
@@ -26,7 +25,7 @@ public class ReplyController {
 
 	@Autowired
 	TopicMainService topicMainService;
-	
+
 	@RequestMapping(value = "/insertReply", method = RequestMethod.POST)
 	@ResponseBody
 	public List<ReplyResultDto> insertReply(@AuthenticationPrincipal Account account, ReplyDto dto) throws Exception {
@@ -35,13 +34,13 @@ public class ReplyController {
 		replyService.insertReply(dto);
 		List<ReplyResultDto> readReply = replyService.readReply(dto.getPostId());
 		long resultCount = topicMainService.replyCount(dto.getPostId());
-		
+
 		if (readReply != null) {
 			readReply.get(0).setReplyCount(resultCount);
 		} else {
-			
+
 		}
-		
+
 		return readReply;
 	}
 

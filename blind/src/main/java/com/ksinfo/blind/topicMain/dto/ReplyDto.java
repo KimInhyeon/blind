@@ -94,5 +94,4 @@ public class ReplyDto {
 	public void setReplyCount(long replyCount) {
 		this.replyCount = replyCount;
 	}
-
 }

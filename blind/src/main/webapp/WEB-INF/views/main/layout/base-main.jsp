@@ -4,13 +4,12 @@
 <html lang="ja">
 <head>
 	<meta charset="UTF-8">
-	<title>KSINFOSYS_BLIND PROTOTYPE</title>
 	<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 </head>
 <body>
 <section class="content">
-	<tiles:insertAttribute name="header"/> <!--  /WEB-INF/views/common/layout/header.jsp -->
+	<tiles:insertAttribute name="header"/> <!-- /WEB-INF/views/common/layout/header.jsp -->
 	<tiles:insertAttribute name="body"/> <!-- body -->
 </section>
 </body>

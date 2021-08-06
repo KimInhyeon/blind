@@ -24,22 +24,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.antMatchers("/manage/**").hasRole("SV")
-			.antMatchers("/companyReview/**", "/topicMain/**").hasAnyRole("SV","RM","NM")
-			.antMatchers("/manage/**").hasRole("SV")
-			.antMatchers("/", "/main", "/registMember", "/testAndroidAccess", "/registMemberApp", "/loginApp").permitAll()
+			.antMatchers("/board", "/upload", "/post").hasAnyRole("SV", "RM")
+			.antMatchers("/registMember", "/registMemberApp", "/login", "/loginApp").anonymous()
+			.antMatchers("/", "/main", "/testAndroidAccess").permitAll()
 			.anyRequest().authenticated()
 			.and().csrf().disable()
 		.formLogin()
 			.loginPage("/login")
 			.defaultSuccessUrl("/loginSuccess")
 			.failureHandler(new CustomizeAuthenticationFailureHandler())
-			.permitAll()
 			.and()
 		.logout()
-			.permitAll()
+			.logoutUrl("/logout")
+			.logoutSuccessUrl("/login")
+			.invalidateHttpSession(true).deleteCookies("JSESSIONID")
 			.and()
 		.exceptionHandling()
-			.accessDeniedPage("/login");
+			.accessDeniedPage("/main");
 	}
 
 	@Bean

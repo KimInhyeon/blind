@@ -17,19 +17,24 @@
 					AND pr.logical_del_flag = '0'
 			</when>
 			<when test="searchTarget eq 'reason'">
-					INNER JOIN blind.report_reason_mst USING(report_reason_code)
+					INNER JOIN (
+						SELECT DISTINCT
+							report_reason_code,
+							report_reason_contents
+						FROM blind.report_reason_mst
+					) AS rrm ON pr.report_reason_code = rrm.report_reason_code
 				WHERE (LOWER(report_reason_content) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 					OR LOWER(report_reason_contents) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 				) AND pr.logical_del_flag = '0'
 			</when>
 			<when test="searchTarget eq 'writer'">
 					INNER JOIN blind.post_mgt AS po USING(post_id)
-					INNER JOIN blind.user_mgt AS us ON po.user_id = us.user_id
+					INNER JOIN blind.user_mgt AS us ON po.user_id = us.user_id AND last_generation_flag = '1'
 				WHERE LOWER(user_nickname) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 					AND pr.logical_del_flag = '0'
 			</when>
 			<when test="searchTarget eq 'reporter'">
-					INNER JOIN blind.user_mgt USING(user_id)
+					INNER JOIN blind.user_mgt AS us ON pr.user_id = us.user_id AND last_generation_flag = '1'
 				WHERE LOWER(user_nickname) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 					AND pr.logical_del_flag = '0'
 			</when>
@@ -61,19 +66,24 @@
 					AND rr.logical_del_flag = '0'
 			</when>
 			<when test="searchTarget eq 'reason'">
-					INNER JOIN blind.report_reason_mst USING(report_reason_code)
+					INNER JOIN (
+						SELECT DISTINCT
+							report_reason_code,
+							report_reason_contents
+						FROM blind.report_reason_mst
+					) AS rrm ON rr.report_reason_code = rrm.report_reason_code
 				WHERE (LOWER(report_reason_content) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 					OR LOWER(report_reason_contents) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 				) AND rr.logical_del_flag = '0'
 			</when>
 			<when test="searchTarget eq 'writer'">
 					INNER JOIN blind.reply_mgt AS re USING(reply_id)
-					INNER JOIN blind.user_mgt AS us ON re.user_id = us.user_id
+					INNER JOIN blind.user_mgt AS us ON re.user_id = us.user_id AND last_generation_flag = '1'
 				WHERE LOWER(user_nickname) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 					AND rr.logical_del_flag = '0'
 			</when>
 			<when test="searchTarget eq 'reporter'">
-					INNER JOIN blind.user_mgt USING(user_id)
+					INNER JOIN blind.user_mgt AS us ON rr.user_id = us.user_id AND last_generation_flag = '1'
 				WHERE LOWER(user_nickname) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 					AND rr.logical_del_flag = '0'
 			</when>
@@ -108,19 +118,24 @@
 					AND crr.logical_del_flag = '0'
 			</when>
 			<when test="searchTarget eq 'reason'">
-					INNER JOIN blind.report_reason_mst USING(report_reason_code)
+					INNER JOIN (
+						SELECT DISTINCT
+							report_reason_code,
+							report_reason_contents
+						FROM blind.report_reason_mst
+					) AS rrm ON crr.report_reason_code = rrm.report_reason_code
 				WHERE (LOWER(report_reason_content) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 					OR LOWER(report_reason_contents) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 				) AND crr.logical_del_flag = '0'
 			</when>
 			<when test="searchTarget eq 'writer'">
 					INNER JOIN blind.company_review_mgt AS cr USING(company_review_id)
-					INNER JOIN blind.user_mgt AS us ON cr.user_id = us.user_id
+					INNER JOIN blind.user_mgt AS us ON cr.user_id = us.user_id AND last_generation_flag = '1'
 				WHERE LOWER(user_nickname) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 					AND crr.logical_del_flag = '0'
 			</when>
 			<when test="searchTarget eq 'reporter'">
-					INNER JOIN blind.user_mgt USING(user_id)
+					INNER JOIN blind.user_mgt AS us ON crr.user_id = us.user_id AND last_generation_flag = '1'
 				WHERE LOWER(user_nickname) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 					AND crr.logical_del_flag = '0'
 			</when>
@@ -262,7 +277,12 @@
 						</if>
 					</if>
 				) AS reported_reason_code
-					INNER JOIN blind.report_reason_mst USING(report_reason_code)
+					INNER JOIN (
+						SELECT DISTINCT
+							report_reason_code,
+							report_reason_contents
+						FROM blind.report_reason_mst
+					) AS rrm ON reported_reason_code.report_reason_code = rrm.report_reason_code
 				WHERE LOWER(report_reason_contents) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 					OR LOWER(report_reason_content) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 			</when>
@@ -302,7 +322,7 @@
 						</if>
 					</if>
 				) AS writer
-					INNER JOIN blind.user_mgt USING(user_id)
+					INNER JOIN blind.user_mgt AS us ON writer.user_id = us.user_id AND last_generation_flag = '1'
 				WHERE LOWER(user_nickname) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 			</when>
 			<when test="searchTarget eq 'reporter'">
@@ -338,7 +358,7 @@
 						</if>
 					</if>
 				) AS reporter
-					INNER JOIN blind.user_mgt USING(user_id)
+					INNER JOIN blind.user_mgt AS us ON reporter.user_id = us.user_id AND last_generation_flag = '1'
 				WHERE LOWER(user_nickname) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 			</when>
 			<otherwise>
@@ -395,9 +415,14 @@
 		FROM blind.post_report_mgt AS pr
 			INNER JOIN blind.post_mgt AS po USING(post_id)
 			INNER JOIN blind.board_mgt USING(board_id)
-			INNER JOIN blind.report_reason_mst USING(report_reason_code)
-			INNER JOIN blind.user_mgt AS wus ON po.user_id = wus.user_id
-			INNER JOIN blind.user_mgt AS rus ON pr.user_id = rus.user_id
+			INNER JOIN blind.user_mgt AS wus ON po.user_id = wus.user_id AND wus.last_generation_flag = '1'
+			INNER JOIN blind.user_mgt AS rus ON pr.user_id = rus.user_id AND rus.last_generation_flag = '1'
+			INNER JOIN (
+				SELECT DISTINCT
+					report_reason_code,
+					report_reason_contents
+				FROM blind.report_reason_mst
+			) AS rrm ON pr.report_reason_code = rrm.report_reason_code
 		WHERE pr.logical_del_flag = '0'
 		<if test="completeFlag neq '2'">
 			AND complete_flag = #{completeFlag}
@@ -449,9 +474,14 @@
 			INNER JOIN blind.reply_mgt AS re USING(reply_id)
 			INNER JOIN blind.post_mgt USING(post_id)
 			INNER JOIN blind.board_mgt USING(board_id)
-			INNER JOIN blind.report_reason_mst USING(report_reason_code)
-			INNER JOIN blind.user_mgt AS wus ON re.user_id = wus.user_id
-			INNER JOIN blind.user_mgt AS rus ON rr.user_id = rus.user_id
+			INNER JOIN blind.user_mgt AS wus ON re.user_id = wus.user_id AND wus.last_generation_flag = '1'
+			INNER JOIN blind.user_mgt AS rus ON rr.user_id = rus.user_id AND rus.last_generation_flag = '1'
+			INNER JOIN (
+				SELECT DISTINCT
+					report_reason_code,
+					report_reason_contents
+				FROM blind.report_reason_mst
+			) AS rrm ON rr.report_reason_code = rrm.report_reason_code
 		WHERE rr.logical_del_flag = '0'
 		<if test="completeFlag neq '2'">
 			AND complete_flag = #{completeFlag}
@@ -500,9 +530,14 @@
 		FROM blind.review_report_mgt AS crr
 			INNER JOIN blind.company_review_mgt AS cr USING(company_review_id)
 			INNER JOIN blind.company_mgt USING(company_id)
-			INNER JOIN blind.report_reason_mst USING(report_reason_code)
-			INNER JOIN blind.user_mgt AS wus ON cr.user_id = wus.user_id
-			INNER JOIN blind.user_mgt AS rus ON crr.user_id = rus.user_id
+			INNER JOIN blind.user_mgt AS wus ON cr.user_id = wus.user_id AND wus.last_generation_flag = '1'
+			INNER JOIN blind.user_mgt AS rus ON crr.user_id = rus.user_id AND rus.last_generation_flag = '1'
+			INNER JOIN (
+				SELECT DISTINCT
+					report_reason_code,
+					report_reason_contents
+				FROM blind.report_reason_mst
+			) AS rrm ON crr.report_reason_code = rrm.report_reason_code
 		WHERE crr.logical_del_flag = '0'
 		<if test="completeFlag neq '2'">
 			AND crr.complete_flag = #{completeFlag}
@@ -661,21 +696,14 @@
 				</when>
 			</choose>
 		) AS reported
-			INNER JOIN 
-			  (
+			INNER JOIN blind.user_mgt AS wus ON writer_id = wus.user_id AND wus.last_generation_flag = '1'
+			INNER JOIN blind.user_mgt AS rus ON reporter_id = rus.user_id AND rus.last_generation_flag = '1'
+			INNER JOIN (
 				SELECT DISTINCT
-				  report_reason_code,
-				  report_reason_contents
-			    FROM
-			      blind.report_reason_mst
-			  ) rrm
-			ON reported.report_reason_code = rrm.report_reason_code
-			INNER JOIN blind.user_mgt AS wus ON writer_id = wus.user_id
-			AND wus.last_generation_flag = '1'
-			AND wus.logical_del_flag = '0'
-			INNER JOIN blind.user_mgt AS rus ON reporter_id = rus.user_id
-			AND rus.last_generation_flag = '1'
-			AND rus.logical_del_flag = '0'
+					report_reason_code,
+					report_reason_contents
+				FROM blind.report_reason_mst
+			) AS rrm ON reported.report_reason_code = rrm.report_reason_code
 		<choose>
 			<when test="searchTarget eq 'writer'">
 				WHERE LOWER(wus.user_nickname) LIKE '%' || LOWER(#{searchKeyword}) || '%'
@@ -746,7 +774,8 @@ CREATE PROCEDURE blind.verify_report(
 					SET reported_count = reported_count + 1,
 						rec_update_user_id = login_user_id,
 						rec_update_date = now
-					WHERE user_id = target_id;
+					WHERE user_id = target_id
+						AND last_generation_flag = '1';
 				END IF;
 			WHEN type = '2' THEN
 				UPDATE blind.reply_report_mgt
@@ -770,7 +799,8 @@ CREATE PROCEDURE blind.verify_report(
 					SET reported_count = reported_count + 1,
 						rec_update_user_id = login_user_id,
 						rec_update_date = now
-					WHERE user_id = target_id;
+					WHERE user_id = target_id
+						AND last_generation_flag = '1';
 				END IF;
 			WHEN type = '3' THEN
 				UPDATE blind.review_report_mgt
@@ -794,7 +824,8 @@ CREATE PROCEDURE blind.verify_report(
 					SET reported_count = reported_count + 1,
 						rec_update_user_id = login_user_id,
 						rec_update_date = now
-					WHERE user_id = target_id;
+					WHERE user_id = target_id
+						AND last_generation_flag = '1';
 				END IF;
 		END CASE;
 	END;
