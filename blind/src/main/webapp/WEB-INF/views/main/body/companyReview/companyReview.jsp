@@ -115,7 +115,8 @@
 
             <div class="companyapplymain" align="center">
                 お探しの会社がありませんか。
-                <span id="apply" onclick="requestCompanyRegistModalStart()">知りたい会社を直接申し込んでください。</span>                
+                <span id="apply" onclick="requestCompanyRegistModalStart()"
+             		  style="cursor:pointer">知りたい会社を直接申し込んでください。</span>                
             </div>
     </div>
 
@@ -189,13 +190,14 @@ ${company.companyName}
 					</div>
 				
 					<p align='left'>企業のメール</p> 
-					<div class="ui input" style="width:100%;"
-						 id="request_compnay_email">
-		  				<input type="text" placeholder="企業のメールを入力してください。">
+					<div class="ui input" style="width:100%;">
+		  				<input type="text" placeholder="企業のメールを入力してください。"
+						       id="request_compnay_email">
+
 					</div>
 					
 					
-					<button class="ui primary button" id="send_alert"
+					<button class="ui primary button" id="send_request_company_regist"
 							style="width:30%; height:auto; text-align:center; margin-top: 20px;">
 							申し込む
 					</button>
@@ -248,36 +250,42 @@ ${company.companyName}
  	    
  	    //3.등록신청할 기업의 정보를 서버로 전송.
     	$("#send_request_company_regist").on("click", function(){
-        	var request_compnay_name = $('input[name="alert_post_reason"]:checked').val();            		
-        	var request_compnay_email =$('#').val();            		
+        	var requestCompnayName = $('#request_compnay_name').val();            		
+        	var requestCompnayEmail =$('#request_compnay_email').val();            		
 		
-      		if(typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null){ 
-        		alert("申告する理由を選んでください。"); //선택된 신고사항이 없기에 선택을 요청
-        	}else{
-        		alert("okay"); //선택된 신고사항이 없기에 선택을 요청
-        		/*
-        		    $.ajax({
-        		         type : "POST",
-        		         url  : "/blind/sendAlert",
-        		         data : { 
-        		         },
-        		         dataType: "json",
-        		         success: function(result){
-        		        	if(result ==1){
-            		 			alert("申告の受付を完了しました。");
-            		 			$('#alert_modal').modal('hide');
-        		        	}
-        		        	else if (result ==0){
-            		            alert("システムのエラーです。管理者にお問い合わせください。");
-            		    	}
-        		         },
-        		         error: function(){
-        		            alert("システムのエラーです。管理者にお問い合わせください。");
-        		         }            
-        			});
-        		*/
+			//alert("request_compnay_name :" + request_compnay_name);
+			//alert("request_compnay_email :" + request_compnay_email);
+			
+        	if((typeof requestCompnayName == "undefined" || requestCompnayName == "" || requestCompnayName == null) 
+        		||(typeof requestCompnayEmail == "undefined" || requestCompnayEmail == "" || requestCompnayEmail == null)  )
+	        	{  //유저가 회사명 또는 회사메일을 기입않을시 참으로 간주하여 경고문 출력 및 기업등록신청 스톱처리.
+   	        		alert("企業名と、企業のメールを入力してください。"); //선택된 신고사항이 없기에 선택을 요청
+    	    		false;
         		}
-        	});
+           	else{
+        		$.ajax({
+        			type : "POST",
+        		    url  : "/blind/sendRequestCompanyRegist",
+        		    data : { requestCompnayName 
+		        		     , requestCompnayEmail
+ 	    	   		        },
+        		    dataType: "json",
+        		    success: function(result){
+        		    	if(result ==1){
+            		 		alert("申込みが完了しました。");
+            		 		$('#request_company_regist_modal').modal('hide');
+        		       	}
+        		       	else if (result ==0){
+            		     	alert("システムのエラーです。管理者にお問い合わせください。");
+            		    }
+        		    },
+        		         
+        		    error: function(){
+        		    	alert("システムのエラーです。管理者にお問い合わせください。");
+        		    }            
+        		});
+        	}
+       	});
     });
 </script>
 

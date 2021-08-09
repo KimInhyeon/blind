@@ -1,5 +1,6 @@
 package com.ksinfo.blind.companyReview.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,4 +27,15 @@ public class CompanyReviewService {
 	public List<CompanyMainViewDto> companySearchPopular(){
 		return companyReviewMapper.companySearchPopular();
 	}
+	
+	public void sendRequestCompanyRegist(String requestCompnayName, String requestCompnayEmail,int userid){
+		java.util.Map<String, Object> paramMap = new HashMap<String, Object>(); 
+
+		paramMap.put("userid", userid);	   
+		paramMap.put("requestCompnayName", requestCompnayName); 
+		paramMap.put("requestCompnayEmail", requestCompnayEmail);	    
+ 
+		companyReviewMapper.sendRequestCompanyRegist(paramMap);	
+	}
+	
 }

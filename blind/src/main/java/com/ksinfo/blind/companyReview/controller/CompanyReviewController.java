@@ -1,5 +1,6 @@
 package com.ksinfo.blind.companyReview.controller;
 
+import com.ksinfo.blind.companyIntroduction.service.CompanyIntroductionService;
 import com.ksinfo.blind.companyReview.dto.CompanyDto;
 import com.ksinfo.blind.companyReview.dto.CompanyJoinDto;
 import com.ksinfo.blind.companyReview.dto.CompanyMainViewDto;
@@ -129,4 +130,18 @@ public class CompanyReviewController {
 		return companyDto;
 	}
 
+	
+	@RequestMapping(value = "sendRequestCompanyRegist", method = RequestMethod.POST, produces="application/json")
+	@ResponseBody
+	public int sendRequestCompanyRegist(String requestCompnayName, String requestCompnayEmail, @AuthenticationPrincipal Account account){
+
+		int userid = (int)account.getUserId();
+		
+		companyReviewService.sendRequestCompanyRegist(requestCompnayName, requestCompnayEmail, userid);
+
+		return 1;//성공시1을 리턴하도록 실시.
+	}
+	
+	
+	
 }

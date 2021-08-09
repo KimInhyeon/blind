@@ -16,4 +16,7 @@ public interface CompanyReviewMapper {
 	List<CompanyDto> companySearchAll();
 	int companyReviewJoin(CompanyJoinDto inputDto);
 	List<CompanyMainViewDto> companySearchPopular();
+	
+	void sendRequestCompanyRegist(java.util.Map<String, Object> paramMap);
+
 }
