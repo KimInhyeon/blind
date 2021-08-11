@@ -17,6 +17,9 @@ import com.ksinfo.blind.companyReview.dto.CompanyJoinDto;
 import com.ksinfo.blind.companyReview.dto.CompanyMainViewDto;
 import com.ksinfo.blind.companyReview.service.CompanyReviewService;
 import com.ksinfo.blind.companyReview.service.CompanyReviewWriteService;
+import com.ksinfo.blind.search.dto.BoardDto;
+import com.ksinfo.blind.search.dto.PostDto;
+import com.ksinfo.blind.search.service.SearchService;
 import com.ksinfo.blind.security.Account;
 import com.ksinfo.blind.util.MessageUtils;
 
@@ -28,6 +31,9 @@ public class CompanyReviewController {
 	CompanyReviewWriteService companyReviewWriteService;
 	@Autowired
 	MessageUtils msg;
+	@Autowired 
+	SearchService searchService; // 본래 SearchService.java에서 선언&사용. 검색기능 활용 및 게시글(포스트)의 출력등을 위해 
+	
 	
 	@RequestMapping(value = "companyReviewMain", method = RequestMethod.GET)
 	public ModelAndView companyReviewMain(HttpServletRequest req) throws Exception {
@@ -124,5 +130,34 @@ public class CompanyReviewController {
 		  
 	      return companyDto;
 	  }
+	  
+	  
+	  //기업리뷰-포스트로 이동하였을 때 최초 작동.
+	  //사용자가 기업리뷰페이지에서 "포스트"탭을 클릭했다는 상황으로 생각하여 진행.
+	  @RequestMapping(value = "companyReviewPost", method = RequestMethod.GET)
+	  public ModelAndView companyReviewPost(String companyName) throws Exception {
+		  
+		  //임시 정보(제작위해 임시적으로 설정)
+		  companyName="トヨタ自動車";        //기업id/기업명을 받아와 작동하도록 해야 할 것으로 본다.
+		  ModelAndView mav = new ModelAndView();
+			
+		  //1.헤더부분
+		  
+		  
+		  
+		  //2.포스트출력관련(jsp 관련부분 : <!-- 2.포스터출력 --> 파트)
+		  List<PostDto> companyPosts = searchService.getSearchPosts(companyName);	//게시글의 제목검색&정렬기준: 최신일
+
+		  mav.addObject("company_posts", companyName);	  
+		  mav.addObject("company_name", companyPosts);
+			
+		  mav.setViewName("main/companyReview/companyReviewPost");
+		  //mav.setViewName("main/companyReview"+companyName+"/companyReviewPost");
+		  //main/companyReview/기업명/companyReviewPost 식으로 찾아갈 수 있도록 작성해야 한다.
+		  //내일 문의하여 진행할 것.
+		  return mav;
+		}
+	  
+	  //
 	  
 }
