@@ -16,7 +16,10 @@ public class BookmarkDto {
 	private String replyCount; //댓글 수
 	private long userId; //유저 아이디
 	private long bookmarkId; //북마크 아이디
-	private String logicalDelFlag;
+	private String logicalDelFlag; //삭제 플래그
+	private long myRecommend; // 내 좋아요 판단
+	private String postRecommendFlag; //좋아요 플래그
+	private long postRecommendId;
 
 
 	public long getBoardId() {
@@ -145,5 +148,29 @@ public class BookmarkDto {
 
 	public void setLogicalDelFlag(String logicalDelFlag) {
 		this.logicalDelFlag = logicalDelFlag;
+	}
+
+	public long getMyRecommend() {
+		return myRecommend;
+	}
+
+	public void setMyRecommend(long myRecommend) {
+		this.myRecommend = myRecommend;
+	}
+
+	public String getPostRecommendFlag() {
+		return postRecommendFlag;
+	}
+
+	public void setPostRecommendFlag(String postRecommendFlag) {
+		this.postRecommendFlag = postRecommendFlag;
+	}
+
+	public long getPostRecommendId() {
+		return postRecommendId;
+	}
+
+	public void setPostRecommendId(long postRecommendId) {
+		this.postRecommendId = postRecommendId;
 	}
 }

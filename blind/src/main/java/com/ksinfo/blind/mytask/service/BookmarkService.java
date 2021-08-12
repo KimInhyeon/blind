@@ -43,4 +43,24 @@ public class BookmarkService {
 		map.put("bookmarkId", searchBookmark.getBookmarkId());
 		return bookmarkMapper.updateBookmark(map);
 	}
+
+	public BookmarkDto searchPostRecommend(long userId, long postId){
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("userId", userId);
+		map.put("postId", postId);
+		return bookmarkMapper.searchPostRecommend(map);
+	}
+
+	public long insertPostRecommend(long userId, long postId){
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("userId", userId);
+		map.put("postId", postId);
+		return bookmarkMapper.insertPostRecommend(map);
+	}
+
+	public long updatePostRecommend(BookmarkDto searchPostRecommend){
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("postRecommendId", searchPostRecommend.getPostRecommendId());
+		return bookmarkMapper.updatePostRecommend(map);
+	}
 }

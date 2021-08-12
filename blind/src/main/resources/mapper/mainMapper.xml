@@ -10,8 +10,8 @@
         , pm.post_contents as postContents
         , pm.post_create_date as postCreateDate
 		, TRIM(TO_CHAR(pci.post_count, '999,999,999,999')) as postCount
-		, TRIM(TO_CHAR(coalesce(count(pri.post_recommend_flag),0), '999,999,999,999')) as recommendCount
-		, TRIM(TO_CHAR(coalesce(count(rm.reply_id),0), '999,999,999,999')) as replyCount
+		, TRIM(TO_CHAR(coalesce(count(DISTINCT pri.post_recommend_flag),0), '999,999,999,999')) as recommendCount
+		, TRIM(TO_CHAR(coalesce(count(DISTINCT rm.reply_id),0), '999,999,999,999')) as replyCount
     FROM
         blind.post_mgt pm
 	INNER JOIN
@@ -25,7 +25,7 @@
 	INNER JOIN
 		blind.post_count_inf pci
 	ON
-		pci.post_id = pm.post_id 
+		pci.post_id = pm.post_id
 	LEFT OUTER JOIN
 		blind.post_recommend_inf pri
 	ON

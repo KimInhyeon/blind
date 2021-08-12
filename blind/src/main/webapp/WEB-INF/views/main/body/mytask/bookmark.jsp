@@ -26,31 +26,59 @@
             });
         });
     </script>
+    <script>
+        $(function(){
+
+            $("i[name=myrec]").click(function(){
+                if($(this).hasClass("red") === true){
+                    $(this).removeClass("red").addClass("outline");
+                    var aa = $(this).closest('a').children('span').text();
+                    var bb = parseInt(aa)-1;
+                    $(this).closest('a').children('span').text(bb);
+                }else{
+                    $(this).addClass("red").removeClass("outline");
+                    var aa = $(this).closest('a').children('span').text();
+                    var bb = parseInt(aa)+1;
+                    $(this).closest('a').children('span').text(bb);
+                }
+            var postId = $(this).attr('id');
+
+
+            $.ajax({
+                type : "POST",
+                url : "/blind/addPostRecommend",
+                data : { postId : postId },
+                dataType:"json",
+                success : function(result){
+                }
+            });
+            });
+        });
+    </script>
+
 <style>
             .tit{padding: 30px 0 8px 0; font-size: 150%; font-weight: 700;}
             .bookmarkcontent a{color:black; display:block; padding-bottom:8px;}
             .bookmarkcontent a span{font-size:80%;}
             .bookmarkcontent p{padding-top:12px; font-size:90%;}
+            .bmcomname a{font-size:80%;}
+            .bmcomname span{font-size:80%;}
             #icn1 a{color:gray;}
             #icn1 a i:hover{color:gray;}
             #icn2 a{color:gray;}
             #icn2 a i:hover{color:gray;}
+
 
 </style>
 </head>
  <body>
     <div class="ui container">
         <h3 class="tit">ブックマーク</h3>
-<%--        <div class="ui fitted divider" style="border-width:medium;"><!--fit 되는 얇은 선--></div>--%>
+        <div class="ui fitted divider" style="border-width:medium;"><!--fit 되는 얇은 선--></div>
         <div class="bookmarkcontent">
         <div class="ui internally celled grid">
         <c:forEach var="bookmark" items="${bookmarkList}" varStatus="status">
-            <script>
-                $(document).ready(function(){
 
-                });
-
-            </script>
                 <c:choose>
                 <c:when test="${status.count % 2 == 1}">
                 <div class="row">
@@ -59,7 +87,7 @@
                         <a href="${pageContext.request.contextPath}/topicDetail?postId=${bookmark.postId}"><span style="font-size:130%; font-weight:700;">${bookmark.postTitle}</span></a>
                         <div class="ui grid">
                             <div class="thirteen wide column">
-                                <div style="height:65px;">
+                                <div style="height:60px;">
                                     <a href="${pageContext.request.contextPath}/topicDetail?postId=${bookmark.postId}"><p>${bookmark.postContents}</p></a>
                                 </div>
                             </div>
@@ -69,10 +97,21 @@
                             </div>
                             </c:if>
                         </div>
-                        <a href=""><span>${bookmark.companyName}・${bookmark.userNickName}</span></a>
+
+                        <div class="bmcomname">
+                            <a href="${pageContext.request.contextPath}/companyIntroduction?companyId=${bookmark.companyId}" style="display:inline-block; padding:5px 0px 15px 0px;">${bookmark.companyName}</a>
+                            <span class="left floated">・${bookmark.userNickName}</span>
+                        </div>
                         <div class="ui left floated horizontal list" id="icn1">
                             <a class="item" href="http://naver.com"><i class="eye icon"></i><span style="padding:0 5px;">${bookmark.postCount}</span></a>
-                            <a class="item" href="http://naver.com"><i class="thumbs up outline icon"></i><span style="padding-left:5px;">${bookmark.recommendCount}</span></a>
+                            <a class="item">
+                                <c:if test="${bookmark.myRecommend eq 0}">
+                                <i class="thumbs up outline icon" name="myrec" id="${bookmark.postId}"></i>
+                                </c:if>
+                                <c:if test="${bookmark.myRecommend eq 1}">
+                                    <i class="thumbs up red icon" name="myrec" id="${bookmark.postId}"></i>
+                                </c:if>
+                                <span style="padding-left:5px;">${bookmark.recommendCount}</span></a>
                             <a class="item" href="#"><i class="comment outline icon"></i><span style="padding:0 5px;">${bookmark.replyCount}</span></a>
                         </div>
                         <div class="ui right floated horizontal list" >
@@ -91,7 +130,7 @@
                         <a href="${pageContext.request.contextPath}/topicDetail?postId=${bookmark.postId}"><span style="font-size:130%; font-weight:700;">${bookmark.postTitle}</span></a>
                         <div class="ui grid">
                             <div class="thirteen wide column">
-                                <div style="height:65px;">
+                                <div style="height:60px;">
                                     <a href="${pageContext.request.contextPath}/topicDetail?postId=${bookmark.postId}"><p>${bookmark.postContents}</p></a>
                                 </div>
                             </div>
@@ -102,11 +141,21 @@
                                 </div>
                             </c:if>
                         </div>
-                        <a href=""><span>${bookmark.companyName}・${bookmark.userNickName}</span></a>
+                        <div class="bmcomname">
+                            <a href="${pageContext.request.contextPath}/companyIntroduction?companyId=${bookmark.companyId}" style="display:inline-block;  padding:5px 0px 15px 0px;">${bookmark.companyName}</a>
+                            <span class="left floated">・${bookmark.userNickName}</span>
+                        </div>
                         <div class="ui left floated horizontal list" id="icn2">
-                            <a class="item" href="http://naver.com"><i class="eye icon"></i><span style="padding:0 5px;">${bookmark.postCount}</span></a>
-                            <a class="item" href="http://naver.com"><i class="thumbs up outline icon"></i><span style="padding-left:5px;">${bookmark.recommendCount}</span></a>
-                            <a class="item" href="#"><i class="comment outline icon"></i><span style="padding:0 5px;">${bookmark.replyCount}</span></a>
+                            <a class="item" href="${pageContext.request.contextPath}/topicDetail?postId=${bookmark.postId}"><i class="eye icon"></i><span style="padding:0 5px;">${bookmark.postCount}</span></a>
+                            <a class="item">
+                                <c:if test="${bookmark.myRecommend eq 0}">
+                                <i class="thumbs up outline icon" name="myrec" id="${bookmark.postId}"></i>
+                            </c:if>
+                                <c:if test="${bookmark.myRecommend eq 1}">
+                                    <i class="thumbs up red icon" name="myrec" id="${bookmark.postId}"></i>
+                                </c:if>
+                                <span style="padding-left:5px;">${bookmark.recommendCount}</span></a>
+                            <a class="item" href="${pageContext.request.contextPath}/topicDetail?postId=${bookmark.postId}"><i class="comment outline icon"></i><span style="padding:0 5px;">${bookmark.replyCount}</span></a>
                         </div>
                         <div class="ui right floated horizontal list" >
                             <a class="item" href=""><span style="padding-left:5px; color:gray;">${bookmark.createDate}</span></a>

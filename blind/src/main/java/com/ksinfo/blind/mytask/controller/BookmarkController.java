@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -36,5 +38,18 @@ public class BookmarkController {
             bookmarkService.updateBookmark(searchBookmark);
             }
         }
+
+    @RequestMapping(value = "addPostRecommend", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public void addPostRecommend(@AuthenticationPrincipal Account account, long postId){
+        BookmarkDto searchPostRecommend = bookmarkService.searchPostRecommend(account.getUserId(), postId);
+        List<BookmarkDto> prlist = new ArrayList<BookmarkDto>();
+        prlist.add(searchPostRecommend);
+        if(searchPostRecommend == null) {
+            bookmarkService.insertPostRecommend(account.getUserId(), postId);
+        }else if(prlist.size() > 0){
+            bookmarkService.updatePostRecommend(searchPostRecommend);
+        }
+    }
 
 }

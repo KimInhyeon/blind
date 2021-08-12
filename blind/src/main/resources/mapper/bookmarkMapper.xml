@@ -9,13 +9,15 @@
 		 ,pm.post_title as postTitle
 		 , pm.post_contents as postContents
 		 , um_name.inner_usernickname as userNickName
+	     , cm_name.company_id as companyId
 		 , cm_name.company_name as companyName
-		 ,to_char(pm.post_create_date,'MM.DD') as createDate
-		 ,pm.post_create_date as order_createDate
-		 ,rank.post_file_url as postFileUrl
+		 , to_char(pm.post_create_date,'MM.DD') as createDate
+		 , pm.post_create_date as order_createDate
+		 , rank.post_file_url as postFileUrl
 		 , TRIM(TO_CHAR(pci.post_count, '999,999,999,999')) as postCount
-		 , TRIM(TO_CHAR(coalesce(count(pri.post_recommend_id),0), '999,999,999,999')) as recommendCount
-		 , TRIM(TO_CHAR(coalesce(count(rm.reply_id),0), '999,999,999,999')) as replyCount
+		 , TRIM(TO_CHAR(coalesce(count(DISTINCT pri.post_recommend_id),0), '999,999,999,999')) as recommendCount
+		 , TRIM(TO_CHAR(coalesce(count(DISTINCT rm.reply_id),0), '999,999,999,999')) as replyCount
+		 , count(DISTINCT CASE WHEN pri.user_id = 1 THEN 1 END) as myRecommend
 		 , bmm.rec_update_date as bookmarkCreateDate
 	FROM
 		blind.post_mgt pm
@@ -63,6 +65,7 @@
 			SELECT
 				inner_um.user_id AS user_id
 				 ,inner_cm.company_name AS company_name
+				 ,inner_cm.company_id AS company_id
 			FROM
 				blind.user_mgt inner_um
 					LEFT JOIN
@@ -105,6 +108,7 @@
 		   ,pm.post_title
 		   , pm.post_contents
 		   , um_name.inner_usernickname
+	       , cm_name.company_id
 		   , cm_name.company_name
 		   , pm.post_create_date
 		   , rank.post_file_url
@@ -139,8 +143,36 @@
 		WHERE bookmark_id = #{bookmarkId};
 	</update>
 
-<!--	<insert id="insertBookmark" parameterType="hashmap">-->
-<!--	INSERT INTO blind.bookmark_mgt(post_id, user_id, bookmark_create_date, bookmark_update_date, rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag)-->
-<!--	VALUES (#{postId}, #{userId}, now(), now(), #{userId}, now(), #{userId}, now(), '0');-->
-<!--	</insert>-->
+
+	<select id="searchPostRecommend" parameterType="hashmap" resultType="com.ksinfo.blind.mytask.dto.BookmarkDto">
+		SELECT
+			pri.post_recommend_id as postRecommendId
+			,pri.user_id as userId
+		    ,pri.post_id as postId
+			,pri.post_recommend_flag as postRecommendFlag
+		FROM
+			blind.post_recommend_inf pri
+		WHERE
+			pri.post_id = #{postId}
+		  AND
+			pri.user_id = #{userId}
+	</select>
+
+	<insert id="insertPostRecommend" parameterType="hashmap">
+		INSERT INTO
+		blind.post_recommend_inf(post_recommend_id, post_id, user_id, post_recommend_date, post_recommend_flag)
+		VALUES
+		(default, #{postId}, #{userId}, now(), '0')
+	</insert>
+
+	<update id="updatePostRecommend" parameterType="hashmap">
+		UPDATE blind.post_recommend_inf
+		SET post_recommend_date=now(), post_recommend_flag =
+			CASE WHEN post_recommend_flag='0' THEN '1'
+				 WHEN post_recommend_flag='1' THEN '0'
+				END
+		WHERE post_recommend_id = #{postRecommendId};
+
+	</update>
+
 </mapper>

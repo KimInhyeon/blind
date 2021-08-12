@@ -16,7 +16,11 @@ public interface BookmarkMapper {
 
 	public BookmarkDto searchBookmark(HashMap<String, Object> map);
 
-//	public long insertBookmark(HashMap<String, Object> map);
-
 	public long updateBookmark(HashMap<String, Object> map);
+
+	public BookmarkDto searchPostRecommend(HashMap<String, Object> map);
+
+	public long insertPostRecommend(HashMap<String, Object> map);
+
+	public long updatePostRecommend(HashMap<String, Object> map);
 }
