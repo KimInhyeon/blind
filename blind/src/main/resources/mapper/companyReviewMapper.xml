@@ -127,7 +127,7 @@ insert into
 	) 
 </insert>
 
-
+<!-- 유저들의 기업등록신청 -->
 <insert id="sendRequestCompanyRegist"  parameterType="java.util.Map"> 
 insert into "blind".company_mgt(
 	company_id,   			 --company_id bigint GENERATED ALWAYS AS IDENTITY
@@ -153,8 +153,8 @@ insert into "blind".company_mgt(
 	 '',					 --, company_homepage character varying(50) not null
 	 '',					 --, company_explain character varying(600) not null
  	0,						 --, verify_flag character(1) not null
- 	1,						 --, closing_flag character(1) not null
- 	1, 					 --, rec_create_user_id bigint not null
+ 	0,						 --, closing_flag character(1) not null
+ 	1, 						 --, rec_create_user_id bigint not null
  	now(),					 --, rec_create_date timestamp not null 
  	1,	 					 --, rec_update_user_id bigint not null
  	now(),					 --, rec_update_date timestamp not null
