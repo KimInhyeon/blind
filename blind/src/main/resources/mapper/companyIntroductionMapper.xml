@@ -118,7 +118,7 @@
                                                   (
                                                       select
                                                           company_review_id
-                                                           ,count(helpful) as cnt
+                                                           ,sum(helpful) as cnt
                                                       from
                                                           blind.review_recommend_inf
                                                       where
@@ -139,7 +139,7 @@
             on
                 c1.company_review_id=c2.company_review_id
     </select>
-    <select id="companyReviewList" parameterType="java.lang.Long" resultType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">
+    <select id="companyReviewList" parameterType="Map" resultType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">
 
         select
             crma.company_review_id
@@ -164,12 +164,13 @@
              ,rec_create_user_id
              ,rec_create_date
              ,coalesce(crmb.helpfulCount,0) as helpfulCount
+             ,coalesce(crmc.helpful,0) as recommendFlag
         from
             blind.company_review_mgt crma
                 left join
             (
                 select
-                    count(helpful) as helpfulCount
+                    sum(helpful) as helpfulCount
                      ,company_review_id
 
                 from
@@ -180,10 +181,28 @@
             ) crmb
             on
                 crma.company_review_id = crmb.company_review_id
+                left join(
+                select
+                    company_review_id
+                     ,helpful
+                from
+                    blind.review_recommend_inf
+                where
+                    user_id = #{userId}
+            )crmc
+                         on
+                             crmb.company_review_id=crmc.company_review_id
 
 
         where
             company_id=#{companyId}
+
+        order by
+            helpfulCount  desc
+
+
+
+
     </select>
 
     <insert id="helpCount" parameterType="Map" >
@@ -206,4 +225,39 @@
 
 
     </insert>
+
+    <update id="updateHelpCount" parameterType="Map">
+        UPDATE blind.review_recommend_inf
+        SET helpful =
+            CASE WHEN helpful=0 THEN 1
+                 WHEN helpful=1 THEN 0
+                END
+        WHERE company_review_id = #{companyReviewId}
+            and user_id = #{userId};
+    </update>
+
+    <select id="searchCompanyRecommend" parameterType="long" resultType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">
+        SELECT
+            company_review_id
+             ,sum(helpful) as helpfulCount
+        FROM
+            blind.review_recommend_inf
+
+        WHERE
+            company_review_id = #{companyReviewId}
+        group by
+            company_review_id
+    </select>
+
+
+    <select id="checkRecommend" parameterType="Map" resultType="int">
+        select
+            count(*) as count
+        from
+            blind.review_recommend_inf
+        where company_review_id=#{companyReviewId}
+          and user_id=#{userId}
+
+
+    </select>
 </mapper>

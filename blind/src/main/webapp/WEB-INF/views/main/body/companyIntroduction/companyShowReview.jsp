@@ -9,18 +9,7 @@
 
 
 	<script>
-		$(document).ready(function() {
-			$('#sample')
-					.popup({
-						on: 'click'
-					});
-			$("#sample").children().on('click', function(){
-				var abc = $('#sample div').slice(1);
 
-				console.log(abc);
-			});
-
-		});
 		function countUp(companyReviewId){
 
 			$.ajax({
@@ -31,14 +20,26 @@
 				},
 				dataType:"json",
 				success: function(result){
-
-
+				console.log(result);
+				var helpfulCount = "#helpfulCount"+result.companyReviewId;
+				$(helpfulCount).html("");
+				var recommendFlag ="#recommendFlag"+result.companyReviewId;
+				var recommendFlag2 = $(recommendFlag).val();
+				if(recommendFlag2 == 1){
+					$(helpfulCount).append("<div style='color:black;'>도움이 돼요("+result.helpfulCount+")</div>");
+					$(recommendFlag).val(0);
+				}else{
+				$(helpfulCount).append("<div style='color: red;'>도움이 돼요("+result.helpfulCount+")</div>");
+					$(recommendFlag).val(1);
+				}
 				},
 				error: function(){
 					alert("에러");
 				}
 			});
 		};
+
+
 	</script>
 
 
@@ -58,6 +59,10 @@
 <div class="ui fluid container" id="reviewHeader" style="padding:80px 0; background-color:black">
 
 </div>
+
+
+
+
 <div class="ui container">
 	<div style="padding-top:20px;">
 		<button style="margin-top:30px;"class="blue ui right floated button"  onclick="location.href='${pageContext.request.contextPath}/companyReviewWrite?companyId=${companyIntroduction.companyId}';"  >
@@ -102,47 +107,10 @@
 				<tr>
 					<td>${companyAverageDto.allPoint}</td>
 					<td>
-						<c:if test="${companyAverageDto.allPoint == 5.0}">
-							<label class="star">★</label>
-							<label class="star">★</label>
-							<label class="star">★</label>
-							<label class="star">★</label>
-							<label class="star">★</label>
+						<div class="div_star">
+							<div class="ui star rating" data-rating="${companyAverageDto.allPoint}" data-max-rating="5"></div>
 
-						</c:if>
-						<c:if test="${companyAverageDto.allPoint == 4.0}">
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-						</c:if>
-						<c:if test="${companyAverageDto.allPoint == 3.0}">
-
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-						</c:if>
-						<c:if test="${companyAverageDto.allPoint == 2.0}">
-
-
-
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-						</c:if>
-						<c:if test="${companyAverageDto.allPoint == 1.0}">
-
-							<label class="star">★</label>
-
-						</c:if>
+						</div>
 					</td>
 
 					<td>(${reviewCount }個のレビュー)</td><td>項目別平均点数</td> <td></td></tr>
@@ -168,70 +136,57 @@
 			<table class="tabtable" border="1" style="width:100%; margin:15px auto; padding:30px"><!--마진은되도록 쓰지말자  -->
 
 				<tr><td>${oneCompanyReview.allPoint }</td><td><h4>"${oneCompanyReview.simpleComment }"</h4></td><td></td><td>
-					<div id="sample"  data-position="bottom left"
-						 data-content="신고"><i class="ellipsis horizontal icon"></i></div>
-				</td></tr>
-				<tr><td >
-					<div>
+					<%--<div id="sample"  data-position="bottom left"
+						 data-content="신고"><i class="ellipsis horizontal icon"></i></div>--%>
+					<div class="ui button" style="background: white; margin:0px;" data-position="bottom center"><i class="ellipsis horizontal icon"></i></div>
+					<div class="ui flowing popup top left transition hidden">
+						<div class="ui column divided center aligned grid">
+							<div class="column" data-position="bottom left">
+								<div class="ui button" style="background: white;">신고</div>
+							</div>
 
-						<c:if test="${oneCompanyReview.allPoint == 5.0}">
-							<label class="star">★</label>
-							<label class="star">★</label>
-							<label class="star">★</label>
-							<label class="star">★</label>
-							<label class="star">★</label>
-
-						</c:if>
-						<c:if test="${oneCompanyReview.allPoint == 4.0}">
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-						</c:if>
-						<c:if test="${oneCompanyReview.allPoint == 3.0}">
-
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-						</c:if>
-						<c:if test="${oneCompanyReview.allPoint == 2.0}">
-
-
-
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-						</c:if>
-						<c:if test="${oneCompanyReview.allPoint == 1.0}">
-
-							<label class="star">★</label>
-
-						</c:if>
-
-
-
-						<div class="ui button">
-							<i class="add icon"></i>
 						</div>
-
-
-						<div class="ui popup">
-							<div class="header">User Rating</div>
-							<div class="ui star rating" data-rating="3"></div>
-						</div>
-
-
 					</div>
 
 
+				</td></tr>
+				<tr><td >
+
+
+
+					<div class="div_star">
+						<div class="ui star rating" data-rating="${oneCompanyReview.allPoint}" data-max-rating="5"></div>
+						<div class="ui button" style="background: white; margin:0px;" data-position="bottom center"><i class="angle down icon"></i></div>
+						<div class="ui flowing popup top left transition hidden" >
+
+							<div class="column" data-position="bottom left" >
+
+								<div class="div_star">
+									<div class="ui star rating" data-rating="${oneCompanyReview.careerPoint}" data-max-rating="5">キャリア向上</div>
+
+								</div>
+								<div class="div_star">
+									<div class="ui star rating" data-rating="${oneCompanyReview.workLifeBalancePoint}" data-max-rating="5">ワークライフバランス</div>
+
+								</div>
+								<div class="div_star">
+									<div class="ui star rating" data-rating="${oneCompanyReview.companyCulturePoint}" data-max-rating="5">社内文化</div>
+
+								</div>
+								<div class="div_star">
+									<div class="ui star rating" data-rating="${oneCompanyReview.payPoint}" data-max-rating="5">給料と福祉</div>
+
+								</div>
+								<div class="div_star">
+									<div class="ui star rating" data-rating="${oneCompanyReview.headPoint}" data-max-rating="5">経営陣</div>
+
+								</div>
+							</div>
+
+
+						</div>
+
+					</div>
 
 				</td><td><h5>장점</h5></td><td><fmt:formatDate value="${oneCompanyReview.recCreateDate}" pattern="yyyy-mm-dd" /></td><td></td>
 
@@ -242,7 +197,17 @@
 				<tr><td ></td><td>${oneCompanyReview.advantages }</td><td></td></tr>
 				<tr><td ></td><td><h5>단점</h5></td></tr>
 				<tr><td ></td><td>${oneCompanyReview.disadvantages }</td></tr>
-				<tr><td><button onclick="countUp(${oneCompanyReview.companyReviewId});">도움이 돼요</button></tr>
+				<tr><td>
+					<c:if test="${oneCompanyReview.recommendFlag == 1}">
+				<tr><td><button onclick="countUp(${oneCompanyReview.companyReviewId});"><div id="helpfulCount${oneCompanyReview.companyReviewId}" style="display:flex;color:red">도움이 돼요(${oneCompanyReview.helpfulCount })</div></button></tr>
+
+					</c:if >
+					<c:if test="${oneCompanyReview.recommendFlag == 0}">
+					<tr><td><button onclick="countUp(${oneCompanyReview.companyReviewId});"><div id="helpfulCount${oneCompanyReview.companyReviewId}" style="display:flex;">도움이 돼요(${oneCompanyReview.helpfulCount })</div></button></tr>
+					</c:if>
+
+				<input type="hidden" id="recommendFlag${oneCompanyReview.companyReviewId}" value="${oneCompanyReview.recommendFlag}"></input>
+				</tr>
 			</table>
 
 		</div>
@@ -252,51 +217,67 @@
 			<div	style="width:100%; border:1px;" >
 				<table class="tabtable" border="1" style="width:100%; margin:15px auto; padding:30px"><!--마진은되도록 쓰지말자  -->
 					<tr><td></td></tr>
-					<tr><td > ${companyShowList.allPoint}</td><td style="width:300px;">장점</td><td><fmt:formatDate value="${companyShowList.recCreateDate}" pattern="yyyy-mm-dd" /></td><td></td></tr>
+					<tr><td > ${companyShowList.allPoint}</td><td style="width:300px;">장점</td><td><fmt:formatDate value="${companyShowList.recCreateDate}" pattern="yyyy-mm-dd" /></td>
+						<td>
+
+							<div class="ui button" style="background: white; margin:0px;" data-position="bottom center"><i class="ellipsis horizontal icon"></i></div>
+							<div class="ui flowing popup top left transition hidden" >
+
+									<div class="column" data-position="bottom left" >
+
+										<div class="ui button" style="background: white ;">신고</div>
+
+										<div class="div_star">
+											<div class="ui star rating" data-rating="${companyShowList.allPoint}" data-max-rating="5"></div>
+
+										</div>
+									</div>
+
+
+							</div>
+
+						</td></tr>
 
 					<tr><td >
 
-						<c:if test="${companyShowList.allPoint == 5.0}">
-							<label class="star">★</label>
-							<label class="star">★</label>
-							<label class="star">★</label>
-							<label class="star">★</label>
-							<label class="star">★</label>
-
-						</c:if>
-						<c:if test="${companyShowList.allPoint == 4.0}">
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-						</c:if>
-						<c:if test="${companyShowList.allPoint == 3.0}">
-
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-							<label class="star">★</label>
-
-						</c:if>
-						<c:if test="${companyShowList.allPoint == 2.0}">
 
 
+						<div class="div_star">
+							<div class="ui star rating" data-rating="${companyShowList.allPoint}" data-max-rating="5"></div>
+							<div class="ui button" style="background: white; margin:0px;" data-position="bottom center"><i class="angle down icon"></i></div>
+							<div class="ui flowing popup top left transition hidden" >
 
-							<label class="star">★</label>
+								<div class="column" data-position="bottom left" >
 
-							<label class="star">★</label>
+									<div class="div_star">
+										<div class="ui star rating" data-rating="${companyShowList.careerPoint}" data-max-rating="5">キャリア向上</div>
 
-						</c:if>
-						<c:if test="${companyShowList.allPoint == 1.0}">
+									</div>
+									<div class="div_star">
+										<div class="ui star rating" data-rating="${companyShowList.workLifeBalancePoint}" data-max-rating="5">ワークライフバランス</div>
 
-							<label class="star">★</label>
+									</div>
+									<div class="div_star">
+										<div class="ui star rating" data-rating="${companyShowList.companyCulturePoint}" data-max-rating="5">社内文化</div>
 
-						</c:if>
+									</div>
+									<div class="div_star">
+										<div class="ui star rating" data-rating="${companyShowList.payPoint}" data-max-rating="5">給料と福祉</div>
+
+									</div>
+									<div class="div_star">
+										<div class="ui star rating" data-rating="${companyShowList.headPoint}" data-max-rating="5">経営陣</div>
+
+									</div>
+								</div>
+
+
+							</div>
+
+						</div>
+
+
+
 
 
 
@@ -304,7 +285,15 @@
 					</td><td>${companyShowList.advantages }</td><td></td><td></td></tr>
 					<tr><td ></td><td>단점</td></tr>
 					<tr><td ></td><td>${companyShowList.disadvantages }</td></tr>
-					<tr><td><button onclick="countUp(${companyShowList.companyReviewId});">도움이 돼요(${companyShowList.helpfulCount })</button></tr>
+					<c:if test="${companyShowList.recommendFlag == 1}">
+						<tr><td><button onclick="countUp(${companyShowList.companyReviewId});"><div id="helpfulCount${companyShowList.companyReviewId}" style="display:flex;color:red">도움이 돼요(${companyShowList.helpfulCount })</div></button></tr>
+
+					</c:if >
+					<c:if test="${companyShowList.recommendFlag == 0}">
+					<tr><td><button onclick="countUp(${companyShowList.companyReviewId});"><div id="helpfulCount${companyShowList.companyReviewId}" style="display:flex;">도움이 돼요(${companyShowList.helpfulCount })</div></button></tr>
+					</c:if>
+					<input type="hidden" id="recommendFlag${companyShowList.companyReviewId}" value="${companyShowList.recommendFlag}"></input>
+
 				</table>
 
 			</div>
@@ -320,6 +309,20 @@
 
 
 </div>
+
+
+<script>
+	$('.button')
+			.popup({
+				inline: true,
+				hoverable :true
+			})
+	;
+	$('.ui.rating')
+			.rating('disable');
+
+
+</script>
 
 </body>
 
