@@ -134,6 +134,13 @@ public class CompanyJoinDto {
 	public void setHelpfulCount(int helpfulCount) {
 		this.helpfulCount = helpfulCount;
 	}
+	public int getRecommendFlag() {
+		return recommendFlag;
+	}
+
+	public void setRecommendFlag(int recommendFlag) {
+		this.recommendFlag = recommendFlag;
+	}
 	private long companyReviewId;
 	private long userId;
 	private long companyId;
@@ -156,7 +163,7 @@ public class CompanyJoinDto {
 	private char completeFlag;
 	private java.util.Date recCreateDate;
 	private int helpfulCount;
-
+	private int recommendFlag;
 
 
 
