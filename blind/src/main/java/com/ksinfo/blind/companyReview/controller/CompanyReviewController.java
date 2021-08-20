@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,23 +18,29 @@ import com.ksinfo.blind.companyReview.dto.CompanyJoinDto;
 import com.ksinfo.blind.companyReview.dto.CompanyMainViewDto;
 import com.ksinfo.blind.companyReview.service.CompanyReviewService;
 import com.ksinfo.blind.companyReview.service.CompanyReviewWriteService;
+import com.ksinfo.blind.manage.dto.CompanySearchDto;
+import com.ksinfo.blind.manage.service.CompanyService;
 import com.ksinfo.blind.search.dto.BoardDto;
 import com.ksinfo.blind.search.dto.PostDto;
 import com.ksinfo.blind.search.service.SearchService;
 import com.ksinfo.blind.security.Account;
 import com.ksinfo.blind.util.MessageUtils;
+import com.ksinfo.blind.util.PageNavigator;
 
 @Controller
 public class CompanyReviewController {
 	@Autowired
 	CompanyReviewService companyReviewService;
+	
 	@Autowired
 	CompanyReviewWriteService companyReviewWriteService;
+	
 	@Autowired
 	MessageUtils msg;
+	
 	@Autowired 
 	SearchService searchService; // 본래 SearchService.java에서 선언&사용. 검색기능 활용 및 게시글(포스트)의 출력등을 위해 
-	
+
 	
 	@RequestMapping(value = "companyReviewMain", method = RequestMethod.GET)
 	public ModelAndView companyReviewMain(HttpServletRequest req) throws Exception {
@@ -135,21 +142,39 @@ public class CompanyReviewController {
 	  //기업리뷰-포스트로 이동하였을 때 최초 작동.
 	  //사용자가 기업리뷰페이지에서 "포스트"탭을 클릭했다는 상황으로 생각하여 진행.
 	  @RequestMapping(value = "companyReviewPost", method = RequestMethod.GET)
-	  public ModelAndView companyReviewPost(String companyName) throws Exception {
-		  
-		  //임시 정보(제작위해 임시적으로 설정)
-		  companyName="トヨタ自動車";        //기업id/기업명을 받아와 작동하도록 해야 할 것으로 본다.
-		  ModelAndView mav = new ModelAndView();
-			
-		  //1.헤더부분
+	  public ModelAndView companyReviewPost(Integer companyId, String searchKeyword,
+			  								@RequestParam(name = "page", defaultValue = "1") int page,
+			  								ModelAndView mav) throws Exception { 
+		  //Integer companyId    : 유저가 이전페이지(기업리뷰 소속의 페이지)에서 넘어온 경우 기업값을 받아오도록 실시.(int는 null값 에러로 인식되어 Integer 사용 
+		  //String searchKeyword : 본 게시판페이지에서 유저가 입력한 검색어. 검색어 입력시 검색어를 중점으로 출력하도록 한다.
 		  
 		  
-		  
-		  //2.포스트출력관련(jsp 관련부분 : <!-- 2.포스터출력 --> 파트)
-		  List<PostDto> companyPosts = searchService.getSearchPosts(companyName);	//게시글의 제목검색&정렬기준: 최신일
+		  //0.임시 정보(제작위해 임시적으로 설정)
+		  companyId = 1; 														// company_id=2 : トヨタ株式会社(각 DB 설정상 다를 수 있습니다)
+		  String companyName=companyReviewService.getCompanyName(companyId);	
 
-		  mav.addObject("company_posts", companyName);	  
-		  mav.addObject("company_name", companyPosts);
+		  
+		  //1.기본정보 설정
+		  List<PostDto> companyPosts;  	  //회사리뷰의 게시글(post)들을 출력.
+
+		  
+		  //2.검색어 여부 확인. 검색어가 없다면 회사명으로 기본검색을 수행, 사용자가 입력한 검색어가 있다면 사용자가 입력한 검색어로 검색 실시.
+		  if(searchKeyword == null || searchKeyword.equals("")) {
+			  //1.1. 검색어 없음(유저가 게시판의 검색창에 검색어를 입력한 경우/타 링크 통해 타고 최초 접속)	
+			  companyPosts = searchService.getSearchPosts(companyName);	//기본설정(기업명) 으로 검색
+		  }
+		  
+		  else {
+			  //1.2. 검색어 있음(유저가 게시판의 검색창에 검색어를 입력한 경우)
+			  companyPosts = searchService.getSearchPosts(searchKeyword);//사용자가 입력한 검색어로 검색
+		  }
+
+		  PageNavigator navi = companyReviewService.getNavigator(page, companyPosts.size());
+
+		  mav.addObject("navi", navi);
+	 	  
+		  mav.addObject("company_name", companyName);	  
+		  mav.addObject("company_posts", companyPosts);
 			
 		  mav.setViewName("main/companyReview/companyReviewPost");
 		  //mav.setViewName("main/companyReview"+companyName+"/companyReviewPost");

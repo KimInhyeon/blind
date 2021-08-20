@@ -126,12 +126,15 @@ insert into
         , now()
         , '0'	
 	) 
-	
-	
-	
 </insert>
 
-
-
+<select id="getCompanyName" resultType="String" parameterType="int">
+	SELECT	
+		company_name
+	FROM
+		blind.company_mgt
+	where
+		company_mgt.company_id = #{companyId}
+</select>
 
 </mapper>
