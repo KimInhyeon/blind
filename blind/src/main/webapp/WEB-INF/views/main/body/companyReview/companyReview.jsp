@@ -256,12 +256,18 @@ ${company.companyName}
 			//alert("request_compnay_name :" + request_compnay_name);
 			//alert("request_compnay_email :" + request_compnay_email);
 			
-        	if((typeof requestCompnayName == "undefined" || requestCompnayName == "" || requestCompnayName == null) 
-        		||(typeof requestCompnayEmail == "undefined" || requestCompnayEmail == "" || requestCompnayEmail == null)  )
-	        	{  //유저가 회사명 또는 회사메일을 기입않을시 참으로 간주하여 경고문 출력 및 기업등록신청 스톱처리.
-   	        		alert("企業名と、企業のメールを入力してください。"); //선택된 신고사항이 없기에 선택을 요청
-    	    		false;
-        		}
+			//입력검정-기업메일(기업입력메일이 공란시 ''으로 입력하여 정상처리되도록 실시)
+        	if((typeof requestCompnayEmail == "undefined" || requestCompnayEmail == "" || requestCompnayEmail == null)){ 
+    			//유저가 기업메일을 입력하지 않아도 작동하도록 하고 있음.(기업입력메일이 공란시 ''으로 입력하여 정상처리되도록 실시)
+	 			requestCompnayEmail = '';       		
+            	//alert("requestCompnayEmail :"+requestCompnayEmail); //체크용 
+        	}
+        	
+        	if(typeof requestCompnayName == "undefined" || requestCompnayName == "" || requestCompnayName == null ){
+        		//유저가 회사명 또는 회사메일을 기입않을시 참으로 간주하여 경고문 출력 및 기업등록신청 스톱처리.
+       	  		alert("企業名を入力してください。"); //선택된 신고사항이 없기에 선택을 요청
+        		false;
+           	}
            	else{
         		$.ajax({
         			type : "POST",
