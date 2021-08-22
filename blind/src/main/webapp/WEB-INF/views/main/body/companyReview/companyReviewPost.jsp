@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <!DOCTYPE html>
 <html lang="jp">
 <head>
@@ -18,6 +20,7 @@
 	}
 </style>
 
+
 </head>
 
 
@@ -29,9 +32,10 @@
 			<h2 style="margin-bottom: 3%;"> ${company_name}のポスト</h2>		
 			   <!-- 1.1.검색창 -->
 			   <div class="inputSearchKeyword">    
+
 			   		<form>
-			        <div class="ui fluid massive left icon input">
-							<input type="text" placeholder="Search" id="searchbox" name="searchKeyword" value="${pastSearchKeyword}"> 
+				        <div class="ui fluid massive left icon input">
+			        		<input type="text" placeholder="Search" id="searchbox" name="searchKeyword" value="${pastSearchKeyword}"> 					        
 				    		<i class="search link icon" id="searchicon" onclick="goSearch();"></i>
 				  			<div class="results"></div>
 						</div>
@@ -41,17 +45,13 @@
 			   <!-- 1.2.추천 키워드 출력 -->
 			   <div style="margin:2%;">
 					<span style="font-weight: bold;">おすすめキーワード</span>
-					<!-- 문의2. 추천키워드별 링크값 대입하는 방법 -->
-					<!-- 문의3. 디렉토리를 활용하여 디렉토리의 내용을 for each로 출력하는 형태는 어떠한가 -->
-
-					<!-- 상단의 css에 a태그 관련 설정. -->
-					<span> <a href=""> ${company_name}の處遇 </a> </span> 		<!-- 처우 -->
-					<span> <a href=""> ${company_name}の給料 </a> </span> 		<!-- 연봉 -->
-					<span> <a href=""> ${company_name}のキャリア </a> </span> 	<!-- 경력 -->
-					<span> <a href=""> ${company_name}の待遇 </a> </span> 		<!-- 대우(직장에서의 지위나 급료 등 근무자에 대한 처우(處遇).) -->
-					<span> <a href=""> ${company_name}の雰圍氣 </a> </span> 			<!-- 분위기 -->
-					<span> <a href=""> ${company_name}の面接 </a> </span> 			<!-- 면접 -->
-					<span> <a href=""> ${company_name}の開發</a> </span>			<!-- 개발 -->
+					<a class="select_recommend_keyword" value= "${company_name}の處遇"> ${company_name}の處遇 </a> 		<!-- 처우 -->
+					<span> <a href="${pageContext.request.contextPath}/companyReviewPost?searchKeyword=${company_name}の給料"> ${company_name}の給料 </a> </span> 		<!-- 연봉 -->
+					<span> <a href="${pageContext.request.contextPath}/companyReviewPost?searchKeyword=${company_name}のキャリア"> ${company_name}のキャリア </a> </span> 	<!-- 경력 -->
+					<span> <a href="${pageContext.request.contextPath}/companyReviewPost?searchKeyword=${company_name}の待遇"> ${company_name}の待遇 </a> </span> 		<!-- 대우(직장에서의 지위나 급료 등 근무자에 대한 처우(處遇).) -->
+					<span> <a href="${pageContext.request.contextPath}/companyReviewPost?searchKeyword=${company_name}の雰圍氣"> ${company_name}の雰圍氣 </a> </span> 			<!-- 분위기 -->
+					<span> <a href="${pageContext.request.contextPath}/companyReviewPost?searchKeyword=${company_name}の面接"> ${company_name}の面接 </a> </span> 			<!-- 면접 -->
+					<span> <a href="${pageContext.request.contextPath}/companyReviewPost?searchKeyword=${company_name}の開發"> ${company_name}の開發</a> </span>			<!-- 개발 -->
 			   </div>
 		</div>
 		
@@ -62,13 +62,12 @@
 			 구현(3)검색결과 출력할 글이 20개 이하면 페이징 않고 전체 출력.(패이징 컨트롤러도 출력얺음)
 			      20개 초과시 페이징실시 & 하단에 페이지컨트롤러 배치.
 		 -->
-		<div style="margin-top: 5%;"> 
-			<h3> ${company_name}のベストポスト</h2>		
-			
+		<div style="margin-top: 5%;"> 			
 			<!-- 게시글(포스트)들 출력 -->
 			<!-- https://semantic-ui.com/collections/grid.html -->
 			<div id="postList" style="background-color:#ffffff; padding : 2%;">
-				<div class="ui divider"  style="border-color: #d4d4d5;"></div>
+				<h2> ${company_name}のベストポスト</h2>		
+				<div class="ui divider"  style="border-color: #d4d4d5;"></div><!-- 첫 시작의 게시글의 윗부분에 가로선을 긋기위한 div(감싸는 구간없음) -->
 				<c:forEach items="${company_posts}" var="posts" varStatus="status">			
 					<div style="padding : 2%; border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;border-right-style: inset;">
 						<a href="topicDetail?postId=${posts.postId}">
@@ -112,6 +111,73 @@
 	
 	
 <script>
+	//검색창하단의 추천어 클릭시, 클릭한 추천어를 검색어로 삼아 검색&페이지 재출력 실시.
+	$(function(){
+		$(".select_recommend_keyword").on('click', function(){		
+			//alert("$(this).val():"+$(this).val() );
+			$.ajax({
+				type:"POST",
+			    url: "companyReviewPostByRecommendKeyWord",
+				data : {  companyName : "${company_name}"
+						 ,selectRecommendKeyword : $(this).val()
+				 	   },
+				dataType:"json",
+				success: function(result){ 
+					$(postList).html("");//초기화(기존의 출력되어있던 게시글들 삭제)
+	
+					
+					$(postList).append( "<div class='ui divider'  style='border-color: #d4d4d5;'></div>");	                
+	
+					
+					//새로 페이징하기위해 실시.
+					const endPage = ${navi.endPage};
+					if (endPage > 1) {
+						const pathname = location.pathname;
+						const getParameterHtml = function (page) {
+							if (page > 1) {
+								let parameterHtml = "?page=" + page
+								return parameterHtml
+							} else if (parameterIsExist) {
+								return "?" + parameter;
+							}
+							return "";
+						};
+						
+						let page = ${navi.startPage};
+						if (page === 1) {
+							html = "<div class=\"ui pagination menu\" style=\"visibility: hidden\;\">" +
+									"<div class=\"item\">前へ</div></div>";
+						} else {
+							html = "<div class=\"ui pagination menu\"><a class=\"item\" href=\"" + pathname +
+									getParameterHtml(page - ${navi.pagination}) + "\">前へ</a></div>";
+						}
+						html += "<div class=\"ui pagination menu\">";
+						
+						while (page <= endPage) {
+							if (page === ${navi.currentPage}) {
+								html += "<div class=\"active item\">" + page + "</div>";
+							} else {
+								html += "<a class=\"item\" href=\"" + pathname + getParameterHtml(page) + "\">" + page + "</a>";
+							}
+							++page;
+						}
+						html += "</div>";
+						if (endPage === ${navi.totalPage}) {
+							html += "<div class=\"ui pagination menu\" style=\"visibility: hidden\;\">"
+						} else {
+							html += "<div class=\"ui pagination menu\"><a class=\"item\" href=\"" + pathname + "?page=" + page;
+						}
+						document.getElementById("pagination").innerHTML = html;
+					}
+					
+				},
+				error: function(){
+					alert("エラー");
+				}				
+			});
+		});
+	});
+	
 	// ページナビゲーター
 	const endPage = ${navi.endPage};
 	if (endPage > 1) {

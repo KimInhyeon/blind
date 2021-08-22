@@ -18,9 +18,6 @@ import com.ksinfo.blind.companyReview.dto.CompanyJoinDto;
 import com.ksinfo.blind.companyReview.dto.CompanyMainViewDto;
 import com.ksinfo.blind.companyReview.service.CompanyReviewService;
 import com.ksinfo.blind.companyReview.service.CompanyReviewWriteService;
-import com.ksinfo.blind.manage.dto.CompanySearchDto;
-import com.ksinfo.blind.manage.service.CompanyService;
-import com.ksinfo.blind.search.dto.BoardDto;
 import com.ksinfo.blind.search.dto.PostDto;
 import com.ksinfo.blind.search.service.SearchService;
 import com.ksinfo.blind.security.Account;
@@ -131,7 +128,7 @@ public class CompanyReviewController {
 	   
 	  @RequestMapping(value = "searchCompanyByCompanyName", method = RequestMethod.POST, produces="application/json")
 	  @ResponseBody//ajax통신할때 제공,html통신으로 body로 넘긴다.화면이 제로딩되지않고 html부분만 바뀐다.    
-	   public List<CompanyDto> searchCompanyByCompanyName(String companyName){ 
+	  public List<CompanyDto> searchCompanyByCompanyName(String companyName){ 
 		  
 		List<CompanyDto> companyDto = companyReviewService.companySearch(companyName);
 		  
@@ -177,12 +174,22 @@ public class CompanyReviewController {
 		  mav.addObject("company_posts", companyPosts);
 			
 		  mav.setViewName("main/companyReview/companyReviewPost");
-		  //mav.setViewName("main/companyReview"+companyName+"/companyReviewPost");
-		  //main/companyReview/기업명/companyReviewPost 식으로 찾아갈 수 있도록 작성해야 한다.
-		  //내일 문의하여 진행할 것.
 		  return mav;
 		}
 	  
-	  //
+	  
+	  //검색창 밑의 키워드를 클릭한 경우 키워드를 검색어로 활용하여 검색작업을 실시하여 페이지를 재출력실시.
+	  @RequestMapping(value = "companyReviewPostByRecommendKeyWord", method = RequestMethod.POST, produces="application/json")
+	  @ResponseBody
+	  public List<PostDto> companyReviewPostByRecommendKeyWord(String selectRecommendKeyword) throws Exception { 
+	  //String selectRecommendKeyword : 기업게시판의 검색창하단의 추천어. 유저가 클릭한 추천어가 검색어로 적용된다.
+		  
+		  List<PostDto> companyPosts;  	  //회사리뷰의 게시글(post)들을 출력.
+		  companyPosts = searchService.getSearchPosts(selectRecommendKeyword);//클릭한 추천어로 검색 결과를 리턴.
+
+
+		  return companyPosts;		  
+		  
+	  }
 	  
 }
