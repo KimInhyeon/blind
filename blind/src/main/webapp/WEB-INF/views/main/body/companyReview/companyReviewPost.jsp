@@ -32,7 +32,6 @@
 			<h2 style="margin-bottom: 3%;"> ${company_name}のポスト</h2>		
 			   <!-- 1.1.검색창 -->
 			   <div class="inputSearchKeyword">    
-
 			   		<form>
 				        <div class="ui fluid massive left icon input">
 			        		<input type="text" placeholder="Search" id="searchbox" name="searchKeyword" value="${pastSearchKeyword}"> 					        
@@ -66,7 +65,6 @@
 			<!-- 게시글(포스트)들 출력 -->
 			<!-- https://semantic-ui.com/collections/grid.html -->
 			<div id="postList" style="background-color:#ffffff; padding : 2%;">
-				<h2> ${company_name}のベストポスト</h2>		
 				<div class="ui divider"  style="border-color: #d4d4d5;"></div><!-- 첫 시작의 게시글의 윗부분에 가로선을 긋기위한 div(감싸는 구간없음) -->
 				<c:forEach items="${company_posts}" var="posts" varStatus="status">			
 					<div style="padding : 2%; border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;border-right-style: inset;">

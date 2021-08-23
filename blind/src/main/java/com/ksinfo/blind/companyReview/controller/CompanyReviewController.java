@@ -180,7 +180,8 @@ public class CompanyReviewController {
 		  
 		  mav.addObject("company_name", companyName);	  
 		  mav.addObject("company_posts", companyPosts);
-			
+		  mav.addObject("pastSearchKeyword", searchKeyword);
+		  
 		  mav.setViewName("main/companyReview/companyReviewPost");
 		  return mav;
 		}
