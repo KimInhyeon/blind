@@ -1,8 +1,10 @@
 package com.ksinfo.blind.companyReview.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
 import com.ksinfo.blind.companyReview.dto.CompanyDto;
@@ -20,5 +22,8 @@ public interface CompanyReviewMapper {
 	List<CompanyMainViewDto> companySearchPopular();
 	String getCompanyName(int companyId);
 	
-	//int getTotalRecord(List<PostDto> companyPosts);
+
+	int getTotalRecord(Map<String, Object> paramMap );
+	
+	List<PostDto> getPosts(RowBounds row, Map<String, Object> paramMap );
 }

@@ -1,6 +1,8 @@
 package com.ksinfo.blind.companyReview.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -153,23 +155,29 @@ public class CompanyReviewController {
 		  
 		  //1.기본정보 설정
 		  List<PostDto> companyPosts;  	  //회사리뷰의 게시글(post)들을 출력.
-
+		  
+		  Map<String, Object> paramMap = new HashMap<>();  //페이징을 위한 파라미터 맵 생성.
+		  paramMap.put("companyName", companyName);
+		  paramMap.put("searchKeyword", searchKeyword);
+		  
+		  PageNavigator navi = companyReviewService.getNavigator(page, paramMap);
+		  
 		  
 		  //2.검색어 여부 확인. 검색어가 없다면 회사명으로 기본검색을 수행, 사용자가 입력한 검색어가 있다면 사용자가 입력한 검색어로 검색 실시.
-		  if(searchKeyword == null || searchKeyword.equals("")) {
+		 // if(searchKeyword == null || searchKeyword.equals("")) {
 			  //1.1. 검색어 없음(유저가 게시판의 검색창에 검색어를 입력한 경우/타 링크 통해 타고 최초 접속)	
-			  companyPosts = searchService.getSearchPosts(companyName);	//기본설정(기업명) 으로 검색
-		  }
+		//	  companyPosts = searchService.getSearchPosts(companyName);	//기본설정(기업명) 으로 검색
+		 // }
 		  
-		  else {
+		 // else {
 			  //1.2. 검색어 있음(유저가 게시판의 검색창에 검색어를 입력한 경우)
-			  companyPosts = searchService.getSearchPosts(searchKeyword);//사용자가 입력한 검색어로 검색
-		  }
+			  companyPosts = companyReviewService.getPosts(navi.getCurrentPage(), paramMap);//사용자가 입력한 검색어로 검색
+		  //}
 
-		  PageNavigator navi = companyReviewService.getNavigator(page, companyPosts.size());
+
 
 		  mav.addObject("navi", navi);
-	 	  
+		  
 		  mav.addObject("company_name", companyName);	  
 		  mav.addObject("company_posts", companyPosts);
 			

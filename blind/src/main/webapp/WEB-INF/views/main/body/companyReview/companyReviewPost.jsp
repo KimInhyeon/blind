@@ -45,7 +45,7 @@
 			   <!-- 1.2.추천 키워드 출력 -->
 			   <div style="margin:2%;">
 					<span style="font-weight: bold;">おすすめキーワード</span>
-					<a class="select_recommend_keyword" value= "${company_name}の處遇"> ${company_name}の處遇 </a> 		<!-- 처우 -->
+					<span> <a href="${pageContext.request.contextPath}/companyReviewPost?searchKeyword=${company_name}の處遇"> ${company_name}の處遇 </a>  </span> 		<!-- 처우 -->
 					<span> <a href="${pageContext.request.contextPath}/companyReviewPost?searchKeyword=${company_name}の給料"> ${company_name}の給料 </a> </span> 		<!-- 연봉 -->
 					<span> <a href="${pageContext.request.contextPath}/companyReviewPost?searchKeyword=${company_name}のキャリア"> ${company_name}のキャリア </a> </span> 	<!-- 경력 -->
 					<span> <a href="${pageContext.request.contextPath}/companyReviewPost?searchKeyword=${company_name}の待遇"> ${company_name}の待遇 </a> </span> 		<!-- 대우(직장에서의 지위나 급료 등 근무자에 대한 처우(處遇).) -->
@@ -110,74 +110,7 @@
 	</div>
 	
 	
-<script>
-	//검색창하단의 추천어 클릭시, 클릭한 추천어를 검색어로 삼아 검색&페이지 재출력 실시.
-	$(function(){
-		$(".select_recommend_keyword").on('click', function(){		
-			//alert("$(this).val():"+$(this).val() );
-			$.ajax({
-				type:"POST",
-			    url: "companyReviewPostByRecommendKeyWord",
-				data : {  companyName : "${company_name}"
-						 ,selectRecommendKeyword : $(this).val()
-				 	   },
-				dataType:"json",
-				success: function(result){ 
-					$(postList).html("");//초기화(기존의 출력되어있던 게시글들 삭제)
-	
-					
-					$(postList).append( "<div class='ui divider'  style='border-color: #d4d4d5;'></div>");	                
-	
-					
-					//새로 페이징하기위해 실시.
-					const endPage = ${navi.endPage};
-					if (endPage > 1) {
-						const pathname = location.pathname;
-						const getParameterHtml = function (page) {
-							if (page > 1) {
-								let parameterHtml = "?page=" + page
-								return parameterHtml
-							} else if (parameterIsExist) {
-								return "?" + parameter;
-							}
-							return "";
-						};
-						
-						let page = ${navi.startPage};
-						if (page === 1) {
-							html = "<div class=\"ui pagination menu\" style=\"visibility: hidden\;\">" +
-									"<div class=\"item\">前へ</div></div>";
-						} else {
-							html = "<div class=\"ui pagination menu\"><a class=\"item\" href=\"" + pathname +
-									getParameterHtml(page - ${navi.pagination}) + "\">前へ</a></div>";
-						}
-						html += "<div class=\"ui pagination menu\">";
-						
-						while (page <= endPage) {
-							if (page === ${navi.currentPage}) {
-								html += "<div class=\"active item\">" + page + "</div>";
-							} else {
-								html += "<a class=\"item\" href=\"" + pathname + getParameterHtml(page) + "\">" + page + "</a>";
-							}
-							++page;
-						}
-						html += "</div>";
-						if (endPage === ${navi.totalPage}) {
-							html += "<div class=\"ui pagination menu\" style=\"visibility: hidden\;\">"
-						} else {
-							html += "<div class=\"ui pagination menu\"><a class=\"item\" href=\"" + pathname + "?page=" + page;
-						}
-						document.getElementById("pagination").innerHTML = html;
-					}
-					
-				},
-				error: function(){
-					alert("エラー");
-				}				
-			});
-		});
-	});
-	
+<script>	
 	// ページナビゲーター
 	const endPage = ${navi.endPage};
 	if (endPage > 1) {
