@@ -21,6 +21,8 @@ public final class FileHashManager {
 //	private static final String ABSOLUTE_PATH = System.getProperty("user.dir") + "/src/main/webapp"; // Unix系
 	private static final String ABSOLUTE_PATH =
 		System.getProperty("user.dir").replaceAll("\\\\", "/") + "/src/main/webapp";
+	private static final String RESOURCES_PATH = "/resources/upload/";
+	private static final int MAX_PATH_LENGTH = RESOURCES_PATH.length() + 76; // 76 == "YYYYMM/64_hash_char.jpeg"
 	private final String contextPath;
 	private final Map<String, String> fileUrlMap;
 
@@ -32,20 +34,21 @@ public final class FileHashManager {
 
 	@PostConstruct
 	public void init() {
-		initFileHashMap(ABSOLUTE_PATH + "/resources/upload/");
+		initFileUrlMap(ABSOLUTE_PATH + RESOURCES_PATH);
 	}
 
-	private void initFileHashMap(String path) {
+	private void initFileUrlMap(String path) {
 		File[] files = new File(path).listFiles();
-		for (int i = files.length - 1; i > -1; --i) {
+		for (int i = files.length - 1, absolutePathLength = ABSOLUTE_PATH.length(); i > -1; --i) {
 			if (files[i].isFile()) {
 				fileUrlMap.put(
 					files[i].getName().substring(0, 64),
-//					contextPath + files[i].getAbsolutePath().substring(ABSOLUTE_PATH.length()) // Unix系
-					contextPath + files[i].getAbsolutePath().substring(ABSOLUTE_PATH.length()).replaceAll("\\\\", "/")
+//					contextPath + files[i].getAbsolutePath().substring(absolutePathLength) // Unix系
+					contextPath + files[i].getAbsolutePath().substring(absolutePathLength)
+															.replaceAll("\\\\", "/")
 				);
 			} else {
-				initFileHashMap(files[i].getPath());
+				initFileUrlMap(files[i].getPath());
 			}
 		}
 	}
@@ -64,7 +67,7 @@ public final class FileHashManager {
 		for (int i = 0; i < filesLength; ++i) {
 			String fileHash = getFileHash(files[i]);
 			if (!fileUrlMap.containsKey(fileHash)) {
-				String path = new StringBuilder("/resources/upload/")
+				String path = new StringBuilder(MAX_PATH_LENGTH).append(RESOURCES_PATH)
 							.append(now.getYear()).append(String.format("%02d", now.getMonthValue())).append('/')
 							.append(fileHash).append('.').append(files[i].getContentType().substring(6)).toString();
 				File file = new File(ABSOLUTE_PATH + path);

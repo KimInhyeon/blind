@@ -34,7 +34,7 @@
 
 	#companyExplain {
 		margin: 0em;
-		max-width: 100%;
+		width: 100%;
 		-webkit-box-flex: 1;
 		-ms-flex: 1 0 auto;
 		flex: 1 0 auto;
@@ -127,6 +127,7 @@
 					<tr>
 						<td class="center aligned">
 							<input type="checkbox" class="ui checkbox" data-id="${company.companyId}" onclick="checkCompanyRow(this)">
+							<input type="hidden" value="${company.searchCompanyName}">
 							<input type="hidden" value="${company.companyHomepage}">
 							<input type="hidden" value="${company.companyExplain}">
 						</td>
@@ -267,8 +268,10 @@
 				<div class="row">
 					<div class="two wide column">処理状況</div>
 					<div class="six wide column" id="verifyFlag"></div>
-					<div class="two wide column">申請番号</div>
-					<div class="six wide column" id="companyId"></div>
+					<div class="two wide column">設立日</div>
+					<div class="six wide column">
+						<div class="ui input"><input type="date" id="foundingDate"></div>
+					</div>
 				</div>
 				<div class="row">
 					<div class="two wide column">営業状況</div>
@@ -290,11 +293,15 @@
 				<div class="row">
 					<div class="two wide column">企業名</div>
 					<div class="six wide column">
-						<div class="ui fluid input"><input type="text" id="companyName"></div>
+						<div class="ui fluid input">
+							<input type="text" id="companyName" placeholder="アルファベット、数字は半角で入力">
+						</div>
 					</div>
-					<div class="two wide column">設立日</div>
-					<div class="six wide column">
-						<div class="ui input"><input type="date" id="foundingDate"></div>
+					<div class="two wide column">検索名</div>
+					<div class="six wide column ui input">
+						<div class="ui fluid input">
+							<input type="text" id="searchCompanyName" placeholder="漢字、ひらがなをカタカナで入力">
+						</div>
 					</div>
 				</div>
 				<div class="row">
@@ -319,7 +326,9 @@
 				</div>
 				<div class="row">
 					<div class="two wide column">詳細</div>
-					<textarea class="fourteen wide column fluid" rows="5" id="companyExplain"></textarea>
+					<div class="fourteen wide column">
+						<textarea rows="5" id="companyExplain"></textarea>
+					</div>
 				</div>
 				<div class="row">
 					<div class="two wide column">申請者</div>
@@ -428,6 +437,7 @@
 			for (let i = 0; i < length; ++i) {
 				html += "<tr><td class=\"center aligned\"><input type=\"checkbox\" class=\"ui checkbox\" " +
 						"data-id=\"" + companyList[i].companyId + "\" onclick=\"checkCompanyRow(this)\">" +
+						"<input type=\"hidden\" value=\"" + companyList[i].searchCompanyName + "\">" +
 						"<input type=\"hidden\" value=\"" + companyList[i].companyHomepage + "\">" +
 						"<input type=\"hidden\" value=\"" + companyList[i].companyExplain + "\"></td>" +
 						"<td class=\"center aligned verifyFlag\" data-value=\"" + companyList[i].verifyFlag + "\"></td>" +
@@ -445,7 +455,7 @@
 			setTableByCodeToName(tbody);
 			html = "<div class=\"ui pagination menu\"";
 			if (navi.startPage < navi.pagination) {
-				html += " style=\"visibility: hidden;\"><a class=\"item\">前へ</a></div>";
+				html += " style=\"visibility: hidden;\"><div class=\"item\">前へ</div></div>";
 			} else {
 				html += "><a class=\"item\" href=\"javascript:getCompanyListByPage(" + String(navi.startPage - 1) +
 					");\">前へ</a></div>";
@@ -463,7 +473,7 @@
 				html += "><a class=\"item\" href=\"javascript:getCompanyListByPage(" + String(navi.endPage + 1) +
 					");\">次へ</a></div>";
 			} else {
-				html += " style=\"visibility: hidden;\"><a class=\"item\">次へ</a></div>";
+				html += " style=\"visibility: hidden;\"><div class=\"item\">次へ</div></div>";
 			}
 			pagination.innerHTML = html;
 			const url = new URL(location.href);
@@ -491,38 +501,38 @@
 	function checkSelectedList() {
 		const checkboxList = document.querySelectorAll("td > input[type=checkbox]:checked");
 		const checkboxListLength = checkboxList.length;
-		if (checkboxListLength < 1) {
-			alert("1つ以上の項目を選択してください");
-		} else {
+		if (checkboxListLength) {
 			checkedList = [];
 			for (let i = 0; i < checkboxListLength; ++i) {
 				const td = checkboxList[i].closest("tr").children;
-				const hidden = checkboxList[i].nextElementSibling;
-				console.log(hidden);
-				console.log(hidden.value);
+				const hidden = td[0].children;
 				checkedList.push({
-					"companyId": Number(checkboxList[i].dataset.id),
+					"companyId": Number(hidden[0].dataset.id),
 					"verifyFlag": td[1].dataset.value,
 					"closingFlag": td[2].dataset.value,
-					"companyName": td[3].innerText,
+					"companyName": td[3].innerText.trim(),
+					"searchCompanyName": hidden[1].value.trim(),
 					"businessTypeCode": td[4].dataset.value,
-					"companyAddress": td[5].innerText,
+					"companyAddress": td[5].innerText.trim(),
 					"foundingDate": td[6].innerText,
-					"workersCount": td[7].innerText,
-					"companyDomain": td[8].innerText,
+					"workersCount": td[7].innerText.trim(),
+					"companyDomain": td[8].innerText.trim(),
 					"userNickName": td[9].innerText,
 					"appDate": td[10].innerText,
-					"companyHomepage": hidden.value,
-					"companyExplain": hidden.nextElementSibling.value
+					"companyHomepage": hidden[2].value.trim(),
+					"companyExplain": hidden[3].value.trim()
 				});
 			}
 			openEditCompanyListModal();
+		} else {
+			alert("1つ以上の項目を選択してください");
 		}
 	}
 
 	function editCompany(index) {
+		document.getElementById("comInfo").dataset.id = String(checkedList[index].companyId);
 		document.getElementById("verifyFlag").innerText = getVerifyFlagName(checkedList[index].verifyFlag);
-		document.getElementById("companyId").innerText = String(checkedList[index].companyId);
+		document.getElementById("foundingDate").value = checkedList[index].foundingDate;
 		document.getElementById("closingFlag").options[checkedList[index].closingFlag].selected = true;
 		const businessTypeCodeOptions = document.getElementById("businessTypeCode").children;
 		for (let i = businessTypeCodeOptions.length - 1; i > -1; --i) {
@@ -532,7 +542,7 @@
 			}
 		}
 		document.getElementById("companyName").value = checkedList[index].companyName;
-		document.getElementById("foundingDate").value = checkedList[index].foundingDate;
+		document.getElementById("searchCompanyName").value = checkedList[index].searchCompanyName;
 		document.getElementById("workersCount").value = checkedList[index].workersCount;
 		document.getElementById("companyAddress").value = checkedList[index].companyAddress;
 		document.getElementById("companyDomain").value = checkedList[index].companyDomain;
@@ -572,6 +582,10 @@
 		return result;
 	}
 
+	function isSearchCompanyName(searchCompanyName) {
+		return searchCompanyName.match(/^[0-9A-Za-zァ-ヶー]*$/);
+	}
+
 	function approveCompanyList() {
 		checkedList = document.querySelectorAll("td > input[type=checkbox]:checked");
 		const checkedListLength = checkedList.length;
@@ -582,32 +596,33 @@
 			const companyIdList = [];
 			for (let i = 0; i < checkedListLength; ++i) {
 				const td = checkedList[i].closest("tr").children;
-				if (td[1].innerText === "ERROR" || td[2].innerText === "ERROR" || td[3].innerText.length < 1 ||
-					td[4].innerText === "ERROR" || td[5].innerText.length < 1 || td[6].innerText.length < 1 ||
-					td[7].innerText.length < 1 || td[8].innerText.length < 1 || td[9].innerText.length < 1 ||
-					td[10].innerText.length < 1
+				const hidden = td[0].children;
+				if (td[1].innerText === "ERROR" || td[2].innerText === "ERROR" || !td[3].innerText.trim().length ||
+					!hidden[1].value.trim().length || !isPureKatakana(hidden[1].value.trim()) || td[4].innerText === "ERROR" ||
+					!td[5].innerText.trim().length || !td[6].innerText.length || !td[7].innerText.trim().length ||
+					!td[8].innerText.trim().length || !td[9].innerText.length || !td[10].innerText.length
 				) {
-					const hidden = checkedList[i].nextElementSibling;
 					unfilledCheckedList.push({
-						"companyId": Number(checkedList[i].dataset.id),
+						"companyId": Number(hidden[0].dataset.id),
 						"verifyFlag": td[1].dataset.value,
 						"closingFlag": td[2].dataset.value,
-						"companyName": td[3].innerText,
+						"companyName": td[3].innerText.trim(),
+						"searchCompanyName": hidden[1].value.trim(),
 						"businessTypeCode": td[4].dataset.value,
-						"companyAddress": td[5].innerText,
+						"companyAddress": td[5].innerText.trim(),
 						"foundingDate": td[6].innerText,
-						"workersCount": td[7].innerText,
-						"companyDomain": td[8].innerText,
+						"workersCount": td[7].innerText.trim(),
+						"companyDomain": td[8].innerText.trim(),
 						"userNickName": td[9].innerText,
 						"appDate": td[10].innerText,
-						"companyHomepage": hidden.value,
-						"companyExplain": hidden.nextElementSibling.value
+						"companyHomepage": hidden[2].value.trim(),
+						"companyExplain": hidden[3].value.trim()
 					});
 				} else {
-					companyIdList.push(Number(checkedList[i].dataset.id));
+					companyIdList.push(Number(hidden[0].dataset.id));
 				}
 			}
-			if (unfilledCheckedList.length > 0) {
+			if (unfilledCheckedList.length) {
 				alert("申請の内容を確認してください");
 				checkedList = unfilledCheckedList;
 				openEditCompanyListModal();
@@ -624,7 +639,7 @@
 							verifyFlag.innerText = "承認";
 						}
 						checkAllCompanyRows(false);
-					} else if (result > 0) {
+					} else if (result) {
 						alert("一部の承認に失敗しました");
 						if (confirm("ページをリフレッシュします")) {
 							location.reload();
@@ -641,12 +656,12 @@
 		const reason = document.getElementById("reason");
 		const index = selection.value;
 		if (index === "2") {
-			reason.closest("div").setAttribute("class", "ui fluid input");
+			reason.closest("div").className = "ui fluid input";
 			reason.value = "";
 			reason.readOnly = false;
 			reason.focus();
 		} else {
-			reason.closest("div").setAttribute("class", "ui fluid disabled input");
+			reason.closest("div").className = "ui fluid disabled input";
 			reason.value = selection.options[index].innerText;
 			reason.readOnly = true;
 		}
@@ -654,16 +669,16 @@
 
 	function openRejectionModal() {
 		checkedList = document.querySelectorAll("td > input[type=checkbox]:checked");
-		if (checkedList.length < 1) {
-			alert("1つ以上の項目を選択してください");
-		} else {
+		if (checkedList.length) {
 			$("#rejection").modal("show");
+		} else {
+			alert("1つ以上の項目を選択してください");
 		}
 	}
 
 	function rejectCompanyList() {
 		const reason = document.getElementById("reason").value.trim();
-		if (reason.length < 1) {
+		if (!reason.length) {
 			alert("理由を入力してください");
 			document.getElementById("reason").focus();
 		} else if (confirm("却下しますか？")) {
@@ -696,44 +711,55 @@
 	}
 
 	function checkForm() {
-		const companyName = document.getElementById("companyName");
-		if (companyName.value.trim().length < 1) {
-			alert("企業名を入力してください");
-			companyName.focus();
-			return false;
-		}
 		const foundingDate = document.getElementById("foundingDate");
-		if (foundingDate.value.length < 1) {
+		if (!foundingDate.value.length) {
 			alert("設立日を入力してください");
 			foundingDate.focus();
 			return false;
 		}
+		const companyName = document.getElementById("companyName");
+		if (!companyName.value.trim().length) {
+			alert("企業名を入力してください");
+			companyName.focus();
+			return false;
+		}
+		const searchCompanyName = document.getElementById("searchCompanyName");
+		if (!searchCompanyName.value.trim().length) {
+			alert("検索名を入力してください");
+			searchCompanyName.focus();
+			return false;
+		}
+		if (!isSearchCompanyName(searchCompanyName.value.trim())) {
+			alert("検索名は半角アルファベット、半角数字、全角カタカナ、長音符のみ入力できます");
+			searchCompanyName.focus();
+			return false;
+		}
 		const workersCount = document.getElementById("workersCount");
-		if (workersCount.value.trim().length < 1) {
+		if (!workersCount.value.trim().length) {
 			alert("従業員数を入力してください");
 			workersCount.focus();
 			return false;
 		}
 		const companyAddress = document.getElementById("companyAddress");
-		if (companyAddress.value.trim().length < 1) {
+		if (!companyAddress.value.trim().length) {
 			alert("所在地を入力してください");
 			companyAddress.focus();
 			return false;
 		}
 		const companyDomain = document.getElementById("companyDomain");
-		if (companyDomain.value.trim().length < 1) {
+		if (!companyDomain.value.trim().length) {
 			alert("ドメインを入力してください");
 			companyDomain.focus();
 			return false;
 		}
 		const companyHomepage = document.getElementById("companyHomepage");
-		if (companyHomepage.value.trim().length < 1) {
+		if (!companyHomepage.value.trim().length) {
 			alert("ホームページを入力してください");
 			companyHomepage.focus();
 			return false;
 		}
 		const companyExplain = document.getElementById("companyExplain");
-		if (companyExplain.value.trim().length < 1) {
+		if (!companyExplain.value.trim().length) {
 			alert("詳細を入力してください");
 			companyExplain.focus();
 			return false;
@@ -743,10 +769,11 @@
 
 	function getCompanyData() {
 		return {
+			"foundingDate": document.getElementById("foundingDate").value,
 			"closingFlag": document.getElementById("closingFlag").value,
 			"businessTypeCode": document.getElementById("businessTypeCode").value,
 			"companyName": document.getElementById("companyName").value.trim(),
-			"foundingDate": document.getElementById("foundingDate").value,
+			"searchCompanyName": document.getElementById("searchCompanyName").value.trim(),
 			"workersCount": document.getElementById("workersCount").value.trim(),
 			"companyAddress": document.getElementById("companyAddress").value.trim(),
 			"companyDomain": document.getElementById("companyDomain").value.trim(),
@@ -769,7 +796,7 @@
 	function updateCompany() {
 		if (checkForm() && confirm("会社の情報を更新しますか？")) {
 			const company = getCompanyData();
-			const companyId = document.getElementById("companyId").innerText;
+			const companyId = document.getElementById("comInfo").dataset.id;
 			company.companyId = Number(companyId);
 			companySubmit("PUT", company).then(function (result) {
 				if (result > 0) {
@@ -777,9 +804,10 @@
 					for (let i = checkboxList.length - 1; i > -1; --i) {
 						if (companyId === checkboxList[i].dataset.id) {
 							const td = checkboxList[i].closest("tr").children;
-							const hidden = checkboxList[i].nextElementSibling;
-							hidden.value = company.companyHomepage;
-							hidden.nextElementSibling.value = company.companyExplain;;
+							const hidden = td[0].children;
+							hidden[1].value = company.searchCompanyName;
+							hidden[2].value = company.companyHomepage;
+							hidden[3].value = company.companyExplain;
 							td[2].dataset.value = company.closingFlag;
 							td[2].innerText = getClosingFlagName(company.closingFlag);
 							td[3].innerText = company.companyName;
@@ -803,18 +831,13 @@
 
 	function openApplyCompanyModal() {
 		document.getElementById("verifyFlag").innerText = "待機";
-		document.getElementById("companyId").innerText = "";
 		document.getElementById("closingFlag").options[0].selected = true;
 		document.getElementById("businessTypeCode").options[0].selected = true;
-		document.getElementById("companyName").value = "";
-		document.getElementById("foundingDate").value = "";
-		document.getElementById("workersCount").value = "";
-		document.getElementById("companyAddress").value = "";
-		document.getElementById("companyDomain").value = "";
-		document.getElementById("companyHomepage").value = "";
-		document.getElementById("companyExplain").value = "";
-		document.getElementById("userNickName").innerText = "";
-		document.getElementById("appDate").innerText = "";
+		document.getElementById("foundingDate").value = document.getElementById("companyName").value =
+			document.getElementById("searchCompanyName").value = document.getElementById("workersCount").value =
+			document.getElementById("companyAddress").value = document.getElementById("companyDomain").value =
+			document.getElementById("companyHomepage").value = document.getElementById("companyExplain").value =
+			document.getElementById("userNickName").innerText = document.getElementById("appDate").innerText = "";
 		const comSubmit = document.getElementById("comSubmit");
 		comSubmit.setAttribute("onclick", "applyCompany()");
 		comSubmit.innerText = "申請";
@@ -827,7 +850,7 @@
 			const company = getCompanyData();
 			company.verifyFlag = "1";
 			companySubmit("POST", company).then(function (result) {
-				if (result > 0) {
+				if (result) {
 					alert("生成に成功しました");
 					$("#comInfo").modal("hide");
 				} else if (result > -1) {
@@ -837,7 +860,7 @@
 		}
 	}
 
-	onload = function () {
+	addEventListener("load", function () {
 		// 検索
 		const verifyFilter = document.getElementById("verifyFilter");
 		const closingFilter = document.getElementById("closingFilter");
@@ -929,7 +952,7 @@
 			document.getElementById("pagination").innerHTML = event.state.pagination;
 			setSearchParameter();
 		};
-	};
+	});
 </script>
 </body>
 </html>

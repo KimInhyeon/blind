@@ -1,17 +1,17 @@
 package com.ksinfo.blind.search.dto;
 
 public class UserDto {
-	//3.USER_MGT //À¯Àú°ü¸® Å×ÀÌºí ±×´ë·Î
-	private int    userId;				//user_id bigint GENERATED ALWAYS AS IDENTITY		//ÀÛ¼ºÀÚÀÎÁö ÀÏÄ¡È®ÀÎ
-	private String userNickName;		// user_nickName character varying(30)
-	private String nickNamechangeDate;	// nickName_change_date date not null
-	private int companyId;			// company_id bigint
-	private char   logicalDelFlag; 		// logical_del_flag character(1) not null
-	//ÀÓÀÇÃß°¡
-	private String userCompanyName;		//ÀÌÀüÀÇ writerCompany
+	//3.USER_MGT //ìœ ì €ê´€ë¦¬ í…Œì´ë¸” ê·¸ëŒ€ë¡œ
+	private int userId; //user_id bigint GENERATED ALWAYS AS IDENTITY //ì‘ì„±ìì¸ì§€ ì¼ì¹˜í™•ì¸
+	private String userNickName;  // user_nickName character varying(30)
+	private String nickNamechangeDate; //nickName_change_date date not null
+	private int companyId; //company_id bigint
+	private char logicalDelFlag; //logical_del_flag character(1) not null
+	//ì„ì˜ì¶”ê°€
+	private String userCompanyName; //ì´ì „ì˜ writerCompany
 
-	// get/set¸Ş¼Òµå ¸ğÀ½
-	
+	// get/setë©”ì†Œë“œ ëª¨ìŒ
+
 	public int getUserId() {
 		return userId;
 	}
@@ -59,6 +59,4 @@ public class UserDto {
 	public void setLogicalDelFlag(char logicalDelFlag) {
 		this.logicalDelFlag = logicalDelFlag;
 	}
-
-	
 }

@@ -1,47 +1,43 @@
 package com.ksinfo.blind.search.dto;
 
 public class PostAlignDto {
-	//1.POST_MGT //°Ô½Ã±Û°ü¸® Å×ÀÌºíÀÇ º¯¼ö
-	private String postId;			//(JOIN-1) 	 //post_id bigint GENERATED ALWAYS AS IDENTITY
-	private String userId;			//(JOIN-2)	 //user_id bigint 					  	   //°Ô½Ã±Û ÀÛ¼º À¯ÀúÀÇ id.Á÷Á¢·Îµå°¡ ¾Æ´Ï¶ó, ÀÛ¼ºÀ¯ÀúÀÇ ÀÏÄ¡¸¦ ÆÄ¾Ç À§ÇÔ.
-	private int boardId;						 //board_id 
-	private String postTitle;		  		  	 //post_title character varying(200)   	   //°Ô½Ã±ÛÀÇ Á¦¸ñ
-	private char   postBlindFlag;				 //post_blind_flag character(1) 		   //Ç¥½Ã¿©ºÎ. ÀÌ°Íµµ È®ÀÎÇØ¾ß ÇÑ´Ù.
-	private String postContents;  	 			 //post_contents text 					   //°Ô½Ã±ÛÀÇ ³»¿ë
-	private String postCreateDate; 		 		 //post_create_date timestamp 			   //»ı¼ºÀÏ
-	private String postUpdateDate; 		 	 	 //post_update_date timestamp not null 	   //°»½ÅÀÏ
-	private char   logicalDelFlag; 		 		 //logical_del_flag character(1) not null  //³í¸®»èÁ¦ ÇÃ·¡±×(1ÀÌ¸é »èÁ¦)
+	//1.POST_MGT //ê²Œì‹œê¸€ê´€ë¦¬ í…Œì´ë¸”ì˜ ë³€ìˆ˜
+	private String postId; //(JOIN-1) //post_id bigint GENERATED ALWAYS AS IDENTITY
+	private String userId; //(JOIN-2) //user_id bigint //ê²Œì‹œê¸€ ì‘ì„± ìœ ì €ì˜ id.ì§ì ‘ë¡œë“œê°€ ì•„ë‹ˆë¼, ì‘ì„±ìœ ì €ì˜ ì¼ì¹˜ë¥¼ íŒŒì•… ìœ„í•¨.
+	private int boardId; //board_id
+	private String postTitle; //post_title character varying(200) //ê²Œì‹œê¸€ì˜ ì œëª©
+	private char postBlindFlag; //post_blind_flag character(1) //í‘œì‹œì—¬ë¶€. ì´ê²ƒë„ í™•ì¸í•´ì•¼ í•œë‹¤.
+	private String postContents; //post_contents text //ê²Œì‹œê¸€ì˜ ë‚´ìš©
+	private String postCreateDate; //post_create_date timestamp //ìƒì„±ì¼
+	private String postUpdateDate; //post_update_date timestamp not null //ê°±ì‹ ì¼
+	private char logicalDelFlag; //logical_del_flag character(1) not null //ë…¼ë¦¬ì‚­ì œ í”Œë˜ê·¸(1ì´ë©´ ì‚­ì œ)
 
-	//2.PostCountInfDto(Á¶È¸¼ö)
-	//(JOIN-1) private int postId;  			//post_id bigint not null
-	private String postCountId;		  //post_count_id bigint GENERATED ALWAYS AS IDENTITY
-	private String postCount;  		//post_count bigint not null
+	//2.PostCountInfDto(ì¡°íšŒìˆ˜)
+	//(JOIN-1) private int postId; //post_id bigint not null
+	private String postCountId; //post_count_id bigint GENERATED ALWAYS AS IDENTITY
+	private String postCount; //post_count bigint not null
 
-	//3.USER_MGT //À¯Àú°ü¸® Å×ÀÌºí
-	//(°ãÃÄ¼­ ÁÖ¼®Ã³¸®) private char   logicalDelFlag; 	// logical_del_flag character(1) not null
-	//(JOIN-2)private int    userId;				//user_id bigint GENERATED ALWAYS AS IDENTITY		//ÀÛ¼ºÀÚÀÎÁö ÀÏÄ¡È®ÀÎ
-	private String userNickName;		// user_nickName character varying(30)
-	private String nickNamechangeDate;	// nickName_change_date date not null
-	private String companyId;			// company_id bigint
+	//3.USER_MGT //ìœ ì €ê´€ë¦¬ í…Œì´ë¸”
+	//(ê²¹ì³ì„œ ì£¼ì„ì²˜ë¦¬) private char logicalDelFlag; // logical_del_flag character(1) not null
+	//(JOIN-2)private int userId; //user_id bigint GENERATED ALWAYS AS IDENTITY //ì‘ì„±ìì¸ì§€ ì¼ì¹˜í™•ì¸
+	private String userNickName; // user_nickName character varying(30)
+	private String nickNamechangeDate; // nickName_change_date date not null
+	private String companyId; // company_id bigint
 
+	//4.BoardDto //í† í”½(ë³´ë“œ)ê´€ë¦¬
+	//(JOIN-1) private int boardId;
+	private String boardTopicName; // board_topic_name character varying(30) not null //í† í”½ì˜ ì´ë¦„
+	private String boardOrder; // board_order integer not null //í† í”½ì˜ í™”ë©´í‘œì‹œìˆœë²ˆ
+	private char anonymousFlag; // anonymous_flag character(1) not null //í† í”½ì˜ ë‹‰ë„¤ì„ ë§ˆìŠ¤í‚¹ì—¬ë¶€(1ì´ë©´ ë§ˆìŠ¤í‚¹)
+	//(ê²¹ì³ì„œ ì£¼ì„ì²˜ë¦¬) private char logicalDelFlag;  // logical_del_flag character(1) not null //ë…¼ë¦¬ì‚­ì œ í”Œë˜ê·¸(1ì´ë©´ ì‚­ì œ)
 
-	
-	//4.BoardDto //ÅäÇÈ(º¸µå)°ü¸®
-	//(JOIN-1) private int 	boardId;
-	private String  boardTopicName;   	 // board_topic_name character varying(30) not null	//ÅäÇÈÀÇ ÀÌ¸§
-	private String  boardOrder;  	 	 // board_order integer not null					//ÅäÇÈÀÇ È­¸éÇ¥½Ã¼ø¹ø
-	private char    anonymousFlag;  	 // anonymous_flag character(1) not null			//ÅäÇÈÀÇ ´Ğ³×ÀÓ ¸¶½ºÅ·¿©ºÎ(1ÀÌ¸é ¸¶½ºÅ·)
-	//(°ãÃÄ¼­ ÁÖ¼®Ã³¸®) private char    logicalDelFlag;  // logical_del_flag character(1) not null			//³í¸®»èÁ¦ ÇÃ·¡±×(1ÀÌ¸é »èÁ¦)
-	
+	private Integer recommendCountOfPosts; //ì¶”ì²œìˆ˜(í…Œì´ë¸” : POST_RECOMMEND_INF)
+	private Integer replyCountOfPosts; //ëŒ“ê¸€ìˆ˜(ê° í¬ìŠ¤íŠ¸ë³„ ëŒ“ê¸€ ì¹´ìš´íŠ¸.)
 
-
-	private Integer recommendCountOfPosts;			//ÃßÃµ¼ö(Å×ÀÌºí : POST_RECOMMEND_INF)
-	private Integer replyCountOfPosts;				//´ñ±Û¼ö(°¢ Æ÷½ºÆ®º° ´ñ±Û Ä«¿îÆ®.)	
-	
-	//ºÒÇÊ¿äÆÇ´ÜÀ¸·Î ÁÖ¼®Ã³¸®
-	private String  writerCompany;					//post ÀÛ¼ºÀÚÀÇ ±Ù¹«È¸»ç Á¤º¸ ÀúÀå.
-	//private Integer boardTopicCount;				//ÅäÇÈº° Æ÷½ºÆ®ÀÇ °¹¼ö Ä«¿îÆ®(ÃÑ°¹¼ö Á¦¿Ü)
-	//private Integer boardTopicCountOfAll;		    //ÅäÇÈº° Æ÷½ºÆ®ÀÇ ÃÑ°¹¼ö Ä«¿îÆ®
+	//ë¶ˆí•„ìš”íŒë‹¨ìœ¼ë¡œ ì£¼ì„ì²˜ë¦¬
+	private String writerCompany; //post ì‘ì„±ìì˜ ê·¼ë¬´íšŒì‚¬ ì •ë³´ ì €ì¥.
+	//private Integer boardTopicCount; //í† í”½ë³„ í¬ìŠ¤íŠ¸ì˜ ê°¯ìˆ˜ ì¹´ìš´íŠ¸(ì´ê°¯ìˆ˜ ì œì™¸)
+	//private Integer boardTopicCountOfAll; //í† í”½ë³„ í¬ìŠ¤íŠ¸ì˜ ì´ê°¯ìˆ˜ ì¹´ìš´íŠ¸
 
 	public String getPostId() {
 		return postId;
@@ -202,7 +198,4 @@ public class PostAlignDto {
 	public void setWriterCompany(String writerCompany) {
 		this.writerCompany = writerCompany;
 	}
-	
-	
-	
 }

@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/manage/**").hasRole("SV")
 			.antMatchers("/board", "/upload", "/post").hasAnyRole("SV", "RM")
 			.antMatchers("/registMember", "/registMemberApp", "/login", "/loginApp").anonymous()
-			.antMatchers("/", "/main", "/testAndroidAccess").permitAll()
+			.antMatchers("/", "/main", "/testAndroidAccess", "/directory").permitAll()
 			.anyRequest().authenticated()
 			.and().csrf().disable()
 		.formLogin()
@@ -37,7 +37,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.logout()
 			.logoutUrl("/logout")
 			.logoutSuccessUrl("/login")
-			.invalidateHttpSession(true).deleteCookies("JSESSIONID")
 			.and()
 		.exceptionHandling()
 			.accessDeniedPage("/main");

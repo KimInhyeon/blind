@@ -69,6 +69,11 @@ CREATE FUNCTION blind.write_post(
 			boardId, userId, title, blind_flag, contents, now,
 			now, userId, now, userId, now, '0'
 		) RETURNING post_id INTO boardId;
+		INSERT INTO blind.post_count_inf (
+    		post_id, post_count
+		) VALUES (
+    		boardId, 0
+		);
 		UPDATE blind.post_file_mgt
 		SET post_id = boardId,
 			rec_update_date = now

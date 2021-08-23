@@ -9,6 +9,7 @@ import com.ksinfo.blind.manage.vo.CompanyVO;
 import com.ksinfo.blind.security.Account;
 import com.ksinfo.blind.util.PageNavigator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,23 +29,23 @@ import java.util.Map;
 @RestController
 public class CompanyController {
 	private final CompanyService companyService;
+	private final String redirectPath;
 
 	@Autowired
-	public CompanyController(CompanyService companyService) {
+	public CompanyController(CompanyService companyService, @Value("${server.servlet.context-path}") String contextPath) {
 		this.companyService = companyService;
+		redirectPath = contextPath + "/manage/company";
 	}
 
 	@GetMapping(value = "manage")
 	public void company(HttpServletResponse httpServletResponse) throws IOException {
-		httpServletResponse.sendRedirect("/blind/manage/company");
+		httpServletResponse.sendRedirect(redirectPath);
 	}
 
 	@GetMapping(value = "manage/company")
 	public ModelAndView company(
-		String searchTarget, String searchKeyword,
-		@RequestParam(name = "page", defaultValue = "1") int page,
-		@RequestParam(name = "verifyFlag", defaultValue = "0") char verifyFlag,
-		@RequestParam(name = "closingFlag", defaultValue = "0") char closingFlag
+		String searchTarget, String searchKeyword, @RequestParam(defaultValue = "1") int page,
+		@RequestParam(defaultValue = "0") char verifyFlag, @RequestParam(defaultValue = "0") char closingFlag
 	) {
 		CompanySearchDto companySearchDto = new CompanySearchDto(verifyFlag, closingFlag, searchTarget, searchKeyword);
 		PageNavigator navi = companyService.getNavigator(page, companySearchDto);
@@ -62,10 +63,8 @@ public class CompanyController {
 
 	@GetMapping(value = "manage/company", params = "ajax=true")
 	public Map<String, Object> getCompanyList(
-		String searchTarget, String searchKeyword,
-		@RequestParam(name = "page", defaultValue = "1") int page,
-		@RequestParam(name = "verifyFlag", defaultValue = "0") char verifyFlag,
-		@RequestParam(name = "closingFlag", defaultValue = "0") char closingFlag
+		String searchTarget, String searchKeyword, @RequestParam(defaultValue = "1") int page,
+		@RequestParam(defaultValue = "0") char verifyFlag, @RequestParam(defaultValue = "0") char closingFlag
 	) {
 		CompanySearchDto companySearchDto = new CompanySearchDto(verifyFlag, closingFlag, searchTarget, searchKeyword);
 		PageNavigator navi = companyService.getNavigator(page, companySearchDto);

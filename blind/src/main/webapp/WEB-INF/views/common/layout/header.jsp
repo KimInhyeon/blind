@@ -63,7 +63,7 @@
 	<a class="browse item" style="color: black;"
 		href="${pageContext.request.contextPath}/companyReviewMain">企業情報</a>
 	<div class="right menu">
-	<sec:authorize access="hasAnyRole(\"RM\",\"SV\")">
+	<sec:authorize access="hasAnyRole('RM','SV')">
 		<a class="item" id="openPostModal">ポスト作成</a>
 		<div class="ui modal" id="postModal">
 			<div class="header">
@@ -156,33 +156,6 @@
 
 			addEventListener("DOMContentLoaded", function () {
 				// モーダル
-				fetch("${pageContext.request.contextPath}" + "/board", {
-					method: "GET"
-				}).then(function (response) {
-					if (response.ok) {
-						return response.json();
-					} else {
-						throw response.status;
-					}
-				}).then(function (topicList) {
-					let topicOptionList = "";
-					for (let i = 0, length = topicList.length; i < length; ++i) {
-						topicOptionList += "<div class=\"item\" data-value=\"" + topicList[i].boardId + "\">" +
-							topicList[i].boardTopicName + "</div>";
-					}
-					document.querySelector(".ui.selection.dropdown > .menu").innerHTML = topicOptionList;
-				}).catch(function (error) {
-					alert("予期しないエラーが発生しました");
-					console.error(error);
-				});
-				editor = new EditorJS({
-					holder: "postModalContents",
-					tools: {
-						underline: Underline,
-						marker: Marker,
-						image: SimpleImage
-					}
-				});
 				const postModal = document.getElementById("postModal");
 				$(postModal).modal({
 					duration: 100,
@@ -193,21 +166,51 @@
 				const postModalTitle = document.getElementById("postModalTitle");
 				const postUploadFiles = document.getElementById("postUploadFiles");
 				document.getElementById("openPostModal").addEventListener("click", function () {
-					$(postModalTopic).closest("div").dropdown("restore defaults");
-					postModalTitle.value = postUploadFiles.value = "";
 					postModal.dataset.id = "0";
-					editor.isReady.then(function () {
-						editor.blocks.clear();
-					});
-					document.querySelectorAll("#postModal > .actions > span").forEach(function (span) {
-						span.remove();
-					});
 					$(postModal).modal("show");
-					deleteFile(postModal.dataset.id).catch(function (error) {
-						alert("予期しないエラーが発生しました");
-						$(postModal).modal("hide");
-						console.error(error);
-					});
+					if (editor === undefined) {
+						fetch("${pageContext.request.contextPath}" + "/board", {
+							method: "GET"
+						}).then(function (response) {
+							if (response.ok) {
+								return response.json();
+							} else {
+								throw response.status;
+							}
+						}).then(function (topicList) {
+							let topicOptionList = "";
+							for (let i = 0, length = topicList.length; i < length; ++i) {
+								topicOptionList += "<div class=\"item\" data-value=\"" + topicList[i].boardId + "\">" +
+									topicList[i].boardTopicName + "</div>";
+							}
+							document.querySelector(".ui.selection.dropdown > .menu").innerHTML = topicOptionList;
+							$(postModalTopic).closest("div").dropdown();
+						}).catch(function (error) {
+							alert("予期しないエラーが発生しました");
+							$(postModal).modal("hide");
+							console.error(error);
+						});
+						editor = new EditorJS({
+							holder: "postModalContents",
+							tools: {
+								underline: Underline,
+								marker: Marker,
+								image: SimpleImage
+							}
+						});
+					} else {
+						$(postModalTopic).closest("div").dropdown("restore defaults");
+						postModalTitle.value = postUploadFiles.value = "";
+						editor.blocks.clear();
+						document.querySelectorAll("#postModal > .actions > span").forEach(function (span) {
+							span.remove();
+						});
+						deleteFile(postModal.dataset.id).catch(function (error) {
+							alert("予期しないエラーが発生しました");
+							$(postModal).modal("hide");
+							console.error(error);
+						});
+					}
 				});
 				document.getElementById("closePostModal").addEventListener("click", function () {
 					$(postModal).modal("hide");
@@ -249,6 +252,19 @@
 					const formData = new FormData();
 					formData.append("postId", postModal.dataset.id);
 					for (let i = 0; i < filesLength; ++i) {
+					/*
+						this.files[i].arrayBuffer().then(function (arrayBuffer) {
+							const byteArray = new Int8Array(arrayBuffer);
+							crypto.subtle.digest("SHA-256", byteArray).then(function (digest) {
+								const hashArray = Array.from(new Uint8Array(digest));
+								let fileHash = "";
+								for (let j = 0, arrayLength = hashArray.length; j < arrayLength; ++j) {
+									fileHash += hashArray[i].toString(16).padStart(2, "0");
+								}
+								console.log(fileHash);
+							});
+						});
+					 */
 						formData.append("files", this.files[i]);
 					}
 					fetch("${pageContext.request.contextPath}" + "/upload", {
@@ -289,19 +305,19 @@
 				});
 
 				document.getElementById("postSubmit").addEventListener("click", function () {
-					if (postModalTopic.value.length < 1) {
+					if (!postModalTopic.value.length) {
 						alert("トピックを選択してください");
 						postModalTopic.closest("div").focus();
 						return;
 					}
 					postModalTitle.value = postModalTitle.value.trim();
-					if (postModalTitle.value.length < 1) {
+					if (!postModalTitle.value.length) {
 						alert("タイトルを入力してください");
 						postModalTitle.focus();
 						return;
 					}
 					editor.save().then(function (savedData) {
-						if (savedData.blocks.length < 1) {
+						if (!savedData.blocks.length) {
 							alert("内容を入力してください");
 							editor.focus();
 							return;
@@ -355,7 +371,7 @@
 				<a class="item" href="${pageContext.request.contextPath}/directory">ディレクトリ</a><br>
 				<a class="item" href="${pageContext.request.contextPath}/member/nick-change">ニックネーム変更</a>
 			</sec:authorize>
-			<sec:authorize access="hasRole(\"SV\")">
+			<sec:authorize access="hasRole('SV')">
 				<div class="ui divider"></div>
 				<a class="item" href="${pageContext.request.contextPath}/manage/company">管理者(企業管理)</a><br>
 				<a class="item" href="${pageContext.request.contextPath}/manage/board">管理者(トピック管理)</a><br>

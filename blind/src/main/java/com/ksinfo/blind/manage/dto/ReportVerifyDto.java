@@ -32,7 +32,7 @@ public final class ReportVerifyDto {
 			@Override
 			public int compare(Report o1, Report o2) {
 				if (o1.getType() == o2.getType()) {
-					return o1.getTargetId() > o2.getTargetId() ? 1 : -1;
+					return Long.compare(o1.getTargetId(), o2.getTargetId());
 				}
 				return o1.getType() - o2.getType();
 			}
