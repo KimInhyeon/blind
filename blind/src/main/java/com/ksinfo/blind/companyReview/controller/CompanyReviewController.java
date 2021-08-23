@@ -177,19 +177,4 @@ public class CompanyReviewController {
 		  return mav;
 		}
 	  
-	  
-	  //검색창 밑의 키워드를 클릭한 경우 키워드를 검색어로 활용하여 검색작업을 실시하여 페이지를 재출력실시.
-	  @RequestMapping(value = "companyReviewPostByRecommendKeyWord", method = RequestMethod.POST, produces="application/json")
-	  @ResponseBody
-	  public List<PostDto> companyReviewPostByRecommendKeyWord(String selectRecommendKeyword) throws Exception { 
-	  //String selectRecommendKeyword : 기업게시판의 검색창하단의 추천어. 유저가 클릭한 추천어가 검색어로 적용된다.
-		  
-		  List<PostDto> companyPosts;  	  //회사리뷰의 게시글(post)들을 출력.
-		  companyPosts = searchService.getSearchPosts(selectRecommendKeyword);//클릭한 추천어로 검색 결과를 리턴.
-
-
-		  return companyPosts;		  
-		  
-	  }
-	  
 }
