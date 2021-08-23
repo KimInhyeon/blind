@@ -107,4 +107,6 @@ public class CompanyIntroductionDto {
 	public void setClosingFlag(char closingFlag) {
 		this.closingFlag = closingFlag;
 	}
+
+
 }
