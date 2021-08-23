@@ -5,11 +5,13 @@ import com.ksinfo.blind.companyIntroduction.dto.CompanyIntroductionDto;
 import com.ksinfo.blind.companyIntroduction.service.CompanyIntroductionService;
 import com.ksinfo.blind.companyReview.dto.CompanyJoinDto;
 import com.ksinfo.blind.security.Account;
+import com.ksinfo.blind.util.PageNavigator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -38,17 +40,19 @@ public class CompanyIntroductionController {
 
 	}
 	@RequestMapping(value = "/companyShowReview", method = RequestMethod.GET)
-	public ModelAndView CompanyShowReview(HttpServletRequest req, Long companyId,@AuthenticationPrincipal Account account) throws Exception {
+	public ModelAndView CompanyShowReview(HttpServletRequest req, Long companyId, @AuthenticationPrincipal Account account, @RequestParam(defaultValue = "1") int page) throws Exception {
 		ModelAndView mav = new ModelAndView();
 
 		CompanyIntroductionDto companyIntroduction = companyIntroductionService.companyIntroduction(companyId);
 		CompanyAverageDto companyAverageDto = companyIntroductionService.companyAveragePoint(companyId);
 		CompanyJoinDto oneCompanyReview = companyIntroductionService.oneCompanyReview(companyId);
+		PageNavigator navi = companyIntroductionService.getNavigator(page,companyId);
+
 		Map<String,Long> map = new HashMap<String,Long>();
 		map.put("companyId",companyId);
 		map.put("userId",account.getUserId());
 
-		List<CompanyJoinDto> companyReviewList = companyIntroductionService.companyReviewList(map);
+		List<CompanyJoinDto> companyReviewList = companyIntroductionService.companyReviewList(map,navi.getCurrentPage());
 
 		mav.addObject("oneCompanyReview", oneCompanyReview);
 		mav.addObject("companyAverageDto",companyAverageDto );
@@ -58,7 +62,7 @@ public class CompanyIntroductionController {
 		mav.setViewName("main/companyIntroduction/companyShowReview");
 		int reviewCount = companyIntroductionService.reviewCount(companyId);
 		mav.addObject("reviewCount", reviewCount);
-
+		mav.addObject("navi",navi);
 
 		return mav;
 
@@ -81,6 +85,8 @@ public class CompanyIntroductionController {
 
 		return companyReviewList;
 	}
+
+
 
 
 /*	@RequestMapping(value = "addPostRecommend", method = RequestMethod.POST, produces = "application/json")

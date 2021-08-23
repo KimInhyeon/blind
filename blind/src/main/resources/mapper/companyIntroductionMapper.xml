@@ -196,6 +196,10 @@
 
         where
             company_id=#{companyId}
+            and
+            crma.logical_del_flag='0'
+            and
+            crma.verify_flag='1'
 
         order by
             helpfulCount  desc
@@ -260,4 +264,15 @@
 
 
     </select>
+
+    <select id="getTotalRecord" resultType="_int">
+        select count(*)
+        from blind.company_review_mgt
+        where verify_flag='1'
+        and
+              logical_del_flag='0'
+
+    </select>
+
+
 </mapper>
