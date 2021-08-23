@@ -106,52 +106,51 @@
 	
 	<!-- 페이징 버튼 배치. 정렬옵션을 주어 배치를 맞춰야 한다. -->
 	<div id="pagination" style="text-align: center; margin-bottom: 5%;">
-		<div class="active item">1</div>
+		<c:choose>
+   <c:when test="${navi.startPage gt navi.pagination}">
+      <div class="ui pagination menu">
+         <a class="item" href="javascript:getPosts(${navi.startPage - navi.pagination});">前へ</a>
+      </div>
+   </c:when>
+   <c:otherwise>
+      <div class="ui pagination menu" style="visibility: hidden;"><a class="item">前へ</a></div>
+   </c:otherwise>
+</c:choose>
+<div class="ui pagination menu">
+<c:forEach var="page" begin="${navi.startPage}" end="${navi.endPage}">
+   <c:choose>
+      <c:when test="${page eq navi.currentPage}">
+         <div class="active item">${page}</div>
+      </c:when>
+      <c:otherwise>
+         <a class="item" href="javascript:getPosts(${page});">${page}</a>
+      </c:otherwise>
+   </c:choose>
+</c:forEach>
+</div>
+<c:choose>
+   <c:when test="${navi.totalPage gt navi.endPage}">
+      <div class="ui pagination menu">
+         <a class="item" href="javascript:getPosts(${navi.endPage + 1})">次へ</a>
+      </div>
+   </c:when>
+   <c:otherwise>
+      <div class="ui pagination menu" style="visibility: hidden;"><a class="item">次へ</a></div>
+   </c:otherwise>
+</c:choose>
 	</div>
 	
-	
-<script>	
-	// ページナビゲーター
-	const endPage = ${navi.endPage};
-	if (endPage > 1) {
-		const pathname = location.pathname;
-		const getParameterHtml = function (page) {
-			if (page > 1) {
-				let parameterHtml = "?page=" + page
-				return parameterHtml
-			} else if (parameterIsExist) {
-				return "?" + parameter;
-			}
-			return "";
-		};
-		
-		let page = ${navi.startPage};
-		if (page === 1) {
-			html = "<div class=\"ui pagination menu\" style=\"visibility: hidden\;\">" +
-					"<div class=\"item\">前へ</div></div>";
-		} else {
-			html = "<div class=\"ui pagination menu\"><a class=\"item\" href=\"" + pathname +
-					getParameterHtml(page - ${navi.pagination}) + "\">前へ</a></div>";
-		}
-		html += "<div class=\"ui pagination menu\">";
-		
-		while (page <= endPage) {
-			if (page === ${navi.currentPage}) {
-				html += "<div class=\"active item\">" + page + "</div>";
-			} else {
-				html += "<a class=\"item\" href=\"" + pathname + getParameterHtml(page) + "\">" + page + "</a>";
-			}
-			++page;
-		}
-		html += "</div>";
-		if (endPage === ${navi.totalPage}) {
-			html += "<div class=\"ui pagination menu\" style=\"visibility: hidden\;\">"
-		} else {
-			html += "<div class=\"ui pagination menu\"><a class=\"item\" href=\"" + pathname + "?page=" + page;
-		}
-		document.getElementById("pagination").innerHTML = html;
+
+</body>
+<script >
+function getPosts(page) {
+	   const searchParams = new URLSearchParams(location.search)
+	   if (page > 1) {
+	      searchParams.set("page", page);
+	   } else {
+	      searchParams.delete("page");
+	   }
+	   location.search = searchParams.toString();
 	}
 </script>
-</body>
-
 </html>
