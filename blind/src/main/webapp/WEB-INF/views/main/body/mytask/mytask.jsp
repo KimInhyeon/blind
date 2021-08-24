@@ -22,7 +22,7 @@
 </head>
 <body>
     <div class="ui container">
-        <h3 class="tit">進行中のテスク</h3>
+        <h3 class="tit">進行中のタスク</h3>
         <hr class="titline">
         <div class="protasktit">
         <span class="subtit">企業レビュ</span><span>進行中のテスクが　1件　あります。</span>

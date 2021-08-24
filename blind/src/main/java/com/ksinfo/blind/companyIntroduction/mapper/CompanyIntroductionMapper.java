@@ -11,5 +11,5 @@ import com.ksinfo.blind.companyReview.dto.CompanyJoinDto;
 public interface CompanyIntroductionMapper {
  CompanyIntroductionDto companyIntro(long paramlong);
  int reviewCount(Long companyId);
- CompanyJoinDto companyAveragePoint(long companyId);
+ CompanyJoinDto companyAveragePoint(long companyId); 
 }
