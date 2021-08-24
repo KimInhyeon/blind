@@ -24,22 +24,22 @@ import com.ksinfo.blind.companyIntroduction.service.CompanyIntroductionService;
 public class AnnualIncomeController {	
 	private static final Logger logger = LoggerFactory.getLogger(AnnualIncomeController.class);
 
-	@Autowired 	
+	@Autowired
 	AnnualIncomeService annualIncomeService;
-	
+
 	@Autowired
 	CompanyIntroductionService companyIntroductionService;
 
 	@RequestMapping(value = "/annualIncome/viewAnnualIncomeBySelectedJobGroupCode", method = RequestMethod.POST, produces="application/json")
-	@ResponseBody 	
+	@ResponseBody
 	public List<AnnualIncomeByJobGroupDto> viewAnnualIncomeBySelectedJobGroupCode(int companyId, String jobGroupCode) {
-		List<AnnualIncomeByJobGroupDto> annualIncomeData = annualIncomeService.getAnnualIncomeData(companyId,jobGroupCode); 
+		List<AnnualIncomeByJobGroupDto> annualIncomeData = annualIncomeService.getAnnualIncomeData(companyId,jobGroupCode);
 		return annualIncomeData;
 	}
 	
 	
 
-	@RequestMapping("/annualIncome/annualIncome")
+	@RequestMapping("/annual_income/annual_income")
 	public ModelAndView annualIncome(int selectCompanyId, ModelAndView mav) { 
 	//[안내]int selectCompanyId가 null값으로 인한 에러로 인식되어 작동을 않습니다.
 	//    0018 연봉탭 기능만 작동하실 경우에는 아래의 [0018연봉탭 제작시 사용한 임시코드]으로 진행해주십시오.
@@ -85,7 +85,7 @@ public class AnnualIncomeController {
 		
 		CompanyIntroductionDto companyIntroduction = companyIntroductionService.companyIntroduction(selectCompanyId);
 		mav.addObject("companyIntroduction", companyIntroduction);
-		
+
 		mav.addObject("companyProfile",companyProfile);
 		mav.addObject("jobGroupList",jobGroupList);
 		mav.addObject("annualIncomeData",annualIncomeData);
