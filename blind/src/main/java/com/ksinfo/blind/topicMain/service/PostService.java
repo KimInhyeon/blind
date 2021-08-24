@@ -1,14 +1,13 @@
 package com.ksinfo.blind.topicMain.service;
 
-import java.util.List;
-
+import com.ksinfo.blind.topicMain.dto.PostDetailDto;
+import com.ksinfo.blind.topicMain.dto.PostDto;
+import com.ksinfo.blind.topicMain.mapper.TopicMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ksinfo.blind.topicMain.dto.PostDetailDto;
-import com.ksinfo.blind.topicMain.dto.PostDto;
-import com.ksinfo.blind.topicMain.mapper.TopicMapper;
+import java.util.List;
 
 @Service
 public class PostService {
@@ -28,5 +27,4 @@ public class PostService {
 	public void updatePostCount(long postId) {
 		mapper.updatePostCount(postId);
 	}
-
 }

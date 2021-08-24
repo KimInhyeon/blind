@@ -31,16 +31,17 @@ public final class ReportVerifyDto {
 		reportList.sort(new Comparator<Report>() {
 			@Override
 			public int compare(Report o1, Report o2) {
-				return o1.type - o2.type;
+				if (o1.getType() == o2.getType()) {
+					return Long.compare(o1.getTargetId(), o2.getTargetId());
+				}
+				return o1.getType() - o2.getType();
 			}
 		});
 		for (int i = reportList.size() - 1; i > 0; --i) {
-			Report report = reportList.get(i);
-			for (int j = i - 1; j > -1 && report.type == reportList.get(j).type; --j) {
-				if (report.targetId == reportList.get(j).targetId) {
-					reportList.remove(j);
-					--i;
-				}
+			Report o1 = reportList.get(i);
+			Report o2 = reportList.get(i - 1);
+			if (o1.getType() == o2.getType() && o1.getTargetId() == o2.getTargetId()) {
+				reportList.remove(i);
 			}
 		}
 		this.verifyFlag = verifyFlag;
