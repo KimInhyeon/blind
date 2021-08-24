@@ -44,8 +44,8 @@
   blind.company_mgt
 
 </select>
-	
-	
+
+
 	
 	
 <select id="companySearchPopular" resultType="com.ksinfo.blind.companyReview.dto.CompanyMainViewDto">
@@ -70,6 +70,7 @@ GROUP BY
 ORDER BY 
 	all_point desc
     fetch first 9 rows only
+
 </select>
 
 <insert id="companyReviewJoin" parameterType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">
@@ -125,13 +126,64 @@ insert into
         , 0
         , now()
         , '0'	
-	) 
-	
-	
-	
+	)
 </insert>
 
+<select id="getCompanyName" resultType="String" parameterType="int">
+	SELECT
+		company_name
+	FROM
+		blind.company_mgt
+	where
+		company_mgt.company_id = #{companyId}
+</select>
 
+<select id="getTotalRecord" resultType="_int">
+	SELECT COUNT(*)
+	FROM
+		blind.post_mgt
+	where(
+		post_title like '%' || #{companyName} ||  '%'
+	or
+		post_contents like '%' || #{companyName} ||  '%')
+	<if test="searchKeyword neq null">
+		and (
+			post_title like '%' || #{searchKeyword} ||  '%'
 
+		or
+			post_contents like '%' || #{searchKeyword} ||  '%')
+	</if>
+	AND logical_del_flag = '0'
+</select>
+
+<select id="getPosts"  resultType="com.ksinfo.blind.search.dto.PostDto">
+SELECT
+   post_title --게시글 주제
+   ,post_contents --게시글 내용
+   ,company_name --작성자가 근무하는 기업명
+   ,user_nickname --작성자의 닉네임
+   ,(SELECT COUNT(*) FROM blind.post_count_inf AS pci WHERE po.post_id = pci.post_id) AS post_count --글의 조회수
+   ,(SELECT COUNT(*) AS recommend_count FROM blind.post_recommend_inf as pri where pri.post_id = po.post_id) AS recommend_count --글의 추천수
+   ,(SELECT COUNT(*) AS reply_count FROM blind.reply_mgt as rm where rm.post_id = po.post_id) AS reply_count --글의 댓글수
+   ,post_create_date --게시글의 최초작성일
+FROM blind.post_mgt as po
+   LEFT JOIN blind.user_mgt as us --작성자의 닉네임
+      ON po.user_id = us.user_id
+      and last_generation_flag = '1'
+   LEFT JOIN blind.company_mgt as cm --근무기업명
+      ON us.company_id = cm.company_id
+where (
+   post_title like '%' || #{companyName} || '%'
+   or
+   post_contents like '%' || #{companyName} || '%')
+<if test="searchKeyword neq null">
+   and (
+   post_title like '%' || #{searchKeyword} || '%'
+   or
+   post_contents like '%' || #{searchKeyword} || '%')
+</if>
+   AND po.logical_del_flag = '0'
+order by po.post_id DESC;
+</select>
 
 </mapper>
