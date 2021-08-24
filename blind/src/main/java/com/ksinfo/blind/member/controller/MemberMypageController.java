@@ -247,8 +247,7 @@ public class MemberMypageController {
 	@RequestMapping(value="/member/logout", method = RequestMethod.POST)
     public ModelAndView logout(HttpSession session, ModelAndView mav) {
         session.invalidate();	//로그아웃 처리(세션아웃)        
-        //mav.setViewName("/blind/login" ); //리턴값으로 로그아웃후 이동할 페이지 값을 리턴.
-                mav.addObject("url", "/blind/login" ); //리턴값으로 로그아웃후 이동할 페이지 값을 리턴.   
+        mav.addObject("url", "/blind/login" ); //리턴값으로 로그아웃후 이동할 페이지 값을 리턴.   
         return mav;    	
     }
 	

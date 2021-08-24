@@ -229,12 +229,13 @@
 				type:"POST",
 			    url: "logout",
 				success: function(result){
-					alert("ログアウトを完了しました。");
+					//alert("ログアウトを完了しました。");
 					location.replace(result.url);  //로그인 페이지로 이동하도록실시.
 				},
 				error: function(){
-					alert("エラー");
-				}				
+	  				//alert("エラー");
+	   				location.replace(result.url);  //컨트롤러에서 로그아웃 처리되었으므로 로그인페이지로 이동처리.
+				}			
 			});
 		}); 	
 		
