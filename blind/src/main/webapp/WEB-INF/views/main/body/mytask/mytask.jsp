@@ -15,7 +15,7 @@
            .protaskcontent{margin-top:20px; font-weight:400; color:gray; font-size:100%; padding:5px 0;}
            .protaskcontent i{float:left; padding:12px 40px 12px 30px;}
            .topictit{padding-top:5px; font-weight:700; color:black; font-size:17px;}
-           .protasknoti{padding: 15px 0 10px 5px; float:left;}
+           .protasknoti{padding: 15px 0px 10px 75px; float:left;}
            .procheck{float:right;}
            .protaskdate{padding: 15px 30px 10px 0; float:right;}
 </style>
@@ -25,7 +25,7 @@
         <h3 class="tit">進行中のタスク</h3>
         <hr class="titline">
         <div class="protasktit">
-        <span class="subtit">企業レビュ</span><span>進行中のテスクが　1件　あります。</span>
+        <span class="subtit">企業レビュ</span><span>進行中のタスクが　1件　あります。</span>
         </div>
         <div class="protaskcontent">
             <i class="large black building outline icon"></i>
@@ -36,7 +36,7 @@
         <div class="ui fitted divider" style="margin-top:50px; "><!--fit 되는 얇은 선--></div>
         </div>
     <div class="protasktit2">
-    <span class="subtit">通報</span><span>進行中のテスクが　1件　あります。</span>
+    <span class="subtit">通報</span><span>進行中のタスクが　1件　あります。</span>
     </div>
     <div class="protaskcontent">
         <i class="large red bullhorn icon"></i>

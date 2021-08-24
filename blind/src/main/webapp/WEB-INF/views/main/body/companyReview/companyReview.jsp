@@ -76,6 +76,15 @@
         .div_tab a{font-size:13px; padding-left:11px;}
         .div_tab a:first-child{padding-left:0px;}
         #bestcompanygrid .column:last-child{margin-bottom:100px;}
+    </style>
+        }
+        #searchicon{padding-left:70px;}
+        .bestcompanyname{font-size:15px; font-weight:700; color:black;}
+        .div_star{padding-top:6px;}
+        .div_tab{padding-top:8px;}
+        .div_tab a{font-size:13px; padding-left:11px;}
+        .div_tab a:first-child{padding-left:0px;}
+        #bestcompanygrid .column:last-child{margin-bottom:100px;}
 
 
 		/* 기업등록신청(BLIND_0013_企業登録申請) 모달창 css */
@@ -88,12 +97,12 @@
             background-color: #ffffff;
             border-radius: 3px;
        }
-         
+
        #request_company_regist_modal div{ /*request_company_regist_modal 내의 모든 div 옵션*/
 	   		list-style:none;
 	        margin-bottom:15px;
        }
-		
+
     </style>
 
 </head>
@@ -114,9 +123,7 @@
             </div>
 
             <div class="companyapplymain" align="center">
-                お探しの会社がありませんか。
-                <span id="apply" onclick="requestCompanyRegistModalStart()"
-             		  style="cursor:pointer">知りたい会社を直接申し込んでください。</span>                
+                お探しの会社がありませんか。<a href="#"> <span id=apply>知りたい会社を直接申し込んでください。</span></a>
             </div>
     </div>
 
@@ -169,50 +176,46 @@ ${company.companyName}
     </div>
 </div>
 
-	<!--기업등록신청 모달창-->
-	<div id="request_company_regist_modal" data-backdrop="static" data-keyboard="false">
-		<div align='center' >
-			<div> <!-- 모달창의 헤더(제목 및 닫기버튼)배치 -->
-				<h1 style="display:inline; ;" >企業の登録申請</h1>
-	     	 	<div style="float:right;" id="modal_close_btn">X</div> 
-      		</div>
-      		    
-      		<div align='left' style="margin-top:5%;width:80%;">  <!-- 작성을 위한 안내멘트 기입. -->
-				<h2>知りたい企業の企業名と、企業のメールを入力してください！</h2>
-			</div>
-				
-			<div align='center'>
-				<div style="margin-top:5%;width:80%;">
-					<p align='left'>企業名</p> 
-					<div class="ui input" style="width:100%;">
-		  				<input type="text" placeholder="企業名を入力してください。"
-		  					   id="request_compnay_name">
-					</div>
-				
-					<p align='left'>企業のメール</p> 
-					<div class="ui input" style="width:100%;">
-		  				<input type="text" placeholder="企業のメールを入力してください。"
-						       id="request_compnay_email">
+<!--기업등록신청 모달창-->
+<div id="request_company_regist_modal" data-backdrop="static" data-keyboard="false">
+    <div align='center' >
+        <div> <!-- 모달창의 헤더(제목 및 닫기버튼)배치 -->
+            <h1 style="display:inline; ;" >企業の登録申請</h1>
+            <div style="float:right;" id="modal_close_btn">X</div>
+        </div>
 
-					</div>
-					
-					
-					<button class="ui primary button" id="send_request_company_regist"
-							style="width:30%; height:auto; text-align:center; margin-top: 20px;">
-							申し込む
-					</button>
+        <div align='left' style="margin-top:5%;width:80%;">  <!-- 작성을 위한 안내멘트 기입. -->
+            <h2>知りたい企業の企業名と、企業のメールを入力してください！</h2>
+        </div>
 
-					<div align='left'
-						style="margin-top: 4%;">
-						<h3>お申し込みいただいた企業は、担当者の検証手続きに従って登録が進行されます。</h3>
-						<!-- 신청하신 기업은 담당자의 확인절차에 따라 등록이 진행됩니다. -->
-					</div>
-				</div>
+        <div align='center'>
+            <div style="margin-top:5%;width:80%;">
+                <p align='left'>企業名</p>
+                <div class="ui input" style="width:100%;">
+                    <input type="text" placeholder="企業名を入力してください。"
+                           id="request_compnay_name">
+                </div>
 
-			</div>
-		
-		</div>	 
-	</div>	
+                <p align='left'>企業のメール</p>
+                <div class="ui input" style="width:100%;">
+                    <input type="text" placeholder="企業のメールを入力してください。"
+                           id="request_compnay_email">
+                </div>
+
+				<button class="ui primary button" id="send_request_company_regist"
+                        style="width:30%; height:auto; text-align:center; margin-top: 20px;">
+                        申し込む
+                </button>
+
+                <div align='left'
+                     style="margin-top: 4%;">
+                    <h3>お申し込みいただいた企業は、担当者の検証手続きに従って登録が進行されます。</h3>
+                    <!-- 신청하신 기업은 담당자의 확인절차에 따라 등록이 진행됩니다. -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script>
@@ -231,38 +234,38 @@ ${company.companyName}
         var aa = $("#stars").children('.selected').length;
         alert(aa);
     }
-    
-    
+
+
     // 기업등록신청(BLIND_0013_企業登録申請) 모달창을 위한 ajax 기능.
 
-    //1.기업등록신청 모달(request_company_regist_modal)-팝업실시. 
+    //1.기업등록신청 모달(request_company_regist_modal)-팝업실시.
     function requestCompanyRegistModalStart(){
 		$('#request_company_regist_modal').modal({ closable: false }); //모달밖을 클릭해도 닫히지 않도록 설정.
 		$('#request_company_regist_modal').modal('show');
     };
 
 
- 	$(function(){ 	
- 	    //2.기업등록신청 모달(request_company_regist_modal)-팝업창 닫기. 
+ 	$(function(){
+ 	    //2.기업등록신청 모달(request_company_regist_modal)-팝업창 닫기.
    		$("#modal_close_btn").on("click", function(){ //신고되면 모달창을 닫도록 함.
       		$('#request_company_regist_modal').modal('hide');
    		});
- 	    
+
  	    //3.등록신청할 기업의 정보를 서버로 전송.
     	$("#send_request_company_regist").on("click", function(){
-        	var requestCompnayName = $('#request_compnay_name').val();            		
-        	var requestCompnayEmail =$('#request_compnay_email').val();            		
-		
+        	var requestCompnayName = $('#request_compnay_name').val();
+        	var requestCompnayEmail =$('#request_compnay_email').val();
+
 			//alert("request_compnay_name :" + request_compnay_name);
 			//alert("request_compnay_email :" + request_compnay_email);
-			
+
 			//입력검정-기업메일(기업입력메일이 공란시 ''으로 입력하여 정상처리되도록 실시)
-        	if((typeof requestCompnayEmail == "undefined" || requestCompnayEmail == "" || requestCompnayEmail == null)){ 
+        	if((typeof requestCompnayEmail == "undefined" || requestCompnayEmail == "" || requestCompnayEmail == null)){
     			//유저가 기업메일을 입력하지 않아도 작동하도록 하고 있음.(기업입력메일이 공란시 ''으로 입력하여 정상처리되도록 실시)
-	 			requestCompnayEmail = '';       		
-            	//alert("requestCompnayEmail :"+requestCompnayEmail); //체크용 
+	 			requestCompnayEmail = '';
+            	//alert("requestCompnayEmail :"+requestCompnayEmail); //체크용
         	}
-        	
+
         	if(typeof requestCompnayName == "undefined" || requestCompnayName == "" || requestCompnayName == null ){
         		//유저가 회사명 또는 회사메일을 기입않을시 참으로 간주하여 경고문 출력 및 기업등록신청 스톱처리.
        	  		alert("企業名を入力してください。"); //선택된 신고사항이 없기에 선택을 요청
@@ -272,7 +275,7 @@ ${company.companyName}
         		$.ajax({
         			type : "POST",
         		    url  : "/blind/sendRequestCompanyRegist",
-        		    data : { requestCompnayName 
+        		    data : { requestCompnayName
 		        		     , requestCompnayEmail
  	    	   		        },
         		    dataType: "json",
@@ -285,10 +288,10 @@ ${company.companyName}
             		     	alert("システムのエラーです。管理者にお問い合わせください。");
             		    }
         		    },
-        		         
+
         		    error: function(){
         		    	alert("システムのエラーです。管理者にお問い合わせください。");
-        		    }            
+        		    }
         		});
         	}
        	});
@@ -296,6 +299,4 @@ ${company.companyName}
 </script>
 
 </body>
-
-
 </html>

@@ -44,8 +44,8 @@
   blind.company_mgt
 
 </select>
-	
-	
+
+
 	
 	
 <select id="companySearchPopular" resultType="com.ksinfo.blind.companyReview.dto.CompanyMainViewDto">
@@ -70,6 +70,7 @@ GROUP BY
 ORDER BY 
 	all_point desc
     fetch first 9 rows only
+
 </select>
 
 <insert id="companyReviewJoin" parameterType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">

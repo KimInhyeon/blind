@@ -6,7 +6,6 @@ public class CommonPostDto { //POST_MGT 참조
 	private String boardTopicname; //게시판 이름
 	private long userId; // 게시글 작성 유저 아이디
 	private String postTitle; // 게시글 타이틀
-	private String postContents; // 게시글 본문
 	private String postCreateDate; //게시글 작성 날짜
 	private String postCount; //조회수
 	private long recordCount;
@@ -45,12 +44,7 @@ public class CommonPostDto { //POST_MGT 참조
 	public void setPostTitle(String postTitle) {
 		this.postTitle = postTitle;
 	}
-	public String getPostContents() {
-		return postContents;
-	}
-	public void setPostContents(String postContents) {
-		this.postContents = postContents;
-	}
+
 	public String getPostCreateDate() {
 		return postCreateDate;
 	}

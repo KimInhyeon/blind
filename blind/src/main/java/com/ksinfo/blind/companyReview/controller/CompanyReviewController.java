@@ -1,20 +1,5 @@
 package com.ksinfo.blind.companyReview.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.ksinfo.blind.companyReview.dto.CompanyDto;
 import com.ksinfo.blind.companyReview.dto.CompanyJoinDto;
 import com.ksinfo.blind.companyReview.dto.CompanyMainViewDto;
@@ -24,18 +9,30 @@ import com.ksinfo.blind.search.dto.PostDto;
 import com.ksinfo.blind.search.service.SearchService;
 import com.ksinfo.blind.security.Account;
 import com.ksinfo.blind.util.MessageUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import com.ksinfo.blind.util.PageNavigator;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class CompanyReviewController {
 	@Autowired
 	CompanyReviewService companyReviewService;
-
 	@Autowired
 	CompanyReviewWriteService companyReviewWriteService;
-
 	@Autowired
 	MessageUtils msg;
+
 
 	@Autowired
 	SearchService searchService; // 본래 SearchService.java에서 선언&사용. 검색기능 활용 및 게시글(포스트)의 출력등을 위해
@@ -70,8 +67,14 @@ public class CompanyReviewController {
 
 
 	@RequestMapping(value = "companyReviewWrite", method = RequestMethod.GET)
-	public ModelAndView companyReviewWrite(HttpServletRequest req) throws Exception {
+	public ModelAndView companyReviewWrite(HttpServletRequest req, Long companyId) throws Exception {
 		ModelAndView mav = new ModelAndView();
+		if(companyId == null) {
+			mav.addObject("companyId", 0);
+
+		}else {
+			mav.addObject("companyId", companyId);
+		}
 		mav.setViewName("main/companyReview/companyReviewWrite");
 		return mav;
 	}
@@ -134,8 +137,8 @@ public class CompanyReviewController {
 
 		List<CompanyDto> companyDto = companyReviewService.companySearch(companyName);
 
-        return companyDto;
-    }
+		return companyDto;
+	}
 
 
 	  //기업리뷰-포스트로 이동하였을 때 최초 작동.
