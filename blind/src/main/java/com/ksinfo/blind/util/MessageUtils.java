@@ -1,22 +1,23 @@
 package com.ksinfo.blind.util;
 
-import java.util.Locale;
-
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.util.Locale;
+
 @Component
 public class MessageUtils {
-	
-    @Autowired
-    private MessageSource messageSource;
-
+    private final MessageSource messageSource;
     private MessageSourceAccessor accessor;
-    
+
+    @Autowired
+    public MessageUtils(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     @PostConstruct
     private void init() {
         accessor = new MessageSourceAccessor(messageSource, Locale.JAPAN);

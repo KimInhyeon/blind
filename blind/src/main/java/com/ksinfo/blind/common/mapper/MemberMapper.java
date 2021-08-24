@@ -7,9 +7,8 @@ import com.ksinfo.blind.security.Account;
 
 @Repository
 @Mapper 
-public interface MemberMapper { 
+public interface MemberMapper {
 	Account findMemberByEmail(String userEmail);
-	
+
 	int registNewMember(java.util.Map<String, Object> paramMap);
 }
-

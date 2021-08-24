@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.mytask.mapper.BookmarkMapper">
+	<select id="bookmarkList" parameterType="long" resultType="com.ksinfo.blind.mytask.dto.BookmarkDto">
+	SELECT
+	    bm.board_id as boardId
+		 ,bm.board_topic_name as boardTopicName
+	     ,pm.post_id as postId
+		 ,pm.post_title as postTitle
+		 , pm.post_contents as postContents
+		 , um_name.inner_usernickname as userNickName
+	     , cm_name.company_id as companyId
+		 , cm_name.company_name as companyName
+		 , to_char(pm.post_create_date,'MM.DD') as createDate
+		 , pm.post_create_date as order_createDate
+		 , rank.post_file_url as postFileUrl
+		 , TRIM(TO_CHAR(pci.post_count, '999,999,999,999')) as postCount
+		 , TRIM(TO_CHAR(coalesce(count(DISTINCT pri.post_recommend_id),0), '999,999,999,999')) as recommendCount
+		 , TRIM(TO_CHAR(coalesce(count(DISTINCT rm.reply_id),0), '999,999,999,999')) as replyCount
+		 , count(DISTINCT CASE WHEN pri.user_id = 1 THEN 1 END) as myRecommend
+		 , bmm.rec_update_date as bookmarkCreateDate
+	FROM
+		blind.post_mgt pm
+		INNER JOIN
+		blind.bookmark_mgt bmm
+		ON
+		pm.post_id = bmm.post_id
+		INNER JOIN
+		blind.board_mgt bm
+		ON
+		pm.board_id = bm.board_id
+		INNER JOIN
+		blind.post_count_inf pci
+		ON
+		pm.post_id = pci.post_id
+	LEFT OUTER JOIN
+		(SELECT
+			 pfm.post_id
+			  ,pfm.post_file_url
+			  ,pfm.rec_create_date
+			  ,ROW_NUMBER() OVER (PARTITION BY pfm.post_id ORDER BY pfm.rec_create_date ASC) AS rn
+		 FROM
+			 blind.post_file_mgt pfm
+			INNER JOIN
+			 blind.bookmark_mgt bmm
+			ON
+		bmm.post_id = pfm.post_id) as rank
+		ON
+		pm.post_id = rank.post_id
+		AND rank.rn = 1
+		LEFT OUTER JOIN
+		blind.post_recommend_inf pri
+		ON
+			pm.post_id = pri.post_id
+		AND
+			pri.post_recommend_flag = '0'
+		LEFT OUTER JOIN
+		blind.reply_mgt rm
+		ON
+			pm.post_id = rm.post_id
+		AND
+			rm.logical_del_flag = '0'
+			INNER JOIN
+			(
+			SELECT
+				inner_um.user_id AS user_id
+				 ,inner_cm.company_name AS company_name
+				 ,inner_cm.company_id AS company_id
+			FROM
+				blind.user_mgt inner_um
+					LEFT JOIN
+				blind.company_mgt inner_cm
+				ON
+					inner_cm.company_id = inner_um.company_id
+			WHERE
+				inner_um.last_generation_flag = '1'
+			  AND
+				inner_um.logical_del_flag = '0'
+		) cm_name
+		ON
+			pm.user_id = cm_name.user_id
+			INNER JOIN
+		(select
+			 inner_pm.post_id as inner_postId
+			  ,inner_um.user_nickname as inner_userNickName
+			  ,inner_um.user_id as inner_userId
+		 FROM
+			 blind.user_mgt inner_um
+				 LEFT JOIN
+			 blind.post_mgt inner_pm
+			 ON
+				 inner_um.user_id = inner_pm.user_id
+		 WHERE
+			 inner_um.last_generation_flag = '1'
+		   AND
+			 inner_um.logical_del_flag = '0'
+		) um_name
+		ON
+			bmm.post_id = um_name.inner_postId
+	WHERE
+		bmm.user_id = #{userId}
+	AND
+	    bmm.logical_del_flag='0'
+	GROUP BY
+		bm.board_id
+		   ,bm.board_topic_name
+	       ,pm.post_id
+		   ,pm.post_title
+		   , pm.post_contents
+		   , um_name.inner_usernickname
+	       , cm_name.company_id
+		   , cm_name.company_name
+		   , pm.post_create_date
+		   , rank.post_file_url
+		   , pci.post_count
+		   , bmm.rec_update_date
+	ORDER BY
+		bmm.rec_update_date DESC
+		fetch first 30 rows only
+
+	</select>
+	<select id="searchBookmark" parameterType="hashmap" resultType="com.ksinfo.blind.mytask.dto.BookmarkDto">
+	SELECT
+	bmm.bookmark_id as bookmarkId
+	,bmm.user_id as userId
+	,bmm.logical_del_flag as logicalDelFlag
+	FROM
+	blind.bookmark_mgt bmm
+	WHERE
+	bmm.post_id = #{postId}
+	AND
+	bmm.user_id = #{userId}
+
+
+	</select>
+
+	<update id="updateBookmark" parameterType="hashmap">
+		UPDATE blind.bookmark_mgt
+		SET rec_update_date = now(), rec_update_user_id = #{userId},logical_del_flag =
+		CASE WHEN logical_del_flag='0' THEN '1'
+			WHEN logical_del_flag='1' THEN '0'
+			END
+		WHERE bookmark_id = #{bookmarkId};
+	</update>
+
+
+	<select id="searchPostRecommend" parameterType="hashmap" resultType="com.ksinfo.blind.mytask.dto.BookmarkDto">
+		SELECT
+			pri.post_recommend_id as postRecommendId
+			,pri.user_id as userId
+		    ,pri.post_id as postId
+			,pri.post_recommend_flag as postRecommendFlag
+		FROM
+			blind.post_recommend_inf pri
+		WHERE
+			pri.post_id = #{postId}
+		  AND
+			pri.user_id = #{userId}
+	</select>
+
+	<insert id="insertPostRecommend" parameterType="hashmap">
+		INSERT INTO
+		blind.post_recommend_inf(post_recommend_id, post_id, user_id, post_recommend_date, post_recommend_flag)
+		VALUES
+		(default, #{postId}, #{userId}, now(), '0')
+	</insert>
+
+	<update id="updatePostRecommend" parameterType="hashmap">
+		UPDATE blind.post_recommend_inf
+		SET post_recommend_date=now(), post_recommend_flag =
+			CASE WHEN post_recommend_flag='0' THEN '1'
+				 WHEN post_recommend_flag='1' THEN '0'
+				END
+		WHERE post_recommend_id = #{postRecommendId};
+
+	</update>
+
+</mapper>

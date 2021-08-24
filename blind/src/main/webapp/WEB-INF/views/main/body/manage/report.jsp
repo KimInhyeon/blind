@@ -312,10 +312,9 @@
 
 	function verifyReportList(isAccept, isCustomMessage) {
 		const checkboxList = document.querySelectorAll("td > input[type=checkbox]:checked");
-		let length = checkboxList.length;
-		if (length < 1) {
+		let reportListLength = checkboxList.length;
+		if (reportListLength < 1) {
 			alert("1つ以上の通報を選択してください。");
-			return;
 		} else if (confirm(isAccept ? "承認しますか？" : "却下しますか？")) {
 			let reason;
 			if (isCustomMessage) {
@@ -341,7 +340,7 @@
 			}
 
 			const reportList = [];
-			for (let i = 0; i < length; ++i) {
+			for (let i = 0; i < reportListLength; ++i) {
 				const td = checkboxList[i].closest("td");
 				reportList.push({
 					"targetId": Number(td.dataset.id),
@@ -349,16 +348,16 @@
 				});
 			}
 			reportList.sort(function (o1, o2) {
+				if (o1.type === o2.type) {
+					return o1.targetId - o2.targetId;
+				}
 				return Number(o1.type) - Number(o2.type);
 			});
-			while (--length > 0) {
-				const type = reportList[length].type;
-				const targetId = reportList[length].targetId;
-				for (let i = length - 1; i > -1 && type === reportList[i].type; --i) {
-					if (targetId === reportList[i].targetId) {
-						reportList.splice(i, 1);
-						--length;
-					}
+			for (--reportListLength; reportListLength > 0; --reportListLength) {
+				const o1 = reportList[reportListLength];
+				const o2 = reportList[reportListLength - 1];
+				if (o1.type === o2.type && o1.targetId === o2.targetId) {
+					reportList.splice(reportListLength, 1);
 				}
 			}
 
@@ -413,7 +412,7 @@
 		const typeFilter = document.getElementById("typeFilter");
 		const inputSearchKeyword = document.getElementById("searchKeyword");
 		if (searchParams.has("verifyFlag")) {
-			verifyFilter.value =  searchParams.get("verifyFlag");
+			verifyFilter.value = searchParams.get("verifyFlag");
 		}
 		if (searchParams.has("type")) {
 			typeFilter.value = searchParams.get("type");
@@ -461,14 +460,9 @@
 		});
 
 		// モーダル
-		$(".ui.modal").modal({
+		$("#contents, #verifyModal").modal({
 			duration: 100,
 			closable: false
-		});
-		addEventListener("keydown", function (event) {
-			if (event.key === "Escape") {
-				$(".ui.modal").modal("hide");
-			}
 		});
 	};
 </script>

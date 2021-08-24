@@ -83,7 +83,7 @@
 					<tr>
 						<td class="center aligned">
 							<input type="checkbox" class="ui checkbox" onclick="checkReviewRow(this)"
-								   data-id="${review.companyReviewId}">
+									data-id="${review.companyReviewId}">
 						</td>
 						<td class="center aligned verifyFlag">
 						<c:choose>
@@ -94,7 +94,7 @@
 						</td>
 						<td class="center aligned">
 						<c:choose>
-							<c:when test="${review.lastGenerationFlag eq '1'}">在職</c:when>
+							<c:when test="${review.workingFlag}">在職</c:when>
 							<c:otherwise>退職</c:otherwise>
 						</c:choose>
 						</td>
@@ -441,14 +441,9 @@
 		});
 
 		// モーダル
-		$(".ui.modal").modal({
+		$("#contents, #verifyModal").modal({
 			duration: 100,
 			closable: false
-		});
-		addEventListener("keydown", function (event) {
-			if (event.key === "Escape") {
-				$(".ui.modal").modal("hide");
-			}
 		});
 	};
 </script>

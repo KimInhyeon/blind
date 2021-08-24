@@ -7,6 +7,7 @@ public class BookmarkDto {
 	private String bookmarkCreateDate;	//, bookmark_create_date timestamp not null
 	private String bookmarkUpdateDate; 	//, bookmark_update_date timestamp not null
 	private char logicalDelFlag;		//, logical_del_flag character(1) not null
+
 	public int getBookmarkId() {
 		return bookmarkId;
 	}
@@ -43,5 +44,5 @@ public class BookmarkDto {
 	public void setLogicalDelFlag(char logicalDelFlag) {
 		this.logicalDelFlag = logicalDelFlag;
 	}
-	
+
 }

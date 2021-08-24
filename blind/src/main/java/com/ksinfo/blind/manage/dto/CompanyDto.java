@@ -2,22 +2,24 @@ package com.ksinfo.blind.manage.dto;
 
 import java.sql.Date;
 
-public class CompanyDto {
+public final class CompanyDto {
 	private long userId;
-	private long companyId;
-	private char verifyFlag;
-	private char closingFlag;
-	private String companyName;
-	private String businessTypeCode;
-	private Date foundingDate;
-	private String workersCount;
-	private String companyAddress;
-	private String companyDomain;
-	private String companyHomepage;
-	private String companyExplain;
+	private final long companyId;
+	private final char verifyFlag;
+	private final char closingFlag;
+	private final String companyName;
+	private final String searchCompanyName;
+	private final String businessTypeCode;
+	private final Date foundingDate;
+	private final String workersCount;
+	private final String companyAddress;
+	private final String companyDomain;
+	private final String companyHomepage;
+	private final String companyExplain;
 
-	public CompanyDto(long companyId, char verifyFlag, char closingFlag,
-		String companyName, String businessTypeCode, Date foundingDate, String workersCount,
+	public CompanyDto(
+		long companyId, char verifyFlag, char closingFlag, String companyName,
+		String searchCompanyName, String businessTypeCode, Date foundingDate, String workersCount,
 		String companyAddress, String companyDomain, String companyHomepage, String companyExplain
 	) {
 		this.companyId = companyId;
@@ -36,6 +38,7 @@ public class CompanyDto {
 			this.closingFlag = '1';
 		}
 		this.companyName = companyName;
+		this.searchCompanyName = searchCompanyName;
 		this.businessTypeCode = businessTypeCode;
 		this.foundingDate = foundingDate;
 		this.workersCount = workersCount;
@@ -67,6 +70,10 @@ public class CompanyDto {
 
 	public String getCompanyName() {
 		return companyName;
+	}
+
+	public String getSearchCompanyName() {
+		return searchCompanyName;
 	}
 
 	public String getBusinessTypeCode() {

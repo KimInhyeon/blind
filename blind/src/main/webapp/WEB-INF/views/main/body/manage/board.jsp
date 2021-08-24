@@ -111,6 +111,15 @@
 					</tr>
 				</c:forEach>
 				</tbody>
+				<script>
+					(function () {
+						const tbody = document.querySelector("tbody");
+						if (tbody.childElementCount < 1) {
+							tbody.innerHTML =
+								"<tr><td class=\"center aligned\" colspan=\"5\">データが存在しません</td></tr>";
+						}
+					}());
+				</script>
 			</table>
 		</div>
 		<div class="row">
@@ -127,7 +136,8 @@
 							<div class="ui grid middle aligned">
 								<div class="six wide column">運用</div>
 								<div class="ten wide column">
-									<select class="ui compact selection dropdown fluid" onchange="checkClosedBoard(this)" id="closedFlag">
+									<select class="ui compact selection dropdown fluid"
+											onchange="checkClosedBoard(this)" id="closedFlag">
 										<option value="0">正常</option>
 										<option value="1">閉鎖</option>
 									</select>
@@ -174,7 +184,7 @@
 </div>
 </div>
 <script>
-	let lastOrder;
+	let lastOrder = ${lastOrder};
 
 	function getClosedFlagName(closedFlag) {
 		switch (closedFlag) {
@@ -201,15 +211,14 @@
 	function getBoardList() {
 		const url = new URL(location.href);
 		const searchParam = new URLSearchParams();
-		searchParam.append("closedFlag", document.querySelector("#closedFilter > select").value);
-		searchParam.append("anonymousFlag", document.querySelector("#anonymousFilter > select").value);
-		url.pathname += "/list";
+		const closedFlag = document.querySelector("#closedFilter > select").value;
+		const anonymousFlag = document.querySelector("#anonymousFilter > select").value;
+		searchParam.set("closedFlag", closedFlag);
+		searchParam.set("anonymousFlag", anonymousFlag);
+		searchParam.set("ajax", "true");
 		url.search = searchParam;
 		fetch(url.href, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json"
-			}
+			method: "GET"
 		}).then(function (response) {
 			if (response.ok) {
 				return response.json();
@@ -221,7 +230,8 @@
 			history.replaceState(tbody.innerHTML, "");
 			const boardListLength = boardList.length;
 			if (boardListLength < 1) {
-				document.querySelector("tbody").innerHTML = "<tr><td colspan=\"5\">データが存在しません</td></tr>";
+				document.querySelector("tbody").innerHTML =
+					"<tr><td class=\"center aligned\" colspan=\"5\">データが存在しません</td></tr>";
 			} else {
 				let html = "";
 				for (let i = 0; i < boardListLength; ++i) {
@@ -235,13 +245,13 @@
 				}
 				tbody.innerHTML = html;
 			}
-			if (searchParam.get("closedFlag") === "0") {
+			if (closedFlag === "0") {
 				searchParam.delete("closedFlag");
 			}
-			if (searchParam.get("anonymousFlag") === "2") {
+			if (anonymousFlag === "2") {
 				searchParam.delete("anonymousFlag");
 			}
-			url.pathname = location.pathname;
+			searchParam.delete("ajax");
 			url.search = searchParam;
 			history.pushState(tbody.innerHTML, "", url.href);
 		}).catch(function (error) {
@@ -250,13 +260,18 @@
 		});
 	}
 
-	function checkClosedBoard(select) {
+	function checkClosedBoard(closedFlag) {
 		const order = document.getElementById("order");
 		const topicName = document.getElementById("topicName");
-		if (select.value === "0") {
+		if (closedFlag.value === "0") {
 			document.getElementById("anonymousFlag").disabled = false;
 			order.readOnly = false;
-			order.setAttribute("max", String(lastOrder));
+			if (closedFlag.dataset.value === "1") {
+				order.value = String(lastOrder + 1);
+				order.setAttribute("max", order.value);
+			} else {
+				order.setAttribute("max", String(lastOrder));
+			}
 			order.closest("div").setAttribute("class", "ui input fluid");
 			topicName.disabled = false;
 			topicName.closest("div").setAttribute("class", "ui fluid input");
@@ -264,8 +279,8 @@
 			const anonymousFlag = document.getElementById("anonymousFlag");
 			anonymousFlag.disabled = true;
 			anonymousFlag.value = anonymousFlag.dataset.value;
+			order.value = order.dataset.value;
 			order.readOnly = true;
-			order.removeAttribute("max");
 			order.closest("div").setAttribute("class", "ui input fluid disabled");
 			topicName.disabled = true;
 			topicName.value = topicName.dataset.value;
@@ -294,14 +309,11 @@
 
 	function openCreateBoardModal() {
 		const closedFlag = document.getElementById("closedFlag");
-		closedFlag.options[0].selected = true;
+		closedFlag.value = closedFlag.dataset.value = "0";
 		closedFlag.disabled = true;
 		checkClosedBoard(closedFlag);
 		document.getElementById("anonymousFlag").options[0].selected = true;
-		const order = document.getElementById("order");
-		const max = String(lastOrder + 1);
-		order.setAttribute("max", max);
-		order.value = max;
+		document.getElementById("order").value = String(lastOrder + 1);
 		document.getElementById("topicName").value = "";
 		const boardSubmit = document.getElementById("boardSubmit");
 		boardSubmit.setAttribute("onclick", "checkForCreate()");
@@ -338,7 +350,8 @@
 			return false;
 		} else {
 			newOrder = Number(newOrder);
-			if (newOrder < 1) {
+			const max = Number(document.getElementById("order").getAttribute("max"));
+			if (newOrder < 1 || (max !== null && newOrder > max)) {
 				alert("正しい順位を入力してください");
 				order.focus();
 				return false;
@@ -450,7 +463,7 @@
 							++i;
 						}
 						tbody.innerHTML = tbodyHtml;
-					} else if (board.boardOrder > originOrder) { // トピックの順序が遅くな
+					} else if (board.boardOrder > originOrder) { // トピックの順序が遅くなる
 						let tbodyHtml = "";
 						let i = 0;
 						const length = trList.length;
@@ -510,7 +523,7 @@
 			"boardOrder": Number(order.value),
 			"anonymousFlag": document.getElementById("anonymousFlag").value
 		};
-		if (checkBoardInfo(order, topicName, closedFlag) && confirm("トピックを更新しますか？")) {
+		if (checkBoardInfo(order, topicName, closedFlag) && confirm("新しいトピックを生成しますか？")) {
 			boardSubmit("POST", board).then(function (boardId) {
 				if (boardId > 0) {
 					++lastOrder;
@@ -556,60 +569,35 @@
 	onload = function () {
 		// 検索パラメータ、順序の最大値
 		const searchParams = new URLSearchParams(location.search);
-		const closedFlag = searchParams.get("closedFlag");
-		const anonymousFlag = searchParams.get("anonymousFlag");
-		if (closedFlag === null && anonymousFlag === null) {
-			lastOrder = document.querySelector("tbody").childElementCount;
-		} else {
-			if (anonymousFlag !== null) {
-				document.querySelector("#anonymousFilter > select").value = anonymousFlag;
-			}
-			if (closedFlag !== null) {
-				document.querySelector("#closedFilter > select").value = closedFlag;
-			}
-			fetch(location.pathname + "/order", {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json"
-				}
-			}).then(function (response) {
-				if (response.ok) {
-					//response.redirect()
-					return response.json();
-				} else {
-					throw response.status;
-				}
-			}).then(function (result) {
-				lastOrder = result;
-			}).catch(function (error) {
-				alert("予期しないエラーが発生しました");
-				console.error(error);
-			});
+		const closedFilter = document.querySelector("#closedFilter > select");
+		const anonymousFilter = document.querySelector("#anonymousFilter > select");
+		if (searchParams.has("closedFlag")) {
+			closedFilter.value = searchParams.get("closedFlag");
+		}
+		if (searchParams.has("anonymousFlag")) {
+			anonymousFilter.value = searchParams.get("anonymousFlag");
 		}
 
 		// モーダル
+		const topicName = document.getElementById("topicName");
 		$("#boardInfo").modal({
 			duration: 100,
 			closable: false,
 			autofocus: false,
 			onVisible: function () {
-				document.getElementById("topicName").focus();
-			}
-		});
-		addEventListener("keydown", function (event) {
-			if (event.key === "Escape") {
-				$(".ui.modal").modal("hide");
+				topicName.focus();
 			}
 		});
 
 		// Pjax
+		const tbody = document.querySelector("tbody");
 		onpopstate = function (event) {
-			document.querySelector("tbody").innerHTML = event.state;
+			tbody.innerHTML = event.state;
 			const searchParams = new URLSearchParams(location.search);
 			const closedFlag = searchParams.get("closedFlag");
 			const anonymousFlag = searchParams.get("anonymousFlag");
-			document.querySelector("#closedFilter > select").value = closedFlag === null ? "0" : closedFlag;
-			document.querySelector("#anonymousFilter > select").value = anonymousFlag === null ? "2" : anonymousFlag;
+			closedFilter.value = closedFlag === null ? "0" : closedFlag;
+			anonymousFilter.value = anonymousFlag === null ? "2" : anonymousFlag;
 		};
 	};
 </script>

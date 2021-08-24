@@ -1,20 +1,22 @@
 package com.ksinfo.blind.common.mapper;
 
-import java.util.List;
-
+import com.ksinfo.blind.common.dto.CommonPostDto;
+import com.ksinfo.blind.common.dto.DirectorySearchDto;
+import com.ksinfo.blind.common.vo.DirectoryCompanyVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
-import com.ksinfo.blind.common.dto.CommonPostDto;
+import java.util.List;
 
-@Repository
 @Mapper
+@Repository
 public interface MainMapper {
-	
-	public List<CommonPostDto> topicBestList(); //토픽베스트
-	
-	public List<CommonPostDto> topicSubList();
-	
+	List<CommonPostDto> topicBestList(); //토픽베스트
 
-	
+	List<CommonPostDto> topicSubList();
+
+	int getDirectoryTotalRecord(DirectorySearchDto directorySearchDto);
+
+	List<DirectoryCompanyVO> getDirectoryCompanyList(RowBounds rowBounds, DirectorySearchDto directorySearchDto);
 }

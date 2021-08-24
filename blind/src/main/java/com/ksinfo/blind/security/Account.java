@@ -1,14 +1,14 @@
 package com.ksinfo.blind.security;
 
-import java.util.Collection;
-
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+
 public class Account implements UserDetails {
 	private static final long serialVersionUID = 1L;
-	
+
 	private long userId;
 	private int userGeneration;
 	private String lastGenerationFlag;

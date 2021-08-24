@@ -5,7 +5,7 @@
 	<definition name="main-layout" template="/WEB-INF/views/main/layout/base-main.jsp">
 		<put-attribute name="header" value="/WEB-INF/views/common/layout/header.jsp"/>
 		<put-attribute name="body" value=""/>
-		<!--<put-attribute name="footer" value="/WEB-INF/views/common/layout/footer.jsp" />-->
+		<put-attribute name="footer" value="/WEB-INF/views/common/layout/footer.jsp" />
 	</definition>
 	<definition name="main/*" extends="main-layout">
 		<put-attribute name="body" value="/WEB-INF/views/main/body/{1}.jsp"/>

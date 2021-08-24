@@ -1,7 +1,5 @@
 package com.ksinfo.blind.topicMain.dto;
 
-import java.sql.Date;
-
 public class ReplyResultDto {
 
 	private long replyId;
@@ -67,5 +65,4 @@ public class ReplyResultDto {
 	public void setReplyCount(long replyCount) {
 		this.replyCount = replyCount;
 	}
-
 }

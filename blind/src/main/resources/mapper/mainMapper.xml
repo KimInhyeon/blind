@@ -10,13 +10,13 @@
         , pm.post_contents as postContents
         , pm.post_create_date as postCreateDate
 		, TRIM(TO_CHAR(pci.post_count, '999,999,999,999')) as postCount
-		, TRIM(TO_CHAR(coalesce(count(pri.post_recommend_flag),0), '999,999,999,999')) as recommendCount
-		, TRIM(TO_CHAR(coalesce(count(rm.reply_id),0), '999,999,999,999')) as replyCount
+		, TRIM(TO_CHAR(coalesce(count(DISTINCT pri.post_recommend_flag),0), '999,999,999,999')) as recommendCount
+		, TRIM(TO_CHAR(coalesce(count(DISTINCT rm.reply_id),0), '999,999,999,999')) as replyCount
     FROM
         blind.post_mgt pm
 	INNER JOIN
 		blind.user_mgt um
-	ON 
+	ON
 		pm.user_id = um.user_id
 	INNER JOIN
 		blind.board_mgt bm
@@ -25,7 +25,7 @@
 	INNER JOIN
 		blind.post_count_inf pci
 	ON
-		pci.post_id = pm.post_id 
+		pci.post_id = pm.post_id
 	LEFT OUTER JOIN
 		blind.post_recommend_inf pri
 	ON
@@ -57,7 +57,7 @@
        , rank.post_create_date as postCreateDate
        , coalesce(pc.count, 0) AS recordCount
        , TRIM(TO_CHAR(rank.post_count, '999,999,999,999,999')) AS postCount
-   FROM ( 
+   FROM (
        SELECT
           pm.post_id
           , bm.board_id
@@ -88,5 +88,45 @@
     rank.board_id = pc.board_id
       WHERE rank.rn between 1 and 5
       ORDER BY rank.board_id ASC
+</select>
+
+<select id="getDirectoryTotalRecord" parameterType="com.ksinfo.blind.common.dto.DirectorySearchDto"
+        resultType="_int">
+    SELECT COUNT(*)
+    FROM blind.company_mgt
+    WHERE
+    <choose>
+        <when test="isSearchCompanyName">
+            <foreach collection="searchKeywordList" item="searchKeyword" open="(" close=")" separator="OR">
+                LOWER(search_company_name) LIKE LOWER(#{searchKeyword})
+            </foreach>
+        </when>
+        <otherwise>
+            LOWER(company_name) LIKE LOWER(#{searchKeywordList[0]})
+        </otherwise>
+    </choose>
+    AND verify_flag = '1'
+    AND logical_del_flag = '0';
+</select>
+
+<select id="getDirectoryCompanyList" parameterType="com.ksinfo.blind.common.dto.DirectorySearchDto"
+        resultType="com.ksinfo.blind.common.vo.DirectoryCompanyVO">
+    SELECT company_id AS companyId
+    , company_name AS companyName
+    FROM blind.company_mgt
+    WHERE
+    <choose>
+        <when test="isSearchCompanyName">
+            <foreach collection="searchKeywordList" item="searchKeyword" open="(" close=")" separator="OR">
+                LOWER(search_company_name) LIKE LOWER(#{searchKeyword})
+            </foreach>
+        </when>
+        <otherwise>
+            LOWER(company_name) LIKE LOWER(#{searchKeywordList[0]})
+        </otherwise>
+    </choose>
+    AND verify_flag = '1'
+    AND logical_del_flag = '0'
+    ORDER BY search_company_name;
 </select>
 </mapper>

@@ -32,23 +32,22 @@
 			verify_flag AS verifyFlag,
 			closing_flag AS closingFlag,
 			company_name AS companyName,
+			COALESCE(search_company_name, '') AS searchCompanyName,
 			business_type_code AS businessTypeCode,
-			company_address AS companyAddress,
-			TO_CHAR(founding_date, 'YYYY-MM-DD') AS foundingDate,
-			workers_count AS workersCount,
+			COALESCE(company_address, '') AS companyAddress,
+			COALESCE(TO_CHAR(founding_date, 'YYYY-MM-DD'), '') AS foundingDate,
+			COALESCE(workers_count, '') AS workersCount,
 			company_domain AS companyDomain,
 			company_homepage AS companyHomepage,
 			company_explain AS companyExplain,
 			user_nickName AS userNickName,
 			TO_CHAR(app_date, 'YYYY-MM-DD') AS appDate
 		FROM blind.company_mgt AS co
-			INNER JOIN blind.user_mgt um
-			ON um.user_id = co.user_id
-			AND um.last_generation_flag = '1'
-			AND um.logical_del_flag = '0'
 		<if test="searchTarget eq 'businessTypeName'">
 			INNER JOIN blind.business_type_mst USING(business_type_code)
 		</if>
+			LEFT JOIN blind.user_mgt AS us
+				ON co.user_id = us.user_id AND last_generation_flag = '1' AND us.logical_del_flag = '0'
 		WHERE co.logical_del_flag = '0'
 		<if test="verifyFlag neq '3'">
 			AND verify_flag = #{verifyFlag}
@@ -66,7 +65,7 @@
 			</choose>
 			) LIKE '%' || LOWER(#{searchKeyword}) || '%'
 		</if>
-		ORDER BY companyId
+		ORDER BY co.company_id
 		<if test="verifyFlag neq '0'">
 			DESC
 		</if>;
@@ -83,19 +82,20 @@
 
 	<insert id="applyCompany" parameterType="com.ksinfo.blind.manage.dto.CompanyDto">
 		INSERT INTO blind.company_mgt (
-			user_id, company_name, business_type_code, company_address, founding_date, workers_count,
-			app_date, company_domain, company_homepage, company_explain, verify_flag, closing_flag,
-			rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+			user_id, company_name, search_company_name, business_type_code, company_address, founding_date,
+			workers_count, app_date, company_domain, company_homepage, company_explain, verify_flag,
+			closing_flag, rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
 		) VALUES (
-			#{userId}, #{companyName}, #{businessTypeCode}, #{companyAddress}, #{foundingDate}, #{workersCount},
-			NOW(), #{companyDomain}, #{companyHomepage}, #{companyExplain}, #{verifyFlag}, #{closingFlag},
-			#{userId}, NOW(), #{userId}, NOW(), '0'
+			#{userId}, #{companyName}, #{searchCompanyName}, #{businessTypeCode}, #{companyAddress}, #{foundingDate},
+			#{workersCount}, NOW(), #{companyDomain}, #{companyHomepage}, #{companyExplain}, #{verifyFlag},
+			#{closingFlag}, #{userId}, NOW(), #{userId}, NOW(), '0'
 		);
 	</insert>
 
 	<update id="updateCompany" parameterType="com.ksinfo.blind.manage.dto.CompanyDto">
 		UPDATE blind.company_mgt
 		SET	company_name = #{companyName},
+			search_company_name = #{searchCompanyName},
 			business_type_code = #{businessTypeCode},
 			company_address = #{companyAddress},
 			founding_date = #{foundingDate},
