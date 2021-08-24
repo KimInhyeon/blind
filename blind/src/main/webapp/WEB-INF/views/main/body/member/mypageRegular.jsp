@@ -148,7 +148,7 @@
     		$("#logout").on('click', function(){	
     			$.ajax({
     				type:"POST",
-    			    url: "/logout",
+    			    url: "logout",
     				success: function(result){
     					alert("ログアウトを完了しました。");
     					location.replace(result.url);  //로그인 페이지로 이동하도록실시.
@@ -181,9 +181,9 @@
 						${user_nick_name}
 					</div>
 							
-					<div class="ui secondary button" style=" position: inherit; float:right; font-size:1em;
+					<div class="ui secondary button" style=" position: inherit; float:right; font-size:1em;"
 						 onclick="location.href='${pageContext.request.contextPath}/accountUpdate';"> 	
-						 	<i class="user circle icon" ></i> <!-- 유저 아이콘(font-size 통해 크기조절) -->
+						 	<i class="user circle icon"></i> <!-- 유저 아이콘(font-size 통해 크기조절) -->
 							情報修正	
 					</div>
 				</div>
