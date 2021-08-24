@@ -39,16 +39,16 @@ public class AnnualIncomeController {
 	
 	
 
-	@RequestMapping("/annualIncome/annualIncome")
-	public ModelAndView annualIncome(int selectCompanyId, ModelAndView mav) { 
+	//@RequestMapping("/annual_income/annual_income")
+	//public ModelAndView annualIncome(int selectCompanyId, ModelAndView mav) { 
 	//[안내]int selectCompanyId가 null값으로 인한 에러로 인식되어 작동을 않습니다.
 	//    0018 연봉탭 기능만 작동하실 경우에는 아래의 [0018연봉탭 제작시 사용한 임시코드]으로 진행해주십시오.
 		
 	//----------------------------------------------------------------------------------------------------------------------	
 	// [0018연봉탭 제작시 사용한 임시코드] annualIncome 본 기능만 제작구현시 사용한 임시코드. 정식 서비스에서는 사용하지마세요.
-	//	@RequestMapping("/annual_income/annual_income")
-	//	public ModelAndView annualIncome(String fakeSelectCompanyId, ModelAndView mav) { //int형의 경우 null 불허. 이로인해 맵핑에러로 이어짐.
-	//	int selectCompanyId = 1; //1 : Company_mgt의 'トヨタ自動車株式会社'의 companyId(사용자분의 DB상태에 따라 출력기업 달리집니다.)
+		@RequestMapping("/annual_income/annual_income")
+		public ModelAndView annualIncome(String fakeSelectCompanyId, ModelAndView mav) { //int형의 경우 null 불허. 이로인해 맵핑에러로 이어짐.
+		int selectCompanyId = 1; //1 : Company_mgt의 'トヨタ自動車株式会社'의 companyId(사용자분의 DB상태에 따라 출력기업 달리집니다.)
 	//----------------------------------------------------------------------------------------------------------------------	
 	
 		List<CompanyDto> companyProfile = annualIncomeService.getCompanyProfile(selectCompanyId);
