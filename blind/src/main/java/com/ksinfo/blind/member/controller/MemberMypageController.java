@@ -244,11 +244,16 @@ public class MemberMypageController {
 		return mav;
 	}		
 	
-	@RequestMapping(value="/logout", method = RequestMethod.POST)
+	@RequestMapping(value="logout", method = RequestMethod.POST)
     public ModelAndView logout(HttpSession session, ModelAndView mav) {
         session.invalidate();	//로그아웃 처리(세션아웃)
-        mav.addObject("url", "/blind/login" ); //리턴값으로 로그아웃후 이동할 페이지 값을 리턴.
-        
+        mav.addObject("url", "/blind/login" ); //리턴값으로 로그아웃후 이동할 페이지 값을 리턴.   
+        return mav;    	
+    }
+	@RequestMapping(value="/member/logoutMypageMain", method = RequestMethod.POST)
+    public ModelAndView logoutMypageMain(HttpSession session, ModelAndView mav) {
+        session.invalidate();	//로그아웃 처리(세션아웃)        
+        mav.addObject("url", "/blind/login" ); //리턴값으로 로그아웃후 이동할 페이지 값을 리턴.   
         return mav;    	
     }
 	

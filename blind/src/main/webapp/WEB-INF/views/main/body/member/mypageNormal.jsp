@@ -150,7 +150,7 @@
     		$("#logout").on('click', function(){	
     			$.ajax({
     				type:"POST",
-    			    url: "logout",
+    			    url: "logoutMypageMain",
     				success: function(result){
     					alert("ログアウトを完了しました。");
     					location.replace(result.url);  //로그인 페이지로 이동하도록실시.
