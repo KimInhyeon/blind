@@ -32,27 +32,27 @@ public class SearchController {
 
 	 //유저가 검색된 기업에 대하여 근무를 추천/비추천 버튼 클릭한 값에 따라 추천/비추천 한 정보를 insert실시 및 기업의 추천도를 리턴.
 	@RequestMapping(value = "companyRecommendVote", method = RequestMethod.POST)
-	@ResponseBody 	
+	@ResponseBody
 	public List<CompanyVoteResultDto> companyRecommendPush(int companyId, @AuthenticationPrincipal Account account, int companyVoteValue) {
-		
+
 			//로그인한 유저인지 체크(로그인 않은 유저의 경우에는 로그인 페이지로 이동하는 등의 조처를 하도록 작성예정.
 			int userId = (int) account.getUserId();
-			
-			// companyRecommendValue : 기업추천여부를 갖는 값.( 1:기업추천 / 0:기업 비추천)				
-			searchService.setCompanyRecommendVote(userId, companyId, companyVoteValue);			
+
+			// companyRecommendValue : 기업추천여부를 갖는 값.( 1:기업추천 / 0:기업 비추천)
+			searchService.setCompanyRecommendVote(userId, companyId, companyVoteValue);
 
 			List<CompanyVoteResultDto> companyRecommendVoteResult = searchService.getCompanyRecommendVoteResult(companyId);
-			
+
 			//선호도를 %로 출력하기 위한 코드. xml에서 SQL을 통해 %로 바로 리턴되도록 수정하는대로 삭제할 예정.
 			float tempDenominator = companyRecommendVoteResult.get(0).getVoteCountOfGood()+ companyRecommendVoteResult.get(0).getVoteCountOfBad();
 			companyRecommendVoteResult.get(0).setVoteCountOfGood( (companyRecommendVoteResult.get(0).getVoteCountOfGood()/ tempDenominator) * 100 );
 			companyRecommendVoteResult.get(0).setVoteCountOfBad(  (companyRecommendVoteResult.get(0).getVoteCountOfBad() / tempDenominator) * 100 );
-			
+
 			return companyRecommendVoteResult; //투표에 참여한 유저에게 기업의 선호도를 출력하기 위한 값들을 리턴.
 	}
-	
-	
-	
+
+
+
 	@RequestMapping(value = "bookmarkChanege", method = RequestMethod.GET)
 	@ResponseBody 	
 	public int bookmarkChanege() { //나중에 리턴형을 BookmarkDto으로 할지 여부 결정필요.
@@ -142,8 +142,8 @@ public class SearchController {
 		//1.기업정보 관련	
 		mav.addObject("searchResultCompanyDataFlag",searchResultCompanyDataFlag); 		//기업정보 여부애 떠라 jsp페이지에서 기업정보관련 출력여부 결정.
  		mav.addObject("searchResultCompany",searchResultCompany); 						//기업정보를 갖는 오브젝트.
-		mav.addObject("companyReviews",companyReviews);									//검색된 기업에 대한 기업리뷰		
-																						//회사id(해당 기업을 추천/비추천 클릭시 COMPANY_RECOMMEND_INF 테이블 추가위해 해당 기업 id 필요.
+		mav.addObject("companyReviews",companyReviews);								//검색된 기업에 대한 기업리뷰
+
 		//2.포스트관련 정보
 		//2.1 포스트출력
 		mav.addObject("boardNameAndIdAndCount",boardNameAndIdAndCount);			//검색어에 검색된 포스트들의 토픽(게시판) 이름들 저장. //boardTopicName
