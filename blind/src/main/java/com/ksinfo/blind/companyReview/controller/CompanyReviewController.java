@@ -136,8 +136,22 @@ public class CompanyReviewController {
 		  
 	      return companyDto;
 	  }
-	  
-	  
+
+	//BLIND_0013_企業登録申請(2021-08-05)
+	@RequestMapping(value = "sendRequestCompanyRegist", method = RequestMethod.POST, produces="application/json")
+	@ResponseBody
+	public int sendRequestCompanyRegist(String requestCompnayName, String requestCompnayEmail, @AuthenticationPrincipal Account account){
+
+		int userid = (int)account.getUserId();
+
+		companyReviewService.sendRequestCompanyRegist(requestCompnayName, requestCompnayEmail, userid);
+
+		return 1;//성공시1을 리턴하도록 실시.
+	}
+
+
+
+	  //BLIND_0017_企業ポストタブ(2021-08-11)
 	  //기업리뷰-포스트로 이동하였을 때 최초 작동.
 	  //사용자가 기업리뷰페이지에서 "포스트"탭을 클릭했다는 상황으로 생각하여 진행.
 	  @RequestMapping(value = "companyReviewPost", method = RequestMethod.GET)
