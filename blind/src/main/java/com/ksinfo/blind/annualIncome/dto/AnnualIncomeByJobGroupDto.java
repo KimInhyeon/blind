@@ -32,5 +32,5 @@ public class AnnualIncomeByJobGroupDto {
 		this.maxAnnualIncome = maxAnnualIncome;
 	}
 
-	
+
 }
