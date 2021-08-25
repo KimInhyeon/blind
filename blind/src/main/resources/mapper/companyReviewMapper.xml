@@ -129,6 +129,43 @@ insert into
 	)
 </insert>
 
+	<!-- BLIND_0013_企業登録申請(2021-08-05) -->
+	<!-- 유저들의 기업등록신청 -->
+	<insert id="sendRequestCompanyRegist"  parameterType="java.util.Map">
+		insert into "blind".company_mgt(
+			company_id,   			 --company_id bigint GENERATED ALWAYS AS IDENTITY
+			user_id,        	     --, user_id bigint not null
+			company_name,	         --, company_name character varying(50) not null
+			app_date,				 --, app_date date not null
+			company_domain, 		 --, company_domain character varying(50) not null
+			company_homepage,		 --, company_homepage character varying(50) not null
+			company_explain,		 --, company_explain character varying(600) not null
+			verify_flag,			 --, verify_flag character(1) not null
+			closing_flag,			 --, closing_flag character(1) not null
+			rec_create_user_id, 	 --, rec_create_user_id bigint not null
+			rec_create_date,		 --, rec_create_date timestamp not null
+			rec_update_user_id, 	 --, rec_update_user_id bigint not null
+			rec_update_date, 		 --, rec_update_date timestamp not null
+			logical_del_flag	     --, logical_del_flag character(1) not null
+		)values(
+				   default,	   			 --company_id bigint GENERATED ALWAYS AS IDENTITY
+				   #{userid},        		 --, user_id bigint not null                      	 (1)user_id
+				   #{requestCompnayName},   --, company_name character varying(50) not null     (2)company_name
+				   now(),					 --, app_date date not null
+				   #{requestCompnayEmail},  --, company_domain character varying(50) not null   (3)company_domain
+				   '',					 --, company_homepage character varying(50) not null
+				   '',					 --, company_explain character varying(600) not null
+				   0,						 --, verify_flag character(1) not null
+				   0,						 --, closing_flag character(1) not null
+				   1, 						 --, rec_create_user_id bigint not null
+				   now(),					 --, rec_create_date timestamp not null
+				   1,	 					 --, rec_update_user_id bigint not null
+				   now(),					 --, rec_update_date timestamp not null
+				   0	    				 --, logical_del_flag character(1) not null
+			   )
+	</insert>
+
+	<!-- BLIND_0017_企業ポストタブ(2021-08-11) -->
 <select id="getCompanyName" resultType="String" parameterType="int">
 	SELECT
 		company_name

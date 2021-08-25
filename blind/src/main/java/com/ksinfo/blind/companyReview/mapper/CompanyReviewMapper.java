@@ -20,10 +20,12 @@ public interface CompanyReviewMapper {
 	List<CompanyDto> companySearchAll();
 	int companyReviewJoin(CompanyJoinDto inputDto);
 	List<CompanyMainViewDto> companySearchPopular();
+
+	//BLIND_0013_企業登録申請(2021-08-05)
+	void sendRequestCompanyRegist(java.util.Map<String, Object> paramMap);
+
+	//BLIND_0017_企業ポストタブ(2021-08-11)
 	String getCompanyName(int companyId);
-
-
 	int getTotalRecord(Map<String, Object> paramMap );
-
 	List<PostDto> getPosts(RowBounds row, Map<String, Object> paramMap );
 }
