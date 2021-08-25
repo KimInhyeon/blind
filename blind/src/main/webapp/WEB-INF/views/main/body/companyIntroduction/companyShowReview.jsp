@@ -10,6 +10,19 @@
 
     <script>
 
+        function getReviewListByPage(page) {
+            const searchParams = new URLSearchParams(location.search);
+            if (page > 1) {
+                searchParams.set("page", page);
+            } else {
+                searchParams.delete("page");
+            }
+            location.search = searchParams.toString();
+        }
+        $(document).ready(function(){
+            alert("${oneCompanyReview.recCreateDate}");
+        });
+
         function countUp(companyReviewId) {
 
             $.ajax({
@@ -166,13 +179,18 @@
 
         </div>
 
+
+
+
+        <c:if test="${!empty oneCompanyReview}">
         <div style="width:100%; border:1px;">
             <table class="tabtable" border="1" style="width:100%; margin:15px auto; padding:30px"><!--마진은되도록 쓰지말자  -->
 
                 <tr>
                     <td>${oneCompanyReview.allPoint }</td>
                     <td><h4>"${oneCompanyReview.simpleComment }"</h4></td>
-                    <td></td>
+                    <td><fmt:formatDate value="${oneCompanyReview.recCreateDate}" pattern="YYYY-MM-DD"/></td>
+
                     <td>
                         <%--<div id="sample"  data-position="bottom left"
                              data-content="신고"><i class="ellipsis horizontal icon"></i></div>--%>
@@ -204,8 +222,9 @@
                                 <div class="column" data-position="bottom left">
 
                                     <div class="div_star">
-                                        <div class="ui star rating" data-rating="${oneCompanyReview.careerPoint}"
-                                             data-max-rating="5">キャリア向上
+                                        <div class="ui star rating"
+                                             data-rating="${oneCompanyReview.careerPoint}"
+                                             data-max-rating="5">ワークライフバランス
                                         </div>
 
                                     </div>
@@ -244,7 +263,7 @@
 
                     </td>
                     <td><h5>장점</h5></td>
-                    <td><fmt:formatDate value="${oneCompanyReview.recCreateDate}" pattern="yyyy-mm-dd"/></td>
+
                     <td></td>
 
 
@@ -294,6 +313,7 @@
             </table>
 
         </div>
+        </c:if>
 
         <c:forEach var="companyShowList" items="${companyShowList}" varStatus="status">
             <div id="showCompanyList">
@@ -305,8 +325,9 @@
                         </tr>
                         <tr>
                             <td> ${companyShowList.allPoint}</td>
-                            <td style="width:300px;">장점</td>
-                            <td><fmt:formatDate value="${companyShowList.recCreateDate}" pattern="yyyy-mm-dd"/></td>
+                            <td><h4>"${companyShowList.simpleComment }"</h4></td>
+
+                            <td><fmt:formatDate value="${companyShowList.recCreateDate}" pattern="YYYY-MM-DD"/></td>
                             <td>
 
                                 <div class="ui button" style="background: white; margin:0px;"
@@ -317,11 +338,6 @@
 
                                         <div class="ui button" style="background: white ;">신고</div>
 
-                                        <div class="div_star">
-                                            <div class="ui star rating" data-rating="${companyShowList.allPoint}"
-                                                 data-max-rating="5"></div>
-
-                                        </div>
                                     </div>
 
 
@@ -381,16 +397,21 @@
                                     </div>
 
                                 </div>
+                                <td><h5>장점</h5></td>
+
 
 
                             </td>
-                            <td>${companyShowList.advantages }</td>
-                            <td></td>
-                            <td></td>
+
+
                         </tr>
                         <tr>
                             <td></td>
-                            <td>단점</td>
+                            <td>${companyShowList.advantages }</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><h5>단점</h5></td>
                         </tr>
                         <tr>
                             <td></td>

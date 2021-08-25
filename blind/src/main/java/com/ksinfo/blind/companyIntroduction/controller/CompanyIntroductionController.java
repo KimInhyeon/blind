@@ -40,12 +40,12 @@ public class CompanyIntroductionController {
 
 	}
 	@RequestMapping(value = "/companyShowReview", method = RequestMethod.GET)
-	public ModelAndView CompanyShowReview(HttpServletRequest req, Long companyId, @AuthenticationPrincipal Account account, @RequestParam(defaultValue = "1") int page) throws Exception {
+	public ModelAndView CompanyShowReview(@RequestParam Long companyId, @AuthenticationPrincipal Account account, @RequestParam(defaultValue = "1") int page) throws Exception {
 		ModelAndView mav = new ModelAndView();
 
 		CompanyIntroductionDto companyIntroduction = companyIntroductionService.companyIntroduction(companyId);
 		CompanyAverageDto companyAverageDto = companyIntroductionService.companyAveragePoint(companyId);
-		CompanyJoinDto oneCompanyReview = companyIntroductionService.oneCompanyReview(companyId);
+
 		PageNavigator navi = companyIntroductionService.getNavigator(page,companyId);
 
 		Map<String,Long> map = new HashMap<String,Long>();
@@ -54,10 +54,16 @@ public class CompanyIntroductionController {
 
 		List<CompanyJoinDto> companyReviewList = companyIntroductionService.companyReviewList(map,navi.getCurrentPage());
 
-		mav.addObject("oneCompanyReview", oneCompanyReview);
+
 		mav.addObject("companyAverageDto",companyAverageDto );
 		mav.addObject("companyIntroduction", companyIntroduction);
-		companyReviewList.remove(0);
+
+		if (page < 2) {
+			CompanyJoinDto oneCompanyReview = companyIntroductionService.oneCompanyReview(companyId);
+			companyReviewList.remove(0);
+			mav.addObject("oneCompanyReview", oneCompanyReview);
+		}
+
 		mav.addObject("companyShowList", companyReviewList);
 		mav.setViewName("main/companyIntroduction/companyShowReview");
 		int reviewCount = companyIntroductionService.reviewCount(companyId);
