@@ -1,11 +1,11 @@
 package com.ksinfo.blind.util;
 
-public class PageNavigator {
-	private int currentPage;
-	private int startPage;
-	private int endPage;
-	private int totalPage;
-	private int pagination;
+public final class PageNavigator {
+	private final int currentPage;
+	private final int startPage;
+	private final int endPage;
+	private final int totalPage;
+	private final int pagination;
 
 	public PageNavigator(int page, int totalRecord, final int recordLimit, final int pagination) {
 		if (totalRecord <= recordLimit) {
@@ -24,10 +24,7 @@ public class PageNavigator {
 				endPage = totalPage;
 			} else {
 				startPage = (currentPage - 1) / pagination * pagination + 1;
-				endPage = startPage + pagination - 1;
-				if (endPage > totalPage) {
-					endPage = totalPage;
-				}
+				endPage = Math.min(startPage + pagination - 1, totalPage);
 			}
 		}
 		this.pagination = pagination;

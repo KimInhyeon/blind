@@ -77,6 +77,7 @@
         .div_tab a:first-child{padding-left:0px;}
         #bestcompanygrid .column:last-child{margin-bottom:100px;}
     </style>
+<%--
         }
         #searchicon{padding-left:70px;}
         .bestcompanyname{font-size:15px; font-weight:700; color:black;}
@@ -104,7 +105,7 @@
        }
 
     </style>
-
+--%>
 </head>
 
 
@@ -157,7 +158,7 @@ ${company.companyName}
                 <div style="display:inline-block;">
                     <img class="ui left floated image" width="70" height="70" src="${pageContext.request.contextPath}/resources/images/company/${company3.companyId}.png">
                     <div style="display:inline-block;">
-                        <a class="bestcompanyname" href="#" style="display:inline-block;">${company3.companyName}</a>
+                        <a class="bestcompanyname" href="companyIntroduction?companyId=${company3.companyId}" style="display:inline-block;">${company3.companyName}</a>
                         <div class="div_star">
                             <div class="ui star rating" data-rating="${company3.allPoint}" data-max-rating="5"></div>(${company3.realAllPoint})
                         </div>

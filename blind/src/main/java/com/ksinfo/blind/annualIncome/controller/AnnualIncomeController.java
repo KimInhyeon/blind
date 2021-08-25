@@ -43,7 +43,7 @@ public class AnnualIncomeController {
 
 	//----------------------------------------------------------------------------------------------------------------------
 	// [0018연봉탭 제작시 사용한 임시코드] annualIncome 본 기능만 제작구현시 사용한 임시코드. 정식 서비스에서는 사용하지마세요.
-	@RequestMapping("/annual_income/annual_income")
+	@RequestMapping("/annualIncome")
 	public ModelAndView annualIncome(String fakeSelectCompanyId, ModelAndView mav) { //int형의 경우 null 불허. 이로인해 맵핑에러로 이어짐.
 		int selectCompanyId = 1; //1 : Company_mgt의 'トヨタ自動車株式会社'의 companyId(사용자분의 DB상태에 따라 출력기업 달리집니다.)
 	//----------------------------------------------------------------------------------------------------------------------
