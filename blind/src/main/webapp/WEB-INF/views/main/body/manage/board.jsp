@@ -89,7 +89,7 @@
 				<tbody>
 				<c:forEach var="board" items="${boardList}">
 					<tr>
-						<td class="center aligned" data-id="${board.boardId}">${board.boardOrder}</td>
+						<td class="right aligned" data-id="${board.boardId}">${board.boardOrder}</td>
 						<td class="center aligned" data-value="${board.closedFlag}">
 						<c:choose>
 							<c:when test="${board.closedFlag eq '0'}">正常</c:when>
@@ -235,7 +235,7 @@
 			} else {
 				let html = "";
 				for (let i = 0; i < boardListLength; ++i) {
-					html += "<tr><td class=\"center aligned\" data-id=\"" + boardList[i].boardId + "\">" +
+					html += "<tr><td class=\"right aligned\" data-id=\"" + boardList[i].boardId + "\">" +
 							boardList[i].boardOrder + "</td><td class=\"center aligned\" data-value=\"" +
 							boardList[i].closedFlag + "\">" + getClosedFlagName(boardList[i].closedFlag) +
 							"</td><td class=\"center aligned\" data-value=\"" +	boardList[i].anonymousFlag +
@@ -384,7 +384,7 @@
 	}
 
 	function getNewBoardRow(board) {
-		return "<tr class=\"warning\"><td class=\"center aligned\" data-id=\"" + board.boardId + "\">" +
+		return "<tr class=\"warning\"><td class=\"right aligned\" data-id=\"" + board.boardId + "\">" +
 				board.boardOrder + "</td><td class=\"center aligned\" data-value=\"" + board.closedFlag + "\">" +
 				getClosedFlagName(board.closedFlag) + "</td><td class=\"center aligned\" data-value=\"" +
 				board.anonymousFlag + "\">" + getAnonymousFlagName(board.anonymousFlag) + "</td><td>" +

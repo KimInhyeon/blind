@@ -100,7 +100,7 @@
 						</td>
 						<td class="center aligned">${report.type}</td>
 						<td>${report.name}</td>
-						<td class="center aligned">
+						<td>
 						<c:choose>
 							<c:when test="${empty report.reportReason}">${report.reportCodeReason}</c:when>
 							<c:otherwise>

@@ -37,4 +37,11 @@ public class CompanyNewsController {
 
 		return modelAndView;
 	}
+
+	@GetMapping(value = "companyNews/{companyId}", params = "ajax=true")
+	public Map<String, Object> getArticles(@PathVariable long companyId, @RequestParam(defaultValue = "1") int page) {
+		String companyName = companyNewsService.getCompanyName(companyId);
+
+		return companyNewsService.getCompanyNews(companyName, page);
+	}
 }

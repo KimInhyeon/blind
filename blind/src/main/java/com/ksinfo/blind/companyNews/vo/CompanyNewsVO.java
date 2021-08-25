@@ -3,6 +3,7 @@ package com.ksinfo.blind.companyNews.vo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.sql.Date;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -21,14 +22,14 @@ public final class CompanyNewsVO {
 		public Article(
 			@JsonProperty("author") String author, @JsonProperty("title") String title,
 			@JsonProperty("description") String description, @JsonProperty("url") String url,
-			@JsonProperty("urlToImage") String urlToImage, @JsonProperty("publishedAt") String publishedAt
+			@JsonProperty("urlToImage") String urlToImage, @JsonProperty("publishedAt") Date publishedAt
 		) {
-			this.author = author;
+			this.author = author == null ? "不明" : author;
 			this.title = title;
 			this.description = description;
 			this.url = url;
 			this.urlToImage = urlToImage;
-			this.publishedAt = publishedAt.substring(0, 10);
+			this.publishedAt = publishedAt.toString();
 		}
 
 		public String getAuthor() {

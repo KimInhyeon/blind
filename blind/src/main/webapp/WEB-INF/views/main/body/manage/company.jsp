@@ -137,7 +137,7 @@
 						<td class="businessType" data-value="${company.businessTypeCode}"></td>
 						<td>${company.companyAddress}</td>
 						<td class="center aligned">${company.foundingDate}</td>
-						<td>${company.workersCount}</td>
+						<td class="right aligned">${company.workersCount}</td>
 						<td>${company.companyDomain}</td>
 						<td>${company.userNickName}</td>
 						<td class="center aligned">${company.appDate}</td>
@@ -446,7 +446,7 @@
 						"<td class=\"businessType\" data-value=\"" + companyList[i].businessTypeCode + "\"></td>" +
 						"<td>" + companyList[i].companyAddress + "</td>" +
 						"<td class=\"center aligned\">" + companyList[i].foundingDate + "</td>" +
-						"<td>" + companyList[i].workersCount + "</td>" +
+						"<td class=\"right aligned\">" + companyList[i].workersCount + "</td>" +
 						"<td>" + companyList[i].companyDomain + "</td>" +
 						"<td>" + companyList[i].userNickName + "</td>" +
 						"<td class=\"center aligned\">" + companyList[i].appDate + "</td></tr>";
