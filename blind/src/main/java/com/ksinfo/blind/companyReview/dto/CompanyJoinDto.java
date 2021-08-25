@@ -166,6 +166,4 @@ public class CompanyJoinDto {
 	private int recommendFlag;
 
 
-
-
 }
