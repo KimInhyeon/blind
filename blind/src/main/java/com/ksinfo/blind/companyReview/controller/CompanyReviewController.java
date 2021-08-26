@@ -199,5 +199,15 @@ public class CompanyReviewController {
 		  mav.setViewName("main/companyReview/companyReviewPost");
 		  return mav;
 		}
-	  
+
+
+
+
+	//BLIND_0017_企業ポストタブ(2021-08-11)
+	@RequestMapping(value = "companyReviewDetails", method = RequestMethod.GET)
+	public ModelAndView companyReviewDetails(HttpServletRequest req) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("main/companyReview/companyReviewDetails");
+		return mav;
+	}
 }
