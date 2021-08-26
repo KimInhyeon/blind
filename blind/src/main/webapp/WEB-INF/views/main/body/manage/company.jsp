@@ -598,7 +598,7 @@
 				const td = checkedList[i].closest("tr").children;
 				const hidden = td[0].children;
 				if (td[1].innerText === "ERROR" || td[2].innerText === "ERROR" || !td[3].innerText.trim().length ||
-					!hidden[1].value.trim().length || !isPureKatakana(hidden[1].value.trim()) || td[4].innerText === "ERROR" ||
+					!hidden[1].value.trim().length || !isSearchCompanyName(hidden[1].value.trim()) || td[4].innerText === "ERROR" ||
 					!td[5].innerText.trim().length || !td[6].innerText.length || !td[7].innerText.trim().length ||
 					!td[8].innerText.trim().length || !td[9].innerText.length || !td[10].innerText.length
 				) {

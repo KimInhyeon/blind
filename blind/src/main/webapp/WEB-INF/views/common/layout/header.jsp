@@ -215,6 +215,13 @@
 				document.getElementById("closePostModal").addEventListener("click", function () {
 					$(postModal).modal("hide");
 				});
+				postModalTitle.addEventListener("input", function () {
+					const title = this.value.trim();
+					if (title.length > 200) {
+						alert("タイトルは２００文字以内にしてください");
+						this.value = title.substring(0, 200);
+					}
+				});
 				addEventListener("keydown", function (event) {
 					if (event.key === "Escape") {
 						$(".ui.modal").modal("hide");
@@ -316,6 +323,11 @@
 						postModalTitle.focus();
 						return;
 					}
+					if (postModalTitle.value.length > 200) {
+						alert("タイトルは２００文字以内にしてください");
+						postModalTitle.focus();
+						return;
+					}
 					editor.save().then(function (savedData) {
 						if (!savedData.blocks.length) {
 							alert("内容を入力してください");
@@ -323,11 +335,12 @@
 							return;
 						}
 						if (confirm("ポストを作成しますか？")) {
-							uploadingText.className = "ui active dimmer";
 							const blockList = savedData.blocks;
 							for (let i = blockList.length - 1; i > -1; --i) {
 								delete blockList[i].id;
 							}
+							uploadingText.firstElementChild.innerText = "ポストをアップロードしています";
+							uploadingText.className = "ui active dimmer";
 							fetch("${pageContext.request.contextPath}" + "/post", {
 								method: "POST",
 								headers: {
@@ -342,13 +355,15 @@
 							}).then(function (response) {
 								if (response.ok) {
 									return response.json();
-								} else {
-									throw response.status;
 								}
+								throw response.status;
 							}).then(function (postId) {
 								location.href = "${pageContext.request.contextPath}" + "/topicDetail?postId=" + postId;
 							}).catch(function (error) {
-
+								uploadingText.className = "ui disabled dimmer";
+								uploadingText.firstElementChild.innerText = "ファイルをアップロードしています";
+								alert("予期しないエラーが発生しました");
+								console.error(error);
 							});
 						}
 					});
