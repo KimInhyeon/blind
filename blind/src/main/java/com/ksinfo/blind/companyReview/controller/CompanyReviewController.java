@@ -203,10 +203,15 @@ public class CompanyReviewController {
 
 
 
-	//BLIND_0017_企業ポストタブ(2021-08-11)
-	@RequestMapping(value = "companyReviewDetails", method = RequestMethod.GET)
-	public ModelAndView companyReviewDetails(HttpServletRequest req) throws Exception {
-		ModelAndView mav = new ModelAndView();
+	//BLIND_0016 企業レビュー詳細照会(2021-08-25)
+	@RequestMapping(value = "companyReviewDetails", method = RequestMethod.POST)
+	public ModelAndView companyReviewDetails(Integer companyId, ModelAndView mav) throws Exception {
+
+		//0.임시정보(작동을 위해 임시적으로 구성한 정보입니다.
+		companyId = 1;
+		//List<CompanyMainViewDto>  companyReviewLists = companyReviewService.getCompanyReviews
+
+		mav.addObject("out",1);
 		mav.setViewName("main/companyReview/companyReviewDetails");
 		return mav;
 	}
