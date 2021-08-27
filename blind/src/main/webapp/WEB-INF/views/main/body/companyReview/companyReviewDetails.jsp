@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="jp">
@@ -23,7 +25,32 @@
             -webkit-user-select: none;
             user-select: none;
         }
+        .star-ratings {
+            color: #aaa9a9;
+            position: relative;
+            unicode-bidi: bidi-override;
+            width: max-content;
+            -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
+            -webkit-text-stroke-width: 1.3px;
+            -webkit-text-stroke-color: #2b2a29;
+        }
 
+        .star-ratings-fill {
+            color: #fff58c;
+            padding: 0;
+            position: absolute;
+            z-index: 1;
+            display: flex;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            -webkit-text-fill-color: gold;
+        }
+
+        .star-ratings-base {
+            z-index: 0;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
@@ -39,25 +66,75 @@
                 <div style="background-color:#0ea432;
                             padding: 1%;
                             display: flex;">
-                    <!-- 헤더파트1.별점 정보-->
+                    <!-- 헤더파트1.별점 정보& 신고버튼 배치-->
                     <div style="font-size: 1.6em; ">
                         2.5
-                        <!-- 별점(숫자) 다음으로 각 항목 볼수 있도록 하는 드롭다운 코드 기입하도록.-->
                     </div>
                     <div class="div_star" style="display: inline-block;">
-                        <!-- css로 별점에 따라 별을 채워주는 코드로 대체하도록한다-->
-                        <i class="star icon"></i>
-                        <i class="star icon"></i>
-                        <i class="star half icon"></i>
-                        <i class="star outline icon"></i>
-                        <i class="star outline icon"></i>
+                        <div class="ui star rating"
+                             data-rating="2"
+                             data-max-rating="5">
+                        </div>
                     </div>
-                    <!-- 헤더파트2.한줄평&작성자 정보-->
+
+                    <div>
+                        <!-- 별점(별이미지로 표현) 다음으로 각 항목 볼수 있도록 하는 드롭다운.-->
+                        <div class="div_star">
+                            <div class="ui star rating" data-rating="1"
+                                 data-max-rating="5"></div>
+                            <div class="ui button" style="background: white; margin:0px;"
+                                 data-position="bottom center"><i class="angle down icon"></i></div>
+                            <div class="ui flowing popup top left transition hidden">
+                                <div class="column" data-position="bottom left">
+                                    <div class="div_star">
+                                        <div class="ui star rating" data-rating="2"
+                                             data-max-rating="5"　style="margin-right:10px;">
+                                        </div>
+                                        <span style="margin-right:10px;">キャリア向上</span>
+                                    </div>
+                                    <div class="div_star">
+                                        <div class="ui star rating"
+                                             data-rating="3"
+                                             data-max-rating="5"　style="margin-right:10px;">
+                                        </div>
+                                        <span style="margin-right:10px;">ワークライフバランス</span>
+                                    </div>
+                                    <div class="div_star">
+                                        <div class="ui star rating"
+                                             data-rating="4"
+                                             data-max-rating="5"　style="float:left; margin-right:10px;">
+                                        </div>
+                                        <span style="margin-right:10px;">社内文化</span>
+                                    </div>
+                                    <div class="div_star">
+                                        <div class="ui star rating" data-rating="5"
+                                             data-max-rating="5"　style="float:left; margin-right:10px;">
+                                        </div>
+                                        <span style="margin-right:10px;">給料と福祉</span>
+                                    </div>
+                                    <div class="div_star">
+                                        <div class="ui star rating" data-rating="1"
+                                             data-max-rating="5"　style="float:left; margin-right:10px;">
+                                        </div>
+                                        <span style="margin-right:10px;">経営陣</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <!-- 신고버튼 -->
+                    <div class="ui icon button" data-content="Add users to your feed">
+                        <i class="add icon"></i>
+                    </div>
+
                 </div>
+
+                <!-- 헤더파트2.한줄평&작성자 정보-->
                 <div style=" dispaly:block; background-color: #9f3a38">
                     <span style="font-size: 1.3em;">예제-한줄평입니다</span>
                     <div>작성자 근무기업, 닉네임, 작성 등등... </div>
                 </div>
+
+
             </div>
 
             <!-- 1.2.기업리뷰1개-본문내용. -->
@@ -80,7 +157,7 @@
 
             <!-- 1.3.기업리뷰1개-푸터역할. 추천(도움이됩니다)버튼, 공유(트윗/페북/URL복사)기능-->
             <div style="background-color: plum;
-                        padding-bottom : 6%;">
+                        padding-bottom : 10%;">
 
                 <div style="float:left;">
                     <i class="thumbs up icon"></i> <!-- <i class="thumbs up outline icon"></i> -->
@@ -155,4 +232,16 @@
     </div>
 
 </body>
+<script>
+    $('.button')
+        .popup({
+            inline: true,
+            hoverable: true
+        })
+    ;
+    $('.ui.rating')
+        .rating('disable');
+
+
+</script>
 </html>
