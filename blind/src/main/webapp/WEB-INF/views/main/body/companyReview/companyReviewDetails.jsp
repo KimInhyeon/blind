@@ -134,11 +134,18 @@
                      </div>
 
                     <div style="position: relative;">
-                        <i class="lock icon"></i>
-                        기업리뷰를 작성하시면 모든 리뷰들을 보실수 있습니다!
-                        <button class="ui primary button">
-                            리뷰 작성하러 가기
-                        </button>
+                        <div style="text-align: center;">
+                            <i class="lock icon"></i>
+                        </div>
+                        <div style="text-align: center;">
+                            기업리뷰를 작성하시면 모든 리뷰들을 보실수 있습니다!
+                        </div>
+                        <div style="text-align: center;">
+                            <button class="ui primary button">
+                                리뷰 작성하러 가기
+                            </button>
+                        </div>
+
                     </div>
 
                 </div>
