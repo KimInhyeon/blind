@@ -24,7 +24,8 @@ public class AlertController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(AlertController.class);
 
-	@Autowired AlertService alertService;  
+	@Autowired
+	AlertService alertService;
 	
 	//1.신고버튼 클릭시 해당 신고유형에 맞는 신고리스트들을 리턴.			
 	@RequestMapping(value="/loadAlertReasonList",method=RequestMethod.POST)
