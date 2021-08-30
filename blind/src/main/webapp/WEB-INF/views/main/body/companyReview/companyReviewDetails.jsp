@@ -63,55 +63,53 @@
 
             <!-- 1.1.기업리뷰1개-헤더부분. 별점/제목(한줄평)/작성자정보(닉네임,업종,작성일)/신고버튼 배치.-->
             <div style="background-color:#2e3032; padding: 0.5%;">
-                <div style="background-color:#0ea432;
-                            padding: 1%;
-                            display: flex;">
+                <div style="padding: 1%;display: flex;">
                     <!-- 헤더파트1.별점 정보& 신고버튼 배치-->
                     <div style="font-size: 1.6em; ">
-                        2.5
+                        ${companyReviewLists[0].allPoint}
                     </div>
                     <div class="div_star" style="display: inline-block;">
                         <div class="ui star rating"
-                             data-rating="2"
+                             data-rating="${companyReviewLists[0].allPoint}"
                              data-max-rating="5">
                         </div>
                     </div>
 
+                    <!-- 별점(별이미지로 표현) 다음으로 각 항목 볼수 있도록 하는 드롭다운.-->
                     <div>
-                        <!-- 별점(별이미지로 표현) 다음으로 각 항목 볼수 있도록 하는 드롭다운.-->
                         <div class="div_star">
                             <div class="ui button" style="background: white; margin:0px;"
                                  data-position="bottom center"><i class="angle down icon"></i></div>
                             <div class="ui flowing popup top left transition hidden">
                                 <div class="column" data-position="bottom left">
                                     <div class="div_star">
-                                        <div class="ui star rating" data-rating="2"
+                                        <div class="ui star rating" data-rating="${companyReviewLists[0].careerPoint}"
                                              data-max-rating="5"　style="margin-right:10px;">
                                         </div>
                                         <span style="margin-right:10px;">キャリア向上</span>
                                     </div>
                                     <div class="div_star">
                                         <div class="ui star rating"
-                                             data-rating="3"
+                                             data-rating=${companyReviewLists[0].workLifeBalancePoint}
                                              data-max-rating="5"　style="margin-right:10px;">
                                         </div>
                                         <span style="margin-right:10px;">ワークライフバランス</span>
                                     </div>
                                     <div class="div_star">
                                         <div class="ui star rating"
-                                             data-rating="4"
+                                             data-rating=${companyReviewLists[0].companyCulturePoint}
                                              data-max-rating="5"　style="float:left; margin-right:10px;">
                                         </div>
                                         <span style="margin-right:10px;">社内文化</span>
                                     </div>
                                     <div class="div_star">
-                                        <div class="ui star rating" data-rating="5"
+                                        <div class="ui star rating" data-rating=${companyReviewLists[0].payPoint}
                                              data-max-rating="5"　style="float:left; margin-right:10px;">
                                         </div>
                                         <span style="margin-right:10px;">給料と福祉</span>
                                     </div>
                                     <div class="div_star">
-                                        <div class="ui star rating" data-rating="1"
+                                        <div class="ui star rating" data-rating=${companyReviewLists[0].headPoint}
                                              data-max-rating="5"　style="float:left; margin-right:10px;">
                                         </div>
                                         <span style="margin-right:10px;">経営陣</span>
@@ -119,50 +117,44 @@
                                 </div>
                             </div>
                         </div>
-
-                    <!-- 신고버튼 -->
-                    <div class="ui icon button" data-content="Add users to your feed">
-                        <i class="add icon"></i>
                     </div>
-
-                </div>
-
-                <!-- 헤더파트2.한줄평&작성자 정보-->
-                <!-- <div style=" dispaly:block; background-color: #9f3a38"> -->
-                <div style=" dispaly:block; >
-                    <span style="font-size: 1.3em;"> testComment1 </span>
-                    <div>(✿╹◡╹) キンちゃん_testMan </div> <!-- 작성자 근무기업, 닉네임, 작성 등등...  -->
-                </div>
-
-
             </div>
-
+            <!-- 헤더파트2.한줄평&작성자 정보-->
+            <!-- <div style=" dispaly:block; background-color: #9f3a38"> -->
+            <div style="padding: 1.5%;">
+            	<span style="font-size: 1.3em;"> ${companyReviewLists[0].simpleComment} </span>
+           	    <!-- 리뷰작성자 근무기업, 닉네임, 작성일자 등등...  -->
+                <!-- 리뷰작성자 근무기업은 미기재/리뷰작성자의 근무기업이름 갖고오도록 sql 갱신할 것.-->
+                <div>${companyReviewLists[0].userNickname}</div>
+                <div>${companyReviewLists[0].recCreateDate}</div>
+            </div>
+                
             <!-- 1.2.기업리뷰1개-본문내용. -->
             <!-- <div style="background-color: #573A08; padding: 0.5%;"> -->
             <div style="padding: 0.5%;">
                 <!-- 1.2.기업리뷰1개-본문내용. 장점 내용 배치.-->
                 <div>
-                    <span style="font-size: 1.2em;">장점</span>
-                    <div>
-                        장점 내용을 출력합니다.
-                    </div>
+                    <span style="font-size: 1.2em;">長所</span>
+                    <div>${companyReviewLists[0].advantages}</div>
                 </div>
                 <!-- 1.2.기업리뷰1개-본문내용. 단점 내용 배치.-->
                 <div>
-                    <span style="font-size: 1.2em;">단점</span>
-                    <div>
-                        단점 내용을 출력합니다.
-                    </div>
+                    <span style="font-size: 1.2em;">短所</span>
+                    <div>${companyReviewLists[0].disadvantages}</div>
                 </div>
             </div>
 
             <!-- 1.3.기업리뷰1개-푸터역할. 추천(도움이됩니다)버튼, 공유(트윗/페북/URL복사)기능-->
-            <div style="background-color: plum;
-                        padding-bottom : 10%;">
-
-                <div style="float:left;">
-                    <i class="thumbs up icon"></i> <!-- <i class="thumbs up outline icon"></i> -->
-                    도움이 됩니다
+            <!-- <div style="background-color: plum; padding-bottom : 10%;">-->
+            <div style="padding-bottom : 10%;">
+                <div style="float:left;">       
+	                <button class="ui primary button">
+						<i class="thumbs up icon"></i> <!-- <i class="thumbs up outline icon"></i> -->
+                    	役立ちます(${companyReviewLists[0].countHelpful})
+					</button>
+                
+                
+                    
                 </div>
                  <div style="float:right;"><!-- 우측배치 -->
                     <i class="twitter icon"></i>
@@ -181,8 +173,8 @@
 		            margin-bottom: 2.0%;
                     padding: 1.2%; ">           <!-- 클릭영역 넓히기 위해 패딩적용.-->
             <i class="arrow left icon"></i>
-            (기업명)
-            리뷰 모두 보기
+            「${companyName}」のレビューをすべて見る
+            
         </div>
 
         <!-- 3.이외기업리뷰글들 리스트형으로 출력.-->
@@ -198,7 +190,6 @@
             </div>
             -->
 
-            <p>div겹치기(CSS position기능 적용)</p>
             <div><!--원래 부모역할(위로 먼저나옴. 리뷰작성을 독려하는 멘트 및 버튼 배치)-->
 
                  <div style="position: relative;"> <!-- new 부모-->

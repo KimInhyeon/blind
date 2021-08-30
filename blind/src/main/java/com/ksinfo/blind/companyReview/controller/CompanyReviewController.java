@@ -146,7 +146,6 @@ public class CompanyReviewController {
 		int userid = (int)account.getUserId();
 
 		companyReviewService.sendRequestCompanyRegist(requestCompnayName, requestCompnayEmail, userid);
-
 		return 1;//성공시1을 리턴하도록 실시.
 	}
 
@@ -207,12 +206,14 @@ public class CompanyReviewController {
 
 		//0.임시정보(작동을 위해 임시적으로 구성한 정보입니다.
 		companyId = 1;	//기업ID
+		
+		String companyName = companyReviewService.getCompanyName(companyId);
 		List<CompanyReviewDto> companyReviewLists= companyReviewService.getCompanyReviews(companyId);
 
 		//company = companyReviewService.getPosts(navi.getCurrentPage(), paramMap);//사용자가 입력한 검색어로 검색
-
-		mav.addObject("out",1);
-
+		
+		mav.addObject("companyName", companyName);
+		mav.addObject("companyReviewLists", companyReviewLists);
 		mav.setViewName("main/companyReview/companyReviewDetails");
 		return mav;
 	}
