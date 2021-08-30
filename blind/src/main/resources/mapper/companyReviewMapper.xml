@@ -223,7 +223,7 @@ order by po.post_id DESC;
 </select>
 
 
-<select id="getCompanyReviews" parameterType="java.util.Map" resultType="com.ksinfo.blind.companyReview.dto">
+<select id="getCompanyReviews" parameterType="java.util.Map" resultType="com.ksinfo.blind.companyReview.dto.CompanyReviewDto">
 select DISTINCT
 	crm.all_point 					-- 기업리뷰1-별점(1)총 별점
 	,crm.career_point				-- 기업리뷰2-별점(2)경력점수
