@@ -63,12 +63,12 @@
 					</div>
 				</div>
 				<div class="row">${article.description}</div>
-				<div class="row"><a href="${article.url}">${article.url}</a></div>
+				<div class="row"><a href="${article.url}" target="_blank">${article.url}</a></div>
 				<div class="ui segment items row">
 					<div class="item">
 						<img class="ui small image" src="${article.urlToImage}">
 						<div class="middle aligned content">
-							<a class="description" href="${article.url}">${article.title}</a>
+							<a class="description" href="${article.url}" target="_blank">${article.title}</a>
 							<p class="extra" style="padding-top: 3%;">${article.author}</p>
 						</div>
 					</div>
