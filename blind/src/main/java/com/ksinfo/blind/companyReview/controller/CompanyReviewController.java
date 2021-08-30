@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ksinfo.blind.search.dto.CompanyReviewDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -200,18 +201,19 @@ public class CompanyReviewController {
 		  return mav;
 		}
 
-
-
-
 	//BLIND_0016 企業レビュー詳細照会(2021-08-25)
-	@RequestMapping(value = "companyReviewDetails", method = RequestMethod.POST)
+	@RequestMapping(value = "companyReviewDetails", method = RequestMethod.GET)
 	public ModelAndView companyReviewDetails(Integer companyId, ModelAndView mav) throws Exception {
 
 		//0.임시정보(작동을 위해 임시적으로 구성한 정보입니다.
-		companyId = 1;
-		//List<CompanyMainViewDto>  companyReviewLists = companyReviewService.getCompanyReviews
+		companyId = 1;	//기업ID
+		//List<companyReviewDto>  companyReviewLists = companyReviewService.getCompanyReviews
+		//List<CompanyReviewDto> companyReviews= companyReviewService.getCompanyReviews(companyId);
+
+		//company = companyReviewService.getPosts(navi.getCurrentPage(), paramMap);//사용자가 입력한 검색어로 검색
 
 		mav.addObject("out",1);
+
 		mav.setViewName("main/companyReview/companyReviewDetails");
 		return mav;
 	}

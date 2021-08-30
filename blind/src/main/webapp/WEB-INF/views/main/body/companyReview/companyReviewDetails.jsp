@@ -80,8 +80,6 @@
                     <div>
                         <!-- 별점(별이미지로 표현) 다음으로 각 항목 볼수 있도록 하는 드롭다운.-->
                         <div class="div_star">
-                            <div class="ui star rating" data-rating="1"
-                                 data-max-rating="5"></div>
                             <div class="ui button" style="background: white; margin:0px;"
                                  data-position="bottom center"><i class="angle down icon"></i></div>
                             <div class="ui flowing popup top left transition hidden">
@@ -121,6 +119,7 @@
                                 </div>
                             </div>
                         </div>
+
                     <!-- 신고버튼 -->
                     <div class="ui icon button" data-content="Add users to your feed">
                         <i class="add icon"></i>
@@ -129,16 +128,18 @@
                 </div>
 
                 <!-- 헤더파트2.한줄평&작성자 정보-->
-                <div style=" dispaly:block; background-color: #9f3a38">
-                    <span style="font-size: 1.3em;">예제-한줄평입니다</span>
-                    <div>작성자 근무기업, 닉네임, 작성 등등... </div>
+                <!-- <div style=" dispaly:block; background-color: #9f3a38"> -->
+                <div style=" dispaly:block; >
+                    <span style="font-size: 1.3em;"> testComment1 </span>
+                    <div>(✿╹◡╹) キンちゃん_testMan </div> <!-- 작성자 근무기업, 닉네임, 작성 등등...  -->
                 </div>
 
 
             </div>
 
             <!-- 1.2.기업리뷰1개-본문내용. -->
-            <div style="background-color: #573A08; padding: 0.5%;">
+            <!-- <div style="background-color: #573A08; padding: 0.5%;"> -->
+            <div style="padding: 0.5%;">
                 <!-- 1.2.기업리뷰1개-본문내용. 장점 내용 배치.-->
                 <div>
                     <span style="font-size: 1.2em;">장점</span>
