@@ -222,4 +222,48 @@ where (
 order by po.post_id DESC;
 </select>
 
+
+<select id="getCompanyReviews" parameterType="java.util.Map" resultType="com.ksinfo.blind.companyReview.dto.CompanyReviewDto">
+select DISTINCT
+	crm.all_point 					-- 기업리뷰1-별점(1)총 별점
+	,crm.career_point				-- 기업리뷰2-별점(2)경력점수
+	,crm.work_life_balance_point	-- 기업리뷰3-별점(3)워라밸점수
+	,crm.pay_point					-- 기업리뷰4-별점(4)급료점수
+	,crm.company_culture_point		-- 기업리뷰5-별점(5)기업문화점수
+	,crm.head_point					-- 기업리뷰6-별점(6)임원점수(경영진평가)
+	,crm.simple_comment				-- 기업리뷰7-한줄평, 제목역할
+	,um.user_nickname				-- 기업리뷰8-작성자 닉네임
+	,crm.rec_create_date			-- 기업리뷰9-작성일(나중에 create_date 추가필요.)
+	,crm.advantages					-- 기업리뷰8-장점,
+	,crm.disadvantages				-- 기업리뷰9-단점,
+--	,jgm.job_group_name				-- 작성자 직군(대기/현재 user_job_code컬럼 추가승인 대기중.)
+	,(select
+		count(rri.helpful)
+	  from blind.review_recommend_inf as rri
+	  where rri.company_id =#{companyId}
+	  and rri.company_review_id = crm.company_review_id) as count_helpful --도움이 되었어요는 해당기업의 id에 맞는 것들만 카운트.
+
+	from
+		blind.company_review_mgt as crm
+
+	-- left조인 1. USER_MGT (유저의 닉네임 로드)
+	left join blind.user_mgt as um
+		on crm.user_id = um.user_id
+
+	-- left조인 1. USER_MGT (기업리뷰 작성자의 직종명 출력용)
+	left join blind.job_group_mst as jgm
+		on crm.user_id = um.user_id
+
+	-- left조인 3. review_recommend_id (기업리뷰의 '도움이 되었습니다(helpful)' 가져오기)
+	left join blind.review_recommend_inf as rri
+		on rri.company_id = crm.company_id
+
+	where
+		crm.company_id = #{companyId}
+	and
+		crm.verify_flag = '1' --verify_flag:기업리뷰승인여부(0:미승인, 1:승인)
+
+	order by count_helpful DESC;--정렬기준 : '도움이 됬어요'버튼의 갯수가 많을수록 가장먼저 출력된다.
+</select>
+
 </mapper>

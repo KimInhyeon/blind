@@ -2,12 +2,16 @@ package com.ksinfo.blind.companyReview.service;
 
 import com.ksinfo.blind.companyReview.dto.CompanyDto;
 import com.ksinfo.blind.companyReview.dto.CompanyMainViewDto;
+import com.ksinfo.blind.companyReview.dto.CompanyReviewDto;
+
 import com.ksinfo.blind.companyReview.mapper.CompanyReviewMapper;
 import com.ksinfo.blind.search.dto.PostDto;
 import com.ksinfo.blind.util.PageNavigator;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,5 +63,14 @@ public class CompanyReviewService {
 		int offset = (page-1)*recordLimit;
 		return companyReviewMapper.getPosts(new RowBounds(offset, recordLimit), paramMap);
 	}
-	
+
+	//BLIND_0016 企業レビュー詳細照会(2021-08-25)
+	List<CompanyReviewDto> getCompanyReviews(int companyId){
+
+
+		java.util.Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("companyId", companyId);
+
+		return companyReviewMapper.getCompanyReviews(paramMap);
+	}
 }
