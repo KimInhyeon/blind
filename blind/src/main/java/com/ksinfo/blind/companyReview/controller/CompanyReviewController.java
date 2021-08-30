@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
-import com.ksinfo.blind.search.dto.CompanyReviewDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -19,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ksinfo.blind.companyReview.dto.CompanyDto;
 import com.ksinfo.blind.companyReview.dto.CompanyJoinDto;
 import com.ksinfo.blind.companyReview.dto.CompanyMainViewDto;
+import com.ksinfo.blind.companyReview.dto.CompanyReviewDto;
+
 import com.ksinfo.blind.companyReview.service.CompanyReviewService;
 import com.ksinfo.blind.companyReview.service.CompanyReviewWriteService;
 import com.ksinfo.blind.search.dto.PostDto;
@@ -207,8 +207,7 @@ public class CompanyReviewController {
 
 		//0.임시정보(작동을 위해 임시적으로 구성한 정보입니다.
 		companyId = 1;	//기업ID
-		//List<companyReviewDto>  companyReviewLists = companyReviewService.getCompanyReviews
-		//List<CompanyReviewDto> companyReviews= companyReviewService.getCompanyReviews(companyId);
+		List<CompanyReviewDto> companyReviewLists= companyReviewService.getCompanyReviews(companyId);
 
 		//company = companyReviewService.getPosts(navi.getCurrentPage(), paramMap);//사용자가 입력한 검색어로 검색
 

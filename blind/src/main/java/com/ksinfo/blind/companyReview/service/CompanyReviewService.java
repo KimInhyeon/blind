@@ -65,12 +65,7 @@ public class CompanyReviewService {
 	}
 
 	//BLIND_0016 企業レビュー詳細照会(2021-08-25)
-	List<CompanyReviewDto> getCompanyReviews(int companyId){
-
-
-		java.util.Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("companyId", companyId);
-
-		return companyReviewMapper.getCompanyReviews(paramMap);
+	public List<CompanyReviewDto> getCompanyReviews(int companyId){
+		return companyReviewMapper.getCompanyReviews(companyId);
 	}
 }

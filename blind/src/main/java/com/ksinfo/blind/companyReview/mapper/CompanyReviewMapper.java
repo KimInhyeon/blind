@@ -31,5 +31,5 @@ public interface CompanyReviewMapper {
 	List<PostDto> getPosts(RowBounds row, Map<String, Object> paramMap );
 
 	//BLIND_0016 企業レビュー詳細照会(2021-08-25)
-	List<CompanyReviewDto> getCompanyReviews(Map<String, Object> paramMap);
+	List<CompanyReviewDto> getCompanyReviews(int companyId);
 }
