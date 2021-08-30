@@ -22,6 +22,18 @@ public class CompanyReviewDto {
 											where rri.company_id =#{companyId}
 											and rri.company_review_id = crm.company_review_id) as count_helpful --도움이 되었어요는 해당기업의 id에 맞는 것들만 카운트.*/
 
+	private int companyReviewId;     		//,crm.company_review_id			-- 포스트들처럼 여러개의 기업리뷰글을 게시&링크하려면 필요.
+	
+	
+	
+	public int getCompanyReviewId() {
+		return companyReviewId;
+	}
+
+	public void setCompanyReviewId(int companyReviewId) {
+		this.companyReviewId = companyReviewId;
+	}
+
 	public int getAllPoint() {
 		return allPoint;
 	}

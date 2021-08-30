@@ -236,6 +236,7 @@ select DISTINCT
 	,crm.rec_create_date			-- 기업리뷰9-작성일(나중에 create_date 추가필요.)
 	,crm.advantages					-- 기업리뷰8-장점,
 	,crm.disadvantages				-- 기업리뷰9-단점,
+	,crm.company_review_id			-- 포스트들처럼 여러개의 기업리뷰글을 게시 및 링크하려면 필요.
 --	,jgm.job_group_name				-- 작성자 직군(대기/현재 user_job_code컬럼 추가승인 대기중.)
 	,(select
 		count(rri.helpful)

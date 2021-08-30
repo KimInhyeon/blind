@@ -206,6 +206,8 @@ public class CompanyReviewController {
 
 		//0.임시정보(작동을 위해 임시적으로 구성한 정보입니다.
 		companyId = 1;	//기업ID
+		int blurEffectSet = 1; //이외게시글 블러효과적용여부. 기업리뷰 작성여부에 따라 값 결정.(0:기업리뷰 미작성, 1:기업리뷰 작성)
+		
 		
 		String companyName = companyReviewService.getCompanyName(companyId);
 		List<CompanyReviewDto> companyReviewLists= companyReviewService.getCompanyReviews(companyId);
@@ -214,6 +216,7 @@ public class CompanyReviewController {
 		
 		mav.addObject("companyName", companyName);
 		mav.addObject("companyReviewLists", companyReviewLists);
+		mav.addObject("blurEffectSet", blurEffectSet);
 		mav.setViewName("main/companyReview/companyReviewDetails");
 		return mav;
 	}
