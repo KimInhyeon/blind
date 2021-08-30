@@ -154,9 +154,9 @@
 				<!-- 페이스북,트위터등 공유링크  -->                    
                 </div>
                  <div style="float:right;"><!-- 우측배치 -->
-                    <i class="twitter icon"></i>
-                    <i class="facebook icon"></i>
-                    <i class="external alternate icon"></i>
+                    <i class="twitter icon" style="font-size: 2.5em;"></i>
+                    <i class="facebook icon" style="font-size: 2.5em;"></i>
+                    <i class="external alternate icon" style="font-size: 2.5em;"></i>
                 </div>
             </div>
 
@@ -300,13 +300,15 @@
                 블러효과 테스트
             </div>
             -->
-
-            <div><!--원래 부모역할(위로 먼저나옴. 리뷰작성을 독려하는 멘트 및 버튼 배치)-->
-                 <div style="position: relative;"> <!-- new 부모-->
-                     <!--자식역할(기업리뷰내용. 블러등으로 내용 못보게 처리.) -->
-                     <div class='stop-dragging',
+            
+			<!-- 예제2-블러 및 드래그방지까지적용. 주석을 쓸 수 없어 id에 주석사항을 기재.id내용 참고바람.-->
+			<!-- 
+            <div id="부모역할">
+                 <div id="새 부모역할" style="position: relative;"> 
+                     <div id="자식역할(기업리뷰내용. 블러등으로 내용 못보게 처리.)"
+                     	 class='stop-dragging',
                           style="position: absolute;
-                         -webkit-filter: blur(3px);">      <!-- -webkit-filter : css 블러(글씨흐림)효과 -->
+                         -webkit-filter: blur(3px);">     
                      	[!]기업리뷰내용(밑에 깔리고 블러로 가려질 글)
                      </div>
 
@@ -325,6 +327,8 @@
                     </div>
                 </div>
             </div>
+            -->
+            
         </div>
 
     </div>
