@@ -89,55 +89,39 @@
 
     </select>
 
-    <select id="oneCompanyReview" parameterType="java.lang.Long" resultType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">
-
+    <select id="oneCompanyReview" resultType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">
 
         select
-            c1.company_id
-             ,c1.simple_comment
-             ,c1.advantages
-             ,c1.disadvantages
-             ,c2.all_point
-             ,c1.rec_create_date
-             ,c1.company_review_id
+            c1.company_id as companyId
+             ,c1.simple_comment as simpleComment
+             ,c1.advantages as advantages
+             ,c1.disadvantages as disadvantages
+             ,c1.all_point as allPoint
+             ,c1.rec_create_date as recCreateDate
+             ,c1.company_review_id as companyReviewId
+             ,c1.career_point as careerPoint
+             ,c1.work_life_balance_point as workLifeBalacnePoint
+             ,c1.company_culture_point as companyCulturePoint
+             ,c1.pay_point as payPoint
+             ,c1.head_point as headPoint
+             ,(select count(*) from blind.review_recommend_inf as rec where c1.company_review_id= rec.company_review_id) as helpfulCount
         from
 
             blind.company_review_mgt c1
-                inner join
-            (
-                select
-                    all_point
-                     ,company_id
-                     ,company_review_id
-                from
-                    blind.company_review_mgt
-                where
-                        company_review_id = ( select
-                                                  c3.company_review_id
-                                              from
-                                                  (
-                                                      select
-                                                          company_review_id
-                                                           ,sum(helpful) as cnt
-                                                      from
-                                                          blind.review_recommend_inf
-                                                      where
-                                                          company_id=#{companyId}
-                                                      group by
-                                                          company_review_id
-                                                      order by
-                                                          cnt desc
-                                                          fetch first 1 rows only
-                                                  ) c3
 
 
 
-                    )
+            where company_id =#{companyId}
+              and
+            c1.logical_del_flag='0'
+              and
+            c1.verify_flag='1'
+        order by
+            helpfulCount desc
+            fetch first row only;
 
 
-            )c2
-            on
-                c1.company_review_id=c2.company_review_id
+
     </select>
     <select id="companyReviewList" parameterType="Map" resultType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">
 

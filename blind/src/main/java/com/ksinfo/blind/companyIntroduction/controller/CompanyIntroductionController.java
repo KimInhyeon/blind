@@ -62,6 +62,10 @@ public class CompanyIntroductionController {
 			CompanyJoinDto oneCompanyReview = companyIntroductionService.oneCompanyReview(companyId);
 			companyReviewList.remove(0);
 			mav.addObject("oneCompanyReview", oneCompanyReview);
+
+
+
+
 		}
 
 		mav.addObject("companyShowList", companyReviewList);

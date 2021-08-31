@@ -19,9 +19,7 @@
             }
             location.search = searchParams.toString();
         }
-        $(document).ready(function(){
-            alert("${oneCompanyReview.recCreateDate}");
-        });
+
 
         function countUp(companyReviewId) {
 
@@ -139,7 +137,13 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>${companyAverageDto.careerPoint}★キャリア向上</td>
+                    <td>${companyAverageDto.careerPoint}
+                        <div class="ui star rating" data-rating="1"
+                             data-max-rating="1"　style="margin-right:10px;">
+                        </div>
+
+
+                        キャリア向上</td>
 
 
                     <td>
@@ -153,26 +157,49 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>${companyAverageDto.workLifeBalancePoint}★ワークライフバランス</td>
+                    <td>${companyAverageDto.workLifeBalancePoint}
+                        <div class="ui star rating" data-rating="1"
+                                data-max-rating="1"　style="margin-right:10px;">
+                        </div>
+
+
+                        ワークライフバランス</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>${companyAverageDto.payPoint}★給料と福祉</td>
+                    <td>${companyAverageDto.payPoint}
+                        <div class="ui star rating" data-rating="1"
+                             data-max-rating="1"　style="margin-right:10px;">
+                        </div>
+
+                        給料と福祉</td>
                 </tr>
                 　　　　
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>${companyAverageDto.companyCulturePoint}★社内文化</td>
+                    <td>${companyAverageDto.companyCulturePoint}
+                        <div class="ui star rating" data-rating="1"
+                             data-max-rating="1"　style="margin-right:10px;">
+                        </div>
+
+
+                        社内文化</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>${companyAverageDto.headPoint}★経営陣</td>
+                    <td>${companyAverageDto.headPoint}
+                        <div class="ui star rating" data-rating="1"
+                             data-max-rating="1"　style="margin-right:10px;">
+                        </div>
+
+
+                        経営陣</td>
                 </tr>
                 　　　　　
             </table>
@@ -189,7 +216,7 @@
                 <tr>
                     <td>${oneCompanyReview.allPoint }</td>
                     <td><h4>"${oneCompanyReview.simpleComment }"</h4></td>
-                    <td><fmt:formatDate value="${oneCompanyReview.recCreateDate}" pattern="YYYY-MM-DD"/></td>
+                    <td>${oneCompanyReview.recCreateDate}</td>
 
                     <td>
                         <%--<div id="sample"  data-position="bottom left"
@@ -215,50 +242,52 @@
                         <div class="div_star">
                             <div class="ui star rating" data-rating="${oneCompanyReview.allPoint}"
                                  data-max-rating="5"></div>
-                            <div class="ui button" style="background: white; margin:0px;" data-position="bottom center">
-                                <i class="angle down icon"></i></div>
+                            <div class="ui button" style="background: white; margin:0px;"
+                                 data-position="bottom center"><i class="angle down icon"></i></div>
                             <div class="ui flowing popup top left transition hidden">
 
                                 <div class="column" data-position="bottom left">
 
                                     <div class="div_star">
-                                        <div class="ui star rating"
-                                             data-rating="${oneCompanyReview.careerPoint}"
-                                             data-max-rating="5">ワークライフバランス
+                                        <div class="ui star rating" data-rating="${oneCompanyReview.careerPoint}"
+                                             data-max-rating="5"　style="margin-right:10px;">
                                         </div>
+                                        <span style="margin-right:10px;">キャリア向上</span>
 
                                     </div>
                                     <div class="div_star">
                                         <div class="ui star rating"
-                                             data-rating="${oneCompanyReview.workLifeBalancePoint}" data-max-rating="5">
-                                            ワークライフバランス
+                                             data-rating="${oneCompanyReview.workLifeBalancePoint}"
+                                             data-max-rating="5"　style="margin-right:10px;">
                                         </div>
+
+                                        <span style="margin-right:10px;">ワークライフバランス</span>
 
                                     </div>
                                     <div class="div_star">
                                         <div class="ui star rating"
-                                             data-rating="${oneCompanyReview.companyCulturePoint}" data-max-rating="5">
-                                            社内文化
+                                             data-rating="${oneCompanyReview.companyCulturePoint}"
+                                             data-max-rating="5"　style="float:left; margin-right:10px;">
                                         </div>
+                                        <span style="margin-right:10px;">社内文化</span>
 
                                     </div>
                                     <div class="div_star">
                                         <div class="ui star rating" data-rating="${oneCompanyReview.payPoint}"
-                                             data-max-rating="5">給料と福祉
+                                             data-max-rating="5"　style="float:left; margin-right:10px;">
                                         </div>
-
+                                        <span style="margin-right:10px;">給料と福祉</span>
                                     </div>
                                     <div class="div_star">
                                         <div class="ui star rating" data-rating="${oneCompanyReview.headPoint}"
-                                             data-max-rating="5">経営陣
+                                             data-max-rating="5"　style="float:left; margin-right:10px;">
                                         </div>
-
+                                        <span style="margin-right:10px;">経営陣</span>
                                     </div>
                                 </div>
 
 
                             </div>
-
                         </div>
 
                     </td>
@@ -327,7 +356,7 @@
                             <td> ${companyShowList.allPoint}</td>
                             <td><h4>"${companyShowList.simpleComment }"</h4></td>
 
-                            <td><fmt:formatDate value="${companyShowList.recCreateDate}" pattern="YYYY-MM-DD"/></td>
+                            <td>${companyShowList.recCreateDate}</td>
                             <td>
 
                                 <div class="ui button" style="background: white; margin:0px;"
@@ -361,35 +390,39 @@
 
                                             <div class="div_star">
                                                 <div class="ui star rating" data-rating="${companyShowList.careerPoint}"
-                                                     data-max-rating="5">キャリア向上
+                                                    data-max-rating="5"　style="margin-right:10px;">
                                                 </div>
+                                                <span style="margin-right:10px;">キャリア向上</span>
 
                                             </div>
                                             <div class="div_star">
                                                 <div class="ui star rating"
                                                      data-rating="${companyShowList.workLifeBalancePoint}"
-                                                     data-max-rating="5">ワークライフバランス
+                                                     data-max-rating="5"　style="margin-right:10px;">
                                                 </div>
+
+                                                    <span style="margin-right:10px;">ワークライフバランス</span>
 
                                             </div>
                                             <div class="div_star">
                                                 <div class="ui star rating"
                                                      data-rating="${companyShowList.companyCulturePoint}"
-                                                     data-max-rating="5">社内文化
+                                                     data-max-rating="5"　style="float:left; margin-right:10px;">
                                                 </div>
+                                                <span style="margin-right:10px;">社内文化</span>
 
                                             </div>
                                             <div class="div_star">
                                                 <div class="ui star rating" data-rating="${companyShowList.payPoint}"
-                                                     data-max-rating="5">給料と福祉
+                                                     data-max-rating="5"　style="float:left; margin-right:10px;">
                                                 </div>
-
+                                                <span style="margin-right:10px;">給料と福祉</span>
                                             </div>
                                             <div class="div_star">
                                                 <div class="ui star rating" data-rating="${companyShowList.headPoint}"
-                                                     data-max-rating="5">経営陣
+                                                     data-max-rating="5"　style="float:left; margin-right:10px;">
                                                 </div>
-
+                                                <span style="margin-right:10px;">経営陣</span>
                                             </div>
                                         </div>
 
