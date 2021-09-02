@@ -2,7 +2,6 @@
 **/.mvn/
 **/target/
 **/src/test/
-**/src/main/webapp/resources/upload/
 **/.settings/
 **/bin/
 *.iml

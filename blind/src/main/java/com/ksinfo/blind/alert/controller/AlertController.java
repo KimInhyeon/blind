@@ -19,6 +19,7 @@ import com.ksinfo.blind.alert.dto.ReportReasonDto;
 import com.ksinfo.blind.alert.dto.ReviewReportDto;
 import com.ksinfo.blind.alert.service.AlertService;
 
+
 @Controller
 public class AlertController {
 	
