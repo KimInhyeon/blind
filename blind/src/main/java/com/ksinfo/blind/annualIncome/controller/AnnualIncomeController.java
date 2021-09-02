@@ -28,7 +28,7 @@ public class AnnualIncomeController {
 	@Autowired
 	CompanyIntroductionService companyIntroductionService;
 
-	@RequestMapping(value = "/annualIncome/viewAnnualIncomeBySelectedJobGroupCode", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "annualIncome/viewAnnualIncomeBySelectedJobGroupCode", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public List<AnnualIncomeByJobGroupDto> viewAnnualIncomeBySelectedJobGroupCode(int companyId, String jobGroupCode) {
 		List<AnnualIncomeByJobGroupDto> annualIncomeData = annualIncomeService.getAnnualIncomeData(companyId, jobGroupCode);

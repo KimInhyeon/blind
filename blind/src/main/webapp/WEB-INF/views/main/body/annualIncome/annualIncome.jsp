@@ -59,7 +59,7 @@ $(function(){
 		
     	$.ajax({
 			type:"POST",
-		    url: "viewAnnualIncomeBySelectedJobGroupCode",
+		    url: "annualIncome/viewAnnualIncomeBySelectedJobGroupCode",
 			data : { companyId      //기업id(기업구분용)
 					 ,jobGroupCode 	//-1:전체직군. -1이외는 선택된 직군코드에 대한 직군연봉만 출력.
 			 	   },
