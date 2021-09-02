@@ -4,7 +4,7 @@ public final class ReviewVO {
 	private final long companyReviewId;
 	private final char verifyFlag;
 	private final char completeFlag;
-	private final char lastGenerationFlag;
+	private final boolean workingFlag;
 	private final byte allPoint;
 	private final String companyName;
 	private final String jobGroupName;
@@ -13,13 +13,13 @@ public final class ReviewVO {
 	private final String recCreateDate;
 
 	public ReviewVO(
-		long companyReviewId, char verifyFlag, char completeFlag, char lastGenerationFlag, byte allPoint,
+		long companyReviewId, char verifyFlag, char completeFlag, boolean workingFlag, byte allPoint,
 		String companyName, String jobGroupName, String simpleComment, String userNickname, String recCreateDate
 	) {
 		this.companyReviewId = companyReviewId;
 		this.verifyFlag = verifyFlag;
 		this.completeFlag = completeFlag;
-		this.lastGenerationFlag = lastGenerationFlag;
+		this.workingFlag = workingFlag;
 		this.allPoint = allPoint;
 		this.companyName = companyName;
 		this.jobGroupName = jobGroupName;
@@ -40,8 +40,8 @@ public final class ReviewVO {
 		return completeFlag;
 	}
 
-	public char getLastGenerationFlag() {
-		return lastGenerationFlag;
+	public boolean isWorkingFlag() {
+		return workingFlag;
 	}
 
 	public byte getAllPoint() {

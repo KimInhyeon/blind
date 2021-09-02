@@ -17,16 +17,16 @@
    .dirkey li a{font-weight:500; color:black; font-size:15px;}
    .dirkey ul li{line-height:220%;}
    .dirpaging{text-align:center; padding-top:20px;}
-   
+
    .company_review_sample > * {
    		padding:5px;
    }
-   
+
    html, body {
 	   position: relative;
 	   height: 100%;
 	}
-	
+
 	body {
 	   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 	   font-size: 14px;
@@ -40,22 +40,22 @@
 	   font-size: 150%;
 	   font-weight: 700;
 	}
-	
+
 	.bookmarkcontent a {
 	   color: black;
 	   display: block;
 	   padding-bottom: 8px;
 	}
-	
+
 	.bookmarkcontent a span {
 	   font-size: 80%;
 	}
-	
+
 	.bookmarkcontent p {
 	   padding-top: 12px;
 	   font-size: 90%;
 	}
-	
+
     #searchbox{border-radius:50px; font-size:23px;}
     #searchbox::placeholder{font-size:18px;}
     .maintit{padding: 6px 0; font-size: 20px; font-weight: 700; float:left;}
@@ -79,8 +79,8 @@
 	
 	$(function(){
 		//기업추천여부(기업에 일하고 싶은가 여부) - 좋아요 버튼 클릭시
-		$(".company_recommend_button").on('click', function(){		
-			
+		$(".company_recommend_button").on('click', function(){
+
 			var companyName = '${searchResultCompany[0].companyName}';  //기업명 저장. append할 때 로드하여 기업명 출력시 사용.
 			$.ajax({
 				type:"POST",
@@ -90,10 +90,10 @@
 				 	   },
 				dataType:"json",
 				success: function(result){ //투표결과(기업선호도)를 출력하도록 변경.
-					
+
 					//초기화(기업선호도 투표를 위한 추천/비추천 버튼등을 삭제)
 					$(company_vote_and_recommend_percent).html("");
-					
+
 					$(company_vote_and_recommend_percent).append( companyName +"は働きたい企業ですか"
 																 +"<button style='color: blue;' class='ui icon button company_recommend_button'>"
 																 +"<i class='thumbs up outline icon'></i>" + result[0].voteCountOfGood+'%'
@@ -101,18 +101,18 @@
 																 +"<button style='color: red;' class='ui icon button company_recommend_button'>"
 																 +"<i class='thumbs down outline icon'></i>" + result[0].voteCountOfBad+'%'
 																 +"</button>"
-					);	                
+					);
 				},
 				error: function(){
 					alert("에러");
-				}				
+				}
 			});
-		}); 
-		
+		});
+
 		//1개의 토픽을 선택시 해당 토픽만 출력하도록 하는 제이쿼리 함수.
-		$("#viewPostsSelectedTopic").on('change', function(){	
+		$("#viewPostsSelectedTopic").on('change', function(){
 			var checkTopicNum= $("#viewPostsSelectedTopic option:selected").val();
-			
+
 	    	$.ajax({
 				type:"POST",
 			    url: "viewPostsSelectedTopic",
@@ -130,13 +130,13 @@
 						var hideUserNick =  value.userNickName.substring(0,1)+'****';
 						var postCreateDate = value.postCreateDate.substring(5,7)+'.'+value.postCreateDate.substring(8,10);
 						var boarderHtml = "<div class='eight wide column' style='border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;border-right-style: inset;'>";
-						
+
 						if (key%2==1) {
 							boarderHtml = "<div class='eight wide column' style='border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;'>";
 						}
-						
+
 						$(postList).append(boarderHtml
-	                								+"<a href='searchBoardName?searchKeyword=" + value.boardId + "'><span>"+ value.boardTopicName +"</span></a>"	
+	                								+"<a href='searchBoardName?searchKeyword=" + value.boardId + "'><span>"+ value.boardTopicName +"</span></a>"
 	                								+"<a href='topicDetail?postId=" + value.postId + "'><span style='font-size: 130%; font-weight: 700;'>" +value.postTitle + "</span></a>"
 	                								+"<div class='ui grid'>"
 			                							+"<div class='thirteen wide column'>"
@@ -169,7 +169,7 @@
 	
 		$("#sortPosts").on('change', function(){
 			var checkTopicNum= $("#viewPostsSelectedTopic option:selected").val();
-			
+
 			$.ajax({
 				type:"POST",
 			    url: "sortPosts",
@@ -179,7 +179,7 @@
 					   },
 				dataType:"json",
 				success: function(result){
-					
+
 
 					//포스트리스트의 화면재구성 시작
 					//주요틀 재구성
@@ -189,13 +189,13 @@
 						var hideUserNick =  value.userNickName.substring(0,1)+'****';
 						var postCreateDate = value.postCreateDate.substring(5,7)+'.'+value.postCreateDate.substring(8,10);
 						var boarderHtml = "<div class='eight wide column' style='border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;border-right-style: inset;'>";
-						
+
 						if (key%2==1) {
 							boarderHtml = "<div class='eight wide column' style='border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;'>";
 						}
-						
+
 						$(postList).append(boarderHtml
-	                								+"<a href='searchBoardName?searchKeyword=" + value.boardId + "'><span>" + value.boardTopicName + "</span></a>"	
+	                								+"<a href='searchBoardName?searchKeyword=" + value.boardId + "'><span>" + value.boardTopicName + "</span></a>"
 	                								+"<a href='topicDetail?postId=" + value.postId + "'><span style='font-size: 130%; font-weight: 700;'>" +value.postTitle + "</span></a>"
 	                								+"<div class='ui grid'>"
 			                							+"<div class='thirteen wide column'>"
@@ -226,14 +226,14 @@
 			});
 		}); 
 	});
-		
+
 	function goSearch(){
 		var searchKeyword = $("#searchbox").val();
-		
+
 		if (searchKeyword === "" || searchKeyword === null || searchKeyword === undefined) {
 			return false;
 		}
-		
+
 		location.href='${pageContext.request.contextPath}/search?searchKeyword=' + searchKeyword;
 	}
 	</script>
@@ -249,7 +249,7 @@
    <div class="inputSearchKeyword">    
    		<form>
         <div class="ui fluid massive left icon input">
-				<input type="text" placeholder="Search" id="searchbox" name="searchKeyword" value="${pastSearchKeyword}"> 
+				<input type="text" placeholder="Search" id="searchbox" name="searchKeyword" value="${pastSearchKeyword}">
 	    		<i class="search link icon" id="searchicon" onclick="goSearch();"></i>
 	  			<div class="results"></div>
 			</div>
@@ -353,16 +353,16 @@
 					<c:forEach items="${searchResultPosts}" var="posts" varStatus="status">
 						<c:if test="${status.index%2==0}">
 							<div class="eight wide column" style="border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;border-right-style: inset;">
-						</c:if>	
+						</c:if>
 						<c:if test="${status.index%2==1}">
 							<div class="eight wide column" style="border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;">
 						</c:if>
-								<a href="searchBoardName?searchKeyword=${posts.boardId}"><span>${posts.boardTopicName }</span></a>	
+								<a href="searchBoardName?searchKeyword=${posts.boardId}"><span>${posts.boardTopicName }</span></a>
 								<a href="topicDetail?postId=${posts.postId}"><span style="font-size: 130%; font-weight: 700;">${posts.postTitle}</span></a>
 									<div class="ui grid">
 										<div class="thirteen wide column">
 											<a href="topicDetail?postId=${posts.postId}"><p>${posts.postContents}</p></a>
-											<a href="companyIntroduction?companyId=${posts.companyId}"><p> ${posts.companyName} 
+											<a href="companyIntroduction?companyId=${posts.companyId}"><p> ${posts.companyName}
 	  												 	   - ${fn:substring(posts.userNickName,0,1)} ****</p></a>
 										</div>
 										<div class="three wide column">
@@ -375,7 +375,7 @@
 						 		 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="eye icon" style="margin:0px 5px 0px 5px;"></i>${posts.postCount}</a>
 						 		 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="thumbs up outline icon" style="margin:0px 5px 0px 5px;"></i> ${posts.recommendCount}</a>
 								 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="comment outline icon"  style="margin:0px 5px 0px 5px;"></i>  ${posts.replyCount}</a>
-							</div>	 
+							</div>
 						  		<div style="float:Right;">
 							 		${fn:substring(posts.postCreateDate,5,7)}.${fn:substring(posts.postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(posts.postCreateDate,0,10)} -->
 							   		<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">

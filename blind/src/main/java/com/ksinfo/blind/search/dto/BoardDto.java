@@ -1,17 +1,15 @@
 package com.ksinfo.blind.search.dto;
 
 public class BoardDto {
-	//1.BOARD_MGT ÅäÇÈ(°Ô½ÃÆÇ)°ü¸® Å×ÀÌºíÀÇ º¯¼ö
-	private int 	boardId;
-	private String  boardTopicName;   	 // board_topic_name character varying(30) not null	//ÅäÇÈÀÇ ÀÌ¸§
-	private String  boardOrder;  	 	 // board_order integer not null					//ÅäÇÈÀÇ È­¸éÇ¥½Ã¼ø¹ø
-	private char    anonymousFlag;   // anonymous_flag character(1) not null			//ÅäÇÈÀÇ ´Ğ³×ÀÓ ¸¶½ºÅ·¿©ºÎ(1ÀÌ¸é ¸¶½ºÅ·)
-	private char    logicalDelFlag;  // logical_del_flag character(1) not null			//³í¸®»èÁ¦ ÇÃ·¡±×(1ÀÌ¸é »èÁ¦)
-	private int 	postCount;
-	
-	
-	// get/set ¸Ş™ µå
-	
+	//1.BOARD_MGT í† í”½(ê²Œì‹œíŒ)ê´€ë¦¬ í…Œì´ë¸”ì˜ ë³€ìˆ˜
+	private int boardId;
+	private String boardTopicName; // board_topic_name character varying(30) not null //í† í”½ì˜ ì´ë¦„
+	private String boardOrder; // board_order integer not null //í† í”½ì˜ í™”ë©´í‘œì‹œìˆœë²ˆ
+	private char anonymousFlag; // anonymous_flag character(1) not null //í† í”½ì˜ ë‹‰ë„¤ì„ ë§ˆìŠ¤í‚¹ì—¬ë¶€(1ì´ë©´ ë§ˆìŠ¤í‚¹)
+	private char logicalDelFlag; // logical_del_flag character(1) not null //ë…¼ë¦¬ì‚­ì œ í”Œë˜ê·¸(1ì´ë©´ ì‚­ì œ)
+	private int postCount;
+
+	// get/set ë©”ì†Œë“œ
 	public String getBoardTopicName() {
 		return boardTopicName;
 	}
@@ -51,7 +49,7 @@ public class BoardDto {
 	public void setBoardTopicName(String boardTopicName) {
 		this.boardTopicName = boardTopicName;
 	}
-	
+
 	public String getBoardOrder() {
 		return boardOrder;
 	}

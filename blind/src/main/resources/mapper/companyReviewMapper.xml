@@ -44,8 +44,8 @@
   blind.company_mgt
 
 </select>
-	
-	
+
+
 	
 	
 <select id="companySearchPopular" resultType="com.ksinfo.blind.companyReview.dto.CompanyMainViewDto">
@@ -70,6 +70,7 @@ GROUP BY
 ORDER BY 
 	all_point desc
     fetch first 9 rows only
+
 </select>
 
 <insert id="companyReviewJoin" parameterType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">
@@ -125,7 +126,7 @@ insert into
         , 0
         , now()
         , '0'	
-	) 
+	)
 </insert>
 
 	<!-- BLIND_0013_企業登録申請(2021-08-05) -->
@@ -166,7 +167,7 @@ insert into
 
 	<!-- BLIND_0017_企業ポストタブ(2021-08-11) -->
 <select id="getCompanyName" resultType="String" parameterType="int">
-	SELECT	
+	SELECT
 		company_name
 	FROM
 		blind.company_mgt
@@ -176,23 +177,23 @@ insert into
 
 <select id="getTotalRecord" resultType="_int">
 	SELECT COUNT(*)
-	FROM 
-		blind.post_mgt 
+	FROM
+		blind.post_mgt
 	where(
-		post_title like '%' || #{companyName} ||  '%'		
+		post_title like '%' || #{companyName} ||  '%'
 	or
 		post_contents like '%' || #{companyName} ||  '%')
 	<if test="searchKeyword neq null">
-		and (		
-			post_title like '%' || #{searchKeyword} ||  '%'		
-		
+		and (
+			post_title like '%' || #{searchKeyword} ||  '%'
+
 		or
 			post_contents like '%' || #{searchKeyword} ||  '%')
 	</if>
-	AND logical_del_flag = '0' 
+	AND logical_del_flag = '0'
 </select>
 
-<select id="getPosts"  resultType="com.ksinfo.blind.search.dto.PostDto"> 
+<select id="getPosts"  resultType="com.ksinfo.blind.search.dto.PostDto">
 SELECT
    post_title --게시글 주제
    ,post_contents --게시글 내용

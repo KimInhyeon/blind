@@ -30,7 +30,7 @@
     	$('#selectList').html("");
     	$('#searchKeyword').val(companyArr[0]);
     	location.href='${pageContext.request.contextPath}/companyIntroduction?companyId=' + companyArr[1];
-	 }; 
+	 };
     </script>
     <style>
         .companysearchbox{
@@ -99,7 +99,7 @@
         <i class="search icon" id="searchicon"></i>
         <div class="ui middle aligned selection list" id="selectList" style="margin-top: 65px;font-size: 0.8em;background-color:#999999;position:absolute;margin-left: 60px;"></div>
     </div>
-    
+
     <div class="companyapplymain" align="center">
         お探しの会社がありませんか。
         <a href="#">
@@ -116,16 +116,16 @@
 			<li>${company2.companyName}★${company2.companyId }</li>
 		</c:forEach>
 	</ul>
-   </form>
+    </form>
 </div>
 
 	<%-- <c:forEach items="${companyDto}" var="company">
 	${company.companyName}
-</c:forEach>  --%>
+    </c:forEach>  --%>
 	<div class="ui fluid container" id="companybackground" >
         <div class="ui container" id="imagetextback">
             <h2 style="text-align:left; padding-top:130px;">私の会社をレビューする</h2>
-    
+
             <p style="text-align:left;">会員様のレビューは、求職者が会社を 検討するのに役立ちます。</p>
         <button class="ui blue button" onclick="location.href='companyReviewWrite'" style="float:left; margin-top:10px; padding:15px 30px;">レビュー作成</button>
         </div>

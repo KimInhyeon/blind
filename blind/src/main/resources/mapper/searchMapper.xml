@@ -207,7 +207,7 @@ SELECT DISTINCT
    ,blind.post_mgt.post_id
    ,blind.post_mgt.post_title                 --게시글 주제
    ,blind.post_mgt.post_contents              --게시글 내용
-   ,blind.company_mgt.company_id   
+   ,blind.company_mgt.company_id
    ,blind.company_mgt.company_name            --근무기업명
    ,blind.user_mgt.user_nickname              --작성자의 닉네임
    ,COALESCE(blind.post_count_inf.post_count, 0) AS post_count   --글의 조회수
@@ -248,13 +248,13 @@ ORDER BY recommend_count DESC;
 
 
 <!-- 기업추천 투표값 추가   -->
-<select id="setCompanyRecommendVote" parameterType="java.util.Map"> 
+<select id="setCompanyRecommendVote" parameterType="java.util.Map">
 insert into "blind".COMPANY_RECOMMEND_INF (
   company_recommend_id
   , user_id
-  , company_id 
+  , company_id
   , good
-  , bad 
+  , bad
 )values(
  Default  				 --  company_recommend_id bigint GENERATED ALWAYS AS IDENTITY
 , #{userId}  			 --  , user_id bigint not null
@@ -273,20 +273,20 @@ insert into "blind".COMPANY_RECOMMEND_INF (
 
 
 <!--  기업의 good/bad투표수 리턴.(기업추천 투표한 유저에게 기업선호도 출력위함) -->
-<select id="getCompanyRecommendVoteResult" parameterType="int" resultType="com.ksinfo.blind.search.dto.CompanyVoteResultDto"> 
+<select id="getCompanyRecommendVoteResult" parameterType="int" resultType="com.ksinfo.blind.search.dto.CompanyVoteResultDto">
 select DISTINCT
 	(select
 		count(*) as voteCountOfGood
 	from "blind".COMPANY_RECOMMEND_INF
-	where 
-		"blind".COMPANY_RECOMMEND_INF.company_id = #{companyId} 
+	where
+		"blind".COMPANY_RECOMMEND_INF.company_id = #{companyId}
 	and
 		"blind".COMPANY_RECOMMEND_INF.good =1)
 	,(select
 		count(*) as voteCountOfBad
 	from "blind".COMPANY_RECOMMEND_INF
-	where 
-		"blind".COMPANY_RECOMMEND_INF.company_id = #{companyId} 
+	where
+		"blind".COMPANY_RECOMMEND_INF.company_id = #{companyId}
 	and
 		"blind".COMPANY_RECOMMEND_INF.bad =1)
 
