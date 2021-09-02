@@ -25,6 +25,31 @@
 
 
 <body>
+<div class="ui fluid container" id="reviewHeader" style="padding:80px 0; background-color:black">
+
+</div>
+<div class="ui container">
+	<div style="padding-top:20px;">
+		<button style="margin-top:30px;"class="blue ui right floated button"  onclick="location.href='${pageContext.request.contextPath}/companyReviewWrite?companyId=${companyIntroduction.companyId}';"  >
+			この会社をレビューする
+		</button>
+		<img class="ui left floated image" src="${pageContext.request.contextPath}/resources/images/company/${companyIntroduction.companyId}.png" width="90px" height="90px" ></img>
+		<div style="margin-top:10px;" >
+			<h2>${companyIntroduction.companyName }</h2>
+			<p style="line-height:0.rem;">★${companyIntroduction.realAllPoint } (${reviewCount }個のレビュー)</p>
+		</div>
+	</div>
+</div>
+<div class="ui container">
+	<div class="ui top attached tabular menu" style="font-size:1.2rem;">
+		<div class="item" onclick="location.href='${pageContext.request.contextPath}/companyIntroduction?companyId=${companyProfile[0].companyId}'" style="display:flex; justify-content:center; width:15%; cursor:pointer;">紹介</div>
+		<div class="item" onclick="location.href='${pageContext.request.contextPath}/companyShowReview?companyId=${companyProfile[0].companyId}'" style="display:flex; justify-content:center; width:15%; cursor:pointer;">レビュー</div>
+		<div class="active item" style="display:flex; justify-content:center; width:15%; cursor:pointer;">掲示板</div>
+		<div class="item" onclick="location.href='${pageContext.request.contextPath}/annualIncome/annualIncome?selectCompanyId=${companyProfile[0].companyId}'" style="display:flex; justify-content:center; width:15%; cursor:pointer;">年棒</div>
+		<div class="item" style="display:flex; justify-content:center; width:15%; cursor:pointer;">ニュース</div>
+	</div>
+
+	<div class="ui bottom attached active tab segment">
 	<div style="margin:2%; width:100%;"> <!-- 기업리뷰의 게시글 전체 감싸기 div -->	
 		
 		<!-- 1.기업리뷰의 게시글의 헤더(검색창&추천키워드)부분 -->
@@ -137,8 +162,8 @@
    </c:otherwise>
 </c:choose>
 	</div>
-	
 
+	</div>
 </body>
 <script >
 function getPosts(page) {
