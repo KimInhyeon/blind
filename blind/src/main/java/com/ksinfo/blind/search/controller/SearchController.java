@@ -97,24 +97,21 @@ public class SearchController {
 	//search.jsp에서 검색어를 입력시 작동하는 기능
 	@RequestMapping("/search")
 	public ModelAndView search(String searchKeyword, ModelAndView mav) {
-		logger.info("SearchController-search 시작");
+		//토픽메인에서 입력한 검색어를 검색실시.
 
-		logger.info("기업정보 관련 데이터 준비");
+		//기업정보 관련 데이터 준비
 		//<!-- 1.1.회사의 프로필 정보 수신 -->
 		List<CompanyDto> searchResultCompany = searchService.getSearchCompany(searchKeyword); //기업프로필
 		List<CompanyReviewDto> companyReviews =  new ArrayList<>();	
 
-		logger.info("기업정보여부 플래그(검색어가 기업을 검색했는지 여부를 알리는 용도)");
+		//기업정보여부 플래그(검색어가 기업을 검색했는지 여부를 알리는 용도)
 		int searchResultCompanyDataFlag = 0; //값이 1일시 회사정보 있음
 		if (!(searchResultCompany.isEmpty())) {
-			//!(searchResultCompany.isEmpty())가 0이다 회사정보가 있음.
-			logger.info("확인결과: 회사정보 있음");
-
 			//<!-- 1.2.회사의 리뷰정보 수신 -->
 			companyReviews = searchService.getCompanyReviews(searchResultCompany.get(0).getCompanyId()); //기업에 대한 기업리뷰 수신
 			searchResultCompanyDataFlag = 1;
 		} else {
-			logger.info("확인결과: 회사정보 없음");
+			//확인결과: 회사정보 없을시 실시사항.
 			searchResultCompanyDataFlag = 0;
 		}
 

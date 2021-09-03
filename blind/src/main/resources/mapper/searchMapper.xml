@@ -4,12 +4,24 @@
 
 <!-- 1.회사관련 xml -->
 <!-- 1.1.회사의 프로필 정보 수신 -->
-<select id="getSearchCompany" parameterType="String" resultType="com.ksinfo.blind.search.dto.CompanyDto"> 
-    SELECT 
-    company_id
-    ,company_name
-    ,company_address
-     FROM blind.company_mgt	
+<select id="getSearchCompany" parameterType="String" resultType="com.ksinfo.blind.search.dto.CompanyDto">
+    SELECT DISTINCT
+        blind.company_mgt.company_id
+        ,blind.company_mgt.company_name
+        ,blind.company_mgt.company_address
+        ,(SELECT            -- allPointAvg :총점평균(특정기업에 대한 n명의 총평점의 평균점수. 특정1인의 총평점이 아님.)
+            AVG(blind.company_review_mgt.all_point)
+          FROM
+            blind.company_review_mgt
+          where
+            blind.company_review_mgt.company_id = blind.company_mgt.company_id) As allPointAvg
+            --검색결과로 리턴될 기업명의 id에 일치하는 총평점만 모아서 평균 계산.
+    FROM
+        blind.company_mgt
+    left join
+        blind.company_review_mgt
+    on
+        blind.company_mgt.company_id = blind.company_review_mgt.company_id
     where company_name= #{searchKeyword};
 </select>
 

@@ -1,6 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -279,13 +282,27 @@
 							<div style="display: flex;">
 								<img src="${pageContext.request.contextPath}/resources/images/company/${searchResultCompany[0].companyId}.png" 
 											width=40px, height=40px style="margin:5px;" align="top">
-									<div>
+									<div style="margin-left: 10px;">
+										<!-- 기업로고 오른쪽-윗라인 : 기업명, 기업총평점의 평균점수-->
 										${searchResultCompany[0].companyName}
-										<i class="star icon"></i>
+										<div class="ui star rating disabled" data-rating="1" data-max-rating="1"
+											 style="margin-left:10px;"><i class="icon active"></i></div>
+										${searchResultCompany[0].allPointAvg}
+
+										<!-- 기업로고 오른쪽-아래라인 : 해당 기업의 기업리뷰파트의 리뷰/기업게시판/급여 탭으로 이동.-->
 										<div style="display: flex;">
-											<a href="${pageContext.request.contextPath}/companyShowReview?companyId=${searchResultCompany[0].companyId}"><span>レビュー</span></a>
-											<a href=""><span>企業ポスト</span></a>
-											<a href=""><span>給料</span></a>
+											<a href="${pageContext.request.contextPath}/companyShowReview?companyId=${searchResultCompany[0].companyId}"
+											   style="margin-right: 10px;">
+												<span style="color: #3d698e"> レビュー </span>
+											</a>
+											<a href=""
+											   style="margin-right: 10px;">
+												<span style="color: #3d698e"> 企業ポスト </span>
+											</a>
+											<a href=""
+											   style="margin-right: 10px;">
+											    <span style="color: #3d698e"> 給料 </span>
+											</a>
 										</div>
 									</div>
 								</div>
@@ -293,8 +310,9 @@
 					</div>
 	
 					<!-- 검색결과1.2. 일하고 싶은 기업인지 추천/비추천버튼 출력. 투표완료시 투표결과(기업선호도)를 출력하는 페이지로 변경. -->
-					<div style="margin-top:7%;">
-						<div class="ui stacked segment" style="width: 100%;margin-top:1%;" id="company_vote_and_recommend_percent" >
+					<div style="margin-top:10%;">
+						<div style="width: 100%;margin-top:11%;margin-bottom:5%; text-align: center;"
+							 id="company_vote_and_recommend_percent" >
 							${searchResultCompany[0].companyName}は働きたい企業ですか
 							<button style="color: blue;" class="ui icon button company_recommend_button" value="1">
 								<i class="thumbs up outline icon"></i>
@@ -303,8 +321,34 @@
 								<i class="thumbs down outline icon"></i>
 							</button>
 						</div>
-	 				
+
 						<div class="company_review_sample" style="background-color:#b1d4e3; margin-top: 2%;">
+							<!-- 구분선 시작-->
+							zzz
+							<c:forEach begin="1" end="5" step="1" varStatus="status">
+								${status.count}<br/>
+							</c:forEach>
+
+							<fmt:parseNumber var="show_star_point" value = "${companyReviews[0].allPoint}" integerOnly="true"/>
+
+							show_star_point:${show_star_point}
+							<div class="div_star">
+								<div class="ui star rating disabled" data-max-rating="5">
+									<c:forEach begin="1" end="5" step="1" varStatus="status">
+										<c:choose>
+											<c:when test="${ show_star_point >= status.count }">
+												<i class="icon active"></i>
+											</c:when>
+											<c:otherwise>
+												<i class="icon"></i>
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
+								</div>
+							</div>
+
+							<!--<c:set var="show_star_point" value = "${companyReviews[0].allPoint}"/>-->
+							<!-- 구분선 끝 -->
 							<c:choose> 
 								<c:when test="${empty companyReviews}">
 									<div>この企業のレビューはありません。</div>
