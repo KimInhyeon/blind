@@ -61,13 +61,10 @@ public class SearchController {
 	@RequestMapping(value = "viewPostsSelectedTopic", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public List<PostDto> viewPostsSelectedTopic(int selectBoardId, String searchKeyword) {
-		logger.info("viewPostsSelectedTopic start");
-		logger.info("selectBoardId : " + selectBoardId + "  searchKeyword : " + searchKeyword);
 
 		//선택한 토픽에 대한 포스트들만 리턴실시.
 		//<!-- 2.2.포스트-토픽선택(왼쪽드롭박스) : 1개의 토픽만 선택시 리턴 -->
 		List<PostDto> searchResultPostsSelectTopic = searchService.getPostSelectTopic(selectBoardId, searchKeyword);
-		logger.info("viewPostsOfOneTopic-END(Returns searchResultPostsOfOneTopic) ");
 
 		return searchResultPostsSelectTopic;
 	}
@@ -76,18 +73,14 @@ public class SearchController {
 	@RequestMapping(value = "sortPosts", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public List<PostDto> sortPosts(int sortPostOption, String searchKeyword, int selectBoardId) {
-		logger.info("sortPosts 시작");
-		logger.info("sortPostOption : " + sortPostOption + "   searchKeyword : " + searchKeyword + "   selectBoardId : " + selectBoardId);
 		List<PostDto> searchResultSortedPosts; //재검색을 실시하여 해당 SQL의 order by등이 적용된 출력.
 
 		if (sortPostOption == 1) {
-			logger.info("sortPosts-정렬옵션 : 최신일 기준");
 			//<!-- 2.3. 콤보박스의 정렬기준 옵션_추천순 -->
 			//<!-- 2.3.1. 콤보박스의 포스트-정렬옵션-최신일  -->
 			searchResultSortedPosts = searchService.getSortPostBylatestDate(selectBoardId, searchKeyword);
 			return searchResultSortedPosts;
 		} else {
-			logger.info("sortPosts-정렬옵션 : 추천수 기준");
 			//<!-- 2.3.2. 콤보박스의 포스트-정렬옵션-추천순  -->
 			searchResultSortedPosts = searchService.getSortPostByRecommend(selectBoardId, searchKeyword);
 			return searchResultSortedPosts;
@@ -125,7 +118,7 @@ public class SearchController {
 		List<BoardDto> boardNameAndIdAndCount = searchService.getBoardNameAndIdAndCount(searchKeyword); //토픽의 이름 수신
 
 		// mav를 통해 값을 jsp에게 리턴할 수 있도록 mavadd 실시.
-		logger.info("데이터준비 3단계. mav에게 searchResultPosts가 받은 정보를 입력. 웹페이지에 출력할 수 있도록 실시.");
+		//데이터준비 3단계. mav에게 searchResultPosts가 받은 정보를 입력. 웹페이지에 출력할 수 있도록 실시.
 
 		//0.이전검색어 그대로 전달.
 		mav.addObject("pastSearchKeyword", searchKeyword); //이전의 검색어.
@@ -143,7 +136,6 @@ public class SearchController {
 		mav.addObject("searchResultPosts", searchResultPosts); //검색어와 관련된 포스트(게시글)들 전달.
 		mav.addObject("searchResultPostsLastNumber", searchResultPosts.size() - 1);
 
-		logger.info("출력할 경로 설정.");
 		mav.setViewName("main/search/search");
 		return mav;
 

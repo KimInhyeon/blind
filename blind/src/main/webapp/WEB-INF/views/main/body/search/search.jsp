@@ -323,15 +323,13 @@
 						</div>
 
 						<div class="company_review_sample" style="background-color:#b1d4e3; margin-top: 2%;">
-							<!-- 구분선 시작-->
-							zzz
-							<c:forEach begin="1" end="5" step="1" varStatus="status">
-								${status.count}<br/>
-							</c:forEach>
 
+							<!-- 기존의 총평점(float형) 값을 int형으로 변환(소수점이하 삭제)-->
 							<fmt:parseNumber var="show_star_point" value = "${companyReviews[0].allPoint}" integerOnly="true"/>
+							<!--소수점을 버리고 정수(int)로 만든다. int형이 아니면 div_star의 별점표현이 작동을 못한다.-->
+							<!-- 논의사항: 3.9같은 경우에는 4.0으로 올림처리를 해야 맞는가? -->
+							<!-- show_star_point:${show_star_point} 정상작동 체크(값확인용) 코드.-->
 
-							show_star_point:${show_star_point}
 							<div class="div_star">
 								<div class="ui star rating disabled" data-max-rating="5">
 									<c:forEach begin="1" end="5" step="1" varStatus="status">
