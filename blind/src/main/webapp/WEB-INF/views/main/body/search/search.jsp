@@ -68,6 +68,11 @@
     .seemore a {color:gray;}
     .topicbest span{color:gray;}
     .topicbest i{color:gray;}
+
+	.font_company_search{
+		font-weight: bolder;
+		font-size: 1.2em;
+	}
 </style>
 	
 	
@@ -258,22 +263,24 @@
 
 
 	<!-- 검색결과출력페이지(전체) -->
-		<h1><strong>${searchKeyword}</strong> 検索結果</h1> <!-- 검색키워드로 변경(지금은 기업명일때만 나온다. -->
-	
+	<div style="margin-top: 2.5%;margin-bottom: 2.5%; margin-left: 1.4%;">
+		<span style="font-size: 2em; font-weight: bolder;"> ${pastSearchKeyword}</span>
+		<span style="font-size: 2em;"> 検索結果</span>
+	</div>
 	<!-- 검색결과1. 기업정보 / 검색어가 기업이 아닌경우 출력되지 않는다. -->      
-		<c:if test="${searchResultCompanyDataFlag eq '1'}"><!-- searchResultCompanyDataFlag의 값이 1이면 회사정보 있으며, 이에따라 출력실시. -->
-			<div class="ui stacked segment" >
+		<c:if test="${searchResultCompanyDataFlag eq '1'}">
+			<div class="font_company_search" style="border:1px solid #cccccc; border-radius: 0.5em; padding: 2%;">
 	   			<h3>企業</h3>
-		   		<div class="ui stacked segment"  style="height: auto; width: 100%;  padding:20;" >
+		   		<div style="height: auto; width: 100%;  padding:2%;" >
 					<!-- 검색결과1.1. 기업의 기본정보페이지(총평점 및 리뷰/게시글/연봉링크) -->
 					<!-- 회사이름,별점 안내 및  리뷰,게시글,연봉 버튼 생성 -->
-					<div class="company_profile_part" > <!-- onclick 통해 div영역 클릭시 페이지 이동(''내에 이동할 URL 기입) -->
-						<div class="logo_and_companyName" style="float:left;display: inline;"> 
+					<div class="company_profile_part"  > <!-- onclick 통해 div영역 클릭시 페이지 이동(''내에 이동할 URL 기입) -->
+						<div class="logo_and_companyName" style="float:left;display: inline;">
 							<div style="display: flex;">
 								<img src="${pageContext.request.contextPath}/resources/images/company/${searchResultCompany[0].companyId}.png" 
 											width=40px, height=40px style="margin:5px;" align="top">
 									<div>
-										${searchResultCompany[0].companyName} 
+										${searchResultCompany[0].companyName}
 										<i class="star icon"></i>
 										<div style="display: flex;">
 											<a href="${pageContext.request.contextPath}/companyShowReview?companyId=${searchResultCompany[0].companyId}"><span>レビュー</span></a>
@@ -286,8 +293,8 @@
 					</div>
 	
 					<!-- 검색결과1.2. 일하고 싶은 기업인지 추천/비추천버튼 출력. 투표완료시 투표결과(기업선호도)를 출력하는 페이지로 변경. -->
-					<div class="ui stacked segment" style="margin:60px;">
-						<div class="ui stacked segment" style="height: auto; width: 100%;margin:10px;" id="company_vote_and_recommend_percent" >
+					<div style="margin-top:7%;">
+						<div class="ui stacked segment" style="width: 100%;margin-top:1%;" id="company_vote_and_recommend_percent" >
 							${searchResultCompany[0].companyName}は働きたい企業ですか
 							<button style="color: blue;" class="ui icon button company_recommend_button" value="1">
 								<i class="thumbs up outline icon"></i>
@@ -297,7 +304,7 @@
 							</button>
 						</div>
 	 				
-						<div class="company_review_sample" style="background-color:#b1d4e3; margin:10px;">
+						<div class="company_review_sample" style="background-color:#b1d4e3; margin-top: 2%;">
 							<c:choose> 
 								<c:when test="${empty companyReviews}">
 									<div>この企業のレビューはありません。</div>
@@ -306,11 +313,11 @@
 								</c:when>
 								<c:otherwise>
 									<a href="">
-										<div>${companyReviews[0].allPoint}</div> 				
-										<div style="float:Right;">レビュー全部見る > </div>
-										<div>${companyReviews[0].jobGroupName}</div>
-										<div>${companyReviews[0].simpleComment}</div>
-										<div>${companyReviews[0].disadvantages}</div>
+										<div style="display: inline-block; margin-top: 1.2%;margin-bottom: 1.2%;margin-left: 1%;">${companyReviews[0].allPoint}</div>
+										<div style="display: block;float:Right; margin-top: 1.2%;margin-bottom: 1.2%; padding-right: 2%;">レビュー全部見る > </div>
+										<div style="margin-top: 1.2%;margin-bottom: 1.2%;margin-left: 1%;"> ${companyReviews[0].jobGroupName} </div>
+										<div style="margin-top: 1.2%;margin-bottom: 1.2%;margin-left: 1%;">  ${companyReviews[0].simpleComment} </div>
+										<div style="margin-top: 1.2%;margin-bottom: 1.2%;margin-left: 1%;">  ${companyReviews[0].disadvantages} </div>
 									</a>						
 								</c:otherwise>
 							</c:choose>						
