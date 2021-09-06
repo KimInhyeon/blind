@@ -14,6 +14,7 @@ public class PostDto {
 	private char logicalDelFlag; //logical_del_flag character(1) not null //논리삭제 플래그(1이면 삭제)
 	private String recommendCount; //글의 추천수
 	private String replyCount; //글의 댓글수
+
 	//타 Dto 참고작성
 	//PostCountInfDto와 동일
 	private String postCountId; //post_count_id bigint GENERATED ALWAYS AS IDENTITY
@@ -24,6 +25,15 @@ public class PostDto {
 	private String userNickName; //user_nickName character varying(30)
 	//임의추가
 	private String companyName; //포스트를 작성한 유저가 근무하는 회사이름
+	private int bookmarkId;
+
+	public int getBookmarkId() {
+		return bookmarkId;
+	}
+
+	public void setBookmarkId(int bookmarkId) {
+		this.bookmarkId = bookmarkId;
+	}
 
 	// get/set 선언모음
 	public int getPostId() {

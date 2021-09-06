@@ -77,14 +77,38 @@
 		font-size: 1.2em;
 	}
 </style>
-	
-	
+
 	<script>
+	//북마크-(1) DB에 추가/삭제 실시.
+	//     -(2) DB 추가/삭제 여부에 따라 색채우기/색채우기 해제
 	function bookmarkSet(postId){
 		var bookmarkId = "#bookmarkSet"+postId;
-		$(bookmarkId).html("<a><i class='bookmark icon'></i></a>");
+
+		$.ajax({
+			type : "POST",
+			url : "/blind/addBookmark",
+			data : { postId : postId },
+			dataType:"json",
+			success : function(result){
+				//result : DB에 북마크 추가/삭제 여부(1:DB 추가완료 / 0:DB 삭제완료)
+
+				if(result == 1) { //1:DB 추가완료
+					$(bookmarkId).html("<a><i class='bookmark icon'></i></a>");
+				}
+
+				else if(result == 0) {
+					$(bookmarkId).html("<a><i class='bookmark icon'></i></a>");
+				}
+
+			}
+			error: function(){
+				alert("");
+			}
+		});
+
+
 	}
-	
+
 	$(function(){
 		//기업추천여부(기업에 일하고 싶은가 여부) - 좋아요 버튼 클릭시
 		$(".company_recommend_button").on('click', function(){
@@ -427,9 +451,26 @@
 							</div>
 						  		<div style="float:Right;">
 							 		${fn:substring(posts.postCreateDate,5,7)}.${fn:substring(posts.postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(posts.postCreateDate,0,10)} -->
-							   		<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
-							   			<a style="color:#000000; margin:0px;"><i class="bookmark outline icon"></i></a>
-							   		</div>
+							   		<!--북마크 on/off 표시 위한 jstl조건문-->
+							   		<c:choose>
+										<c:when test="${posts.bookmarkId == 0}">
+											<p>posts.bookmarkId:${posts.bookmarkId}</p>
+											<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
+												<a style="color:#000000; margin:0px;"><i class="bookmark outline icon"></i></a>
+												case-1
+											</div>
+										</c:when>
+										<c:otherwise>
+											<p>posts.bookmarkId:${posts.bookmarkId}</p>
+											<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
+												<a style="color:#000000; margin:0px;"><i class="bookmark icon"></i></a>
+												case-2
+											</div>
+										</c:otherwise>
+
+									</c:choose>
+
+
 							  	</div>
 					   		</div>
 					   </div>

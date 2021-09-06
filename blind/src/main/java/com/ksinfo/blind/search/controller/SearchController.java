@@ -1,5 +1,6 @@
 package com.ksinfo.blind.search.controller;
 
+import com.ksinfo.blind.mytask.dto.BookmarkDto;
 import com.ksinfo.blind.search.dto.BoardDto;
 import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
@@ -140,6 +141,21 @@ public class SearchController {
 		return mav;
 
 	}
+
+	/*
+	@RequestMapping(value = "addBookmark", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public void addBookmark(@AuthenticationPrincipal Account account, long postId) {
+		BookmarkDto searchBookmark = bookmarkService.searchBookmark(account.getUserId(), postId);
+		if (searchBookmark != null) {
+			bookmarkService.updateBookmark(searchBookmark);
+		}
+	}
+	*/
+
+
+
+
 
 	@RequestMapping("/search/testView")
 	public ModelAndView testView(ModelAndView mav) {

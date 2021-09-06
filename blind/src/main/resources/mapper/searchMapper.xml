@@ -68,9 +68,10 @@ SELECT DISTINCT
    ,blind.company_mgt.company_id
    ,blind.company_mgt.company_name          --근무기업명
    ,blind.user_mgt.user_nickname              --작성자의 닉네임
-   ,COALESCE(blind.post_count_inf.post_count, 0) AS post_count   --글의 조회수
+   ,COALESCE(blind.post_count_inf.post_count, 0) AS post_count           --글의 조회수
    ,COALESCE(count_recommend_inf.recommend_count, 0) AS recommend_count  --글의 추천수
-   ,COALESCE(count_reply_inf.reply_count, 0) AS  reply_count       --글의 댓글수
+   ,COALESCE(count_reply_inf.reply_count, 0) AS  reply_count             --글의 댓글수
+   ,blind.bookmark_mgt.bookmark_id                                       --북마크ID(NULL값이 아닌 경우에는 jsp에서 샐채움처리 실시.)
    ,blind.post_mgt.post_create_date           --게시글의 최초작성일
 FROM blind.post_mgt
 LEFT JOIN blind.board_mgt            --토픽(게시판)명
@@ -96,7 +97,9 @@ LEFT JOIN
   FROM
    blind.reply_mgt
   GROUP BY post_id) count_reply_inf
-ON blind.post_mgt.post_id = count_reply_inf.post_id 
+ON blind.post_mgt.post_id = count_reply_inf.post_id
+LEFT JOIN blind.bookmark_mgt            --북마크
+    ON blind.post_mgt.post_id = blind.bookmark_mgt.post_id
 where blind.post_mgt.post_title like '%'|| #{searchKeyword} ||'%'
 order by blind.post_mgt.post_create_date DESC;
 </select>
@@ -304,5 +307,40 @@ select DISTINCT
 
 from "blind".COMPANY_RECOMMEND_INF
 </select>
+
+<insert id="addBookmark" parameterType="java.util.Map">
+    INSERT INTO blind.bookmark_mgt(
+        bookmark_id,
+        post_id,
+        user_id,
+        bookmark_create_date,
+        bookmark_update_date,
+        rec_create_user_id,
+        rec_create_date,
+        rec_update_user_id,
+        rec_update_date,
+        logical_del_flag
+    )VALUES(
+        default --bookmark_id,
+        ,#{postId}		--post_id,
+        ,#{userId}		--user_id,
+        ,now()	--bookmark_create_date,
+        ,now()	--bookmark_update_date,
+        ,#{userId}			--rec_create_user_id,
+        ,now()	--rec_create_date,
+        ,#{userId}			--rec_update_user_id,
+        ,now()	--rec_update_date,
+        ,0		--logical_del_flag
+    );
+</insert>
+<delete id="removeBookmark" parameterType="java.util.Map" >
+    delete
+    from
+        blind.bookmark_mgt
+    where
+        blind.bookmark_mgt.post_id =#{postId} --해당포스트만 삭제처리되도록.
+      and
+        blind.bookmark_mgt.user_id =#{userId}; --본인(로그인완료)시에만 처리할 수 있도록.
+</delete>
 
 </mapper>
