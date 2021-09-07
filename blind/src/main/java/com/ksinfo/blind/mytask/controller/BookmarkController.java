@@ -39,6 +39,24 @@ public class BookmarkController {
             }
         }
 
+    //북마크 없음을 확인한 경우 신규 row를 추가.
+    @RequestMapping(value = "insertBookmark", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public void insertBookmark(@AuthenticationPrincipal Account account, long postId) {
+        BookmarkDto searchBookmark = bookmarkService.searchBookmark(account.getUserId(), postId);
+        if (searchBookmark != null) {
+            bookmarkService.updateBookmark(searchBookmark);
+        }
+    }
+
+    //해당 북마크의 logical_del_flag(on/off여부)칼럼값을 받는다. 이를 리턴하여 jsp의 ajax로 on/off표현.
+    @RequestMapping(value = "checkNowBookmarkFlag", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public void checkNowBookmarkFlag(@AuthenticationPrincipal Account account, long postId) {
+
+    }
+
+
     @RequestMapping(value = "addPostRecommend", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public void addPostRecommend(@AuthenticationPrincipal Account account, long postId){

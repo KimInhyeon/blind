@@ -1,6 +1,7 @@
 package com.ksinfo.blind.search.controller;
 
 import com.ksinfo.blind.mytask.dto.BookmarkDto;
+import com.ksinfo.blind.mytask.service.BookmarkService;
 import com.ksinfo.blind.search.dto.BoardDto;
 import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
@@ -24,10 +25,10 @@ import java.util.List;
 @Controller
 public class SearchController {
 
-	private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
+//	private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 
 	@Autowired SearchService searchService; // SearchService.java에서 선언된 DB의 자료형
-
+	@Autowired BookmarkService bookmarkService;
 
 	//유저가 검색된 기업에 대하여 근무를 추천/비추천 버튼 클릭한 값에 따라 추천/비추천 한 정보를 insert실시 및 기업의 추천도를 리턴.
 	@RequestMapping(value = "companyRecommendVote", method = RequestMethod.POST)
@@ -48,14 +49,6 @@ public class SearchController {
 		companyRecommendVoteResult.get(0).setVoteCountOfBad((companyRecommendVoteResult.get(0).getVoteCountOfBad() / tempDenominator) * 100);
 
 		return companyRecommendVoteResult; //투표에 참여한 유저에게 기업의 선호도를 출력하기 위한 값들을 리턴.
-	}
-
-
-	@RequestMapping(value = "bookmarkChanege", method = RequestMethod.GET)
-	@ResponseBody
-	public int bookmarkChanege() { //나중에 리턴형을 BookmarkDto으로 할지 여부 결정필요.
-		//북마크 설정 mapper.xml을 통해 SQL 수정실시하도록 갱신예정.
-		return 1; //성공시 flag 개념으로 1을 성공의 개념으로 리턴.
 	}
 
 	//포스트-1개의 토픽(board) 선택시 해당하는 게시판만 출력되도록 실행.
@@ -142,16 +135,27 @@ public class SearchController {
 
 	}
 
-	/*
-	@RequestMapping(value = "addBookmark", method = RequestMethod.POST, produces = "application/json")
+	//북마크 추가/삭제여부를 결정.
+	@RequestMapping(value = "/bookmarkSet", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public void addBookmark(@AuthenticationPrincipal Account account, long postId) {
+	public int bookmarkSet(@AuthenticationPrincipal Account account, int postId) {
+		//우선 기존에 등록된 플래그가 있는지 여부를 확인.
 		BookmarkDto searchBookmark = bookmarkService.searchBookmark(account.getUserId(), postId);
-		if (searchBookmark != null) {
+		int resultBookmarkFlag=0;	//ajax에게 리턴하여 ajax로 북마크태그를 on/off하도록 설정.　우선 초기값은 0으로 설정.
+
+		if (searchBookmark != null) {//DB에 등록된 북마크 없음여부 확인.
+			//기존에 등록된 북마크가 있음을 확인. logical_del_flag를 update하여 on/off처리 실시.
 			bookmarkService.updateBookmark(searchBookmark);
+			resultBookmarkFlag = bookmarkService.checkNowBookmarkFlag(searchBookmark);
 		}
+		else{
+			//기존에 등록된 북마크가 없음. 따라서 신규등록으로 처리.
+			bookmarkService.insertBookmark( ( (int)account.getUserId() ), postId);
+			resultBookmarkFlag =1;
+		}
+
+		return resultBookmarkFlag; //(0:DB에서 삭제.북마크 outline 출력. 1:DB에 추가.)
 	}
-	*/
 
 
 
