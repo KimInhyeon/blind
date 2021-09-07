@@ -170,18 +170,6 @@
 		)
 	</insert>
 
-	<!-- 현재의 북마크 상태 확인 SQL(2021-09-07추가) -->
-	<select id="checkNowBookmarkFlag" parameterType="java.util.Map"  resultType="int">
-		select
-		    blind.bookmark_mgt.logical_del_flag
-		from
-			blind.bookmark_mgt
-		where
-			blind.bookmark_mgt.rec_update_user_id = #{userId}
-		and
-			blind.bookmark_mgt.post_id = #{postId};
-	</select>
-
 	<select id="searchPostRecommend" parameterType="hashmap" resultType="com.ksinfo.blind.mytask.dto.BookmarkDto">
 		SELECT
 			pri.post_recommend_id as postRecommendId

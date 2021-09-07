@@ -20,7 +20,6 @@ public interface BookmarkMapper {
 
 	//2021-09-07 추가
 	public void insertBookmark(HashMap<String, Object> map);				//새로 북마크row추가
-	public int checkNowBookmarkFlag(HashMap<String, Object> map);	//북마크의 현 logic값 리턴. 이에 따라 ajax로 on/off 출력 설정.
 
 	public BookmarkDto searchPostRecommend(HashMap<String, Object> map);
 

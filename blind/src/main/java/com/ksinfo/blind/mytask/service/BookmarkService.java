@@ -52,13 +52,6 @@ public class BookmarkService {
 		bookmarkMapper.insertBookmark(map);
 	}
 
-	public int checkNowBookmarkFlag(BookmarkDto searchBookmark){
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("postId", searchBookmark.getPostId());
-		map.put("userId", searchBookmark.getUserId());
-		return bookmarkMapper.checkNowBookmarkFlag(map);
-	}
-
 	public BookmarkDto searchPostRecommend(long userId, long postId){
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("userId", userId);

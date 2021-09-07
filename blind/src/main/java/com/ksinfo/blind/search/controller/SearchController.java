@@ -146,7 +146,8 @@ public class SearchController {
 		if (searchBookmark != null) {//DB에 등록된 북마크 없음여부 확인.
 			//기존에 등록된 북마크가 있음을 확인. logical_del_flag를 update하여 on/off처리 실시.
 			bookmarkService.updateBookmark(searchBookmark);
-			resultBookmarkFlag = bookmarkService.checkNowBookmarkFlag(searchBookmark);
+			BookmarkDto searchBookmarkTemp = bookmarkService.searchBookmark(account.getUserId(), postId);
+			resultBookmarkFlag = Integer.parseInt(searchBookmarkTemp.getLogicalDelFlag());
 		}
 		else{
 			//기존에 등록된 북마크가 없음. 따라서 신규등록으로 처리.
@@ -156,10 +157,6 @@ public class SearchController {
 
 		return resultBookmarkFlag; //(0:DB에서 삭제.북마크 outline 출력. 1:DB에 추가.)
 	}
-
-
-
-
 
 	@RequestMapping("/search/testView")
 	public ModelAndView testView(ModelAndView mav) {
