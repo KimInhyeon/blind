@@ -152,7 +152,9 @@ public class SearchController {
 		else{
 			//기존에 등록된 북마크가 없음. 따라서 신규등록으로 처리.
 			bookmarkService.insertBookmark( ( (int)account.getUserId() ), postId);
-			resultBookmarkFlag =1;
+			BookmarkDto searchBookmarkTemp = bookmarkService.searchBookmark(account.getUserId(), postId);
+			resultBookmarkFlag = Integer.parseInt(searchBookmarkTemp.getLogicalDelFlag());
+
 		}
 
 		return resultBookmarkFlag; //(0:DB에서 삭제.북마크 outline 출력. 1:DB에 추가.)

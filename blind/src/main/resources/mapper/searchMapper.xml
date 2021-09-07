@@ -71,8 +71,9 @@ SELECT DISTINCT
    ,COALESCE(blind.post_count_inf.post_count, 0) AS post_count           --글의 조회수
    ,COALESCE(count_recommend_inf.recommend_count, 0) AS recommend_count  --글의 추천수
    ,COALESCE(count_reply_inf.reply_count, 0) AS  reply_count             --글의 댓글수
-   ,blind.bookmark_mgt.bookmark_id                                       --북마크ID(NULL값이 아닌 경우에는 jsp에서 샐채움처리 실시.)
-   ,blind.post_mgt.post_create_date           --게시글의 최초작성일
+   ,blind.bookmark_mgt.bookmark_id                                       --북마크ID
+   ,CAST(blind.bookmark_mgt.logical_del_flag AS int)                       --북마크ID(NULL값이 아닌 경우에는 jsp에서 샐채움처리 실시.)
+   ,blind.post_mgt.post_create_date                                      --게시글의 최초작성일
 FROM blind.post_mgt
 LEFT JOIN blind.board_mgt            --토픽(게시판)명
    ON blind.post_mgt.board_id = blind.board_mgt.board_id

@@ -78,11 +78,9 @@
 	}
 </style>
 	<script>
-	//북마크-(1) DB에 추가/삭제 실시.
-	//     -(2) DB 추가/삭제 여부에 따라 색채우기/색채우기 해제
 	function bookmarkSet(postId) {
 		var bookmarkId = "#bookmarkSet"+postId;
-		alert("postId : "+postId);
+		//alert("postId : "+postId);
 		$.ajax({
 			type: "POST",
 			url: "/blind/bookmarkSet",
@@ -90,12 +88,12 @@
 			dataType: "json",
 			success: function (result) {
 				if (result == 1) { //1:DB 추가완료
-					alert('aaaaa');
+					alert('ブックマーク登録完了。');
 					$(bookmarkId).html("<a><i class='bookmark icon'></i></a>");
 				}
 				else if (result == 0) {
-					alert('bbbbb');
-					$(bookmarkId).html("<a><i class='bookmark icon'></i></a>");
+					alert('ブックマーク解除完了。 ');
+					$(bookmarkId).html("<a><i class='bookmark outline icon'></i></a>");
 				}
 			},
 			error: function () {
@@ -448,14 +446,14 @@
 							 		${fn:substring(posts.postCreateDate,5,7)}.${fn:substring(posts.postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(posts.postCreateDate,0,10)} -->
 							   		<!--검색결과 최초 출력시 북마크의 on/off 표시 위한 jstl조건문-->
 							   		<c:choose>
-										<c:when test="${posts.bookmarkId == 0}">
-											<div class="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
-												<a style="color:#000000; margin:0px;"><i class="bookmark outline icon"></i></a>
+										<c:when test="${posts.bookmarkId != 0 && posts.logicalDelFlag ==1}">
+											<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
+												<a style="color:#000000; margin:0px;"><i class="bookmark icon"></i></a>
 											</div>
 										</c:when>
 										<c:otherwise>
-											<div class="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
-												<a style="color:#000000; margin:0px;"><i class="bookmark icon"></i></a>
+											<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
+												<a style="color:#000000; margin:0px;"><i class="bookmark outline icon"></i></a>
 											</div>
 										</c:otherwise>
 									</c:choose>

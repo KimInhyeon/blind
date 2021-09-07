@@ -19,9 +19,6 @@ public class CompanyReviewDto {
 	private String resignReason; // resign_reason character varying(150) not null
 	private String workArea; // work_area character varying(50) not null
 	private String advantages; // advantages character varying(400) not null
-	private char verifyFlag; // verify_flag character(1) not null
-	private char completeFlag; // complete_flag character(1) not null
-	private char logicalDelFlag; //logical_del_flag character(1) not null
 	//2.출력을 위해 임의로 추가.
 	private String jobGroupName; //기존 SQL DDL에는 없습니다. 기업리뷰에 유저정보 출력위해 추가된 부분입니다.
 
@@ -162,27 +159,4 @@ public class CompanyReviewDto {
 		this.advantages = advantages;
 	}
 
-	public char getVerifyFlag() {
-		return verifyFlag;
-	}
-
-	public void setVerifyFlag(char verifyFlag) {
-		this.verifyFlag = verifyFlag;
-	}
-
-	public char getCompleteFlag() {
-		return completeFlag;
-	}
-
-	public void setCompleteFlag(char completeFlag) {
-		this.completeFlag = completeFlag;
-	}
-
-	public char getLogicalDelFlag() {
-		return logicalDelFlag;
-	}
-
-	public void setLogicalDelFlag(char logicalDelFlag) {
-		this.logicalDelFlag = logicalDelFlag;
-	}
 }
