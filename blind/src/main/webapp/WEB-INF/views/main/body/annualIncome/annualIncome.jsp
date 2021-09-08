@@ -53,9 +53,9 @@ $(function(){
 	//1개의 직군을 선택하면 선택한 직군에 따라 연봉값들을 리턴.
 	$("#selectGroupList").on('change', function(){	
 		var companyId = ${companyProfile[0].companyId};
-		alert("companyId : "+companyId);
+		//alert("companyId : "+companyId);
 		var jobGroupCode= $("#selectGroupList option:selected").val();
-		alert("jobGroupCode:"+jobGroupCode);
+		//alert("jobGroupCode:"+jobGroupCode);
 		
     	$.ajax({
 			type:"POST",
