@@ -19,7 +19,31 @@
 	  margin:0.5%;
 	}
 </style>
-
+<script>
+	function bookmarkSet(postId) {
+		var bookmarkId = "#bookmarkSet"+postId;
+		alert("postId : "+postId);
+		$.ajax({
+			type: "POST",
+			url: "/blind/bookmarkSet",
+			data: {postId},
+			dataType: "json",
+			success: function (result) {
+				if (result == 1) { //1:DB 추가완료
+					alert('ブックマーク登録完了。');
+					$(bookmarkId).html("<a><i class='bookmark icon'></i></a>");
+				}
+				else if (result == 0) {
+					alert('ブックマーク解除完了。 ');
+					$(bookmarkId).html("<a><i class='bookmark outline icon'></i></a>");
+				}
+			},
+			error: function () {
+				alert("システムエラーです。");
+			}
+		});
+	}
+</script>
 
 </head>
 
@@ -52,12 +76,12 @@
 	<div class="ui bottom attached active tab segment">
 		<div style="margin:2%; width:100%;"> <!-- 기업리뷰의 게시글 전체 감싸기 div -->
 			<!-- 1.기업리뷰의 게시글의 헤더(검색창&추천키워드)부분 -->
-			<div style="margin-top: 5%; margin-bottom: 5%;">
+			<div style="margin-top: 5%; margin-bottom: 5%; style="width: 90%;">
 				<h2 style="margin-bottom: 3%;"> ${company_name}のポスト</h2>
 				   <!-- 1.1.검색창 -->
 				   <div class="inputSearchKeyword">
 						<form>
-							<div class="ui fluid massive left icon input">
+							<div class="ui fluid massive left icon input" style="width: 90%;">
 								<input type="text" placeholder="Search" id="searchbox" name="searchKeyword" value="${pastSearchKeyword}">
 								<i class="search link icon" id="searchicon" onclick="goSearch();"></i>
 								<div class="results"></div>
@@ -86,10 +110,10 @@
 			<div style="margin-top: 5%;">
 				<!-- 게시글(포스트)들 출력 -->
 				<!-- https://semantic-ui.com/collections/grid.html -->
-				<div id="postList" style="background-color:#ffffff; padding : 2%;">
-					<div class="ui divider"  style="border-color: #d4d4d5;"></div><!-- 첫 시작의 게시글의 윗부분에 가로선을 긋기위한 div(감싸는 구간없음) -->
+				<div id="postList" style="background-color:#ffffff; padding : 2%;width: 90%;">
+					<div class="ui divider"  style="border-color: #d4d4d5;"></div><!--포스트 구분에 사용되는 가로선을 긋기위한 div(감싸는 구간없음)-->
 					<c:forEach items="${company_posts}" var="posts" varStatus="status">
-						<div style="padding : 2%; border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;border-right-style: inset;">
+						<div style="padding : 2%; border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;">
 							<a href="topicDetail?postId=${posts.postId}">
 								<span style="font-size: 150%;">${posts.postTitle}</span>
 							</a>
@@ -112,10 +136,19 @@
 								</div>
 
 								<div style="float:Right;"> <!-- 작성일,북마크 출력 -->
-									${fn:substring(posts.postCreateDate,5,7)}.${fn:substring(posts.postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(posts.postCreateDate,0,10)} -->
-									<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
-										<a style="color:#000000; margin:0px;"><i class="bookmark outline icon"></i></a>
-									</div>
+									${fn:substring(posts.postCreateDate,5,7)}.${fn:substring(posts.postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(posts.postCreateDate,0,10)} -->							   		<!--검색결과 최초 출력시 북마크의 on/off 표시 위한 jstl조건문-->
+									<c:choose>
+										<c:when test="${posts.bookmarkId != 0 && posts.logicalDelFlag ==1}">
+											<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
+												<a style="color:#000000; margin:0px;"><i class="bookmark icon"></i></a>
+											</div>
+										</c:when>
+										<c:otherwise>
+											<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
+												<a style="color:#000000; margin:0px;"><i class="bookmark outline icon"></i></a>
+											</div>
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</div>
 						</div>
