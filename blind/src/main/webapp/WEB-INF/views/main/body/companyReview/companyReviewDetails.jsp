@@ -83,6 +83,10 @@
         <!-- 1.기업리뷰 1개 출력부분.-->
         <div style="padding: 2%;">
             <!-- 1.1.기업리뷰1개-헤더부분. 별점/제목(한줄평)/작성자정보(닉네임,업종,작성일)/신고버튼 배치.-->
+			<!-- 추가옵션 버튼(신고하기 등) -->
+			<div style="float: right;">
+				<i class="ellipsis horizontal icon" style="font-size: 1.2em;"></i>
+			</div>
             <div style="padding: 0.5%;">
                 <div style="padding: 1%;display: flex;">
                     <!-- 헤더파트1.별점 정보& 신고버튼 배치-->
@@ -139,31 +143,34 @@
                             </div>
                         </div>
                     </div>
-                    
-                <!-- 헤더파트2.한줄평&작성자 정보-->
-	            <div style="padding: 1.5%;">
-	            	<span style="font-size: 1.3em;"> ${companyReviewLists[0].simpleComment} </span>
-	           	    <!-- 리뷰작성자 근무기업, 닉네임, 작성일자 등등...  -->
-	                <!-- 리뷰작성자 근무기업은 미기재/리뷰작성자의 근무기업이름 갖고오도록 sql 갱신할 것.-->
-	                <div>${companyReviewLists[0].userNickname}</div>
-	                <div>${companyReviewLists[0].recCreateDate}</div>
-	            </div>
             </div>
-            
 
-                
             <!-- 1.2.기업리뷰1개-본문내용. -->
             <!-- <div style="background-color: #573A08; padding: 0.5%;"> -->
             <div style="padding: 0.5%;">
-                <!-- 1.2.기업리뷰1개-본문내용. 장점 내용 배치.-->
-                <div>
-                    <span style="font-size: 1.2em;">長所</span>
-                    <div>${companyReviewLists[0].advantages}</div>
+				<!-- 기업리뷰1개-본문-1.한줄평&작성자 정보 (구)헤더파트2.한줄평&작성자 정보-->
+				<div style="padding: 0.5%;">
+					<!-- 기업리뷰의 제목(한줄평)-->
+					<span style="font-size: 2em;font-weight: bold;"> ${companyReviewLists[0].simpleComment} </span>
+
+					<!-- 기업리뷰 작성자의 정보를 출력 -->
+					<div  style="padding-top:1.2%;">
+						<span style="padding-right: 1.3%; "> </span>  <!-- 리뷰 작성자의 현직원/전직원 여부 -->
+						<span style="padding-right: 1.3%; "> ${companyReviewLists[0].userNickname} </span>  <!-- 리뷰 작성자의 닉네임-->
+						<span style="padding-right: 1.3%; "> </span>  <!-- 리뷰 작성자의 직군 .-->
+						<span style="padding-right: 1.3%; "> ${companyReviewLists[0].recCreateDate} </span> <!-- 리뷰 작성일 -->
+
+					</div>
+				</div>
+				<!-- 기업리뷰1개-본문-2.기업 장점 출력-->
+				<div  style="padding-top:1.2%;">
+                    <span style="font-size: 1.5em;font-weight: bold;">長所</span>
+                    <div style="font-size: 1.3em;"> ${companyReviewLists[0].advantages}</div>
                 </div>
-                <!-- 1.2.기업리뷰1개-본문내용. 단점 내용 배치.-->
-                <div>
-                    <span style="font-size: 1.2em;">短所</span>
-                    <div>${companyReviewLists[0].disadvantages}</div>
+				<!-- 기업리뷰1개-본문-2.기업 단점 출력-->
+				<div  style="padding-top:1.2%;">
+                    <span style="font-size: 1.2em;font-weight: bold;">短所</span>
+					<div style="font-size: 1.3em;">${companyReviewLists[0].disadvantages}</div>
                 </div>
             </div>
 
@@ -259,7 +266,7 @@
 						</div>
 	            	</div>
 				
-					<!-- 헤더파트2.한줄평&작성자 정보-->
+					<!-- 헤더파트2.한줄평&작성자 정보 / '(구)헤더파트2.한줄평&작성자 정보'가 업데이트되면 변경예정. -->
 		            <div style="padding: 1.5%;">
 		            	<span style="font-size: 1.3em;"> ${companyReviewLists[0].simpleComment} </span>
 		           	    <!-- 리뷰작성자 근무기업, 닉네임, 작성일자 등등...  -->
