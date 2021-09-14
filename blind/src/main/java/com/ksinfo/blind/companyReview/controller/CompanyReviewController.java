@@ -5,6 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.ksinfo.blind.alert.controller.AlertController;
+import com.ksinfo.blind.alert.dto.PostReportDto;
+import com.ksinfo.blind.alert.dto.ReplyReportDto;
+import com.ksinfo.blind.alert.dto.ReportReasonDto;
+import com.ksinfo.blind.alert.dto.ReviewReportDto;
+import com.ksinfo.blind.alert.service.AlertService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -220,4 +229,5 @@ public class CompanyReviewController {
 		mav.setViewName("main/companyReview/companyReviewDetails");
 		return mav;
 	}
+
 }
