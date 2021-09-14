@@ -89,7 +89,7 @@
 
     </select>
 
-    <select id="oneCompanyReview" resultType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">
+    <select id="oneCompanyReview" parameterType="Map" resultType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">
 
         select
             c1.company_id as companyId
@@ -100,11 +100,13 @@
              ,c1.rec_create_date as recCreateDate
              ,c1.company_review_id as companyReviewId
              ,c1.career_point as careerPoint
-             ,c1.work_life_balance_point as workLifeBalacnePoint
+             ,c1.work_life_balance_point as workLifeBalancePoint
              ,c1.company_culture_point as companyCulturePoint
              ,c1.pay_point as payPoint
              ,c1.head_point as headPoint
-             ,(select count(*) from blind.review_recommend_inf as rec where c1.company_review_id= rec.company_review_id) as helpfulCount
+             ,coalesce((select sum(helpful) from blind.review_recommend_inf as rec where c1.company_review_id= rec.company_review_id),0) as helpfulCount
+             ,coalesce((select helpful from blind.review_recommend_inf where user_id=#{user_id} and company_review_id=#{company_review_id}),0) as recommendFlag
+
         from
 
             blind.company_review_mgt c1

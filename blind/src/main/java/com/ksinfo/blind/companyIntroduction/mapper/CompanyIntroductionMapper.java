@@ -16,7 +16,7 @@ public interface CompanyIntroductionMapper {
  CompanyIntroductionDto companyIntro(long paramlong);
  int reviewCount(Long companyId);
  CompanyAverageDto companyAveragePoint(long companyId);
- CompanyJoinDto	oneCompanyReview(long companyId);
+ CompanyJoinDto	oneCompanyReview(Map<String,Long> paramMap);
  List<CompanyJoinDto>	companyReviewList(Map<String,Long> paramMap, RowBounds rowBounds);
  void helpCount(Map<String ,Long> paramMap);
  void updateHelpCount(Map<String, Long> paramMap);

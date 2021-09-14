@@ -214,11 +214,11 @@
             <table class="tabtable" border="1" style="width:100%; margin:15px auto; padding:30px"><!--마진은되도록 쓰지말자  -->
 
                 <tr>
-                    <td>${oneCompanyReview.allPoint }</td>
-                    <td><h4>"${oneCompanyReview.simpleComment }"</h4></td>
+                    <td style="width:20%;">${oneCompanyReview.allPoint }</td>
+                    <td style="width:65%;"><h4>"${oneCompanyReview.simpleComment }"</h4></td>
                     <td>${oneCompanyReview.recCreateDate}</td>
 
-                    <td>
+                    <td style="width:5%;">
                         <%--<div id="sample"  data-position="bottom left"
                              data-content="신고"><i class="ellipsis horizontal icon"></i></div>--%>
                         <div class="ui button" style="background: white; margin:0px;" data-position="bottom center"><i
@@ -349,15 +349,13 @@
                 <div style="width:100%; border:1px;">
                     <table class="tabtable" border="1" style="width:100%; margin:15px auto; padding:30px">
                         <!--마진은되도록 쓰지말자  -->
+
                         <tr>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td> ${companyShowList.allPoint}</td>
-                            <td><h4>"${companyShowList.simpleComment }"</h4></td>
+                            <td style="width:20%;" > ${companyShowList.allPoint}</td>
+                            <td style="width:65%;" ><h4>"${companyShowList.simpleComment }"</h4></td>
 
                             <td>${companyShowList.recCreateDate}</td>
-                            <td>
+                            <td style="width:5%;" >
 
                                 <div class="ui button" style="background: white; margin:0px;"
                                      data-position="bottom center"><i class="ellipsis horizontal icon"></i></div>

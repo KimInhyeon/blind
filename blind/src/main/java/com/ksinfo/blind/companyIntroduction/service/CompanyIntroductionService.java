@@ -29,8 +29,8 @@ public class CompanyIntroductionService {
 	public CompanyAverageDto companyAveragePoint(long companyId) {
 		return CompanyIntroductionMapper.companyAveragePoint(companyId);
 	}
-	public CompanyJoinDto oneCompanyReview(long companyId) {
-		return CompanyIntroductionMapper.oneCompanyReview(companyId);
+	public CompanyJoinDto oneCompanyReview(Map<String,Long> paramMap) {
+		return CompanyIntroductionMapper.oneCompanyReview(paramMap);
 	}
 	public List<CompanyJoinDto> companyReviewList(Map<String,Long> paramMap,int page){
 		int offset = (page-1)*recordLimit;

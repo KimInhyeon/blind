@@ -59,7 +59,8 @@ public class CompanyIntroductionController {
 		mav.addObject("companyIntroduction", companyIntroduction);
 
 		if (page < 2) {
-			CompanyJoinDto oneCompanyReview = companyIntroductionService.oneCompanyReview(companyId);
+			CompanyJoinDto oneCompanyReview = companyIntroductionService.oneCompanyReview(map);
+			System.out.println(oneCompanyReview.getWorkLifeBalancePoint());
 			companyReviewList.remove(0);
 			mav.addObject("oneCompanyReview", oneCompanyReview);
 
@@ -92,7 +93,6 @@ public class CompanyIntroductionController {
 		}
 
 		CompanyJoinDto companyReviewList = companyIntroductionService.searchCompanyRecommend(companyReviewId);
-
 		return companyReviewList;
 	}
 
