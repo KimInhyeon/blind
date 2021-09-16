@@ -166,7 +166,8 @@ public class CompanyReviewController {
 	  @RequestMapping(value = "companyReviewPost", method = RequestMethod.GET)
 	  public ModelAndView companyReviewPost(Integer companyId, String searchKeyword,
 			  								@RequestParam(name = "page", defaultValue = "1") int page,
-			  								ModelAndView mav) throws Exception { 
+			  								ModelAndView mav,
+											@AuthenticationPrincipal Account account) throws Exception {
 		  //Integer companyId    : 유저가 이전페이지(기업리뷰 소속의 페이지)에서 넘어온 경우 기업값을 받아오도록 실시.(int는 null값 에러로 인식되어 Integer 사용 
 		  //String searchKeyword : 본 게시판페이지에서 유저가 입력한 검색어. 검색어 입력시 검색어를 중점으로 출력하도록 한다.
 		  
@@ -200,24 +201,26 @@ public class CompanyReviewController {
 
 
 		  mav.addObject("navi", navi);
-		  
+
+		  int userId = (int)account.getUserId();
+		  mav.addObject("userId",userId);
+
 		  mav.addObject("company_name", companyName);	  
 		  mav.addObject("company_posts", companyPosts);
 		  mav.addObject("pastSearchKeyword", searchKeyword);
-		  
+
 		  mav.setViewName("main/companyReview/companyReviewPost");
 		  return mav;
 		}
 
 	//BLIND_0016 企業レビュー詳細照会(2021-08-25)
 	@RequestMapping(value = "companyReviewDetails", method = RequestMethod.GET)
-	public ModelAndView companyReviewDetails(Integer companyId, ModelAndView mav) throws Exception {
+	public ModelAndView companyReviewDetails(Integer companyId, ModelAndView mav){
 
 		//0.임시정보(작동을 위해 임시적으로 구성한 정보입니다.
 		companyId = 1;	//기업ID
 		int blurEffectSet = 1; //이외게시글 블러효과적용여부. 기업리뷰 작성여부에 따라 값 결정.(0:기업리뷰 미작성, 1:기업리뷰 작성)
-		
-		
+
 		String companyName = companyReviewService.getCompanyName(companyId);
 		List<CompanyReviewDto> companyReviewLists= companyReviewService.getCompanyReviews(companyId);
 
@@ -226,6 +229,7 @@ public class CompanyReviewController {
 		mav.addObject("companyName", companyName);
 		mav.addObject("companyReviewLists", companyReviewLists);
 		mav.addObject("blurEffectSet", blurEffectSet);
+
 		mav.setViewName("main/companyReview/companyReviewDetails");
 		return mav;
 	}

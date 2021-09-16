@@ -89,7 +89,23 @@
 					<i class="ellipsis horizontal icon" style="font-size: 1.2em;"></i></div>
 				<div class="ui flowing popup top left transition hidden">
 					<div class="column" data-position="bottom left">
-						<button class="alert_modal_start" onclick="alertModalStart(this.value)" value="0008">申告する(企業レビュー)</button>
+						<button class="alert_modal_start"
+								onclick="alertModalStart(
+									'0008'
+									,0
+									,'${companyReviewLists[0].companyReviewId}'
+									,0
+									,'${companyReviewLists[0].userNickname}'
+									,'${companyReviewLists[0].simpleComment}'
+								)">
+							<!-- 신고유형. 0008은 기업리뷰 신고(currentAlertType) -->
+							<!-- 신고할 기업리뷰의 id(currentCompanyReviewId) -->
+							<!-- replyId. 여기서는 기업리뷰 신고인 관계로 없음 의미로 0을 입력. -->
+							<!-- 신고할 기업리뷰의 id(currentCompanyReviewId) -->
+							<!-- nickName(신고할 포스트의 닉네임) -->
+							<!-- 신고할 포스트의 제목(simpleComment) -->
+							申告する(企業レビュー)
+						</button>
 					</div>
 				</div>
 			</div>
@@ -368,7 +384,12 @@
         </div>
     </div>
 
-	<input type="hidden" value="" id="currentAlertType"> <!-- 신고종류(포스트/기업리뷰/댓글)를 구분하는 값을 임시저장. -->
+	<!--신고하기(send_alert)를 할 때 전송할 값을 줄 수 있도록 임시로 값을 저장. -->
+	<input type="hidden" value="" id="currentAlertType" />
+	<input type="hidden" value="" id="currentPostId" />
+	<input type="hidden" value="" id="currentCompanyReviewId" />
+	<input type="hidden" value="" id="currentReplyId" />
+
 </body>
 
 <!--신고 모달창-->
@@ -416,9 +437,14 @@
         .rating('disable');
 
 	//1.신고모달창을 팝업실시.
-	function alertModalStart(alertType){
-		document.getElementById("currentAlertType").value = alertType;
-		alert(alertType);
+	function alertModalStart(alertType, postId, companyReviewId, replyId, targetUserNickname, targetTitle){
+    	//신고하기 전에 hidden에 미리 정보를 저장. send_alert 함수를 실행때 사용할 수 있도록 저장.
+    	document.getElementById("currentAlertType").value = alertType;
+		document.getElementById("currentPostId").value = postId;
+		document.getElementById("currentCompanyReviewId").value = companyReviewId;
+		document.getElementById("currentReplyId").value = replyId;
+
+		//DB에서 신고유형(포스트/기업리뷰/댓글)에 따라 신고할 목록을 로드.
 		$.ajax({
 			type : "POST",
 			url  : "/blind/loadAlertReasonList",
@@ -430,18 +456,18 @@
 
 				if(selectedAlertType=="0006")
 				{
-					document.getElementById("alertTitle").innerHTML=$('#post_title').text();
-					document.getElementById("nickName").innerHTML=$('#post_nickname').text();
+					//document.getElementById("alertTitle").innerHTML=$('#post_title').text();
+					//document.getElementById("nickName").innerHTML=$('#post_nickname').text();
 				}
 				else if(selectedAlertType=="0008")
 				{
-					document.getElementById("alertTitle").innerHTML=$('#company_review_title').text();
-					document.getElementById("nickName").innerHTML=$('#company_review_nickname').text();
+					document.getElementById("alertTitle").innerHTML=targetUserNickname;
+					document.getElementById("nickName").innerHTML=targetTitle;
 				}
 				else if(selectedAlertType=="0012")
 				{
-					document.getElementById("alertTitle").innerHTML=$('#reply_title').text();
-					document.getElementById("nickName").innerHTML=$('#reply_nickname').text();
+					//document.getElementById("alertTitle").innerHTML=$('#reply_title').text();
+					//document.getElementById("nickName").innerHTML=$('#reply_nickname').text();
 				}
 
 				//2.신고할 사항들의 리스트
@@ -464,12 +490,23 @@
 			}
 		});
 	};
-	/*
 	//2.신고를 하는 코드
 	$(function(){
 		$("#send_alert").on("click", function(){
-			var reportReasonCode = $('input[name="alert_post_reason"]:checked').val();
-			var alertType =$('#currentAlertType').val();
+			//신고정보들을 집계.
+			//2.1.신고사유 및 유형
+			var alertType = $('#currentAlertType').val();
+			var reportReasonCode = $('input[name="alert_post_reason"]:checked').val(); //유저가 라디오 버튼에서 선택한 신고사유.
+
+			//2.2.신고대상ID(0이 입력된 경우는 없음과 같음.)
+			var postId = $('#currentPostId').val();
+			var companyReviewId = $('#currentCompanyReviewId').val();
+			var replyId = $('#currentReplyId').val();
+
+			alert("send_alertType : "+alertType );
+			alert("send_postId : "+postId );
+			alert("send_currentCompanyReviewId : "+companyReviewId );
+			alert("send_replyId : "+replyId );
 
 			if(typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null){
 				alert("申告する理由を選んでください。"); //선택된 신고사항이 없기에 선택을 요청
@@ -477,13 +514,12 @@
 				$.ajax({
 					type : "POST",
 					url  : "/blind/sendAlert",
-					data : { postId : ${postId}
-						,companyReviewId : ${ companyReviewId }
-						,replyId : ${replyId}
-						,userId : ${userId}
-						,reportReasonCode
-						,alertType
-						,report_reason_content : $("#report_reason_content").val()
+					data : { postId
+							,companyReviewId
+							,replyId
+							,reportReasonCode
+							,alertType
+							,report_reason_content : $("#report_reason_content").val()
 					},
 					dataType: "json",
 					success: function(result){
@@ -521,7 +557,6 @@
 			$(alert_reason_textarea).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
 		}
 	}
-	*/
 </script>
 
 </html>
