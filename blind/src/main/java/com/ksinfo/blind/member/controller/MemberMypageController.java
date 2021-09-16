@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import com.ksinfo.blind.mytask.service.BookmarkService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -196,28 +197,9 @@ public class MemberMypageController {
 		mav.addObject("explain_flag",explain_flag);
 		mav.setViewName("main/member/certification");
 		return mav;
-	}	
-	
-	//3.2. 나의 북마크(즐겨찾기) 리스트 보기 페이지 이동.(일반회원불가. 일반회원은 인증페이지로 리턴)
-	@RequestMapping(value="viewListMyBookmark")
-	public ModelAndView ViewListmyBookmark(@AuthenticationPrincipal Account account, ModelAndView mav) {
-		//로그인한 유저의 정보
-		String userAuth = account.getUserAuth();
-
-		//출력할 페이지 설정		
-		if(userAuth.equals("ROLE_RM")) {	//정회원인 경우 연봉등록페이지로 이동			
-			mav.setViewName("main/member/viewListMyBookmark");
-			return mav;
-		}
-
-		//일반회원인 경우 이메일 인증페이지로 이동.
-		int explain_flag=1;	//explain_flag : 정회원만 이용할 수 있는 페이지를 일반회원이 접속시 '인증(main/member/certification)'페이지로 보내고 안내 팝업창을 띄우도록 하는 신호값.
-		mav.addObject("explain_flag",explain_flag);
-		mav.setViewName("main/member/certification");
-		return mav;
-	}	
+	}
 		
-	//3.3. 나의 기업리뷰 리스트 보기 페이지 이동.(일반회원불가. 일반회원은 인증페이지로 리턴)
+	//3.2. 나의 기업리뷰 리스트 보기 페이지 이동.(일반회원불가. 일반회원은 인증페이지로 리턴)
 	@RequestMapping(value="viewListWritedCompanyReview")
 	public ModelAndView ViewListWritedCompanyReview(@AuthenticationPrincipal Account account, ModelAndView mav) {
 		//로그인한 유저의 정보
@@ -250,5 +232,19 @@ public class MemberMypageController {
         mav.addObject("url", "/blind/login" ); //리턴값으로 로그아웃후 이동할 페이지 값을 리턴.   
         return mav;    	
     }
-	
+
+
+    //북마크페이지로 이동.
+	//기존의 BookmarkController.java의 북마크 코드를 활용.
+	@Autowired
+	BookmarkService bookmarkService;
+
+	@RequestMapping(value = "/bookmark")
+	public ModelAndView bookmarkView(@AuthenticationPrincipal Account account, ModelAndView mv) {
+		mv.addObject("bookmarkList", bookmarkService.bookmarkList(account.getUserId()));
+		mv.setViewName("main/mytask/bookmark");
+		return mv;
+	}
+
+
 }

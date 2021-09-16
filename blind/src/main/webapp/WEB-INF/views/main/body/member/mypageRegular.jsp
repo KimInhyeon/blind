@@ -286,8 +286,8 @@
 							</div>
 		
 							<div class="mypage_button_style_wrap"
-								 onclick="location.href='${pageContext.request.contextPath}/viewListMyBookmark';"> 												
-								<div class="mypage_button_style_button_name"> 								
+								 onclick="location.href='${pageContext.request.contextPath}/bookmark';">
+								<div class="mypage_button_style_button_name">
 									ブックマーク
 								</div>
 								<div class="mypage_button_style_button_icon">
