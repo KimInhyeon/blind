@@ -233,18 +233,4 @@ public class MemberMypageController {
         return mav;    	
     }
 
-
-    //북마크페이지로 이동.
-	//기존의 BookmarkController.java의 북마크 코드를 활용.
-	@Autowired
-	BookmarkService bookmarkService;
-
-	@RequestMapping(value = "/bookmark")
-	public ModelAndView bookmarkView(@AuthenticationPrincipal Account account, ModelAndView mv) {
-		mv.addObject("bookmarkList", bookmarkService.bookmarkList(account.getUserId()));
-		mv.setViewName("main/mytask/bookmark");
-		return mv;
-	}
-
-
 }
