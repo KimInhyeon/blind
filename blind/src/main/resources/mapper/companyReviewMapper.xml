@@ -273,4 +273,34 @@ select DISTINCT
 	order by count_helpful DESC;--정렬기준 : '도움이 됬어요'버튼의 갯수가 많을수록 가장먼저 출력된다.
 </select>
 
+<!-- 유저가 추천할 기업리뷰의 도움이되었습니다 버튼 클릭한 경우 기존에 등록한 행을 리턴. -->
+<select id="searchHelpful" parameterType="java.util.Map" resultType="com.ksinfo.blind.companyReview.dto.CompanyReviewDto">
+		select
+			(select
+				count(rri.helpful)
+				from blind.review_recommend_inf as rri
+				where rri.company_id = #{companyId}
+	 			and rri.company_review_id = crm.company_review_id
+			) as count_helpful --도움이 되었어요는 해당기업의 id에 맞는 것들만 카운트.
+		from
+			blind.company_review_mgt as crm
+		-- left조인 1. USER_MGT (유저의 닉네임 로드)
+		left join blind.user_mgt as um
+			on crm.user_id = um.user_id
+		-- left조인 1. USER_MGT (기업리뷰 작성자의 직종명 출력용)
+				left join blind.job_group_mst as jgm
+						  on crm.user_id = um.user_id
+
+				-- left조인 3. review_recommend_id (기업리뷰의 '도움이 되었습니다(helpful)' 가져오기)
+				left join blind.review_recommend_inf as rri
+						  on rri.company_id = crm.company_id
+
+		where
+			crm.company_id = #{companyId}
+		  and
+			crm.verify_flag = '1' --verify_flag:기업리뷰승인여부(0:미승인, 1:승인)
+
+		order by count_helpful DESC;--정렬기준 : '도움이 됬어요'버튼의 갯수가 많을수록 가장먼저 출력된다.
+</select>
+
 </mapper>

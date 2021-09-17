@@ -1,5 +1,6 @@
 package com.ksinfo.blind.companyReview.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import com.ksinfo.blind.alert.dto.ReplyReportDto;
 import com.ksinfo.blind.alert.dto.ReportReasonDto;
 import com.ksinfo.blind.alert.dto.ReviewReportDto;
 import com.ksinfo.blind.alert.service.AlertService;
+import com.ksinfo.blind.mytask.dto.BookmarkDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -225,7 +227,8 @@ public class CompanyReviewController {
 		List<CompanyReviewDto> companyReviewLists= companyReviewService.getCompanyReviews(companyId);
 
 		//company = companyReviewService.getPosts(navi.getCurrentPage(), paramMap);//사용자가 입력한 검색어로 검색
-		
+
+		mav.addObject("nowCompanyId", companyId);
 		mav.addObject("companyName", companyName);
 		mav.addObject("companyReviewLists", companyReviewLists);
 		mav.addObject("blurEffectSet", blurEffectSet);
@@ -234,4 +237,59 @@ public class CompanyReviewController {
 		return mav;
 	}
 
+
+	//企業レビュー詳細照会（0016）-「役立ちます」機能追加。(기업리뷰-도움이 되었습니다 기능추가.)
+	//SearchController.java의 bookmarkSet를 모델로 작성함.
+	@RequestMapping(value = "helpfulSet", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public int bookmarkSet(Integer companyId, int companyReviewId, @AuthenticationPrincipal Account account ) {
+		//1.우선 현 유저가 해당 기업리뷰를 추천한 내역이 있는지 확인.
+
+		CompanyReviewDto searchHelpful = companyReviewService.searchHelpful(companyId, companyReviewId, (int)account.getUserId());
+
+		/* 아직 작성중입니다-START(코드의 작동을 위해 임시로 주석처리)
+		if (searchHelpful != null) {//DB에 등록된 북마크 없음여부 확인.
+			//기존에 등록된 북마크가 있음을 확인. logical_del_flag를 update하여 on/off처리 실시.
+			companyReviewService.updateHelpful(searchHelpful);
+ㅌ		}
+		else{
+			//기존에 등록된 북마크가 없음. 따라서 신규등록으로 처리.
+			companyReviewService.insertHelpful( ( (int)account.getUserId() ), companyReviewId);
+		}
+		아직 작성중입니다-END(코드의 작동을 위해 임시로 주석처리) */
+
+		//신규추가(또는 갱신)된 최신정보를 리턴하기위해 재검색을 실시.
+		searchHelpful = companyReviewService.searchHelpful(companyId, (int)account.getUserId(), companyReviewId);
+
+		return searchHelpful.getCountHelpful(); // 최종 도움이되었습니다(helpful)카운팅을 리턴.
+	}
+
+	/* 아직 작성중입니다-START(코드의 작동을 위해 임시로 주석처리)
+	//企業レビュー詳細照会（0016）-「役立ちます」機能追加。(기업리뷰-도움이 되었습니다 기능추가.)
+	//BookmarkController.java의 insertBookmark, addPostRecommend를 모델로 작성함.
+	//기존에 추가된
+	@RequestMapping(value = "insertBookmark", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public void insertHelpful(@AuthenticationPrincipal Account account, long companyReviewId) {
+		BookmarkDto searchBookmark = bookmarkService.searchBookmark(account.getUserId(), companyReviewId);
+		if (searchBookmark != null) {
+			bookmarkService.updateBookmark(searchBookmark);
+		}
+	}
+
+	//企業レビュー詳細照会（0016）-「役立ちます」機能追加。
+	//BookmarkController.java의 insertBookmark, addPostRecommend를 모델로 작성함.
+	@RequestMapping(value = "addPostRecommend", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public void addPostRecommend(@AuthenticationPrincipal Account account, long postId){
+		BookmarkDto searchPostRecommend = bookmarkService.searchPostRecommend(account.getUserId(), postId);
+		List<BookmarkDto> prlist = new ArrayList<BookmarkDto>();
+		prlist.add(searchPostRecommend);
+		if(searchPostRecommend == null) {
+			bookmarkService.insertPostRecommend(account.getUserId(), postId);
+		}else if(prlist.size() > 0){
+			bookmarkService.updatePostRecommend(searchPostRecommend);
+		}
+	}
+	아직 작성중입니다-END(코드의 작동을 위해 임시로 주석처리) */
 }

@@ -52,6 +52,34 @@
             padding: 0;
         }
     </style>
+
+	<script>
+		//役立ちます(도움이 되었습니다/기업리뷰추천수)를 카운트 및 출력하는 기능.
+		function helpfulSet(nowCompanyId, companyReviewId) {
+			var helpfulId = "#helpfulSet"+companyReviewId;
+			$.ajax({
+				type: "POST",
+				url: "/blind/helpfulSet",
+				data: { nowCompanyId
+						,companyReviewId },
+				dataType: "json",
+				success: function (result) {
+					if (result == 1) { //1:DB 추가완료
+						alert('「役立ちます」登録完了。');
+						//$(bookmarkId).html("<a><i class='bookmark icon'></i></a>");
+					}
+					else if (result == 0) {
+						alert('「役立ちます」解除完了。 ');
+						//$(bookmarkId).html("<a><i class='bookmark outline icon'></i></a>");
+					}
+				},
+				error: function () {
+					alert("システムエラーです。");
+				}
+			});
+		}
+	</script>
+
 </head>
 <body>
 <div class="ui fluid container" id="reviewHeader" style="padding:80px 0; background-color:black">
@@ -199,11 +227,14 @@
             <!-- 1.3.기업리뷰1개-푸터역할. 추천(도움이됩니다)버튼, 공유(트윗/페북/URL복사)기능-->
             <!-- <div style="background-color: plum; padding-bottom : 10%;">-->
             <div style="padding-bottom : 10%;">
-                <div style="float:left;">       
-	                <button class="ui primary button">
-						<i class="thumbs up icon"></i> <!-- <i class="thumbs up outline icon"></i> -->
-                    	役立ちます(${companyReviewLists[0].countHelpful})
-					</button>
+                <div style="float:left;">
+					<div class="ui primary button"
+						 id="helpfulSet${companyReviewLists[0].companyReviewId}"
+						 onclick="helpfulSet( ${nowCompanyId}
+						 					  ,${companyReviewLists[0].companyReviewId})">
+						<i class="thumbs up icon"></i>
+						役立ちます(${companyReviewLists[0].countHelpful})
+					</div>
 				<!-- 페이스북,트위터등 공유링크  -->                    
                 </div>
                  <div style="float:right;"><!-- 우측배치 -->
@@ -557,6 +588,8 @@
 			$(alert_reason_textarea).append("<textarea id='report_reason_content' style='width:100%; height:150px; resize: none;' disabled> </textarea>");
 		}
 	}
+	//신고하기 관련 AJAX 끝.
+
 </script>
 
 </html>

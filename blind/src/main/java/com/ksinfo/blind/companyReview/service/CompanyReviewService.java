@@ -68,4 +68,14 @@ public class CompanyReviewService {
 	public List<CompanyReviewDto> getCompanyReviews(int companyId){
 		return companyReviewMapper.getCompanyReviews(companyId);
 	}
+
+	//企業レビュー詳細照会（0016）-「役立ちます」機能追加。(기업리뷰-도움이 되었습니다 기능추가.)
+	//도움이 되었습니다. 버튼 클릭시 해당기업리뷰에 이전에 등록된 추천기록(레코드)가 있는지 확인.
+	public CompanyReviewDto searchHelpful(int companyId, int userId,int companyReviewId){
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("companyId", companyId);
+		map.put("userId", userId);
+		map.put("companyReviewId", companyReviewId);
+		return companyReviewMapper.searchHelpful(map);
+	}
 }
