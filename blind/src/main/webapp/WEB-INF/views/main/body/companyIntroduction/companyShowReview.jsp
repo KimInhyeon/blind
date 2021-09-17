@@ -52,6 +52,26 @@
         };
 
 
+
+
+
+
+
+        function copyToClipboard(val) {
+            const t = document.createElement("textarea");
+            document.body.appendChild(t);
+            t.value = val;
+            t.select();
+            document.execCommand('copy');
+            document.body.removeChild(t);
+        };
+            function copy() {
+            copyToClipboard('localhost:8282/blind/companyShowReview?companyId='+${companyIntroduction.companyId});
+
+        };
+
+
+
     </script>
 
 
@@ -165,17 +185,7 @@
 
                         ワークライフバランス</td>
                 </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>${companyAverageDto.payPoint}
-                        <div class="ui star rating" data-rating="1"
-                             data-max-rating="1"　style="margin-right:10px;">
-                        </div>
 
-                        給料と福祉</td>
-                </tr>
                 　　　　
                 <tr>
                     <td></td>
@@ -188,6 +198,17 @@
 
 
                         社内文化</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>${companyAverageDto.payPoint}
+                        <div class="ui star rating" data-rating="1"
+                             data-max-rating="1"　style="margin-right:10px;">
+                        </div>
+
+                        給料と福祉</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -278,6 +299,8 @@
                                         </div>
                                         <span style="margin-right:10px;">給料と福祉</span>
                                     </div>
+
+
                                     <div class="div_star">
                                         <div class="ui star rating" data-rating="${oneCompanyReview.headPoint}"
                                              data-max-rating="5"　style="float:left; margin-right:10px;">
@@ -333,6 +356,11 @@
                                     돼요(${oneCompanyReview.helpfulCount })
                                 </div>
                             </button>
+                        </td>
+                        <td>
+                            <button onclick="copy()">COPY</button>
+
+                        </td>
                     </tr>
                 </c:if>
 
@@ -467,6 +495,11 @@
                                             도움이 돼요(${companyShowList.helpfulCount })
                                         </div>
                                     </button>
+                                </td>
+                                <td>
+                                    <button onclick="copy()">COPY</button>
+
+                                </td>
                             </tr>
                         </c:if>
                         <input type="hidden" id="recommendFlag${companyShowList.companyReviewId}"
