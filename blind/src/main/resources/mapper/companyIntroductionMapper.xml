@@ -92,37 +92,59 @@
     <select id="oneCompanyReview" parameterType="Map" resultType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">
 
         select
-            c1.company_id as companyId
-             ,c1.simple_comment as simpleComment
-             ,c1.advantages as advantages
-             ,c1.disadvantages as disadvantages
-             ,c1.all_point as allPoint
-             ,c1.rec_create_date as recCreateDate
-             ,c1.company_review_id as companyReviewId
-             ,c1.career_point as careerPoint
-             ,c1.work_life_balance_point as workLifeBalancePoint
-             ,c1.company_culture_point as companyCulturePoint
-             ,c1.pay_point as payPoint
-             ,c1.head_point as headPoint
-             ,coalesce((select sum(helpful) from blind.review_recommend_inf as rec where c1.company_review_id= rec.company_review_id),0) as helpfulCount
-             ,coalesce((select helpful from blind.review_recommend_inf where user_id=#{user_id} and company_review_id=#{company_review_id}),0) as recommendFlag
+            crma.company_id as companyId
+             ,simple_comment as simpleComment
+             ,advantages as advantages
+             ,disadvantages as disadvantages
+             ,all_point as allPoint
+             ,rec_create_date as recCreateDate
+             ,crma.company_review_id as companyReviewId
+             ,career_point as careerPoint
+             ,work_life_balance_point as workLifeBalancePoint
+             ,company_culture_point as companyCulturePoint
+             ,pay_point as payPoint
+             ,head_point as headPoint
+             ,coalesce(crmb.helpfulCount,0) as helpfulCount
+             ,coalesce(crmc.helpful,0) as recommendFlag
 
         from
+            blind.company_review_mgt crma
+                left join
+            (
+                select
+                    sum(helpful) as helpfulCount
+                     ,company_review_id
 
-            blind.company_review_mgt c1
+                from
+                    blind.review_recommend_inf
+
+                group by
+                    company_review_id
+            ) crmb
+            on
+                crma.company_review_id = crmb.company_review_id
+                left join(
+                select
+                    company_review_id
+                     ,helpful
+                from
+                    blind.review_recommend_inf
+                where
+                    user_id = #{userId}
+            )crmc
+                         on
+                             crmb.company_review_id=crmc.company_review_id
 
 
 
-            where company_id =#{companyId}
-              and
-            c1.logical_del_flag='0'
-              and
-            c1.verify_flag='1'
+        where company_id =#{companyId}
+          and
+            crma.logical_del_flag='0'
+          and
+            crma.verify_flag='1'
         order by
-            helpfulCount desc
+            helpfulCount desc,recCreateDate desc
             fetch first row only;
-
-
 
     </select>
     <select id="companyReviewList" parameterType="Map" resultType="com.ksinfo.blind.companyReview.dto.CompanyJoinDto">
@@ -188,7 +210,7 @@
             crma.verify_flag='1'
 
         order by
-            helpfulCount  desc
+            helpfulCount desc,rec_create_date desc
 
 
 

@@ -21,6 +21,7 @@
         }
 
 
+
         function countUp(companyReviewId) {
 
             $.ajax({
@@ -456,6 +457,8 @@
                                     </div>
 
                                 </div>
+
+
                                 <td><h5>장점</h5></td>
 
 
@@ -464,6 +467,7 @@
 
 
                         </tr>
+
                         <tr>
                             <td></td>
                             <td>${companyShowList.advantages }</td>
