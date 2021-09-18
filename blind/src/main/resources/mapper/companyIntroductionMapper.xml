@@ -273,7 +273,7 @@
 
     </select>
 
-    <select id="getTotalRecord" resultType="_int">
+    <select id="getTotalRecord" resultType="int">
         select count(*)
         from blind.company_review_mgt
         where verify_flag='1'
@@ -282,5 +282,17 @@
 
     </select>
 
+    <select id="getReviewWrite" parameterType="long" resultType="int">
+        select
+
+
+
+        from
+            blind.company_review_mgt
+        where
+            user_id=#{userId}
+
+
+    </select>
 
 </mapper>
