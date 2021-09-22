@@ -6,19 +6,15 @@ import com.ksinfo.blind.security.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 public class BookmarkController {
+<<<<<<< HEAD
 
     @Autowired
     BookmarkService bookmarkService;
@@ -64,3 +60,46 @@ public class BookmarkController {
     }
 
 }
+=======
+	private final BookmarkService bookmarkService;
+
+	@Autowired
+	public BookmarkController(BookmarkService bookmarkService) {
+		this.bookmarkService = bookmarkService;
+	}
+
+	@RequestMapping(value = "/bookmark")
+	public ModelAndView bookmarkView(@AuthenticationPrincipal Account account, ModelAndView mv) {
+		mv.addObject("bookmarkList", bookmarkService.bookmarkList(account.getUserId()));
+		mv.setViewName("main/mytask/bookmark");
+		return mv;
+	}
+
+	@RequestMapping(value = "addBookmark", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	// true: ブックマーク追加、false: ブックマーク削除
+	public boolean addBookmark(@AuthenticationPrincipal Account account, @RequestBody long postId) {
+		BookmarkDto searchBookmark = bookmarkService.searchBookmark(account.getUserId(), postId);
+		if (searchBookmark == null) {
+			bookmarkService.insertBookmark(account.getUserId(), postId);
+
+			return true;
+		}
+
+		return bookmarkService.updateBookmark(searchBookmark);
+	}
+
+	@RequestMapping(value = "addPostRecommend", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public void addPostRecommend(@AuthenticationPrincipal Account account, long postId) {
+		BookmarkDto searchPostRecommend = bookmarkService.searchPostRecommend(account.getUserId(), postId);
+//		List<BookmarkDto> prlist = new ArrayList<BookmarkDto>();
+//		prlist.add(searchPostRecommend);
+		if (searchPostRecommend == null) {
+			bookmarkService.insertPostRecommend(account.getUserId(), postId);
+		} else/* if (prlist.size() > 0) */{
+			bookmarkService.updatePostRecommend(searchPostRecommend);
+		}
+	}
+}
+>>>>>>> changju.lee

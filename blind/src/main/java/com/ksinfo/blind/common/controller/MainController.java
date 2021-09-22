@@ -2,16 +2,15 @@ package com.ksinfo.blind.common.controller;
 
 import com.ksinfo.blind.common.dto.DirectorySearchDto;
 import com.ksinfo.blind.common.service.MainService;
+import com.ksinfo.blind.common.vo.BestMainPostVO;
 import com.ksinfo.blind.common.vo.DirectoryCompanyVO;
+import com.ksinfo.blind.common.vo.SubMainPostVO;
 import com.ksinfo.blind.util.PageNavigator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,29 +19,39 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
-public class MainController {
+@RestController
+public final class MainController {
 	private final MainService mainService;
-	private final String redirectPath;
+	private final String mainPath;
+	private final String manageCompanyPath;
 
 	@Autowired
 	public MainController(MainService mainService, @Value("${server.servlet.context-path}") String contextPath) {
 		this.mainService = mainService;
-		redirectPath = contextPath + "/main";
+		mainPath = contextPath + "/main";
+		manageCompanyPath = contextPath + "/manage/company";
 	}
 
 	@GetMapping(value = "/")
 	public void main(HttpServletResponse httpServletResponse) throws IOException {
-		httpServletResponse.sendRedirect(redirectPath);
+		httpServletResponse.sendRedirect(mainPath);
 	}
 
-	@RequestMapping(value = "/main", method = RequestMethod.GET)
-	public ModelAndView mainView(ModelAndView mv) {
-		mv.addObject("topicBestList", mainService.topicBestList());
-		mv.addObject("topicSubList", mainService.topicSubList());
-		mv.setViewName("main/main");
+	@GetMapping(value = "manage")
+	public void company(HttpServletResponse httpServletResponse) throws IOException {
+		httpServletResponse.sendRedirect(manageCompanyPath);
+	}
 
-		return mv;
+	@GetMapping(value = "main")
+	public ModelAndView mainView() {
+		List<BestMainPostVO> bestMainPostList = mainService.getBestMainPostList();
+		List<SubMainPostVO> subMainPostList = mainService.getSubMainPostList();
+
+		ModelAndView modelAndView = new ModelAndView("main/main");
+		modelAndView.addObject("bestMainPostList", bestMainPostList);
+		modelAndView.addObject("subMainPostList", subMainPostList);
+
+		return modelAndView;
 	}
 
 	@GetMapping(value = "directory")
@@ -61,8 +70,7 @@ public class MainController {
 		return modelAndView;
 	}
 
-	@ResponseBody
-	@GetMapping(value = "directory", params = "ajax")
+	@GetMapping(value = "directory", params = "ajax=true")
 	public Map<String, Object> getDirectory(
 		@RequestParam(defaultValue = "ア") StringBuilder searchKeyword, @RequestParam(defaultValue = "1") int page
 	) {

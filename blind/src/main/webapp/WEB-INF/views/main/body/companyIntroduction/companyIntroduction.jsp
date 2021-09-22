@@ -52,7 +52,7 @@
   <div class="item" onclick="location.href='companyShowReview?companyId=${companyIntroduction.companyId}'" style="display:flex; justify-content:center; width:15%; cursor:pointer;">レビュー</div>
   <div class="item" style="display: flex; justify-content:center; width:15%; cursor:pointer;">掲示板</div>
   <div class="item" onclick="location.href='annualIncome?selectCompanyId=${companyIntroduction.companyId}'" style="display: flex; justify-content:center; width:15%; cursor:pointer;">年俸</div>
-  <div class="item" onclick="location.href='companyNews/${companyIntroduction.companyId}'" style="display: flex; justify-content:center; width:15%; cursor:pointer;">ニュース</div>
+  <div class="item" onclick="location.href='company/news/${companyIntroduction.companyId}'" style="display: flex; justify-content:center; width:15%; cursor:pointer;">ニュース</div>
 
 
 </div>

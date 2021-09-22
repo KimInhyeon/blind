@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Component
-public class SearchCompanyNameManager {
+public final class SearchCompanyNameManager {
 	private static final String searchCompanyNameRegex = "^[0-9A-Za-zぁ-ゖァ-ヶー]*$";
 
 	private void convertFullToHalf(StringBuilder searchKeyword) {

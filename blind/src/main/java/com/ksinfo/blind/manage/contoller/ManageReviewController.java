@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,15 +21,16 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @RestController
-public class ManageReviewController {
-	private ManageReviewService manageReviewService;
+@RequestMapping("manage/review")
+public final class ManageReviewController {
+	private final ManageReviewService manageReviewService;
 
 	@Autowired
 	public ManageReviewController(ManageReviewService manageReviewService) {
 		this.manageReviewService = manageReviewService;
 	}
 
-	@GetMapping(value = "manage/review")
+	@GetMapping
 	public ModelAndView review(String searchTarget, String searchKeyword,
 		@RequestParam(name = "page", defaultValue = "1") int page,
 		@RequestParam(name = "verifyFlag", defaultValue = "0") char verifyFlag,
@@ -38,19 +40,19 @@ public class ManageReviewController {
 		PageNavigator navi = manageReviewService.getNavigator(page, reviewSearchDto);
 		List<ReviewVO> reviewList = manageReviewService.getReviewList(navi.getCurrentPage(), reviewSearchDto);
 
-		ModelAndView modelAndView = new ModelAndView("main/manage/review");
+		ModelAndView modelAndView = new ModelAndView("main/manage/manageReview");
 		modelAndView.addObject("navi", navi);
 		modelAndView.addObject("reviewList", reviewList);
 
 		return modelAndView;
 	}
 
-	@GetMapping(value = "manage/review/{companyReviewId}")
+	@GetMapping(value = "{companyReviewId}")
 	public CompanyReviewVO getReview(@PathVariable("companyReviewId") long companyReviewId) {
 		return manageReviewService.getReview(companyReviewId);
 	}
 
-	@PatchMapping(value = "manage/review")
+	@PatchMapping
 	public int verifyReview(@RequestBody ReviewVerifyDto reviewVerifyDto, @AuthenticationPrincipal Account account) {
 		reviewVerifyDto.setUserId(account.getUserId());
 		return manageReviewService.verifyReview(reviewVerifyDto);

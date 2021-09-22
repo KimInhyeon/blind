@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-	<meta charset="UTF-8">
 	<title>ディレクトリ</title>
 </head>
 <style>
@@ -50,7 +49,7 @@
 		<a class="column item">${company.companyName}　掲示板</a>
 		<a class="column item" href="annualIncome?selectCompanyId=${company.companyId}">${company.companyName}　年収</a>
 		<a class="column item">${company.companyName}　採用</a>
-		<a class="column item" href="companyNews/${company.companyName}">${company.companyName}　ニュース</a>
+		<a class="column item" href="companyNews/${company.companyId}">${company.companyName}　ニュース</a>
 	</c:forEach>
 	</section>
 	<div class="ui divider"></div>
@@ -184,7 +183,7 @@
 		});
 	}
 
-	addEventListener("load", function () {
+	addEventListener("DOMContentLoaded", function () {
 		const searchKeyword = document.getElementById("searchKeyword");
 		const search = function () {
 			searchKeyword.value = searchKeyword.value.trim();

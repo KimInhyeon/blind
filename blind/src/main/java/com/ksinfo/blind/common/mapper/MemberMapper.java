@@ -1,12 +1,9 @@
 package com.ksinfo.blind.common.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
-
 import com.ksinfo.blind.security.Account;
+import org.apache.ibatis.annotations.Mapper;
 
-@Repository
-@Mapper 
+@Mapper
 public interface MemberMapper {
 	Account findMemberByEmail(String userEmail);
 

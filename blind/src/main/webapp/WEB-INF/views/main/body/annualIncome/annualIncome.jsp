@@ -151,10 +151,17 @@ $(function(){
   <div class="item" onclick="location.href='${pageContext.request.contextPath}/companyIntroduction?companyId=${companyProfile[0].companyId}'" style="display:flex; justify-content:center; width:15%; cursor:pointer;">紹介</div>
   <div class="item" onclick="location.href='${pageContext.request.contextPath}/companyShowReview?companyId=${companyProfile[0].companyId}'" style="display:flex; justify-content:center; width:15%; cursor:pointer;">レビュー</div>
   <div class="item" style="display:flex; justify-content:center; width:15%; cursor:pointer;">掲示板</div>
+<<<<<<< HEAD
   <div class="active item" onclick="location.href='${pageContext.request.contextPath}/annualIncome/annualIncome?selectCompanyId=${companyProfile[0].companyId}'" style="display:flex; justify-content:center; width:15%; cursor:pointer;">年棒</div>
   <div class="item" style="display:flex; justify-content:center; width:15%; cursor:pointer;">ニュース</div>
   
   
+=======
+  <div class="active item" onclick="location.href='${pageContext.request.contextPath}/annualIncome?selectCompanyId=${companyProfile[0].companyId}'" style="display:flex; justify-content:center; width:15%; cursor:pointer;">年棒</div>
+  <div class="item" onclick="location.href='company/news/${companyProfile[0].companyId}'" style="display:flex; justify-content:center; width:15%; cursor:pointer;">ニュース</div>
+
+
+>>>>>>> changju.lee
 </div>
 <div class="ui bottom attached active tab segment">
 	<div style="margin:3%;"> <!-- 전체적 공통 여백 적용 -->

@@ -77,6 +77,11 @@
 		font-size: 1.2em;
 	}
 </style>
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> changju.lee
 	<script>
 	function bookmarkSet(postId) {
 		var bookmarkId = "#bookmarkSet"+postId;
@@ -151,7 +156,7 @@
 					//주요틀 재구성
 					$(postList).html("");
 					//반복문통해 각 포스트들 출력진행
-					$.each(result, function (key, value) {	
+					$.each(result, function (key, value) {
 						var hideUserNick =  value.userNickName.substring(0,1)+'****';
 						var postCreateDate = value.postCreateDate.substring(5,7)+'.'+value.postCreateDate.substring(8,10);
 						var boarderHtml = "<div class='eight wide column' style='border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;border-right-style: inset;'>";
@@ -161,11 +166,11 @@
 						}
 
 						$(postList).append(boarderHtml
-	                								+"<a href='searchBoardName?searchKeyword=" + value.boardId + "'><span>"+ value.boardTopicName +"</span></a>"
-	                								+"<a href='topicDetail?postId=" + value.postId + "'><span style='font-size: 130%; font-weight: 700;'>" +value.postTitle + "</span></a>"
+	                								+"<a href='topic/" + value.boardId + "'><span>"+ value.boardTopicName +"</span></a>"
+	                								+"<a href='post/" + value.postId + "'><span style='font-size: 130%; font-weight: 700;'>" +value.postTitle + "</span></a>"
 	                								+"<div class='ui grid'>"
 			                							+"<div class='thirteen wide column'>"
-			                								+"<a href='topicDetail?postId=" + value.postId + "'><p>"+ value.postContents + "</p></a>"
+			                								+"<a href='post/" + value.postId + "'><p>"+ value.postContents + "</p></a>"
 			                								+"<a href='companyIntroduction?companyId=" + value.companyId + "'><p>"+ value.companyName + "-" + hideUserNick +"</p></a>"
 			                							+"</div>"
 			    										+"<div class='three wide column'>"
@@ -184,14 +189,14 @@
 	    							   				+"</div>");
 						}); //$.each(result, function (key, value) 반복출력 종료.
 		                //마지막 부분 출력
-	                	$(postList).append("</div>");	
+	                	$(postList).append("</div>");
 				},
 				error: function(){
 					alert("에러");
-				}				
+				}
 			});
-		}); 
-	
+		});
+
 		$("#sortPosts").on('change', function(){
 			var checkTopicNum= $("#viewPostsSelectedTopic option:selected").val();
 
@@ -210,7 +215,7 @@
 					//주요틀 재구성
 					$(postList).html("");
 					//반복문통해 각 포스트들 출력진행
-					$.each(result, function (key, value) {	
+					$.each(result, function (key, value) {
 						var hideUserNick =  value.userNickName.substring(0,1)+'****';
 						var postCreateDate = value.postCreateDate.substring(5,7)+'.'+value.postCreateDate.substring(8,10);
 						var boarderHtml = "<div class='eight wide column' style='border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;border-right-style: inset;'>";
@@ -220,11 +225,11 @@
 						}
 
 						$(postList).append(boarderHtml
-	                								+"<a href='searchBoardName?searchKeyword=" + value.boardId + "'><span>" + value.boardTopicName + "</span></a>"
-	                								+"<a href='topicDetail?postId=" + value.postId + "'><span style='font-size: 130%; font-weight: 700;'>" +value.postTitle + "</span></a>"
+	                								+"<a href='topic/" + value.boardId + "'><span>" + value.boardTopicName + "</span></a>"
+	                								+"<a href='post/" + value.postId + "'><span style='font-size: 130%; font-weight: 700;'>" +value.postTitle + "</span></a>"
 	                								+"<div class='ui grid'>"
 			                							+"<div class='thirteen wide column'>"
-			                								+"<a href='topicDetail?postId=" + value.postId + "'><p>"+ value.postContents + "</p></a>"
+			                								+"<a href='post/" + value.postId + "'><p>"+ value.postContents + "</p></a>"
 			                								+"<a href='companyIntroduction?companyId=" + value.companyId + "'><p>"+ value.companyName + "-" + hideUserNick +"</p></a>"
 			                							+"</div>"
 			    										+"<div class='three wide column'>"
@@ -243,13 +248,13 @@
 		                						+"</div>");
 						}); //$.each(result, function (key, value) 반복출력 종료.
 		                //마지막 부분 출력
-	                	$(postList).append("</div>");	
+	                	$(postList).append("</div>");
 				},
 				error: function(result){
 					alert("에러"+result);
-				}				
+				}
 			});
-		}); 
+		});
 	});
 
 	function goSearch(){
@@ -262,16 +267,16 @@
 		location.href='${pageContext.request.contextPath}/search?searchKeyword=' + searchKeyword;
 	}
 	</script>
-	
+
    <title>検索結果 page</title>
-   
+
    </head>
-   
+
    <body>
    		 <div class="ui container">
 			<div class="bookmarkcontent">
    <!-- 검색창 -->
-   <div class="inputSearchKeyword">    
+   <div class="inputSearchKeyword">
    		<form>
         <div class="ui fluid massive left icon input">
 				<input type="text" placeholder="Search" id="searchbox" name="searchKeyword" value="${pastSearchKeyword}">
@@ -283,6 +288,7 @@
 
 
 	<!-- 검색결과출력페이지(전체) -->
+<<<<<<< HEAD
 	<div style="margin-top: 2.5%;margin-bottom: 2.5%; margin-left: 1.4%;">
 		<span style="font-size: 2em; font-weight: bolder;"> ${pastSearchKeyword}</span>
 		<span style="font-size: 2em;"> 検索結果</span>
@@ -290,15 +296,27 @@
 	<!-- 검색결과1. 기업정보 / 검색어가 기업이 아닌경우 출력되지 않는다. -->      
 		<c:if test="${searchResultCompanyDataFlag eq '1'}">
 			<div class="font_company_search" style="border:1px solid #cccccc; border-radius: 0.5em; padding: 2%;">
+=======
+		<h1><strong>${searchKeyword}</strong> 検索結果</h1> <!-- 검색키워드로 변경(지금은 기업명일때만 나온다. -->
+
+	<!-- 검색결과1. 기업정보 / 검색어가 기업이 아닌경우 출력되지 않는다. -->
+		<c:if test="${searchResultCompanyDataFlag eq '1'}"><!-- searchResultCompanyDataFlag의 값이 1이면 회사정보 있으며, 이에따라 출력실시. -->
+			<div class="ui stacked segment" >
+>>>>>>> changju.lee
 	   			<h3>企業</h3>
 		   		<div style="height: auto; width: 100%;  padding:2%;" >
 					<!-- 검색결과1.1. 기업의 기본정보페이지(총평점 및 리뷰/게시글/연봉링크) -->
 					<!-- 회사이름,별점 안내 및  리뷰,게시글,연봉 버튼 생성 -->
+<<<<<<< HEAD
 					<div class="company_profile_part"  > <!-- onclick 통해 div영역 클릭시 페이지 이동(''내에 이동할 URL 기입) -->
+=======
+					<div class="company_profile_part" > <!-- onclick 통해 div영역 클릭시 페이지 이동(''내에 이동할 URL 기입) -->
+>>>>>>> changju.lee
 						<div class="logo_and_companyName" style="float:left;display: inline;">
 							<div style="display: flex;">
-								<img src="${pageContext.request.contextPath}/resources/images/company/${searchResultCompany[0].companyId}.png" 
+								<img src="${pageContext.request.contextPath}/resources/images/company/${searchResultCompany[0].companyId}.png"
 											width=40px, height=40px style="margin:5px;" align="top">
+<<<<<<< HEAD
 									<div style="margin-left: 10px;">
 										<!-- 기업로고 오른쪽-윗라인 : 기업명, 기업총평점의 평균점수-->
 										${searchResultCompany[0].companyName}
@@ -307,6 +325,11 @@
 										${searchResultCompany[0].allPointAvg}
 
 										<!-- 기업로고 오른쪽-아래라인 : 해당 기업의 기업리뷰파트의 리뷰/기업게시판/급여 탭으로 이동.-->
+=======
+									<div>
+										${searchResultCompany[0].companyName}
+										<i class="star icon"></i>
+>>>>>>> changju.lee
 										<div style="display: flex;">
 											<a href="${pageContext.request.contextPath}/companyShowReview?companyId=${searchResultCompany[0].companyId}"
 											   style="margin-right: 10px;">
@@ -325,7 +348,7 @@
 								</div>
 						</div>
 					</div>
-	
+
 					<!-- 검색결과1.2. 일하고 싶은 기업인지 추천/비추천버튼 출력. 투표완료시 투표결과(기업선호도)를 출력하는 페이지로 변경. -->
 					<div style="margin-top:10%;">
 						<div style="width: 100%;margin-top:11%;margin-bottom:5%; text-align: center;"
@@ -339,6 +362,7 @@
 							</button>
 						</div>
 
+<<<<<<< HEAD
 						<div class="company_review_sample" style="background-color:#b1d4e3; margin-top: 2%;">
 
 							<!-- 기존의 총평점(float형) 값을 int형으로 변환(소수점이하 삭제)-->
@@ -365,6 +389,10 @@
 							<!--<c:set var="show_star_point" value = "${companyReviews[0].allPoint}"/>-->
 							<!-- 구분선 끝 -->
 							<c:choose> 
+=======
+						<div class="company_review_sample" style="background-color:#b1d4e3; margin:10px;">
+							<c:choose>
+>>>>>>> changju.lee
 								<c:when test="${empty companyReviews}">
 									<div>この企業のレビューはありません。</div>
 									<div>一番に作成しませんか。</div>
@@ -372,14 +400,23 @@
 								</c:when>
 								<c:otherwise>
 									<a href="">
+<<<<<<< HEAD
 										<div style="display: inline-block; margin-top: 1.2%;margin-bottom: 1.2%;margin-left: 1%;">${companyReviews[0].allPoint}</div>
 										<div style="display: block;float:Right; margin-top: 1.2%;margin-bottom: 1.2%; padding-right: 2%;">レビュー全部見る > </div>
 										<div style="margin-top: 1.2%;margin-bottom: 1.2%;margin-left: 1%;"> ${companyReviews[0].jobGroupName} </div>
 										<div style="margin-top: 1.2%;margin-bottom: 1.2%;margin-left: 1%;">  ${companyReviews[0].simpleComment} </div>
 										<div style="margin-top: 1.2%;margin-bottom: 1.2%;margin-left: 1%;">  ${companyReviews[0].disadvantages} </div>
 									</a>						
+=======
+										<div>${companyReviews[0].allPoint}</div>
+										<div style="float:Right;">レビュー全部見る > </div>
+										<div>${companyReviews[0].jobGroupName}</div>
+										<div>${companyReviews[0].simpleComment}</div>
+										<div>${companyReviews[0].disadvantages}</div>
+									</a>
+>>>>>>> changju.lee
 								</c:otherwise>
-							</c:choose>						
+							</c:choose>
 						</div>
 					</div>
 		 		</div>
@@ -406,13 +443,13 @@
 					    <option value="${menuData.boardId}"> ${menuData.boardTopicName} ( ${menuData.postCount} )</option>
 					</c:forEach>
 				</select>
-				
-				<!-- 드롭버튼(2)정렬설정 --> 		
+
+				<!-- 드롭버튼(2)정렬설정 -->
 				<select id="sortPosts" style="float:right; width:100px;height:50px;">
 					<option value="1">最新順</option>
 					<option value="2">推薦順</option>
 				</select>
-			</div>   		
+			</div>
 		 <hr width = "100%" color = "#000000" size = "5"></hr>
 			<!-- 게시글(포스트)들 출력 -->
 				<div class="ui internally grid" id="postList" style="box-shadow: none; margin: 0; width: 100%;">
@@ -423,11 +460,11 @@
 						<c:if test="${status.index%2==1}">
 							<div class="eight wide column" style="border-color: #d4d4d5; border-width: thin !important; border-bottom-style: inset;">
 						</c:if>
-								<a href="searchBoardName?searchKeyword=${posts.boardId}"><span>${posts.boardTopicName }</span></a>
-								<a href="topicDetail?postId=${posts.postId}"><span style="font-size: 130%; font-weight: 700;">${posts.postTitle}</span></a>
+								<a href="topic/${posts.boardId}"><span>${posts.boardTopicName}</span></a>
+								<a href="post/${posts.postId}"><span style="font-size: 130%; font-weight: 700;">${posts.postTitle}</span></a>
 									<div class="ui grid">
 										<div class="thirteen wide column">
-											<a href="topicDetail?postId=${posts.postId}"><p>${posts.postContents}</p></a>
+											<a href="post/${posts.postId}"><p>${posts.postContents}</p></a>
 											<a href="companyIntroduction?companyId=${posts.companyId}"><p> ${posts.companyName}
 	  												 	   - ${fn:substring(posts.userNickName,0,1)} ****</p></a>
 										</div>
@@ -437,11 +474,19 @@
 									</div>
 
 						 	<div style="padding:10px; line-heigh:top;">
+<<<<<<< HEAD
 								<div style="display:flex;">
 									 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="eye icon" style="margin:0px 5px 0px 5px;"></i>${posts.postCount}</a>
 									 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="thumbs up outline icon" style="margin:0px 5px 0px 5px;"></i> ${posts.recommendCount}</a>
 									 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="comment outline icon"  style="margin:0px 5px 0px 5px;"></i>  ${posts.replyCount}</a>
 								</div>
+=======
+						 	<div style="display:flex;">
+						 		 <a href="post/${posts.postId}"><i class="eye icon" style="margin:0px 5px 0px 5px;"></i>${posts.postCount}</a>
+						 		 <a href="post/${posts.postId}"><i class="thumbs up outline icon" style="margin:0px 5px 0px 5px;"></i> ${posts.recommendCount}</a>
+								 <a href="post/${posts.postId}"><i class="comment outline icon"  style="margin:0px 5px 0px 5px;"></i>  ${posts.replyCount}</a>
+							</div>
+>>>>>>> changju.lee
 						  		<div style="float:Right;">
 							 		${fn:substring(posts.postCreateDate,5,7)}.${fn:substring(posts.postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(posts.postCreateDate,0,10)} -->
 							   		<!--검색결과 최초 출력시 북마크의 on/off 표시 위한 jstl조건문-->
@@ -460,7 +505,7 @@
 							  	</div>
 					   		</div>
 					   </div>
-					
+
 					</c:forEach>
 			 	 </div>
 			</div>
@@ -468,6 +513,11 @@
 	</div>
 </body>
 
+<<<<<<< HEAD
 </html>
 
 
+=======
+
+</html>
+>>>>>>> changju.lee

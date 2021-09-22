@@ -9,6 +9,8 @@ import com.ksinfo.blind.util.PageNavigator;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,20 +25,24 @@ public class ManageReviewService {
 		this.manageReviewMapper = manageReviewMapper;
 	}
 
+	@Transactional(readOnly = true)
 	public PageNavigator getNavigator(int page, ReviewSearchDto reviewSearchDto) {
-		int totalRecord = manageReviewMapper.getReviewTotalCount(reviewSearchDto);
+		int totalRecord = manageReviewMapper.getTotalReviewRecord(reviewSearchDto);
 		return new PageNavigator(page, totalRecord, recordLimit, pagination);
 	}
 
+	@Transactional(readOnly = true)
 	public List<ReviewVO> getReviewList(int page, ReviewSearchDto reviewSearchDto) {
 		int offset = (page - 1) * recordLimit;
 		return manageReviewMapper.getReviewList(new RowBounds(offset, recordLimit), reviewSearchDto);
 	}
 
+	@Transactional(readOnly = true)
 	public CompanyReviewVO getReview(long companyReviewId) {
 		return manageReviewMapper.getReview(companyReviewId);
 	}
 
+	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public int verifyReview(ReviewVerifyDto reviewVerifyDto) {
 		try {
 			return manageReviewMapper.verifyReview(reviewVerifyDto);

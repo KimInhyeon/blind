@@ -8,9 +8,7 @@ public final class PageNavigator {
 	private final int pagination;
 
 	public PageNavigator(int page, int totalRecord, final int recordLimit, final int pagination) {
-		if (totalRecord <= recordLimit) {
-			currentPage = startPage = endPage = totalPage = 1;
-		} else {
+		if (totalRecord > recordLimit) {
 			totalPage = (totalRecord + recordLimit - 1) / recordLimit;
 			if (page > totalPage) {
 				currentPage = totalPage;
@@ -19,13 +17,15 @@ public final class PageNavigator {
 			} else {
 				currentPage = 1;
 			}
-			if (totalPage <= pagination) {
-				startPage = 1;
-				endPage = totalPage;
-			} else {
+			if (totalPage > pagination) {
 				startPage = (currentPage - 1) / pagination * pagination + 1;
 				endPage = Math.min(startPage + pagination - 1, totalPage);
+			} else {
+				startPage = 1;
+				endPage = totalPage;
 			}
+		} else {
+			currentPage = startPage = endPage = totalPage = 1;
 		}
 		this.pagination = pagination;
 	}

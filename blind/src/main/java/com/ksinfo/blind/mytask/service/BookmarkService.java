@@ -1,9 +1,7 @@
 package com.ksinfo.blind.mytask.service;
 
 import com.ksinfo.blind.mytask.dto.BookmarkDto;
-import com.ksinfo.blind.mytask.dto.MyTopicDto;
 import com.ksinfo.blind.mytask.mapper.BookmarkMapper;
-import com.ksinfo.blind.mytask.mapper.MyTopicMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +10,14 @@ import java.util.List;
 
 @Service
 public class BookmarkService {
+	private final BookmarkMapper bookmarkMapper;
 
 	@Autowired
-	private BookmarkMapper bookmarkMapper;
+	public BookmarkService(BookmarkMapper bookmarkMapper) {
+		this.bookmarkMapper = bookmarkMapper;
+	}
 
 	public List<BookmarkDto> bookmarkList(long userId) {
-
 		return bookmarkMapper.bookmarkList(userId);
 	}
 
@@ -28,6 +28,7 @@ public class BookmarkService {
 		return bookmarkMapper.searchBookmark(map);
 	}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 //	public long insertBookmark(BookmarkDto searchBookmark){
@@ -45,6 +46,18 @@ public class BookmarkService {
 		map.put("userId", searchBookmark.getUserId());
 		map.put("bookmarkId", searchBookmark.getBookmarkId());
 		return bookmarkMapper.updateBookmark(map);
+=======
+	public void insertBookmark(long userId, long postId){
+		bookmarkMapper.insertBookmark(userId, postId);
+	}
+
+	public boolean updateBookmark(BookmarkDto searchBookmark){
+		boolean isAddBookmark = searchBookmark.getLogicalDelFlag().equals("1");
+		searchBookmark.setLogicalDelFlag(isAddBookmark ? "0" : "1");
+		bookmarkMapper.updateBookmark(searchBookmark);
+
+		return isAddBookmark;
+>>>>>>> changju.lee
 	}
 
 	//북마크 컨트롤러에서 searchBookmark 실시결과 null이 나온경우 신규추가를 실시.

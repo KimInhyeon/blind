@@ -5,14 +5,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -30,10 +29,6 @@ public final class FileHashManager {
 	public FileHashManager(@Value("${server.servlet.context-path}") String contextPath) {
 		this.contextPath = contextPath;
 		fileUrlMap = new HashMap<>();
-	}
-
-	@PostConstruct
-	public void init() {
 		initFileUrlMap(ABSOLUTE_PATH + RESOURCES_PATH);
 	}
 
@@ -53,33 +48,41 @@ public final class FileHashManager {
 		}
 	}
 
-	private String getFileHash(MultipartFile file) throws Exception {
-		MessageDigest sha256 = MessageDigest.getInstance(ALGORITHM);
-		byte[] digest = sha256.digest(file.getBytes());
-
-		return new BigInteger(1, digest).toString(16);
+	public String getFileUrl(String fileHash) {
+		return fileUrlMap.get(fileHash);
 	}
 
-	public List<String> getFileUrl(MultipartFile[] files) throws Exception {
-		LocalDate now = LocalDate.now();
-		int filesLength = files.length;
-		List<String> fileUrlList = new ArrayList<>(filesLength);
-		for (int i = 0; i < filesLength; ++i) {
-			String fileHash = getFileHash(files[i]);
-			if (!fileUrlMap.containsKey(fileHash)) {
-				String path = new StringBuilder(MAX_PATH_LENGTH).append(RESOURCES_PATH)
-							.append(now.getYear()).append(String.format("%02d", now.getMonthValue())).append('/')
-							.append(fileHash).append('.').append(files[i].getContentType().substring(6)).toString();
-				File file = new File(ABSOLUTE_PATH + path);
-				if (!file.exists()) {
-					file.mkdirs();
-				}
-				files[i].transferTo(file);
-				fileUrlMap.put(fileHash, contextPath + path);
-			}
-			fileUrlList.add(fileUrlMap.get(fileHash));
+	private String getFileHash(MultipartFile file) {
+		String fileHash = null;
+		try {
+			MessageDigest sha256 = MessageDigest.getInstance(ALGORITHM);
+			byte[] digest = sha256.digest(file.getBytes());
+			fileHash = new BigInteger(1, digest).toString(16);
+		} catch (NoSuchAlgorithmException | IOException e) {
+			e.printStackTrace();
 		}
 
-		return fileUrlList;
+		return fileHash;
+	}
+
+	public String getFileUrl(MultipartFile file) {
+		String fileHash = getFileHash(file);
+		LocalDate now = LocalDate.now();
+		String path = new StringBuilder(MAX_PATH_LENGTH).append(RESOURCES_PATH)
+					.append(now.getYear()).append(String.format("%02d", now.getMonthValue())).append('/')
+					.append(fileHash).append('.').append(file.getContentType().substring(6)).toString();
+		File newFile = new File(ABSOLUTE_PATH + path);
+		if (!newFile.exists()) {
+			newFile.mkdirs();
+		}
+		try {
+			file.transferTo(newFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String fileUrl = contextPath + path;
+		fileUrlMap.put(fileHash, fileUrl);
+
+		return fileUrl;
 	}
 }

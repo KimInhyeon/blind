@@ -6,14 +6,12 @@ import com.ksinfo.blind.manage.vo.CompanyReviewVO;
 import com.ksinfo.blind.manage.vo.ReviewVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Mapper
-@Repository
 public interface ManageReviewMapper {
-	int getReviewTotalCount(ReviewSearchDto reviewSearchDto);
+	int getTotalReviewRecord(ReviewSearchDto reviewSearchDto);
 
 	List<ReviewVO> getReviewList(RowBounds rowBounds, ReviewSearchDto reviewSearchDto);
 

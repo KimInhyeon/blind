@@ -1,132 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ksinfo.blind.common.mapper.MainMapper">
-<select id="topicBestList" resultType="com.ksinfo.blind.common.dto.CommonPostDto"> 
-	SELECT 
-          pm.post_id as postId
-        , bm.board_topic_name as boardTopicname
-        , pm.user_id as userId
-        , pm.post_title as postTitle
-        , pm.post_contents as postContents
-        , pm.post_create_date as postCreateDate
-		, TRIM(TO_CHAR(pci.post_count, '999,999,999,999')) as postCount
-		, TRIM(TO_CHAR(coalesce(count(DISTINCT pri.post_recommend_flag),0), '999,999,999,999')) as recommendCount
-		, TRIM(TO_CHAR(coalesce(count(DISTINCT rm.reply_id),0), '999,999,999,999')) as replyCount
-    FROM
-        blind.post_mgt pm
-	INNER JOIN
-		blind.user_mgt um
-	ON
-		pm.user_id = um.user_id
-	INNER JOIN
-		blind.board_mgt bm
-    ON
-        pm.board_id = bm.board_id
-	INNER JOIN
-		blind.post_count_inf pci
-	ON
-		pci.post_id = pm.post_id
-	LEFT OUTER JOIN
-		blind.post_recommend_inf pri
-	ON
-		pm.post_id = pri.post_id
-	LEFT OUTER JOIN
-		blind.reply_mgt rm
-	ON
-	 	pm.post_id = rm.post_id
-	WHERE pm.post_create_date BETWEEN now() + INTERVAL '-3 DAY' AND NOW()
-	GROUP BY
-	    pm.post_id
-        , bm.board_topic_name
-        , pm.user_id
-        , pm.post_title
-        , pm.post_contents
-        , pm.post_create_date
-		, pci.post_count
-	ORDER BY
-		pci.post_count DESC
-	fetch first 10 rows only
-</select>
+	<select id="getBestMainPostList" resultType="com.ksinfo.blind.common.vo.BestMainPostVO">
+		SELECT board_id AS boardId
+			, board_topic_name AS boardTopicName
+			, post_id AS postId
+			, post_title AS postTitle
+			, (
+				SELECT COUNT(*)
+				FROM blind.post_recommend_inf AS pri
+				WHERE po.post_id = pri.post_id
+					AND post_recommend_flag = '1'
+			) AS postRecommendCount
+			, (
+				SELECT COUNT(*)
+				FROM blind.reply_mgt AS re
+				WHERE re.post_id = po.post_id
+					AND re.logical_del_flag = '0'
+			) AS replyCount
+		FROM blind.post_mgt AS po
+			INNER JOIN blind.post_count_inf USING(post_id)
+			INNER JOIN blind.board_mgt AS bo USING(board_id)
+		WHERE post_create_date > NOW() - INTERVAL '3 days'
+			AND po.logical_del_flag = '0'
+			AND bo.closed_flag = '0'
+			AND bo.logical_del_flag = '0'
+		ORDER BY postRecommendCount DESC, post_id DESC
+		FETCH FIRST 10 ROWS ONLY;
+	</select>
 
-<select id="topicSubList" resultType="com.ksinfo.blind.common.dto.CommonPostDto"> 
-	SELECT 
-       coalesce(rank.post_id,0) as postId
-       , rank.board_id as boardId
-       , rank.board_topic_name as boardTopicname
-       , coalesce(rank.post_title, 'ポストが作成されていません。') as postTitle
-       , rank.post_create_date as postCreateDate
-       , coalesce(pc.count, 0) AS recordCount
-       , TRIM(TO_CHAR(rank.post_count, '999,999,999,999,999')) AS postCount
-   FROM (
-       SELECT
-          pm.post_id
-          , bm.board_id
-          , bm.board_topic_name
-          , pm.post_title
-          , pm.post_create_date
-          , pci.post_count
-          , RANK() OVER (PARTITION BY pm.board_id ORDER BY pci.post_count DESC) AS rn  
-          FROM blind.post_mgt pm
-       INNER JOIN
-            blind.post_count_inf pci
-             ON
-            pci.post_id = pm.post_id
-       RIGHT JOIN
-            blind.board_mgt bm
-           ON
-           pm.board_id = bm.board_id 
-      ) AS rank
-   LEFT JOIN 
-     (
-    SELECT
-		board_id,
-		count(*) AS count
-		FROM blind.post_mgt
-		GROUP BY board_id
-		) AS pc
-    ON
-    rank.board_id = pc.board_id
-      WHERE rank.rn between 1 and 5
-      ORDER BY rank.board_id ASC
-</select>
+	<select id="getSubMainPostList" resultType="com.ksinfo.blind.common.vo.SubMainPostVO">
+		SELECT board_id AS boardId
+			, board_topic_name AS boardTopicName
+			, COALESCE(post_id, 0) AS postId
+			, COALESCE(post_title, 'ポストが作成されていません。') AS postTitle
+			, COALESCE(post_count, 0) AS postCount
+		FROM blind.board_mgt AS bo
+			LEFT JOIN LATERAL (
+				SELECT post_id
+					, board_id
+					, post_title
+					, post_count
+				FROM blind.post_mgt AS po
+					INNER JOIN blind.post_count_inf USING(post_id)
+				WHERE bo.board_id = po.board_id
+					AND post_create_date > NOW() - INTERVAL '3 days'
+					AND logical_del_flag = '0'
+				ORDER BY (
+					SELECT COUNT(*)
+					FROM blind.post_recommend_inf AS pri
+					WHERE po.post_id = pri.post_id
+						AND post_recommend_flag = '1'
+				) DESC, post_id DESC
+				FETCH FIRST 5 ROWS ONLY
+			) AS postList USING(board_id)
+		WHERE closed_flag = '0'
+			AND logical_del_flag = '0'
+		ORDER BY board_order;
+	</select>
 
-<select id="getDirectoryTotalRecord" parameterType="com.ksinfo.blind.common.dto.DirectorySearchDto"
-        resultType="_int">
-    SELECT COUNT(*)
-    FROM blind.company_mgt
-    WHERE
-    <choose>
-        <when test="isSearchCompanyName">
-            <foreach collection="searchKeywordList" item="searchKeyword" open="(" close=")" separator="OR">
-                LOWER(search_company_name) LIKE LOWER(#{searchKeyword})
-            </foreach>
-        </when>
-        <otherwise>
-            LOWER(company_name) LIKE LOWER(#{searchKeywordList[0]})
-        </otherwise>
-    </choose>
-    AND verify_flag = '1'
-    AND logical_del_flag = '0';
-</select>
+	<select id="getTotalDirectoryRecord" parameterType="com.ksinfo.blind.common.dto.DirectorySearchDto"
+			resultType="_int">
+		SELECT COUNT(*)
+		FROM blind.company_mgt
+		WHERE
+		<choose>
+			<when test="isSearchCompanyName">
+				<foreach collection="searchKeywordList" item="searchKeyword" open="(" close=")" separator="OR">
+					LOWER(search_company_name) LIKE LOWER(#{searchKeyword})
+				</foreach>
+			</when>
+			<otherwise>
+				LOWER(company_name) LIKE LOWER(#{searchKeywordList[0]})
+			</otherwise>
+		</choose>
+		AND verify_flag = '1'
+		AND logical_del_flag = '0';
+	</select>
 
-<select id="getDirectoryCompanyList" parameterType="com.ksinfo.blind.common.dto.DirectorySearchDto"
-        resultType="com.ksinfo.blind.common.vo.DirectoryCompanyVO">
-    SELECT company_id AS companyId
-    , company_name AS companyName
-    FROM blind.company_mgt
-    WHERE
-    <choose>
-        <when test="isSearchCompanyName">
-            <foreach collection="searchKeywordList" item="searchKeyword" open="(" close=")" separator="OR">
-                LOWER(search_company_name) LIKE LOWER(#{searchKeyword})
-            </foreach>
-        </when>
-        <otherwise>
-            LOWER(company_name) LIKE LOWER(#{searchKeywordList[0]})
-        </otherwise>
-    </choose>
-    AND verify_flag = '1'
-    AND logical_del_flag = '0'
-    ORDER BY search_company_name;
-</select>
+	<select id="getDirectoryCompanyList" parameterType="com.ksinfo.blind.common.dto.DirectorySearchDto"
+			resultType="com.ksinfo.blind.common.vo.DirectoryCompanyVO">
+		SELECT company_id AS companyId
+			, company_name AS companyName
+		FROM blind.company_mgt
+		WHERE
+		<choose>
+			<when test="isSearchCompanyName">
+				<foreach collection="searchKeywordList" item="searchKeyword" open="(" close=")" separator="OR">
+					LOWER(search_company_name) LIKE LOWER(#{searchKeyword})
+				</foreach>
+			</when>
+			<otherwise>
+				LOWER(company_name) LIKE LOWER(#{searchKeywordList[0]})
+			</otherwise>
+		</choose>
+			AND verify_flag = '1'
+			AND logical_del_flag = '0'
+		ORDER BY search_company_name;
+	</select>
 </mapper>

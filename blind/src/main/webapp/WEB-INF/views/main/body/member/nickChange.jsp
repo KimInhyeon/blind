@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-	<meta charset="UTF-8">
 	<title>ニックネーム変更</title>
 </head>
 <body>
@@ -16,14 +15,14 @@
 			<div class="six wide column field">
 				<label>ニックネーム</label>
 				<div class="ui transparent huge icon input disabled">
-					<input type="text" value="${userNickname}" id="nickname" oninput="checkNickname(this)">
+					<input type="text" value="${userNickname}" id="nickname" oninput="checkNickname(this);">
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="five wide column" id="nicknameCheckMessage"></div>
 			<div class="two wide column">
-				<button class="ui positive button disabled" id="nicknameSubmit" onclick="nickChangeSubmit(this)">変更</button>
+				<button class="ui positive button disabled" id="nicknameSubmit" onclick="nickChangeSubmit(this);">変更</button>
 			</div>
 		</div>
 	</div>
@@ -124,7 +123,7 @@
 		possibleDate = nicknameChangeDate;
 	}
 
-	onload = function () {
+	addEventListener("DOMContentLoaded", function () {
 		setPossibleDate(new Date(${nicknameChangeDate}));
 
 		const nickname = document.getElementById("nickname");
@@ -173,7 +172,7 @@
 				nicknameCheckMessage.innerText = "";
 			}
 		});
-	};
+	});
 </script>
 </body>
 </html>

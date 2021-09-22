@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Map;
 
 @RestController
-public class CompanyNewsController {
+public final class CompanyNewsController {
 	private final CompanyIntroductionService companyIntroductionService;
 	private final CompanyNewsService companyNewsService;
 
@@ -23,7 +23,7 @@ public class CompanyNewsController {
 		this.companyNewsService = companyNewsService;
 	}
 
-	@GetMapping("companyNews/{companyId}")
+	@GetMapping("company/news/{companyId}")
 	public ModelAndView companyNews(@PathVariable long companyId, @RequestParam(defaultValue = "1") int page) {
 		CompanyIntroductionDto companyIntroduction = companyIntroductionService.companyIntroduction(companyId);
 		int reviewCount = companyIntroductionService.reviewCount(companyId);
@@ -36,5 +36,12 @@ public class CompanyNewsController {
 		modelAndView.addObject("navi", companyNews.get("navi"));
 
 		return modelAndView;
+	}
+
+	@GetMapping(value = "company/news/{companyId}", params = "ajax=true")
+	public Map<String, Object> getArticles(@PathVariable long companyId, @RequestParam(defaultValue = "1") int page) {
+		String companyName = companyNewsService.getCompanyName(companyId);
+
+		return companyNewsService.getCompanyNews(companyName, page);
 	}
 }

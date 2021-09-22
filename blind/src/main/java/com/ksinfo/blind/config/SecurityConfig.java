@@ -24,22 +24,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.antMatchers("/manage/**").hasRole("SV")
-			.antMatchers("/companyReview/**", "/topicMain/**").hasAnyRole("SV","RM","NM")
-			.antMatchers("/manage/**").hasRole("SV")
-			.antMatchers("/", "/main", "/registMember", "/testAndroidAccess").permitAll()
+			.antMatchers("/topic", "/image", "/post").hasAnyRole("SV", "RM")
+			.antMatchers("/addBookmark").authenticated()
+			.antMatchers("/registMember", "/registMemberApp", "/login", "/loginApp").anonymous()
+			.antMatchers("/", "/main", "/topic/**", "/post/**", "/directory", "/testAndroidAccess").permitAll()
+			.antMatchers("/companyIntroduction", "/companyReviewMain", "/companyNews/**").permitAll()
 			.anyRequest().authenticated()
 			.and().csrf().disable()
 		.formLogin()
 			.loginPage("/login")
 			.defaultSuccessUrl("/loginSuccess")
 			.failureHandler(new CustomizeAuthenticationFailureHandler())
-			.permitAll()
 			.and()
 		.logout()
-			.permitAll()
+			.logoutUrl("/logout")
+			.logoutSuccessUrl("/login")
 			.and()
 		.exceptionHandling()
-			.accessDeniedPage("/login");
+			.accessDeniedPage("/main");
 	}
 
 	@Bean
