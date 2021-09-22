@@ -6,6 +6,9 @@
 <meta charset="UTF-8">
     <title></title>
     <script>
+        $(document).ready(function(){
+            $('#searchKeyword').html("会社の名前を入力してください。");
+        });
 	    function searchCompany() {
             $('#selectList').html("");
             var searchKeyword = $('#searchKeyword').val();
