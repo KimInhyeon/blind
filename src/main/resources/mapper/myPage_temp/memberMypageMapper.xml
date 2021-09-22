@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.myPage_temp.mapper.MemberMyPageMapper">
+	<!-- 1.유저(정회원)가 근무하는 회사의 이름 가져오기 -->
+	<select id="getUsersCompanyName" resultType="string">
+		SELECT company_name AS companyName
+		FROM blind.company_mgt
+		WHERE company_id = #{companyId};
+	</select>
+
+	<!-- 2.유저가 이번 달에 작성한 포스트의 갯수를 리턴 -->
+	<select id="getPostCountsThisMonth" resultType="_int">
+		SELECT COUNT(*)
+		FROM blind.post_mgt
+		WHERE user_id = #{userId}
+			AND post_create_date BETWEEN(DATE_TRUNC('month', CURRENT_DATE)) AND CURRENT_DATE; <!--이번달의 시작일부터
+			AND post_create_date <![CDATA[<=]]> (DATE_TRUNC('MONTH', CURRENT_DATE) + INTERVAL '1 MONTH - 1 day');
+			부등호(>=, <=)사용시 <![CDATA[ 를 활용하는 것도 방법임을 확인. -->
+	</select>
+
+	<!-- 3.유저가 이번달에 작성한 포스트들이 얻은 좋아요의 갯수를 카운트하여 리턴.  -->
+	<select id="getPostLikeCountThisMonth" resultType="_int">
+<!--	ポストごとではなく総合だけ必要であれば以下のクァーリーに変更
+
+		SELECT COUNT(*)
+		FROM blind.post_recommend_inf
+		WHERE post_id IN (
+			SELECT post_id
+			FROM blind.post_mgt
+			WHERE user_id = #{userId}
+				AND post_create_date BETWEEN(DATE_TRUNC('month', CURRENT_DATE)) AND CURRENT_DATE
+				AND logical_del_flag = '0'
+		) AND post_recommend_flag = '1';
+-->
+		SELECT COUNT(pri.post_id)
+		FROM blind.post_recommend_inf AS pri
+			LEFT JOIN blind.post_mgt AS po USING(post_id)
+		WHERE po.user_id = #{userId} <!--조건1.작성자 본인의 글인지를 확인-->
+			AND post_create_date >= cast(date_trunc('month',current_date) as date) <!--이번달의 시작일부터-->
+			AND post_create_date <![CDATA[<=]]> (DATE_TRUNC('MONTH', CURRENT_DATE) + INTERVAL '1 MONTH - 1 day'); <!--이번달의 마지막날까지-->
+	</select>
+
+	<!-- 4.유저가 이번 달에 작성한 글에 대한 댓글의 갯수 카운트 -->
+	<!--
+	<select id="getPostReplyCountThisMonth" parameterType="int" resultType="int">
+
+	</select>
+	 -->
+
+	<!-- 5.유저의 연봉랭킹정보 -->
+	<select id="getSalaryRankingData" resultType="_float">
+<!--	上位n%の情報が必要であればresultTypeを_intに変更して以下のクァーリーに変更
+
+		SELECT ROUND(CAST(rank.salaryranking AS DECIMAL) / (SELECT COUNT(*) FROM blind.salary_rank_mgt), 2) * 100
+		FROM blind.salary_rank_mgt AS target
+			INNER JOIN (
+				SELECT user_id
+					, RANK() OVER(ORDER BY salary DESC) AS salaryranking
+			FROM blind.salary_rank_mgt
+		) rank USING(user_id)
+		WHERE target.user_id = #{userId};
+-->
+		SELECT ROUND((CAST(rank.salaryranking AS DECIMAL) / (SELECT COUNT(*) FROM blind.salary_rank_mgt) * 100), 1)
+		FROM BLIND.salary_rank_mgt AS target
+			INNER JOIN (
+				SELECT user_id
+					, RANK() OVER(ORDER BY salary DESC) AS salaryranking
+			FROM blind.salary_rank_mgt
+			) AS rank USING(user_id)
+		WHERE target.user_id = #{userId};
+	</select>
+
+	<!-- 6. 유저의 현재 비밀번호를 수신.(account의 비밀번호는 로그인 시점의 정보인 관계로 최신 비번이 아닐 수 있음)-->
+	<select id="getCurrentPassword" resultType="string">
+		SELECT user_password
+		FROM blind.user_mgt
+		WHERE user_id = #{userId};
+	</select>
+
+	<!-- 7.유저의 비밀번호 갱신 -->
+	<update id="updateToNewPassword">
+		UPDATE blind.user_mgt
+		SET user_password = #{newPassword}
+		WHERE user_id = #{userId};
+	</update>
+</mapper>

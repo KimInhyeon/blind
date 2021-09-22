@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.member.mapper.MyPostMapper">
+	<select id="getMyPostList" resultType="com.ksinfo.blind.member.vo.MyPostVO">
+		SELECT type,
+			postId,
+			postTitle,
+			companyName,
+			userNickname,
+			TO_CHAR(rec_create_date, 'YYYY.MM.DD') AS recCreateDate
+		FROM (
+			WITH pm AS (
+				SELECT post_id,
+					post_title,
+					board_topic_name,
+					pm.rec_create_date
+				FROM blind.post_mgt AS pm
+					INNER JOIN blind.board_mgt AS bm
+						ON pm.board_id = bm.board_id AND bm.logical_del_flag = '0'
+				WHERE user_id = #{userId}
+					AND pm.logical_del_flag = '0'
+			)
+			SELECT 'ポスト' AS type,
+				post_id AS postId,
+				post_title AS postTitle,
+				board_topic_name AS companyName,
+				NULL AS userNickname,
+				rec_create_date
+			FROM pm
+			UNION ALL (
+				SELECT type,
+					postId,
+					postTItle,
+					CASE WHEN cm.verify_flag = '1' THEN company_name ELSE '会社名無し' END AS companyName,
+					CASE WHEN um.logical_del_flag = '0' THEN user_nickname ELSE '脱会した会員' END AS userNickname,
+					dual.rec_create_date
+				FROM (
+					SELECT 'コメント' AS type,
+						post_id AS postId,
+						post_title AS postTitle,
+						user_id,
+						pm.rec_create_date
+					FROM pm
+						INNER JOIN blind.reply_mgt USING (post_id)
+					UNION ALL
+					SELECT 'いいね' AS type,
+						pm.post_id AS postId,
+						post_title AS postTitle,
+						pri.user_id,
+						rec_create_date
+					FROM pm
+						INNER JOIN blind.post_recommend_inf AS pri
+							ON pm.post_id = pri.post_id AND post_recommend_flag = '1'
+					UNION ALL
+					SELECT '通報' AS type,
+						pm.post_id AS postId,
+						post_title AS postTitle,
+						prm.user_id,
+						prm.rec_create_date
+					FROM pm
+						INNER JOIN blind.post_report_mgt AS prm
+							ON pm.post_id = prm.post_id AND prm.logical_del_flag = '0'
+				) AS dual
+					INNER JOIN blind.user_mgt AS um
+						ON dual.user_id = um.user_id AND um.last_generation_flag = '1'
+					INNER JOIN blind.company_mgt AS cm
+						ON um.company_id = cm.company_id AND cm.logical_del_flag = '0'
+			)
+		) AS myPostList
+		ORDER BY rec_create_date DESC;
+	</select>
+</mapper>

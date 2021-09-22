@@ -3,15 +3,11 @@
 **/.mvn/
 **/target/
 **/src/test/
+**/src/main/webapp/resources/upload/
 **/.settings/
 **/bin/
 *.iml
 *.settings
 *.project
 *.classpath
-<<<<<<< HEAD
 *.gitignore
-/.metadata/
-=======
-*.gitignore
->>>>>>> changju.lee
