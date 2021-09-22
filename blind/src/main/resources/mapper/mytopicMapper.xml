@@ -6,6 +6,7 @@
       1 as mytopicType 
         ,um.user_nickName as userNickName
         ,coalesce(cm.company_name,'会社名無し') as companyName
+        ,pm.post_id as postId
         ,pm.post_title as postTitle
         ,bm.board_topic_name as boardTopicname
         ,to_char(pm.post_create_date,'YYYY.MM.DD') as createDate
@@ -41,6 +42,7 @@ UNION ALL
       2 as mytopicType
         ,(select um.user_nickName from blind.user_mgt um where um.user_id = rm.user_id	AND um.last_generation_flag = '1' AND um.logical_del_flag = '0') as userNickName
         ,coalesce(cm_name.company_name,'会社名無し') as companyName
+		,pm.post_id as postId
         ,pm.post_title as postTitle
         ,null as boardTopicname
         ,to_char(rm.rec_create_date, 'YYYY.MM.DD') as createDate
@@ -86,6 +88,7 @@ UNION ALL
    		3 as mytopicType
 		,(select um.user_nickName from blind.user_mgt um where um.user_id = pri.user_id	AND um.last_generation_flag = '1' AND um.logical_del_flag = '0') as userNickName
         ,coalesce(cm_name.company_name,'会社名無し') as companyName
+		,pm.post_id as postId
         ,pm.post_title as postTitle
         ,null as boardTopicname
         ,to_char(pri.post_recommend_date,'YYYY.MM.DD') as createDate
@@ -132,6 +135,7 @@ UNION ALL
    		4 as mytopicType
 		,(select um.user_nickName from blind.user_mgt um where um.user_id = prm.user_id	AND um.last_generation_flag = '1' AND um.logical_del_flag = '0') as userNickName
         ,coalesce(cm_name.company_name,'会社名無し') as companyName
+		,pm.post_id as postId
         ,pm.post_title as postTitle
         ,null as boardTopicname
         ,to_char(prm.post_report_date,'YYYY.MM.DD') as createDate

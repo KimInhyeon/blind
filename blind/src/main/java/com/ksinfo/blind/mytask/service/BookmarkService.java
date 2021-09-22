@@ -28,14 +28,7 @@ public class BookmarkService {
 		return bookmarkMapper.searchBookmark(map);
 	}
 
-//	public long insertBookmark(BookmarkDto searchBookmark){
-//		HashMap<String, Object> map = new HashMap<String, Object>();
-//		map.put("logicalDelFlag", searchBookmark.getLogicalDelFlag());
-//		map.put("postId", searchBookmark.getPostId());
-//		map.put("userId", searchBookmark.getUserId());
-//		return bookmarkMapper.insertBookmark(map);
-//	}
-//
+
 	public long updateBookmark(BookmarkDto searchBookmark){
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("logicalDelFlag", searchBookmark.getLogicalDelFlag());

@@ -4,6 +4,7 @@ public class MyTopicDto { //
 	private int mytopicType;
 	private String userNickName; // 유저 닉네임
 	private String boardTopicname; // 게시판 이름
+	private String postId; //게시글 아이디
 	private String postTitle; // 게시글 이름
 	private String createDate; // 게시글 작성 날짜
 	private String postReportNickName; // 게시글 신고 닉네임
@@ -30,6 +31,14 @@ public class MyTopicDto { //
 	}
 	public void setBoardTopicname(String boardTopicname) {
 		this.boardTopicname = boardTopicname;
+	}
+
+	public String getPostId() {
+		return postId;
+	}
+
+	public void setPostId(String postId) {
+		this.postId = postId;
 	}
 
 	public String getPostTitle() {

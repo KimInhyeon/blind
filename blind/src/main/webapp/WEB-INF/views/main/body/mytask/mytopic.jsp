@@ -12,6 +12,7 @@
            .mytopiccontent{font-weight:400; color:gray; font-size:100%; padding:5px 0;}
            .mytopiccontent i{float:left; padding:7px 40px 50px 30px;}
            .topictit{padding-top:5px; font-weight:700; color:black; font-size:17px;}
+           .topictit a {color:black;}
            .mytopicnoti{padding: 15px 0 10px 10px; float:left;}
            .mytopicdate{padding: 15px 30px 10px 0; float:right;}
         </style>
@@ -25,7 +26,7 @@
     	<c:when test="${mytopic.mytopicType eq 1 }">
         <div class="mytopiccontent">
             <i class="large red clipboard list icon"></i>
-            <div class="topictit">${mytopic.postTitle }</div>
+            <div class="topictit"><a href="${pageContext.request.contextPath}/topicDetail?postId=${mytopic.postId}">${mytopic.postTitle }</a></div>
             <div class="mytopicnoti" >会員様が「${mytopic.boardTopicname }トピックグループ」にポストを登録しました。<br style="clear:both;"></div>
         <div class="mytopicdate">${mytopic.createDate }<br style="clear:both;"></div>
         <div class="ui fitted divider" style="margin-top:50px;"><!--fit 되는 얇은 선--></div>
@@ -35,7 +36,7 @@
 		<c:when test="${mytopic.mytopicType eq 2 }">
         <div class="mytopiccontent">
             <i class="large black comment alternate icon"></i>
-            <div class="topictit">${mytopic.postTitle }</div>
+            <div class="topictit"><a href="${pageContext.request.contextPath}/topicDetail?postId=${mytopic.postId}">${mytopic.postTitle }</a></div>
             <div class="mytopicnoti" >会員様のポストに「${mytopic.companyName}・${mytopic.userNickName}」様がコメントを作成しました。<br style="clear:both;"></div>
         <div class="mytopicdate">${mytopic.createDate }<br style="clear:both;"></div>
         <div class="ui fitted divider" style="margin-top:50px;"><!--fit 되는 얇은 선--></div>
@@ -44,7 +45,7 @@
         <c:when test="${mytopic.mytopicType eq 3 }">
         <div class="mytopiccontent">
             <i class="red heart icon"></i>
-            <div class="topictit">${mytopic.postTitle }</div>
+            <div class="topictit"><a href="${pageContext.request.contextPath}/topicDetail?postId=${mytopic.postId}">${mytopic.postTitle }</a></div>
             <div class="mytopicnoti" >会員様のポストに「${mytopic.companyName}・${mytopic.userNickName}」様がいいね！しました。<br style="clear:both;"></div>
         <div class="mytopicdate">${mytopic.createDate }<br style="clear:both;"></div>
         <div class="ui fitted divider" style="margin-top:50px;"><!--fit 되는 얇은 선--></div>
@@ -53,7 +54,7 @@
         <c:when test="${mytopic.mytopicType eq 4 }">
         <div class="mytopiccontent">
             <i class="large red bullhorn icon"></i>
-            <div class="topictit">${mytopic.postTitle }</div>
+            <div class="topictit"><a href="${pageContext.request.contextPath}/topicDetail?postId=${mytopic.postId}">${mytopic.postTitle }</a></div>
             <div class="mytopicnoti" >会員様のポストが「${mytopic.companyName}・${mytopic.userNickName}」様により、通報されました。<br style="clear:both;">
                 ${mytopic.postReportNickName }様は今まで総 ${mytopic.reportedCount } 回通報されました。<br>
                 3回以上になった場合、ご利用を制限することがあります。</div>

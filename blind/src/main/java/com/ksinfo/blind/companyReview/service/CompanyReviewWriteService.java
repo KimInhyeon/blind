@@ -16,4 +16,8 @@ public class CompanyReviewWriteService {
 	public int companyReviewJoin(CompanyJoinDto inputDto){
 		return companyReviewWriteMapper.companyReviewJoin(inputDto);
 	}
+
+	public CompanyJoinDto companyReviewUpdate(long companyReviewId){
+		return companyReviewWriteMapper.companyReviewUpdate(companyReviewId);
+	}
 }
