@@ -137,12 +137,38 @@
 	<update id="updateBookmark" parameterType="hashmap">
 		UPDATE blind.bookmark_mgt
 		SET rec_update_date = now(), rec_update_user_id = #{userId},logical_del_flag =
-		CASE WHEN logical_del_flag='0' THEN '1'
-			WHEN logical_del_flag='1' THEN '0'
-			END
+			CASE WHEN logical_del_flag='0' THEN '1'
+				 WHEN logical_del_flag='1' THEN '0'
+				END
 		WHERE bookmark_id = #{bookmarkId};
 	</update>
 
+	<!-- 신규북마크 추가 SQL(2021-09-07추가) -->
+	<insert id="insertBookmark" parameterType="java.util.Map" >
+		INSERT INTO blind.bookmark_mgt(
+			bookmark_id,
+			post_id,
+			user_id,
+			bookmark_create_date,
+			bookmark_update_date,
+			rec_create_user_id,
+			rec_create_date,
+			rec_update_user_id,
+			rec_update_date,
+			logical_del_flag
+		)VALUES(
+			default, 	--bookmark_id,
+		   	#{postId},	--post_id,
+			#{userId},	--user_id,
+			now(),		--bookmark_create_date,
+			now(),		--bookmark_update_date,
+			#{userId},	--rec_create_user_id,
+			now(),		--rec_create_date,
+			#{userId},	--rec_update_user_id,
+			now(),		--rec_update_date,
+			1			--logical_del_flag(유저가 북마크로 설정하기에 최초생성시 초기값을 1으로 설정.)
+		)
+	</insert>
 
 	<select id="searchPostRecommend" parameterType="hashmap" resultType="com.ksinfo.blind.mytask.dto.BookmarkDto">
 		SELECT

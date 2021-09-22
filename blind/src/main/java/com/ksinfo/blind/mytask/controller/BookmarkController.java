@@ -39,6 +39,17 @@ public class BookmarkController {
             }
         }
 
+    //북마크 없음을 확인한 경우 신규 row를 추가.
+    @RequestMapping(value = "insertBookmark", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public void insertBookmark(@AuthenticationPrincipal Account account, long postId) {
+        BookmarkDto searchBookmark = bookmarkService.searchBookmark(account.getUserId(), postId);
+        if (searchBookmark != null) {
+            bookmarkService.updateBookmark(searchBookmark);
+        }
+    }
+
+
     @RequestMapping(value = "addPostRecommend", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public void addPostRecommend(@AuthenticationPrincipal Account account, long postId){

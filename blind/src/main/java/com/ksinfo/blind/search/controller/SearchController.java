@@ -1,5 +1,7 @@
 package com.ksinfo.blind.search.controller;
 
+import com.ksinfo.blind.mytask.dto.BookmarkDto;
+import com.ksinfo.blind.mytask.service.BookmarkService;
 import com.ksinfo.blind.search.dto.BoardDto;
 import com.ksinfo.blind.search.dto.CompanyDto;
 import com.ksinfo.blind.search.dto.CompanyReviewDto;
@@ -23,10 +25,10 @@ import java.util.List;
 @Controller
 public class SearchController {
 
-	private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
+//	private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 
 	@Autowired SearchService searchService; // SearchService.java에서 선언된 DB의 자료형
-
+	@Autowired BookmarkService bookmarkService;
 
 	//유저가 검색된 기업에 대하여 근무를 추천/비추천 버튼 클릭한 값에 따라 추천/비추천 한 정보를 insert실시 및 기업의 추천도를 리턴.
 	@RequestMapping(value = "companyRecommendVote", method = RequestMethod.POST)
@@ -49,25 +51,14 @@ public class SearchController {
 		return companyRecommendVoteResult; //투표에 참여한 유저에게 기업의 선호도를 출력하기 위한 값들을 리턴.
 	}
 
-
-	@RequestMapping(value = "bookmarkChanege", method = RequestMethod.GET)
-	@ResponseBody
-	public int bookmarkChanege() { //나중에 리턴형을 BookmarkDto으로 할지 여부 결정필요.
-		//북마크 설정 mapper.xml을 통해 SQL 수정실시하도록 갱신예정.
-		return 1; //성공시 flag 개념으로 1을 성공의 개념으로 리턴.
-	}
-
 	//포스트-1개의 토픽(board) 선택시 해당하는 게시판만 출력되도록 실행.
 	@RequestMapping(value = "viewPostsSelectedTopic", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public List<PostDto> viewPostsSelectedTopic(int selectBoardId, String searchKeyword) {
-		logger.info("viewPostsSelectedTopic start");
-		logger.info("selectBoardId : " + selectBoardId + "  searchKeyword : " + searchKeyword);
 
 		//선택한 토픽에 대한 포스트들만 리턴실시.
 		//<!-- 2.2.포스트-토픽선택(왼쪽드롭박스) : 1개의 토픽만 선택시 리턴 -->
 		List<PostDto> searchResultPostsSelectTopic = searchService.getPostSelectTopic(selectBoardId, searchKeyword);
-		logger.info("viewPostsOfOneTopic-END(Returns searchResultPostsOfOneTopic) ");
 
 		return searchResultPostsSelectTopic;
 	}
@@ -76,18 +67,14 @@ public class SearchController {
 	@RequestMapping(value = "sortPosts", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public List<PostDto> sortPosts(int sortPostOption, String searchKeyword, int selectBoardId) {
-		logger.info("sortPosts 시작");
-		logger.info("sortPostOption : " + sortPostOption + "   searchKeyword : " + searchKeyword + "   selectBoardId : " + selectBoardId);
 		List<PostDto> searchResultSortedPosts; //재검색을 실시하여 해당 SQL의 order by등이 적용된 출력.
 
 		if (sortPostOption == 1) {
-			logger.info("sortPosts-정렬옵션 : 최신일 기준");
 			//<!-- 2.3. 콤보박스의 정렬기준 옵션_추천순 -->
 			//<!-- 2.3.1. 콤보박스의 포스트-정렬옵션-최신일  -->
 			searchResultSortedPosts = searchService.getSortPostBylatestDate(selectBoardId, searchKeyword);
 			return searchResultSortedPosts;
 		} else {
-			logger.info("sortPosts-정렬옵션 : 추천수 기준");
 			//<!-- 2.3.2. 콤보박스의 포스트-정렬옵션-추천순  -->
 			searchResultSortedPosts = searchService.getSortPostByRecommend(selectBoardId, searchKeyword);
 			return searchResultSortedPosts;
@@ -97,24 +84,21 @@ public class SearchController {
 	//search.jsp에서 검색어를 입력시 작동하는 기능
 	@RequestMapping("/search")
 	public ModelAndView search(String searchKeyword, ModelAndView mav) {
-		logger.info("SearchController-search 시작");
+		//토픽메인에서 입력한 검색어를 검색실시.
 
-		logger.info("기업정보 관련 데이터 준비");
+		//기업정보 관련 데이터 준비
 		//<!-- 1.1.회사의 프로필 정보 수신 -->
 		List<CompanyDto> searchResultCompany = searchService.getSearchCompany(searchKeyword); //기업프로필
 		List<CompanyReviewDto> companyReviews =  new ArrayList<>();	
 
-		logger.info("기업정보여부 플래그(검색어가 기업을 검색했는지 여부를 알리는 용도)");
+		//기업정보여부 플래그(검색어가 기업을 검색했는지 여부를 알리는 용도)
 		int searchResultCompanyDataFlag = 0; //값이 1일시 회사정보 있음
 		if (!(searchResultCompany.isEmpty())) {
-			//!(searchResultCompany.isEmpty())가 0이다 회사정보가 있음.
-			logger.info("확인결과: 회사정보 있음");
-
 			//<!-- 1.2.회사의 리뷰정보 수신 -->
 			companyReviews = searchService.getCompanyReviews(searchResultCompany.get(0).getCompanyId()); //기업에 대한 기업리뷰 수신
 			searchResultCompanyDataFlag = 1;
 		} else {
-			logger.info("확인결과: 회사정보 없음");
+			//확인결과: 회사정보 없을시 실시사항.
 			searchResultCompanyDataFlag = 0;
 		}
 
@@ -128,7 +112,7 @@ public class SearchController {
 		List<BoardDto> boardNameAndIdAndCount = searchService.getBoardNameAndIdAndCount(searchKeyword); //토픽의 이름 수신
 
 		// mav를 통해 값을 jsp에게 리턴할 수 있도록 mavadd 실시.
-		logger.info("데이터준비 3단계. mav에게 searchResultPosts가 받은 정보를 입력. 웹페이지에 출력할 수 있도록 실시.");
+		//데이터준비 3단계. mav에게 searchResultPosts가 받은 정보를 입력. 웹페이지에 출력할 수 있도록 실시.
 
 		//0.이전검색어 그대로 전달.
 		mav.addObject("pastSearchKeyword", searchKeyword); //이전의 검색어.
@@ -146,10 +130,34 @@ public class SearchController {
 		mav.addObject("searchResultPosts", searchResultPosts); //검색어와 관련된 포스트(게시글)들 전달.
 		mav.addObject("searchResultPostsLastNumber", searchResultPosts.size() - 1);
 
-		logger.info("출력할 경로 설정.");
 		mav.setViewName("main/search/search");
 		return mav;
 
+	}
+
+	//북마크 추가/삭제여부를 결정.
+	@RequestMapping(value = "/bookmarkSet", method = RequestMethod.POST, produces = "application/json")
+	@ResponseBody
+	public int bookmarkSet(@AuthenticationPrincipal Account account, int postId) {
+		//우선 기존에 등록된 플래그가 있는지 여부를 확인.
+		BookmarkDto searchBookmark = bookmarkService.searchBookmark(account.getUserId(), postId);
+		int resultBookmarkFlag=0;	//ajax에게 리턴하여 ajax로 북마크태그를 on/off하도록 설정.　우선 초기값은 0으로 설정.
+
+		if (searchBookmark != null) {//DB에 등록된 북마크 없음여부 확인.
+			//기존에 등록된 북마크가 있음을 확인. logical_del_flag를 update하여 on/off처리 실시.
+			bookmarkService.updateBookmark(searchBookmark);
+			BookmarkDto searchBookmarkTemp = bookmarkService.searchBookmark(account.getUserId(), postId);
+			resultBookmarkFlag = Integer.parseInt(searchBookmarkTemp.getLogicalDelFlag());
+		}
+		else{
+			//기존에 등록된 북마크가 없음. 따라서 신규등록으로 처리.
+			bookmarkService.insertBookmark( ( (int)account.getUserId() ), postId);
+			BookmarkDto searchBookmarkTemp = bookmarkService.searchBookmark(account.getUserId(), postId);
+			resultBookmarkFlag = Integer.parseInt(searchBookmarkTemp.getLogicalDelFlag());
+
+		}
+
+		return resultBookmarkFlag; //(0:DB에서 삭제.북마크 outline 출력. 1:DB에 추가.)
 	}
 
 	@RequestMapping("/search/testView")

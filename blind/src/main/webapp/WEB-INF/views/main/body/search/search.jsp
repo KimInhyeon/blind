@@ -1,6 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -68,15 +71,37 @@
     .seemore a {color:gray;}
     .topicbest span{color:gray;}
     .topicbest i{color:gray;}
-</style>
-	
-	
-	<script>
-	function bookmarkSet(postId){
-		var bookmarkId = "#bookmarkSet"+postId;
-		$(bookmarkId).html("<a><i class='bookmark icon'></i></a>");
+
+	.font_company_search{
+		font-weight: bolder;
+		font-size: 1.2em;
 	}
-	
+</style>
+	<script>
+	function bookmarkSet(postId) {
+		var bookmarkId = "#bookmarkSet"+postId;
+		//alert("postId : "+postId);
+		$.ajax({
+			type: "POST",
+			url: "/blind/bookmarkSet",
+			data: {postId},
+			dataType: "json",
+			success: function (result) {
+				if (result == 1) { //1:DB 추가완료
+					alert('ブックマーク登録完了。');
+					$(bookmarkId).html("<a><i class='bookmark icon'></i></a>");
+				}
+				else if (result == 0) {
+					alert('ブックマーク解除完了。 ');
+					$(bookmarkId).html("<a><i class='bookmark outline icon'></i></a>");
+				}
+			},
+			error: function () {
+				alert("システムエラーです。");
+			}
+		});
+	}
+
 	$(function(){
 		//기업추천여부(기업에 일하고 싶은가 여부) - 좋아요 버튼 클릭시
 		$(".company_recommend_button").on('click', function(){
@@ -258,27 +283,43 @@
 
 
 	<!-- 검색결과출력페이지(전체) -->
-		<h1><strong>${searchKeyword}</strong> 検索結果</h1> <!-- 검색키워드로 변경(지금은 기업명일때만 나온다. -->
-	
+	<div style="margin-top: 2.5%;margin-bottom: 2.5%; margin-left: 1.4%;">
+		<span style="font-size: 2em; font-weight: bolder;"> ${pastSearchKeyword}</span>
+		<span style="font-size: 2em;"> 検索結果</span>
+	</div>
 	<!-- 검색결과1. 기업정보 / 검색어가 기업이 아닌경우 출력되지 않는다. -->      
-		<c:if test="${searchResultCompanyDataFlag eq '1'}"><!-- searchResultCompanyDataFlag의 값이 1이면 회사정보 있으며, 이에따라 출력실시. -->
-			<div class="ui stacked segment" >
+		<c:if test="${searchResultCompanyDataFlag eq '1'}">
+			<div class="font_company_search" style="border:1px solid #cccccc; border-radius: 0.5em; padding: 2%;">
 	   			<h3>企業</h3>
-		   		<div class="ui stacked segment"  style="height: auto; width: 100%;  padding:20;" >
+		   		<div style="height: auto; width: 100%;  padding:2%;" >
 					<!-- 검색결과1.1. 기업의 기본정보페이지(총평점 및 리뷰/게시글/연봉링크) -->
 					<!-- 회사이름,별점 안내 및  리뷰,게시글,연봉 버튼 생성 -->
-					<div class="company_profile_part" > <!-- onclick 통해 div영역 클릭시 페이지 이동(''내에 이동할 URL 기입) -->
-						<div class="logo_and_companyName" style="float:left;display: inline;"> 
+					<div class="company_profile_part"  > <!-- onclick 통해 div영역 클릭시 페이지 이동(''내에 이동할 URL 기입) -->
+						<div class="logo_and_companyName" style="float:left;display: inline;">
 							<div style="display: flex;">
 								<img src="${pageContext.request.contextPath}/resources/images/company/${searchResultCompany[0].companyId}.png" 
 											width=40px, height=40px style="margin:5px;" align="top">
-									<div>
-										${searchResultCompany[0].companyName} 
-										<i class="star icon"></i>
+									<div style="margin-left: 10px;">
+										<!-- 기업로고 오른쪽-윗라인 : 기업명, 기업총평점의 평균점수-->
+										${searchResultCompany[0].companyName}
+										<div class="ui star rating disabled" data-rating="1" data-max-rating="1"
+											 style="margin-left:10px;"><i class="icon active"></i></div>
+										${searchResultCompany[0].allPointAvg}
+
+										<!-- 기업로고 오른쪽-아래라인 : 해당 기업의 기업리뷰파트의 리뷰/기업게시판/급여 탭으로 이동.-->
 										<div style="display: flex;">
-											<a href="${pageContext.request.contextPath}/companyShowReview?companyId=${searchResultCompany[0].companyId}"><span>レビュー</span></a>
-											<a href=""><span>企業ポスト</span></a>
-											<a href=""><span>給料</span></a>
+											<a href="${pageContext.request.contextPath}/companyShowReview?companyId=${searchResultCompany[0].companyId}"
+											   style="margin-right: 10px;">
+												<span style="color: #3d698e"> レビュー </span>
+											</a>
+											<a href=""
+											   style="margin-right: 10px;">
+												<span style="color: #3d698e"> 企業ポスト </span>
+											</a>
+											<a href=""
+											   style="margin-right: 10px;">
+											    <span style="color: #3d698e"> 給料 </span>
+											</a>
 										</div>
 									</div>
 								</div>
@@ -286,8 +327,9 @@
 					</div>
 	
 					<!-- 검색결과1.2. 일하고 싶은 기업인지 추천/비추천버튼 출력. 투표완료시 투표결과(기업선호도)를 출력하는 페이지로 변경. -->
-					<div class="ui stacked segment" style="margin:60px;">
-						<div class="ui stacked segment" style="height: auto; width: 100%;margin:10px;" id="company_vote_and_recommend_percent" >
+					<div style="margin-top:10%;">
+						<div style="width: 100%;margin-top:11%;margin-bottom:5%; text-align: center;"
+							 id="company_vote_and_recommend_percent" >
 							${searchResultCompany[0].companyName}は働きたい企業ですか
 							<button style="color: blue;" class="ui icon button company_recommend_button" value="1">
 								<i class="thumbs up outline icon"></i>
@@ -296,8 +338,32 @@
 								<i class="thumbs down outline icon"></i>
 							</button>
 						</div>
-	 				
-						<div class="company_review_sample" style="background-color:#b1d4e3; margin:10px;">
+
+						<div class="company_review_sample" style="background-color:#b1d4e3; margin-top: 2%;">
+
+							<!-- 기존의 총평점(float형) 값을 int형으로 변환(소수점이하 삭제)-->
+							<fmt:parseNumber var="show_star_point" value = "${companyReviews[0].allPoint}" integerOnly="true"/>
+							<!--소수점을 버리고 정수(int)로 만든다. int형이 아니면 div_star의 별점표현이 작동을 못한다.-->
+							<!-- 논의사항: 3.9같은 경우에는 4.0으로 올림처리를 해야 맞는가? -->
+							<!-- show_star_point:${show_star_point} 정상작동 체크(값확인용) 코드.-->
+
+							<div class="div_star">
+								<div class="ui star rating disabled" data-max-rating="5">
+									<c:forEach begin="1" end="5" step="1" varStatus="status">
+										<c:choose>
+											<c:when test="${ show_star_point >= status.count }">
+												<i class="icon active"></i>
+											</c:when>
+											<c:otherwise>
+												<i class="icon"></i>
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
+								</div>
+							</div>
+
+							<!--<c:set var="show_star_point" value = "${companyReviews[0].allPoint}"/>-->
+							<!-- 구분선 끝 -->
 							<c:choose> 
 								<c:when test="${empty companyReviews}">
 									<div>この企業のレビューはありません。</div>
@@ -306,11 +372,11 @@
 								</c:when>
 								<c:otherwise>
 									<a href="">
-										<div>${companyReviews[0].allPoint}</div> 				
-										<div style="float:Right;">レビュー全部見る > </div>
-										<div>${companyReviews[0].jobGroupName}</div>
-										<div>${companyReviews[0].simpleComment}</div>
-										<div>${companyReviews[0].disadvantages}</div>
+										<div style="display: inline-block; margin-top: 1.2%;margin-bottom: 1.2%;margin-left: 1%;">${companyReviews[0].allPoint}</div>
+										<div style="display: block;float:Right; margin-top: 1.2%;margin-bottom: 1.2%; padding-right: 2%;">レビュー全部見る > </div>
+										<div style="margin-top: 1.2%;margin-bottom: 1.2%;margin-left: 1%;"> ${companyReviews[0].jobGroupName} </div>
+										<div style="margin-top: 1.2%;margin-bottom: 1.2%;margin-left: 1%;">  ${companyReviews[0].simpleComment} </div>
+										<div style="margin-top: 1.2%;margin-bottom: 1.2%;margin-left: 1%;">  ${companyReviews[0].disadvantages} </div>
 									</a>						
 								</c:otherwise>
 							</c:choose>						
@@ -371,16 +437,26 @@
 									</div>
 
 						 	<div style="padding:10px; line-heigh:top;">
-						 	<div style="display:flex;">
-						 		 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="eye icon" style="margin:0px 5px 0px 5px;"></i>${posts.postCount}</a>
-						 		 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="thumbs up outline icon" style="margin:0px 5px 0px 5px;"></i> ${posts.recommendCount}</a>
-								 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="comment outline icon"  style="margin:0px 5px 0px 5px;"></i>  ${posts.replyCount}</a>
-							</div>
+								<div style="display:flex;">
+									 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="eye icon" style="margin:0px 5px 0px 5px;"></i>${posts.postCount}</a>
+									 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="thumbs up outline icon" style="margin:0px 5px 0px 5px;"></i> ${posts.recommendCount}</a>
+									 <a href="/blind/topicDetail?postId=${posts.postId }"><i class="comment outline icon"  style="margin:0px 5px 0px 5px;"></i>  ${posts.replyCount}</a>
+								</div>
 						  		<div style="float:Right;">
 							 		${fn:substring(posts.postCreateDate,5,7)}.${fn:substring(posts.postCreateDate,8,10)} <!-- 년-월-일 출력 방식 : ${fn:substring(posts.postCreateDate,0,10)} -->
-							   		<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
-							   			<a style="color:#000000; margin:0px;"><i class="bookmark outline icon"></i></a>
-							   		</div>
+							   		<!--검색결과 최초 출력시 북마크의 on/off 표시 위한 jstl조건문-->
+							   		<c:choose>
+										<c:when test="${posts.bookmarkId != 0 && posts.logicalDelFlag ==1}">
+											<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
+												<a style="color:#000000; margin:0px;"><i class="bookmark icon"></i></a>
+											</div>
+										</c:when>
+										<c:otherwise>
+											<div id="bookmarkSet${posts.postId}" onclick="bookmarkSet(${posts.postId})" style="display: inline; margin:0px 5px 0px 5px;">
+												<a style="color:#000000; margin:0px;"><i class="bookmark outline icon"></i></a>
+											</div>
+										</c:otherwise>
+									</c:choose>
 							  	</div>
 					   		</div>
 					   </div>
@@ -389,8 +465,8 @@
 			 	 </div>
 			</div>
 		</div>
+	</div>
 </body>
-
 
 </html>
 

@@ -1,3 +1,4 @@
+
 package com.ksinfo.blind.alert.service;
 
 import java.util.List;

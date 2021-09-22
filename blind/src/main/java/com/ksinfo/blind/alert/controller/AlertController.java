@@ -3,9 +3,11 @@ package com.ksinfo.blind.alert.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.ksinfo.blind.security.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,12 +21,14 @@ import com.ksinfo.blind.alert.dto.ReportReasonDto;
 import com.ksinfo.blind.alert.dto.ReviewReportDto;
 import com.ksinfo.blind.alert.service.AlertService;
 
+
 @Controller
 public class AlertController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(AlertController.class);
 
-	@Autowired AlertService alertService;  
+	@Autowired
+	AlertService alertService;
 	
 	//1.신고버튼 클릭시 해당 신고유형에 맞는 신고리스트들을 리턴.			
 	@RequestMapping(value="/loadAlertReasonList",method=RequestMethod.POST)
@@ -46,24 +50,15 @@ public class AlertController {
 	//2.수신된 신고사항을 DB에 저장
 	@RequestMapping(value="/sendAlert",method=RequestMethod.POST)
 	@ResponseBody
-	public int receiveAlert(@RequestParam Map<String, Object> param){ 
-		logger.info("receiveAlert 시작.");			
-	      
-	    //수신된 정보 확인위한 로그코드
-	    logger.info("postId : "+param.get("postId")); 								//게시글의 id
-	    logger.info("companyReviewId : "+param.get("companyReviewId")); 			//기업리뷰글 id
-	    logger.info("replyId : "+param.get("replyId")); 							//댓글 id	
-        logger.info("userId : "+param.get("userId")); 								//신고자의 id(닉네임이 아님)
-	    logger.info("selectAlertReason : "+param.get("reportReasonCode"));			//신고사유 코드번호
-	    logger.info("alertType : "+param.get("alertType"));							//신고유형(1:포스트/2:기업리뷰/3:포스트댓글)
-	    logger.info("reportReasonContent : "+param.get("report_reason_content"));	//textarea의 작성내용.
-	
-	      
+	public int receiveAlert(@RequestParam Map<String, Object> param,
+							@AuthenticationPrincipal Account account) throws Exception{
+
 	    // 작성편의 및 post/review/reply ReportDto에 맞도록 변수를 저장. 
 	    int postId = Integer.parseInt(param.get("postId").toString()) ;
 	    int companyReviewId = Integer.parseInt(param.get("companyReviewId").toString()) ;
 	    int replyId = Integer.parseInt(param.get("replyId").toString());
-	    int userId = Integer.parseInt(param.get("userId").toString());
+	    int userId = (int)account.getUserId();
+
 	    String reportReasonCode = param.get("reportReasonCode").toString();
 	    String alertType = param.get("alertType").toString();
 	    String reportReasonContent = param.get("report_reason_content").toString();

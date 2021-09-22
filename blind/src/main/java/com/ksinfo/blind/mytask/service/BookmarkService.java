@@ -28,6 +28,16 @@ public class BookmarkService {
 		return bookmarkMapper.searchBookmark(map);
 	}
 
+<<<<<<< HEAD
+=======
+//	public long insertBookmark(BookmarkDto searchBookmark){
+//		HashMap<String, Object> map = new HashMap<String, Object>();
+//		map.put("logicalDelFlag", searchBookmark.getLogicalDelFlag());
+//		map.put("postId", searchBookmark.getPostId());
+//		map.put("userId", searchBookmark.getUserId());
+//		return bookmarkMapper.insertBookmark(map);
+//	}
+>>>>>>> GimBoSeong
 
 	public long updateBookmark(BookmarkDto searchBookmark){
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -35,6 +45,14 @@ public class BookmarkService {
 		map.put("userId", searchBookmark.getUserId());
 		map.put("bookmarkId", searchBookmark.getBookmarkId());
 		return bookmarkMapper.updateBookmark(map);
+	}
+
+	//북마크 컨트롤러에서 searchBookmark 실시결과 null이 나온경우 신규추가를 실시.
+	public void insertBookmark(int userId, int postId){
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("postId", postId );
+		map.put("userId", userId );
+		bookmarkMapper.insertBookmark(map);
 	}
 
 	public BookmarkDto searchPostRecommend(long userId, long postId){
