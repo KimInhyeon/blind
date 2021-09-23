@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.board.mapper.ReplyMapper">
+	<select id="getRefreshCounts" parameterType="com.ksinfo.blind.board.dto.ReplyRequestDto"
+			resultType="com.ksinfo.blind.board.vo.RefreshVO">
+		SELECT (
+			SELECT post_count
+			FROM blind.post_count_inf
+			WHERE post_id = #{postId}
+		) AS postCount, (
+			SELECT COUNT(*)
+			FROM blind.reply_mgt
+			WHERE post_id = #{postId}
+				AND logical_del_flag = '0'
+		) AS replyCount, (
+			SELECT COUNT(*)
+			FROM blind.post_recommend_inf
+			WHERE post_id = #{postId}
+				AND post_recommend_flag = '1'
+		) AS postRecommendCount;
+	</select>
+
+	<select id="getReplyList" parameterType="com.ksinfo.blind.board.dto.ReplyRequestDto"
+			resultType="com.ksinfo.blind.board.vo.ReplyVO">
+		WITH RECURSIVE replyList AS (
+			SELECT reply_id,
+				target_reply_id,
+				user_id,
+				reply_file_url,
+				reply_contents,
+				reply_blind_flag,
+				rec_create_date,
+				logical_del_flag,
+				ARRAY[reply_id] AS sequence
+			FROM blind.reply_mgt
+			WHERE post_id = #{postId}
+				AND target_reply_id IS NULL
+			UNION ALL
+			SELECT re.reply_id,
+				re.target_reply_id,
+				re.user_id,
+				re.reply_file_url,
+				re.reply_contents,
+				re.reply_blind_flag,
+				re.rec_create_date,
+				re.logical_del_flag,
+				ARRAY_APPEND(sequence, re.reply_id) AS sequence
+			FROM blind.reply_mgt AS re
+				INNER JOIN replyList AS rl ON re.target_reply_id = rl.reply_id
+		)
+		SELECT rl.reply_id AS replyId,
+			CASE WHEN us.logical_del_flag = '0' THEN company_id ELSE 0 END AS companyId,
+			CASE WHEN us.logical_del_flag = '0' THEN company_name END AS companyName,
+			CASE WHEN us.logical_del_flag = '0' THEN user_nickname ELSE '脱会した会員' END AS userNickname,
+			target_reply_id AS targetReplyId,
+			targetNickname,
+			CASE WHEN rl.logical_del_flag = '1' THEN '削除されたコメント'
+				WHEN
+				<choose>
+					<when test="userId gt 0">visible</when>
+					<otherwise>reply_blind_flag = '0'</otherwise>
+				</choose>
+				THEN reply_contents
+				ELSE '非公開コメント'
+			END AS replyContents,
+			reply_blind_flag AS replyBlindFlag,
+			CASE WHEN NOW() - rl.rec_create_date > INTERVAL '1 week'
+					THEN TO_CHAR(rl.rec_create_date, 'MM.DD')
+				WHEN NOW() - rl.rec_create_date > INTERVAL '2 day'
+					THEN EXTRACT(DAYS FROM NOW() - rl.rec_create_date) || '日前'
+				WHEN NOW() - rl.rec_create_date > INTERVAL '1 day'
+					THEN '昨日'
+				WHEN NOW() - rl.rec_create_date > INTERVAL '1 hour'
+					THEN EXTRACT(HOURS FROM NOW() - rl.rec_create_date) || '時間前'
+				WHEN NOW() - rl.rec_create_date > INTERVAL '1 minute'
+					THEN EXTRACT(MINS FROM NOW() - rl.rec_create_date) || '分前'
+				ELSE 'だった今'
+			END AS recCreateDate,
+		<choose>
+			<when test="userId gt 0">
+				visible,
+				CASE WHEN visible THEN reply_file_url END AS replyFileUrl,
+				replyRecommended,
+				replyRecommendCount,
+			</when>
+			<otherwise>
+				reply_blind_flag = '0' AS visible,
+				CASE WHEN reply_blind_flag = '0' THEN reply_file_url END AS replyFileUrl,
+				FALSE AS replyRecommended, (
+					SELECT COUNT(*)
+					FROM blind.reply_recommend_inf
+					WHERE reply_id = rl.reply_id
+						AND reply_recommend_flag = '1'
+				) AS replyRecommendCount,
+			</otherwise>
+		</choose>
+			nestedCount,
+			CARDINALITY(sequence) - 1 AS depth,
+			rl.user_id = #{userId} AS writer
+		FROM replyList AS rl
+			INNER JOIN blind.user_mgt AS us
+				ON rl.user_id = us.user_id AND us.last_generation_flag = '1'
+			INNER JOIN blind.company_mgt USING(company_id)
+		<if test="userId gt 0">
+			INNER JOIN LATERAL (
+				WITH rri AS (
+					SELECT user_id
+					FROM blind.reply_recommend_inf
+					WHERE reply_id = rl.reply_id
+						AND reply_recommend_flag = '1'
+				)
+				SELECT rl.reply_id,
+					EXISTS(SELECT FROM rri WHERE user_id = #{userId}) AS replyRecommended,
+					(SELECT COUNT(*) FROM rri) AS replyRecommendCount
+			) AS rri USING(reply_id)
+		</if>
+			INNER JOIN LATERAL (
+				WITH RECURSIVE nested AS (
+					SELECT reply_id, logical_del_flag
+					FROM replyList
+					WHERE target_reply_id = rl.reply_id
+					UNION ALL
+					SELECT rl2.reply_id, rl2.logical_del_flag
+					FROM replyList AS rl2
+						INNER JOIN nested AS ne ON rl2.target_reply_id = ne.reply_id
+				)
+				SELECT rl.reply_id, (SELECT COUNT(*) FROM nested WHERE logical_del_flag = '0') AS nestedCount
+			) AS nested USING(reply_id)
+			LEFT JOIN LATERAL (
+				SELECT reply_id,
+					rl3.user_id,
+					CASE WHEN us2.logical_del_flag = '0' THEN user_nickname ELSE '脱会した会員' END AS targetNickname
+				FROM replyList AS rl3
+					INNER JOIN blind.user_mgt AS us2 ON rl3.user_id = us2.user_id AND us2.last_generation_flag = '1'
+				WHERE reply_id = rl.target_reply_id
+			) AS ta ON rl.target_reply_id = ta.reply_id
+		<if test="userId gt 0">
+			INNER JOIN LATERAL (
+				WITH po AS (
+					SELECT user_id FROM blind.post_mgt WHERE post_id = #{postId}
+				)
+				SELECT rl.reply_id,
+					rl.reply_blind_flag = '0'
+						OR po.user_id = #{userId}
+						OR rl.user_id = #{userId}
+						OR ta.user_id = #{userId}
+					AS visible
+				FROM po
+			) AS vi ON rl.reply_id = vi.reply_id
+		</if>
+		WHERE rl.logical_del_flag = '0'
+			OR nestedCount > 0
+		ORDER BY sequence
+		<if test="_parameter instanceof com.ksinfo.blind.board.dto.PostRequestDto">
+			FETCH FIRST 10 ROWS ONLY
+		</if>;
+	</select>
+</mapper>

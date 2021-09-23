@@ -1,7 +1,9 @@
 **/.idea/
+**/.metadata/
 **/.mvn/
 **/target/
 **/src/test/
+**/src/main/webapp/resources/upload/
 **/.settings/
 **/bin/
 *.iml
@@ -9,4 +11,3 @@
 *.project
 *.classpath
 *.gitignore
-/.metadata/

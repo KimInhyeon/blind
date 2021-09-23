@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.company.mapper.CompanyIntroductionMapper">
+    <select id="getCompanyIntroduction" resultType="com.ksinfo.blind.company.vo.CompanyIntroductionVO">
+        SELECT company_id AS companyId,
+            company_name AS companyName,
+            company_homepage AS companyHomepage,
+            CASE WHEN bu.logical_del_flag = '0' THEN business_type_name ELSE 'ERROR' END AS businessTypeName,
+            company_address AS companyAddress,
+            TO_CHAR(founding_date, 'YYYY') AS foundingDate,
+            workers_count AS workersCount,
+            company_explain AS companyExplain
+        FROM blind.company_mgt AS co
+            INNER JOIN blind.business_type_mst AS bu USING(business_type_code)
+        WHERE company_id = #{companyId}
+            AND co.logical_del_flag = '0';
+    </select>
+</mapper>
