@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.manage.mapper.ManageCompanyMapper">
+	<select id="getTotalCompanyRecord" parameterType="com.ksinfo.blind.manage.dto.CompanySearchDto" resultType="_int">
+		SELECT COUNT(*)
+		FROM blind.company_mgt AS co
+		<if test="searchTarget eq 'businessTypeName'">
+			INNER JOIN blind.business_type_mst USING(business_type_code)
+		</if>
+		WHERE co.logical_del_flag = '0'
+		<if test="verifyFlag neq '3'">
+			AND verify_flag = #{verifyFlag}
+		</if>
+		<if test="closingFlag neq '2'">
+			AND closing_flag = #{closingFlag}
+		</if>
+		<if test="searchTarget neq null">
+			AND LOWER(
+			<choose>
+				<when test="searchTarget eq 'companyName'">company_name</when>
+				<when test="searchTarget eq 'businessTypeName'">business_type_name</when>
+				<when test="searchTarget eq 'companyDomain'">company_domain</when>
+				<otherwise>company_address</otherwise>
+			</choose>
+			) LIKE '%' || LOWER(#{searchKeyword}) || '%'
+		</if>;
+	</select>
+
+	<select id="getCompanyList" parameterType="com.ksinfo.blind.manage.dto.CompanySearchDto"
+			resultType="com.ksinfo.blind.manage.vo.CompanyVO">
+		SELECT co.company_id AS companyId,
+			verify_flag AS verifyFlag,
+			closing_flag AS closingFlag,
+			company_name AS companyName,
+			COALESCE(search_company_name, '') AS searchCompanyName,
+			business_type_code AS businessTypeCode,
+			COALESCE(company_address, '') AS companyAddress,
+			COALESCE(TO_CHAR(founding_date, 'YYYY-MM-DD'), '') AS foundingDate,
+			COALESCE(workers_count, '') AS workersCount,
+			company_domain AS companyDomain,
+			company_homepage AS companyHomepage,
+			company_explain AS companyExplain,
+			CASE WHEN us.logical_del_flag = '0' THEN user_nickName ELSE '脱会した会員' END AS userNickName,
+			TO_CHAR(app_date, 'YYYY-MM-DD') AS appDate
+		FROM blind.company_mgt AS co
+		<if test="searchTarget eq 'businessTypeName'">
+			INNER JOIN blind.business_type_mst USING(business_type_code)
+		</if>
+			INNER JOIN blind.user_mgt AS us
+				ON co.user_id = us.user_id AND last_generation_flag = '1'
+		WHERE co.logical_del_flag = '0'
+		<if test="verifyFlag neq '3'">
+			AND verify_flag = #{verifyFlag}
+		</if>
+		<if test="closingFlag neq '2'">
+			AND closing_flag = #{closingFlag}
+		</if>
+		<if test="searchTarget neq null">
+			AND LOWER(
+			<choose>
+				<when test="searchTarget eq 'companyName'">company_name</when>
+				<when test="searchTarget eq 'businessTypeName'">business_type_name</when>
+				<when test="searchTarget eq 'companyDomain'">company_domain</when>
+				<otherwise>company_address</otherwise>
+			</choose>
+			) LIKE '%' || LOWER(#{searchKeyword}) || '%'
+		</if>
+		ORDER BY co.company_id
+		<if test="verifyFlag neq '0'">
+			DESC
+		</if>;
+	</select>
+
+	<select id="getBusinessTypeList" resultType="com.ksinfo.blind.manage.vo.BusinessTypeVO">
+		SELECT business_type_code AS businessTypeCode,
+			business_type_name AS businessTypeName
+		FROM blind.business_type_mst
+		WHERE logical_del_flag = '0'
+		ORDER BY business_type_id;
+	</select>
+
+	<insert id="applyCompany" parameterType="com.ksinfo.blind.manage.dto.CompanyDto">
+		INSERT INTO blind.company_mgt (
+			user_id, company_name, search_company_name, business_type_code, company_address, founding_date,
+			workers_count, app_date, company_domain, company_homepage, company_explain, verify_flag,
+			closing_flag, rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			#{userId}, #{companyName}, #{searchCompanyName}, #{businessTypeCode}, #{companyAddress}, #{foundingDate},
+			#{workersCount}, NOW(), #{companyDomain}, #{companyHomepage}, #{companyExplain}, #{verifyFlag},
+			#{closingFlag}, #{userId}, NOW(), #{userId}, NOW(), '0'
+		);
+	</insert>
+
+	<update id="updateCompany" parameterType="com.ksinfo.blind.manage.dto.CompanyDto">
+		UPDATE blind.company_mgt
+		SET	company_name = #{companyName},
+			search_company_name = #{searchCompanyName},
+			business_type_code = #{businessTypeCode},
+			company_address = #{companyAddress},
+			founding_date = #{foundingDate},
+			workers_count = #{workersCount},
+			company_domain = #{companyDomain},
+			company_homepage = #{companyHomepage},
+			company_explain = #{companyExplain},
+			closing_flag = #{closingFlag},
+			rec_update_user_id = #{userId},
+			rec_update_date = NOW()
+		WHERE company_id = #{companyId}
+			AND logical_del_flag = '0';
+	</update>
+
+	<update id="verifyCompany" parameterType="com.ksinfo.blind.manage.dto.CompanyVerifyDto">
+		UPDATE blind.company_mgt
+		SET	verify_flag = #{verifyFlag},
+		<if test="reason neq null">
+			reject_reason = #{reason},
+		</if>
+			rec_update_user_id = #{userId},
+			rec_update_date = NOW()
+		WHERE logical_del_flag = '0'
+			AND company_id IN
+			<foreach collection="companyIdList" item="companyId" open="(" close=")" separator=",">
+				#{companyId}
+			</foreach>;
+	</update>
+</mapper>

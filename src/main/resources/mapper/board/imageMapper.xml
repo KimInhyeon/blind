@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.board.mapper.ImageMapper">
+	<select id="getFileSize" resultType="_long">
+		SELECT post_file_size
+		FROM blind.post_file_mgt
+		WHERE post_file_url = #{postFileUrl}
+		FETCH FIRST ROW ONLY;
+	</select>
+
+	<select id="getTotalFileSize" resultType="_long">
+		SELECT COALESCE(SUM(post_file_size), 0)
+		FROM blind.post_file_mgt
+		WHERE rec_create_user_id = #{userId}
+			AND post_id = #{postId}
+			AND logical_del_flag = '0';
+	</select>
+<!--
+CREATE FUNCTION blind.upload_file(
+	target_id BIGINT, file_url VARCHAR(2000), file_name VARCHAR(200), file_size BIGINT, user_id BIGINT
+) RETURNS BIGINT AS $$
+	DECLARE
+		now TIMESTAMP := NOW();
+	BEGIN
+		INSERT INTO blind.post_file_mgt (
+			post_id, post_file_url, post_file_origin_name, post_file_size, rec_create_user_id,
+			rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			target_id, file_url, file_name, file_size, user_id,
+			now, user_id, now, '0'
+		) RETURNING post_file_id INTO target_id;
+		RETURN target_id;
+	END;
+$$ LANGUAGE plpgsql;
+-->
+	<select id="uploadFile" parameterType="com.ksinfo.blind.board.dto.PostFileDto"
+			resultType="_long" statementType="CALLABLE">
+		{CALL blind.upload_file(#{postId}, #{postFileUrl}, #{postFileOriginName}, #{postFileSize}, #{userId})}
+	</select>
+
+	<update id="deleteUploadedFile">
+		UPDATE blind.post_file_mgt
+		SET rec_update_user_id = #{userId},
+			rec_update_date = NOW(),
+			logical_del_flag = '1'
+		WHERE rec_create_user_id = #{userId}
+			AND logical_del_flag = '0'
+			AND
+		<choose>
+			<when test="postFileId gt 0">post_file_id</when>
+			<otherwise>post_id</otherwise>
+		</choose>
+			= #{postFileId};
+	</update>
+</mapper>

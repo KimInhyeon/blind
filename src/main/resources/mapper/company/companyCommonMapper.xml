@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.company.mapper.CompanyCommonMapper">
+	<select id="getPopularCompanyList" resultType="com.ksinfo.blind.company.vo.CompanyMainVO">
+		SELECT co.company_id AS companyId
+			, company_name AS companyName
+			, ROUND(AVG(COALESCE(all_point, 0)), 0) AS allPoint
+			, ROUND(AVG(COALESCE(all_point, 0)), 1) AS realAllPoint
+		FROM blind.company_mgt AS co
+			LEFT JOIN blind.company_review_mgt AS cr
+				ON co.company_id = cr.company_id AND cr.verify_flag = '1' AND cr.logical_del_flag = '0'
+		WHERE co.verify_flag = '1'
+			AND co.logical_del_flag = '0'
+		GROUP BY co.company_id, company_name
+		ORDER BY realAllPoint DESC
+		FETCH FIRST 9 ROWS ONLY;
+	</select>
+
+	<select id="searchCompany" resultType="com.ksinfo.blind.company.vo.CompanySearchVO">
+		SELECT company_id AS companyId
+			, company_name AS companyName
+		FROM blind.company_mgt
+		WHERE LOWER(company_name) LIKE '%' || LOWER(#{companyName}) || '%'
+			AND verify_flag = '1'
+			AND closing_flag = '0'
+			AND logical_del_flag = '0';
+	</select>
+
+	<!-- BLIND_0013_企業登録申請(2021-08-05) -->
+	<!-- 유저들의 기업등록신청 -->
+	<insert id="requestCompany" parameterType="com.ksinfo.blind.company.dto.CompanyRequestDto">
+		INSERT INTO blind.company_mgt(
+			user_id, company_name, app_date, company_domain, company_homepage, company_explain, verify_flag,
+			closing_flag, rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			#{userId}, #{companyName}, NOW(), #{companyDomain}, #{companyHomepage}, #{companyExplain}, '0',
+			'0', #{userId}, NOW(), #{userId}, NOW(), '0'
+		);
+	</insert>
+
+	<select id="getCompanyMenu" resultType="com.ksinfo.blind.company.vo.CompanyMenuVO">
+		SELECT co.company_id AS companyId,
+			company_name As compnayName,
+			COALESCE(AVG(all_point), 0) AS allPointAvg,
+			COUNT(company_review_id) AS reviewCount
+		FROM blind.company_mgt AS co
+			LEFT JOIN blind.company_review_mgt AS cr
+				ON co.company_id = cr.company_id AND cr.verify_flag = '1' AND cr.logical_del_flag = '0'
+		WHERE co.company_id = #{companyId}
+			AND co.verify_flag = '1'
+			AND co.logical_del_flag = '0'
+		GROUP BY co.company_id, company_name;
+	</select>
+
+
+	<!-- 기업추천 투표값 추가   -->
+	<insert id="setCompanyRecommendVote">
+		INSERT INTO blind.company_recommend_inf (
+			user_id , company_id,
+			good, bad
+		) VALUES (
+			#{userId}, #{companyId},
+		<choose>
+			<when test="companyVoteValue eq 1">1, 0</when> <!-- 1: 기업 추천 -->
+			<when test="companyVoteValue eq 0">0, 1</when> <!-- 0: 기업 비추천 -->
+		</choose>
+		);
+	</insert>
+
+	<!--  기업의 good/bad투표수 리턴.(기업추천 투표한 유저에게 기업선호도 출력위함) -->
+	<select id="getCompanyRecommendVoteResult" resultType="com.ksinfo.blind.company.vo.CompanyVoteResultDto">
+		SELECT SUM(good) AS voteCountOfGood,
+			SUM(bad) AS voteCountOfBad
+		FROM blind.company_recommend_inf
+		WHERE company_id = #{companyId};
+	</select>
+</mapper>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.common.mapper.SearchMapper">
+	<select id="getPostList" parameterType="com.ksinfo.blind.common.dto.SearchPostDto"
+			resultType="com.ksinfo.blind.common.vo.SearchPostVO">
+		SELECT po.board_id AS boardId,
+			board_topic_name AS boardTopicName,
+			post_id AS postId,
+			post_title AS postTitle,
+			post_contents AS postContents,
+			CASE WHEN us.logical_del_flag = '0' THEN company_id ELSE 0 END AS companyId,
+			CASE WHEN us.logical_del_flag = '0' THEN company_name END AS companyName,
+			CASE WHEN us.logical_del_flag = '0' THEN user_nickname ELSE '脱会した会員' END AS userNickname,
+			CASE WHEN NOW() - post_create_date > INTERVAL '1 week'
+					THEN TO_CHAR(post_create_date, 'MM.DD')
+				WHEN NOW() - post_create_date > INTERVAL '2 day'
+					THEN EXTRACT(DAYS FROM NOW() - post_create_date) || '日前'
+				WHEN NOW() - post_create_date > INTERVAL '1 day'
+					THEN '昨日'
+				WHEN NOW() - post_create_date > INTERVAL '1 hour'
+					THEN EXTRACT(HOURS FROM NOW() - post_create_date) || '時間前'
+				WHEN NOW() - post_create_date > INTERVAL '1 minute'
+					THEN EXTRACT(MINS FROM NOW() - post_create_date) || '分前'
+				ELSE 'だった今'
+			END AS postCreateDate,
+			post_count AS postCount,
+			postRecommendCount, (
+				SELECT COUNT(*)
+				FROM blind.reply_mgt
+				WHERE post_id = po.post_id
+					AND logical_del_flag = '0'
+			) AS replyCount,
+		<choose>
+			<when test="userId gt 0">
+				EXISTS(
+					SELECT
+					FROM blind.bookmark_mgt
+					WHERE user_id = #{userId}
+						AND post_id = po.post_id
+						AND logical_del_flag = '0'
+				)
+			</when>
+			<otherwise>FALSE</otherwise>
+		</choose> AS bookmarked
+		FROM blind.post_mgt AS po
+			INNER JOIN blind.board_mgt AS bo
+				ON po.board_id = bo.board_id AND closed_flag = '0' AND bo.logical_del_flag = '0'
+			INNER JOIN blind.post_count_inf USING(post_id)
+			INNER JOIN blind.user_mgt AS us
+				ON po.user_id = us.user_id AND last_generation_flag = '1'
+			INNER JOIN blind.company_mgt USING(company_id)
+			INNER JOIN LATERAL (
+				SELECT po.post_id, (
+					SELECT COUNT(*)
+					FROM blind.post_recommend_inf
+					WHERE post_id = po.post_id
+						AND post_recommend_flag = '1'
+				) AS postRecommendCount
+			) AS pr USING(post_id)
+		WHERE po.logical_del_flag = '0'
+		<if test="boardId gt 0">
+			AND po.board_id = #{boardId}
+		</if>
+		<if test="searchKeyword neq null">
+			AND (LOWER(post_title) LIKE '%' || LOWER(#{searchKeyword}) || '%'
+				OR LOWER(post_contents) LIKE '%' || LOWER(#{searchKeyword}) || '%'
+			)
+		</if>
+		<choose>
+			<when test="sort eq 'recommend'">
+				<if test="postId gt 0">
+					AND postRecommendCount <![CDATA[<=]]> (
+						SELECT COUNT(*)
+						FROM blind.post_recommend_inf
+						WHERE post_id = #{postId}
+							AND post_recommend_flag = '1'
+					) AND post_id <![CDATA[<]]> #{postId}
+				</if>
+				ORDER BY postRecommendCount DESC,
+			</when>
+			<otherwise>
+				<if test="postId gt 0">
+					AND post_id <![CDATA[<]]> #{postId}
+				</if>
+				ORDER BY
+			</otherwise>
+		</choose>
+		post_id DESC
+		FETCH FIRST 20 ROWS ONLY;
+	</select>
+
+	<select id="getBoardSliderList" resultType="com.ksinfo.blind.board.vo.BoardVO">
+		SELECT 0 AS boardId,
+			'トピック全体' AS boardTopicName
+		UNION ALL (
+			SELECT board_id AS boardId,
+				board_topic_name AS boardTopicName
+			FROM blind.board_mgt
+			WHERE closed_flag = '0'
+				AND logical_del_flag = '0'
+			ORDER BY board_order
+		);
+	</select>
+
+	<select id="getSearchBoardList" resultType="com.ksinfo.blind.common.vo.SearchBoardVO">
+		WITH board AS (
+			SELECT board_id AS boardId,
+				board_topic_name boardTopicName, (
+					SELECT COUNT(*)
+					FROM blind.post_mgt
+					WHERE board_id = bo.board_id
+						AND logical_del_flag = '0'
+						AND (LOWER(post_title) LIKE '%' || LOWER(#{searchKeyword}) || '%'
+							OR LOWER(post_contents) LIKE '%' || LOWER(#{searchKeyword}) || '%'
+						)
+				) AS postCount
+			FROM blind.board_mgt AS bo
+			WHERE logical_del_flag = '0'
+				AND closed_flag = '0'
+			ORDER BY board_order
+		)
+		SELECT 0 AS boardId,
+			'トピック全体' AS boardTopicName,
+			SUM(postCount) AS postCount
+		FROM board
+		UNION ALL
+		SELECT *
+		FROM board;
+	</select>
+
+	<select id="getSearchCompanyList" resultType="com.ksinfo.blind.common.vo.SearchCompanyVO">
+		SELECT company_id AS companyId,
+			company_name AS companyName,
+			company_address AS companyAddress,
+			allPointAvg,
+			all_point AS allPoint,
+			job_group_name AS jobGroupName,
+			simple_comment AS simpleComment,
+			disadvantages
+		FROM blind.company_mgt AS co
+			LEFT JOIN LATERAL (
+			    SELECT company_id, (
+						SELECT AVG(all_point)
+						FROM blind.company_review_mgt
+						WHERE company_id = cr.company_id
+							AND verify_flag = '1'
+							AND logical_del_flag = '0'
+					) AS allPointAvg,
+					all_point,
+					job_group_code,
+					simple_comment,
+					disadvantages
+				FROM blind.company_review_mgt AS cr
+				WHERE company_id = co.company_id
+					AND verify_flag = '1'
+					AND logical_del_flag = '0'
+				ORDER BY (
+					SELECT SUM(helpful)
+					FROM blind.review_recommend_inf
+					WHERE company_id = cr.company_id
+				) DESC, company_review_id DESC
+				FETCH FIRST ROW ONLY
+			) AS crm USING(company_id)
+			LEFT JOIN blind.job_group_mst AS jo
+				ON crm.job_group_code = jo.job_group_code AND jo.logical_del_flag = '0'
+		WHERE company_name = #{searchKeyword}
+			AND verify_flag = '1'
+			AND co.logical_del_flag = '0'
+		ORDER BY founding_date;
+	</select>
+</mapper>

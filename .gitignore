@@ -1,4 +1,5 @@
 **/.idea/
+**/.metadata/
 **/.mvn/
 **/target/
 **/src/test/
@@ -10,4 +11,3 @@
 *.project
 *.classpath
 *.gitignore
-/.metadata/
