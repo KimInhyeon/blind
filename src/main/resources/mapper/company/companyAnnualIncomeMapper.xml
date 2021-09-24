@@ -3,18 +3,19 @@
 <mapper namespace="com.ksinfo.blind.company.mapper.CompanyAnnualIncomeMapper">
 	<select id="getJobGroupListInCompany" resultType="com.ksinfo.blind.company.vo.CompanyJobGroupVO">
 		SELECT job_group_code AS jobGroupCode,
-			job_group_name AS jobGroupName
-		FROM (
-			SELECT user_id, MAX(user_generation)
-			FROM blind.user_mgt
-			WHERE company_id = #{companyId}
-				AND logical_del_flag = '0'
-			GROUP BY user_id
-		) AS us
-			INNER JOIN blind.salary_rank_mgt AS sa USING(user_id)
-			INNER JOIN blind.job_group_mst AS jo USING(job_group_code)
-		WHERE sa.logical_del_flag = '0'
-			AND jo.logical_del_flag = '0'
+			job_group_name AS jobGroupName,
+			EXISTS(
+				SELECT
+				FROM blind.salary_rank_mgt AS sa
+					INNER JOIN blind.user_mgt AS us USING(user_id)
+				WHERE job_group_code = jo.job_group_code
+					AND us.company_id = #{companyId}
+					AND us.last_generation_flag = '1'
+					AND sa.logical_del_flag = '0'
+					AND us.logical_del_flag = '0'
+			) AS exist
+		FROM blind.job_group_mst AS jo
+		WHERE logical_del_flag = '0'
 	</select>
 
 	<select id="getAnnualIncome" parameterType="com.ksinfo.blind.company.dto.CompanyAnnualIncomeSearchDto"

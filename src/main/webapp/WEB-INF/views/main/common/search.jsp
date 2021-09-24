@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <style>
 	.company_review_sample > * {
@@ -247,12 +248,34 @@
 </div>
 
 <script>
+	function bookmark(bookmark) {
+		<sec:authorize access="isAuthenticated()">
+		fetch("bookmark", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: bookmark.dataset.id
+		}).then(function (response) {
+			if (response.ok) {
+				return response.json();
+			}
+			throw response.status;
+		}).then(function (result) {
+			bookmark.className = result ? "bookmark link icon" : "bookmark link icon outline";
+		}).catch(function (error) {
+			alert("予期しないエラーが発生しました");
+			console.error(error);
+		});
+		</sec:authorize>
+	}
+
 	addEventListener("DOMContentLoaded", function () {
 		const getArticleHtml = function (post) {
-			let html = "<article class=\"column\" data-id=\"" + post.postId + "\"><a class=\"ui grid row\" " +
-				"href=\"${pageContext.request.contextPath}/post/" + post.postId + "\" target=\"_blank\">" +
-				"<div class=\" thirteen wide column\"><h3 class=\"ui header row\">" + post.postTitle +
-				"</h3><div class=\"row\">";
+			let html = "<article class=\"column\" data-id=\"" + post.postId +
+						"\"><a class=\"ui grid row\" href=\"post/" + post.postId +
+						"\" target=\"_blank\"><div class=\" thirteen wide column\"><h3 class=\"ui header row\">" +
+						post.postTitle + "</h3><div class=\"row\">";
 			const postBlockList = post.postContents;
 			for (let i = 0, postBlockListLength = postBlockList.length; i < postBlockListLength; ++i) {
 				html += "<p>" + postBlockList[i].data.text + "</p>";

@@ -175,7 +175,7 @@
 <script>
 	function bookmark(bookmark) {
 	<sec:authorize access="isAuthenticated()">
-		fetch("addBookmark", {
+		fetch("bookmark", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"

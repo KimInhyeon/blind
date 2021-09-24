@@ -38,7 +38,7 @@ public class MemberMyPageService {
 	//게시글에 대한 댓글 카운트
 	/*DB의 데이터를 먼저 작성후 테스트 진행예정
 	@Transactional(readOnly = true)
-	public int getPostReplyCountThisMonth(int userId) {
+	public int getPostReplyCountThisMonth(long userId) {
 		return  mapper.getPostReplyCountThisMonth(userId);
 	}*/
 

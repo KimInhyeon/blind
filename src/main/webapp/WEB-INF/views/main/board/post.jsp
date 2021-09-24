@@ -68,9 +68,9 @@
 		<section id="post">
 			<article class="row">
 				<div class="row">
-					<a class="ui small header" href="${pageContext.request.contextPath}/board/0">トピック</a>
+					<a class="ui small header" href="search?boardId=0">トピック</a>
 					<i class="angle right icon"></i>
-					<a class="ui small header" href="${pageContext.request.contextPath}/board/${post.boardId}">
+					<a class="ui small header" href="search?boardId=${post.boardId}">
 						${post.boardTopicName}
 					</a>
 				</div>
@@ -79,8 +79,7 @@
 				</div>
 				<div class="row">
 				<c:if test="${not empty post.companyName}">
-					<a href="${pageContext.request.contextPath}/companyIntroduction?companyId=${post.companyId}"
-						target="_blank">${post.companyName}</a>
+					<a href="company/introduction/${post.companyId}" target="_blank">${post.companyName}</a>
 					<span>・</span>
 				</c:if>
 					<span>${post.userNickname}</span>
@@ -239,9 +238,7 @@
 		}
 
 		const fileHash = await getFileHash(file);
-		const url = new URL(location.origin + "${pageContext.request.contextPath}/image");
-		url.search = "fileHash=" + fileHash;
-		let replyFileUrl = await fetch(url.toString(), {
+		let replyFileUrl = await fetch("image/fileHash=" + fileHash, {
 			method: "GET"
 		}).then(function (response) {
 			if (response.ok) {
@@ -255,8 +252,7 @@
 		if (!replyFileUrl) {
 			const formData = new FormData();
 			formData.append("file", file);
-			url.search = "";
-			replyFileUrl = await fetch(url.toString(), {
+			replyFileUrl = await fetch("image", {
 				method: "POST",
 				body: formData
 			}).then(function (response) {

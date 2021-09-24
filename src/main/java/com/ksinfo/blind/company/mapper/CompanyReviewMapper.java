@@ -32,7 +32,4 @@ public interface CompanyReviewMapper {
 
 	//BLIND_0016 企業レビュー詳細照会(2021-08-25)
 	List<CompanyReviewVO> getCompanyReviews(long companyId);
-
-	//BLIND_0017_企業ポストタブ(2021-08-11)
-	String getCompanyName(long companyId);
 }
