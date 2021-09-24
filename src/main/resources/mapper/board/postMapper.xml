@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.board.mapper.PostMapper">
+<!--
+CREATE FUNCTION blind.write_post(
+	boardId BIGINT, userId BIGINT, title VARCHAR(200), blind_flag CHAR(1), contents TEXT
+) RETURNS BIGINT AS $$
+	DECLARE
+		now TIMESTAMP := NOW();
+	BEGIN
+		INSERT INTO blind.post_mgt (
+			board_id, user_id, post_title, post_blind_flag, post_contents, post_create_date,
+			post_update_date, rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			boardId, userId, title, blind_flag, contents, now,
+			now, userId, now, userId, now, '0'
+		) RETURNING post_id INTO boardId;
+		INSERT INTO blind.post_count_inf (
+			post_id, post_count
+		) VALUES (
+			boardId, 0
+		);
+		UPDATE blind.post_file_mgt
+		SET post_id = boardId,
+			rec_update_date = now
+		WHERE rec_create_user_id = userId
+			AND post_id = 0
+			AND logical_del_flag = '0';
+		RETURN boardId;
+	END;
+$$ LANGUAGE plpgsql;
+-->
+	<select id="writePost" parameterType="com.ksinfo.blind.board.dto.PostDto"
+			resultType="_long" statementType="CALLABLE">
+		{CALL blind.write_post(#{boardId}, #{userId}, #{title}, #{blindFlag}, #{contents})}
+	</select>
+
+	<update id="readPost">
+		UPDATE blind.post_count_inf
+		SET post_count = post_count + 1
+		WHERE post_id = #{postId};
+	</update>
+
+	<select id="getPost" parameterType="com.ksinfo.blind.board.dto.PostRequestDto"
+			resultType="com.ksinfo.blind.board.vo.PostVO">
+		SELECT po.board_id AS boardId,
+			board_topic_name AS boardTopicName,
+			post_id AS postId,
+			post_title AS postTitle,
+			post_contents AS postContents,
+			CASE WHEN us.logical_del_flag = '0' THEN company_id ELSE 0 END AS companyId,
+			CASE WHEN us.logical_del_flag = '0' THEN company_name END AS companyName,
+			CASE WHEN us.logical_del_flag = '0' THEN user_nickname ELSE '脱会した会員' END AS userNickname,
+			CASE WHEN NOW() - post_create_date > INTERVAL '1 week'
+					THEN TO_CHAR(post_create_date, 'MM.DD')
+				WHEN NOW() - post_create_date > INTERVAL '2 day'
+					THEN EXTRACT(DAYS FROM NOW() - post_create_date) || '日前'
+				WHEN NOW() - post_create_date > INTERVAL '1 day'
+					THEN '昨日'
+				WHEN NOW() - post_create_date > INTERVAL '1 hour'
+					THEN EXTRACT(HOURS FROM NOW() - post_create_date) || '時間前'
+				WHEN NOW() - post_create_date > INTERVAL '1 minute'
+					THEN EXTRACT(MINS FROM NOW() - post_create_date) || '分前'
+				ELSE 'だった今'
+			END AS postCreateDate,
+			post_count AS postCount,
+		<choose>
+			<when test="userId gt 0">
+				postRecommended,
+				postRecommendCount,
+				EXISTS(
+					SELECT
+					FROM blind.bookmark_mgt
+					WHERE user_id = #{userId}
+						AND post_id = po.post_id
+						AND logical_del_flag = '0'
+				) AS bookmarked,
+				po.user_id = #{userId} AS writer,
+			</when>
+			<otherwise>
+				FALSE AS postRecommended, (
+					SELECT COUNT(*)
+					FROM blind.post_recommend_inf
+					WHERE post_id = po.post_id
+						AND post_recommend_flag = '1'
+				) AS postRecommendCount,
+				FALSE AS bookmarked,
+				FALSE AS writer,
+			</otherwise>
+		</choose>
+			(SELECT COUNT(*) FROM blind.reply_mgt WHERE post_id = po.post_id AND logical_del_flag = '0') AS replyCount
+		FROM blind.post_mgt AS po
+			INNER JOIN blind.board_mgt AS bo
+				ON po.board_id = bo.board_id AND bo.logical_del_flag = '0'
+			INNER JOIN blind.user_mgt AS us
+				ON po.user_id = us.user_id AND us.last_generation_flag = '1'
+			INNER JOIN blind.company_mgt USING(company_id)
+			INNER JOIN blind.post_count_inf USING(post_id)
+		<if test="userId gt 0">
+			INNER JOIN LATERAL (
+				WITH pri AS (
+					SELECT user_id
+					FROM blind.post_recommend_inf
+					WHERE post_id = po.post_id
+						AND post_recommend_flag = '1'
+				)
+				SELECT po.post_id,
+					EXISTS(SELECT FROM pri WHERE user_id = #{userId}) AS postRecommended,
+					(SELECT COUNT(*) FROM pri) AS postRecommendCount
+			) AS rri USING(post_id)
+		</if>
+		WHERE post_id = #{postId}
+			AND po.logical_del_flag = '0';
+	</select>
+
+	<select id="searchPostRecommend" parameterType="com.ksinfo.blind.board.dto.PostRecommendDto" resultType="long">
+		SELECT post_recommend_id AS postRecommendId
+		FROM blind.post_recommend_inf
+		WHERE user_id = #{userId}
+			AND post_id = #{postId};
+	</select>
+
+	<insert id="recommendPost" parameterType="com.ksinfo.blind.board.dto.PostRecommendDto">
+		INSERT INTO blind.post_recommend_inf(
+			post_id, user_id, post_recommend_date, post_recommend_flag
+		) VALUES (
+			#{postId}, #{userId}, NOW(), '1'
+		);
+	</insert>
+
+	<update id="updatePostRecommend">
+		UPDATE blind.post_recommend_inf
+		SET post_recommend_date = NOW(),
+			post_recommend_flag = CASE WHEN post_recommend_flag = '0' THEN '1' ELSE '0' END
+		WHERE post_recommend_id = #{postRecommendId};
+	</update>
+
+	<select id="getPostRecommendResult" parameterType="com.ksinfo.blind.board.dto.PostRecommendDto"
+			resultType="com.ksinfo.blind.board.vo.PostRecommendResultVO">
+		SELECT COUNT(*) AS postRecommendCount, (
+				SELECT post_recommend_flag = '1'
+				FROM blind.post_recommend_inf
+				WHERE post_id = #{postId}
+					AND user_id = #{userId}
+			) AS recommended
+		FROM blind.post_recommend_inf AS pri
+		WHERE post_id = #{postId}
+			AND post_recommend_flag = '1';
+	</select>
+</mapper>

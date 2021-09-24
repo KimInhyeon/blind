@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.common.mapper.ReportMapper">
+	<!-- 1.신고이유들을 리턴(모달창에 출력시 사용 -->
+	<select id="getReportReasonList" resultType="com.ksinfo.blind.common.dto.ReportReasonDto">
+		SELECT report_reason_code AS reportReasonCode,
+			report_reason_contents As reportReasonContents
+		FROM blind.report_reason_mst
+		WHERE report_screen_code = #{reportType}
+		ORDER BY report_reason_code;
+	</select>
+
+	<!-- 2.신고접수-포스트의 신고시 -->
+	<select id="setPostReport" parameterType="com.ksinfo.blind.common.dto.PostReportDto">
+		INSERT INTO blind.post_report_mgt(
+			post_id, user_id, post_report_date, report_reason_code, report_reason_content, verify_flag,
+			complete_flag, rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			#{postId}, #{userId}, NOW(), #{reportReasonCode}, #{reportReasonContent}, 0,
+			0, #{userId}, NOW(), #{userId}, NOW(), 0
+		);
+	</select>
+
+	<!-- 3.신고접수-기업리뷰 신고시 -->
+	<select id="setReviewReport" parameterType="com.ksinfo.blind.common.dto.ReviewReportDto">
+		INSERT INTO blind.review_report_mgt(
+			company_review_id, user_id, review_report_date, report_reason_code, report_reason_content, verify_flag,
+			complete_flag, rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			#{companyReviewId}, #{userId}, NOW(), #{reportReasonCode}, #{reportReasonContent}, 0,
+			0, #{userId}, NOW(), #{userId}, NOW(), 0
+		);
+	</select>
+
+	<!-- 4.신고접수-댓글 신고시 -->
+	<select id="setReplyReport" parameterType="com.ksinfo.blind.common.dto.ReplyReportDto">
+		INSERT INTO blind.REPLY_REPORT_MGT (
+			reply_id, user_id, reply_report_date, report_reason_code, report_reason_content, verify_flag,
+			complete_flag, rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			#{replyId}, #{userId}, NOW(), #{reportReasonCode}, #{reportReasonContent}, 0,
+			0, #{userId}, NOW(), #{userId}, NOW(), 0
+		);
+	</select>
+</mapper>

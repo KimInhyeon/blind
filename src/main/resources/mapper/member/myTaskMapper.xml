@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.member.mapper.MyTaskMapper">
+	<select id="getMyCompanyReviewList" resultType="com.ksinfo.blind.member.vo.MyCompanyReviewVO">
+		SELECT company_review_id AS companyReviewId,
+			company_name AS companyName,
+			complete_flag AS completeFlag,
+			TO_CHAR(crm.rec_create_date, 'YYYY.MM.DD') AS recCreateDate
+		FROM blind.company_review_mgt AS crm
+			INNER JOIN blind.company_mgt AS cm
+				ON crm.company_id = cm.company_id AND cm.logical_del_flag = '0'
+		WHERE crm.user_id = #{userId}
+			AND crm.logical_del_flag = '0'
+		ORDER BY company_review_id DESC;
+	</select>
+
+	<select id="getMyReportList" resultType="com.ksinfo.blind.member.vo.MyReportVO">
+		SELECT type,
+			title,
+			groupName,
+			CASE WHEN um.logical_del_flag = '0' THEN user_nickname ELSE '脱会した会員' END AS userNickname,
+			CASE WHEN type = 'レビュー' THEN
+				CASE WHEN company_name IS NULL THEN '会社名無し'
+					ELSE company_name
+				END
+			END AS companyName,
+			TO_CHAR(task.rec_create_date, 'YYYY.MM.DD') AS recCreateDate,
+			status
+		FROM (
+			SELECT 'レビュー' AS type,
+				simple_comment AS title,
+				job_group_name AS groupName,
+				rrm.user_id,
+				rrm.rec_create_date,
+				CASE
+					WHEN rrm.verify_flag = '0' AND rrm.complete_flag = '0' THEN '待機'
+					WHEN rrm.verify_flag = '1' AND rrm.complete_flag = '1' THEN '承認'
+					ELSE '却下'
+				END AS status
+			FROM blind.review_report_mgt AS rrm
+				INNER JOIN blind.company_review_mgt AS crm
+					ON rrm.company_review_id = crm.company_review_id AND crm.logical_del_flag = '0'
+				INNER JOIN blind.job_group_mst AS jgm
+					ON crm.job_group_code = jgm.job_group_code AND jgm.logical_del_flag = '0'
+			WHERE rrm.user_id = #{userId}
+			UNION ALL
+			SELECT 'ポスト' AS type,
+				post_title AS title,
+				board_topic_name AS groupName,
+				prm.user_id,
+				prm.rec_create_date,
+				CASE
+					WHEN verify_flag = '0' AND complete_flag = '0' THEN '待機'
+					WHEN verify_flag = '1' AND complete_flag = '1' THEN '承認'
+					ELSE '却下'
+				END AS status
+			FROM blind.post_report_mgt AS prm
+				INNER JOIN blind.post_mgt AS pm
+					ON prm.post_id = pm.post_id AND pm.logical_del_flag = '0'
+				INNER JOIN blind.board_mgt AS bm
+					ON pm.board_id = bm.board_id AND bm.logical_del_flag = '0'
+			WHERE prm.user_id = #{userId}
+				AND prm.logical_del_flag = '0'
+		) AS task
+			INNER JOIN blind.user_mgt AS um
+				ON task.user_id = um.user_id AND um.last_generation_flag = '1'
+			LEFT JOIN blind.company_mgt AS cm
+				ON um.company_id = cm.company_id AND verify_flag = '1' AND cm.logical_del_flag = '0'
+		ORDER BY task.rec_create_date DESC;
+	</select>
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.common.mapper.DirectoryMapper">
+	<select id="getTotalDirectoryRecord" parameterType="com.ksinfo.blind.common.dto.DirectorySearchDto"
+			resultType="_int">
+		SELECT COUNT(*)
+		FROM blind.company_mgt
+		WHERE
+		<choose>
+			<when test="isSearchCompanyName">
+				<foreach collection="searchKeywordList" item="searchKeyword" open="(" close=")" separator="OR">
+					LOWER(search_company_name) LIKE LOWER(#{searchKeyword})
+				</foreach>
+			</when>
+			<otherwise>
+				LOWER(company_name) LIKE LOWER(#{searchKeywordList[0]})
+			</otherwise>
+		</choose>
+			AND verify_flag = '1'
+			AND logical_del_flag = '0';
+	</select>
+
+	<select id="getDirectoryCompanyList" parameterType="com.ksinfo.blind.common.dto.DirectorySearchDto"
+			resultType="com.ksinfo.blind.common.vo.DirectoryCompanyVO">
+		SELECT company_id AS companyId
+			, company_name AS companyName
+		FROM blind.company_mgt
+		WHERE
+		<choose>
+			<when test="isSearchCompanyName">
+				<foreach collection="searchKeywordList" item="searchKeyword" open="(" close=")" separator="OR">
+					LOWER(search_company_name) LIKE LOWER(#{searchKeyword})
+				</foreach>
+			</when>
+			<otherwise>
+				LOWER(company_name) LIKE LOWER(#{searchKeywordList[0]})
+			</otherwise>
+		</choose>
+			AND verify_flag = '1'
+			AND logical_del_flag = '0'
+		ORDER BY search_company_name;
+	</select>
+</mapper>
