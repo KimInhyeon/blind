@@ -39,14 +39,24 @@
 			TO_CHAR(cr.rec_create_date, 'YYYY.MM.DD') AS recCreateDate,
 		<choose>
 			<when test="userId gt 0">
-				advantages AS advantages,
-				disadvantages AS disadvantages, (
-					SELECT EXISTS(
-						SELECT
-						FROM blind.review_recommend_inf
-						WHERE company_review_id = cr.company_review_id
-							AND user_id = #{userId}
-							AND helpful = 1
+				CASE WHEN EXISTS(
+					SELECT
+					FROM blind.company_review_mgt
+					WHERE user_id = #{userId}
+						AND logical_del_flag = '0'
+				) THEN advantages END AS advantages,
+				CASE WHEN EXISTS(
+					SELECT
+					FROM blind.company_review_mgt
+					WHERE user_id = #{userId}
+						AND logical_del_flag = '0'
+				) THEN disadvantages END AS disadvantages, (
+				SELECT EXISTS(
+					SELECT
+					FROM blind.review_recommend_inf
+					WHERE company_review_id = cr.company_review_id
+						AND user_id = #{userId}
+						AND helpful = 1
 					)
 				) AS recommended,
 			</when>
@@ -104,7 +114,7 @@
 		SELECT SUM(helpful) AS helpfulCount, (
 			SELECT helpful
 			FROM blind.review_recommend_inf
-			WHERE company_review_id = rri.company_review_id
+			WHERE company_review_id = #{companyReviewId}
 				AND user_id = #{userId}
 			) AS helpful
 		FROM blind.review_recommend_inf AS rri
@@ -125,6 +135,15 @@
 		);
 	</insert>
 
+
+	<select id="getCompanyName" resultType="string">
+		SELECT company_name
+		FROM blind.company_mgt
+		WHERE company_id = #{companyId}
+			AND verify_flag = '1'
+			AND closing_flag = '0'
+			AND logical_del_flag = '0';
+	</select>
 
 	<select id="getCompanyReviews" resultType="com.ksinfo.blind.company.vo.CompanyReviewVO">
 		SELECT DISTINCT crm.company_review_id AS companyReviewId <!-- 포스트들처럼 여러개의 기업리뷰글을 게시 및 링크하려면 필요. -->

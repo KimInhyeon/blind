@@ -29,6 +29,8 @@ public interface CompanyReviewMapper {
 
 	void writeCompanyReview(CompanyReviewWriteDto companyReview);
 
+	String getCompanyName(long companyId);
+
 
 	//BLIND_0016 企業レビュー詳細照会(2021-08-25)
 	List<CompanyReviewVO> getCompanyReviews(long companyId);

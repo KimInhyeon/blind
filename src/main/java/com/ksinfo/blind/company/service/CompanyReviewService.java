@@ -75,4 +75,8 @@ public class CompanyReviewService {
 	public List<CompanyReviewVO> getCompanyReviews(long companyId){
 		return companyReviewMapper.getCompanyReviews(companyId);
 	}
+
+	public String getCompanyName(long companyId) {
+		return companyReviewMapper.getCompanyName(companyId);
+	}
 }

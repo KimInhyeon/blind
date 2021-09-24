@@ -1,14 +1,14 @@
 package com.ksinfo.blind.member.dto;
 
 public final class RegisterMemberDto {
-	private String userPassword;
 	private String userEmail;
+	private String userPassword;
 	private final String userNickname;
 	private final String userAuth;
 
 	public RegisterMemberDto(String username, String password, String nickname, String role) {
-		userPassword = username;
-		userEmail = password;
+		userEmail = username;
+		userPassword = password;
 		userNickname = nickname;
 		switch (role) {
 			case "NM":
@@ -26,20 +26,20 @@ public final class RegisterMemberDto {
 		}
 	}
 
-	public String getUserPassword() {
-		return userPassword;
-	}
-
-	public void setUserPassword(String userPassword) {
-		this.userPassword = userPassword;
-	}
-
 	public String getUserEmail() {
 		return userEmail;
 	}
 
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
+	}
+
+	public String getUserPassword() {
+		return userPassword;
+	}
+
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
 	}
 
 	public String getUserNickname() {
