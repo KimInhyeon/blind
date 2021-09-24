@@ -23,5 +23,6 @@ public interface CompanyIntroductionMapper {
  CompanyJoinDto searchCompanyRecommend(long companyReviewId);
  int  checkRecommend(Map<String,Long> paramMap);
  int getTotalRecord(Map<String, Object> map);
+ int getReviewWrite(long userId);
 
 }

@@ -82,16 +82,27 @@
             padding-top: 10px;
         }
 
+        #writtenReview{
+            color: transparent;
+            text-shadow: 0 0 5px #000;
+            transition: all 250ms ease-in;
+            -ms-user-select: none;
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
+
+        }
 
     </style>
 
 
 </head>
 <body>
+
 <div class="ui fluid container" id="reviewHeader" style="padding:80px 0; background-color:black">
 
 </div>
-
 
 <div class="ui container">
     <div style="padding-top:20px;">
@@ -248,7 +259,7 @@
                         <div class="ui flowing popup top left transition hidden">
                             <div class="ui column divided center aligned grid">
                                 <div class="column" data-position="bottom left">
-                                    <div class="ui button" style="background: white;">신고</div>
+                                    <div class="ui button" style="background: white;">申告</div>
                                 </div>
 
                             </div>
@@ -315,7 +326,10 @@
                         </div>
 
                     </td>
-                    <td><h5>장점</h5></td>
+
+
+                     <td><c:if test="${writtenFlag == false}"><div id="writtenReview"><h5>長所</h5></div></c:if>
+                         <c:if test="${writtenFlag == true}"><h5>長所</h5></c:if></td>
 
                     <td></td>
 
@@ -325,36 +339,47 @@
 
                 <tr>
                     <td></td>
-                    <td>${oneCompanyReview.advantages }</td>
+                    <td><c:if test="${writtenFlag == false}"><div id="writtenReview">${oneCompanyReview.advantages }</div></c:if>
+                        <c:if test="${writtenFlag == true}">${oneCompanyReview.advantages }</c:if>
+
+
+                    </td>
                     <td></td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td><h5>단점</h5></td>
+                    <td><c:if test="${writtenFlag == false}"><div id="writtenReview"><h5>短所</h5></div></c:if>
+                        <c:if test="${writtenFlag == true}"><h5>短所</h5></c:if></td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td>${oneCompanyReview.disadvantages }</td>
+                    <td><c:if test="${writtenFlag == false}"><div id="writtenReview">${oneCompanyReview.disadvantages }</div></c:if>
+                        <c:if test="${writtenFlag == true}">${oneCompanyReview.disadvantages }</c:if>
+                    </td>
                 </tr>
+
+
+
+                <c:if test="${writtenFlag == false}"></c:if>
+
+                <c:if test="${writtenFlag == true}">
+
+                <c:if test="${oneCompanyReview.recommendFlag == 1}">
                 <tr>
                     <td>
-                        <c:if test="${oneCompanyReview.recommendFlag == 1}">
-                <tr>
-                    <td>
-                        <button onclick="countUp(${oneCompanyReview.companyReviewId});">
-                            <div id="helpfulCount${oneCompanyReview.companyReviewId}" style="display:flex;color:red">도움이
-                                돼요(${oneCompanyReview.helpfulCount })
+                        <button onclick="countUp(${oneCompanyReview.companyReviewId});" disabled>
+
+                            <div id="helpfulCount${oneCompanyReview.companyReviewId}" style="display:flex;color:red">いいね(${oneCompanyReview.helpfulCount })
                             </div>
                         </button>
+                    </td>
                 </tr>
-
                 </c:if>
                 <c:if test="${oneCompanyReview.recommendFlag == 0}">
                     <tr>
                         <td>
                             <button onclick="countUp(${oneCompanyReview.companyReviewId});">
-                                <div id="helpfulCount${oneCompanyReview.companyReviewId}" style="display:flex;">도움이
-                                    돼요(${oneCompanyReview.helpfulCount })
+                                <div id="helpfulCount${oneCompanyReview.companyReviewId}" style="display:flex;">いいね(${oneCompanyReview.helpfulCount })
                                 </div>
                             </button>
                         </td>
@@ -364,10 +389,12 @@
                         </td>
                     </tr>
                 </c:if>
-
+                </c:if>
                 <input type="hidden" id="recommendFlag${oneCompanyReview.companyReviewId}"
                        value="${oneCompanyReview.recommendFlag}"></input>
-                </tr>
+
+
+
             </table>
 
         </div>
@@ -392,7 +419,7 @@
 
                                     <div class="column" data-position="bottom left">
 
-                                        <div class="ui button" style="background: white ;">신고</div>
+                                        <div class="ui button" style="background: white ;">申告</div>
 
                                     </div>
 
@@ -459,7 +486,8 @@
                                 </div>
 
 
-                                <td><h5>장점</h5></td>
+                                <td><c:if test="${writtenFlag == false}"><div id="writtenReview"><h5>長所</h5></div></c:if>
+                            <c:if test="${writtenFlag == true}"><h5>長所</h5></c:if></td></td>
 
 
 
@@ -470,22 +498,38 @@
 
                         <tr>
                             <td></td>
-                            <td>${companyShowList.advantages }</td>
+                            <td><c:if test="${writtenFlag == false}"><div id="writtenReview">${companyShowList.advantages }</div></c:if>
+                            <c:if test="${writtenFlag == true}">${companyShowList.advantages }</c:if>
+
+
+                            </td>
                         </tr>
                         <tr>
                             <td></td>
-                            <td><h5>단점</h5></td>
+                            <td><c:if test="${writtenFlag == false}"><div id="writtenReview"><h5>短所</h5></div></c:if>
+                                <c:if test="${writtenFlag == true}"><h5>短所</h5></c:if>
+
+
+
+                                </td>
                         </tr>
                         <tr>
                             <td></td>
-                            <td>${companyShowList.disadvantages }</td>
+                            <td><c:if test="${writtenFlag == false}"><div id="writtenReview">${companyShowList.disadvantages }</div></c:if>
+                                <c:if test="${writtenFlag == true}">${companyShowList.disadvantages }</c:if>
+                            </td>
                         </tr>
+
+
+
+                        <c:if test="${writtenFlag == false}"></c:if>
+                    <c:if test="${writtenFlag == true}">
                         <c:if test="${companyShowList.recommendFlag == 1}">
                             <tr>
                                 <td>
                                     <button onclick="countUp(${companyShowList.companyReviewId});">
                                         <div id="helpfulCount${companyShowList.companyReviewId}"
-                                             style="display:flex;color:red">도움이 돼요(${companyShowList.helpfulCount })
+                                             style="display:flex;color:red">いいね(${companyShowList.helpfulCount })
                                         </div>
                                     </button>
                             </tr>
@@ -496,7 +540,7 @@
                                 <td>
                                     <button onclick="countUp(${companyShowList.companyReviewId});">
                                         <div id="helpfulCount${companyShowList.companyReviewId}" style="display:flex;">
-                                            도움이 돼요(${companyShowList.helpfulCount })
+                                            いいね(${companyShowList.helpfulCount })
                                         </div>
                                     </button>
                                 </td>
@@ -506,6 +550,7 @@
                                 </td>
                             </tr>
                         </c:if>
+                    </c:if>
                         <input type="hidden" id="recommendFlag${companyShowList.companyReviewId}"
                                value="${companyShowList.recommendFlag}"></input>
 

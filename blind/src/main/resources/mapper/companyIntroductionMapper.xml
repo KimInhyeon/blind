@@ -284,13 +284,12 @@
 
     <select id="getReviewWrite" parameterType="long" resultType="int">
         select
-
-
-
+        count(*)
         from
             blind.company_review_mgt
         where
             user_id=#{userId}
+
 
 
     </select>

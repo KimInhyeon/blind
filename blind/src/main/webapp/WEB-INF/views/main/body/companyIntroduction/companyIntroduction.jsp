@@ -19,6 +19,8 @@
 <div class="ui fluid container" id="reviewHeader" style="padding:80px 0; background-color:black">
 
 </div>
+
+
 <div class="ui container">
 	<div style="padding-top:20px;">
 	 <button style="margin-top:30px;"class="blue ui right floated button"  onclick="location.href='${pageContext.request.contextPath}/companyReviewWrite?companyId=${companyIntroduction.companyId}';"  >
@@ -42,7 +44,6 @@
 
 
 <div class="ui container">
-
 
 
 

@@ -63,7 +63,9 @@ public class CompanyIntroductionService {
 		int totalRecord = CompanyIntroductionMapper.getTotalRecord(map);
 		return new PageNavigator(page,totalRecord,recordLimit,pagination);
 	}
-
+	public int getReviewWrite(long userId){
+		return CompanyIntroductionMapper.getReviewWrite(userId);
+	}
 
 /*	public long updatePostRecommend(BookmarkDto searchPostRecommend){
 		HashMap<String, Object> map = new HashMap<String, Object>();

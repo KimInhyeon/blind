@@ -45,6 +45,18 @@ public class CompanyIntroductionController {
 
 		CompanyIntroductionDto companyIntroduction = companyIntroductionService.companyIntroduction(companyId);
 		CompanyAverageDto companyAverageDto = companyIntroductionService.companyAveragePoint(companyId);
+		Boolean writtenFlag = null;
+		if(companyIntroductionService.getReviewWrite(account.getUserId()) > 0){
+			writtenFlag = true;
+
+
+		}else{
+			writtenFlag=false;
+
+		}
+		System.out.println(companyIntroductionService.getReviewWrite(account.getUserId()));
+		System.out.println(writtenFlag);
+		mav.addObject("writtenFlag",writtenFlag);
 
 		PageNavigator navi = companyIntroductionService.getNavigator(page,companyId);
 
