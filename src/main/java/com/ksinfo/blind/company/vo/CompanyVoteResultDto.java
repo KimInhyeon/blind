@@ -5,10 +5,9 @@ public final class CompanyVoteResultDto {
 	private final int voteCountOfBad;
 
 	public CompanyVoteResultDto(float voteCountOfGood, float voteCountOfBad) {
-		float tempDenominator = voteCountOfGood + voteCountOfBad;
-		if (tempDenominator > 0) {
-			this.voteCountOfGood = Math.round(voteCountOfGood / tempDenominator * 100);
-			this.voteCountOfBad = Math.round(voteCountOfBad / tempDenominator * 100);
+		if (voteCountOfGood > 0 || voteCountOfBad > 0) {
+			this.voteCountOfGood = Math.round(voteCountOfGood / (voteCountOfGood + voteCountOfBad) * 100);
+			this.voteCountOfBad = 100 - this.voteCountOfGood;
 		} else {
 			this.voteCountOfGood = this.voteCountOfBad = 0;
 		}

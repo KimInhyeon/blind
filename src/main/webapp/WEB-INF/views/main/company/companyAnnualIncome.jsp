@@ -64,7 +64,9 @@
 					<select class="ui dropdown" id="selectGroupList" style="width: 489px; margin-left: 2%;">
 						<option value="00">職群全体</option>
 					<c:forEach var="job" items="${jobGroupList}">
-						<option value="${job.jobGroupCode}">${job.jobGroupName}</option>
+						<option value="${job.jobGroupCode}"<c:if test="${not job.exist}"> disabled</c:if>>
+							${job.jobGroupName}<c:if test="${not job.exist}"> &lt; Coming Soon &gt;</c:if>
+						</option>
 					</c:forEach>
 					</select>
 					<%-- 연봉정보가 나오는 영역 --%>

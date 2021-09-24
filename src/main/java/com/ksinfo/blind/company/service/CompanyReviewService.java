@@ -75,9 +75,4 @@ public class CompanyReviewService {
 	public List<CompanyReviewVO> getCompanyReviews(long companyId){
 		return companyReviewMapper.getCompanyReviews(companyId);
 	}
-
-	//BLIND_0017_企業ポストタブ(2021-08-11)
-	public String getCompanyName(long companyId){
-		return companyReviewMapper.getCompanyName(companyId);
-	}
 }

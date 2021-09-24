@@ -169,11 +169,4 @@
 
 		ORDER BY helpfulCount DESC; <!-- 정렬기준 : '도움이 됬어요'버튼의 갯수가 많을수록 가장먼저 출력된다. -->
 	</select>
-
-	<!-- BLIND_0017_企業ポストタブ(2021-08-11) --> <!-- -->
-	<select id="getCompanyName" resultType="string">
-		SELECT company_name
-		FROM blind.company_mgt
-		WHERE company_mgt.company_id = #{companyId};
-	</select>
 </mapper>

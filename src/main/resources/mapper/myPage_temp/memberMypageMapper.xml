@@ -23,14 +23,12 @@
 <!--	ポストごとではなく総合だけ必要であれば以下のクァーリーに変更
 
 		SELECT COUNT(*)
-		FROM blind.post_recommend_inf
-		WHERE post_id IN (
-			SELECT post_id
-			FROM blind.post_mgt
-			WHERE user_id = #{userId}
-				AND post_create_date BETWEEN(DATE_TRUNC('month', CURRENT_DATE)) AND CURRENT_DATE
-				AND logical_del_flag = '0'
-		) AND post_recommend_flag = '1';
+		FROM blind.post_mgt AS po
+			INNER JOIN blind.post_recommend_inf AS pri
+				ON po.post_id = pri.post_id AND pri.post_recommend_flag = '1'
+		WHERE po.user_id = #{userId}
+			AND post_create_date BETWEEN(DATE_TRUNC('month', CURRENT_DATE)) AND CURRENT_DATE
+			AND logical_del_flag = '0'
 -->
 		SELECT COUNT(pri.post_id)
 		FROM blind.post_recommend_inf AS pri
@@ -49,23 +47,12 @@
 
 	<!-- 5.유저의 연봉랭킹정보 -->
 	<select id="getSalaryRankingData" resultType="_float">
-<!--	上位n%の情報が必要であればresultTypeを_intに変更して以下のクァーリーに変更
-
-		SELECT ROUND(CAST(rank.salaryranking AS DECIMAL) / (SELECT COUNT(*) FROM blind.salary_rank_mgt), 2) * 100
-		FROM blind.salary_rank_mgt AS target
-			INNER JOIN (
-				SELECT user_id
-					, RANK() OVER(ORDER BY salary DESC) AS salaryranking
-			FROM blind.salary_rank_mgt
-		) rank USING(user_id)
-		WHERE target.user_id = #{userId};
--->
 		SELECT ROUND((CAST(rank.salaryranking AS DECIMAL) / (SELECT COUNT(*) FROM blind.salary_rank_mgt) * 100), 1)
 		FROM BLIND.salary_rank_mgt AS target
 			INNER JOIN (
 				SELECT user_id
 					, RANK() OVER(ORDER BY salary DESC) AS salaryranking
-			FROM blind.salary_rank_mgt
+				FROM blind.salary_rank_mgt
 			) AS rank USING(user_id)
 		WHERE target.user_id = #{userId};
 	</select>

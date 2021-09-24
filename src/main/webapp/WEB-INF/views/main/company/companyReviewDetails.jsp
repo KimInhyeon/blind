@@ -9,8 +9,7 @@
 	<%--드래그를 방지하는 CSS--%>
 	div.stop-dragging {
 		-ms-user-select: none;
-		-moz-user-select: -moz-none;
-		-khtml-user-select: none;
+		-moz-user-select: none;
 		-webkit-user-select: none;
 		user-select: none;
 	}
@@ -189,7 +188,7 @@
 					margin-bottom: 2.0%; padding: 1.2%;">
 				<%-- 클릭영역 넓히기 위해 패딩적용.--%>
 				<i class="arrow left icon"></i>
-				「${companyName}」のレビューをすべて見る
+				「${companyMenu.companyName}」のレビューをすべて見る
 			</div>
 
 			<%-- 3.이외기업리뷰글들 리스트형으로 출력.--%>

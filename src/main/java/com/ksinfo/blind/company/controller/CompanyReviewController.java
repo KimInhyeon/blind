@@ -103,14 +103,14 @@ public class CompanyReviewController {
 		companyId = 1;    //기업ID
 		int blurEffectSet = 1; //이외게시글 블러효과적용여부. 기업리뷰 작성여부에 따라 값 결정.(0:기업리뷰 미작성, 1:기업리뷰 작성)
 
-		String companyName = companyReviewService.getCompanyName(companyId);
+		CompanyMenuVO companyMenu = companyCommonService.getCompanyMenu(companyId);
 		List<CompanyReviewVO> companyReviewLists = companyReviewService.getCompanyReviews(companyId);
 
 		//company = companyReviewService.getPosts(navi.getCurrentPage(), paramMap);//사용자가 입력한 검색어로 검색
 
 		ModelAndView modelAndView = new ModelAndView("main/company/companyReviewDetails");
 		modelAndView.addObject("nowCompanyId", companyId);
-		modelAndView.addObject("companyName", companyName);
+		modelAndView.addObject("companyMenu", companyMenu);
 		modelAndView.addObject("companyReviewLists", companyReviewLists);
 		modelAndView.addObject("blurEffectSet", blurEffectSet);
 

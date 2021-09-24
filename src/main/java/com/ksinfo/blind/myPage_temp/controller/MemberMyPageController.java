@@ -43,9 +43,9 @@ public final class MemberMyPageController {
 			int postLikeCountThisMonth = memberMyPageService.getPostLikeCountThisMonth(userId);
 
 			//account 자체를 그대로 전송시 password등도 같이 전송되어 보안 우려로 개별전송.
-			//int companyId= (int) account.getCompanyId();
-			//String userCompanyName = mypageService.getUsersCompanyName(companyId);
-			//mav.addObject("user_company_name",userCompanyName); //정보노출 우려로 주석처리.
+			//long companyId = account.getCompanyId();
+			//String userCompanyName = MemberMyPageService.getUsersCompanyName(companyId);
+			//mav.addObject("user_company_name", userCompanyName); //정보노출 우려로 주석처리.
 
 			mav.addObject("user_post_counts_this_month", userPostCountsThisMonth);
 			mav.addObject("like_count_this_month", postLikeCountThisMonth);
@@ -75,7 +75,7 @@ public final class MemberMyPageController {
 	public int checkCurrentPassword(@AuthenticationPrincipal Account account, String inputCurrentPassword) {
 
 		//DB에서 현 유저의 비밀번호를 가져옴.
-		String currentPassword = memberMyPageService.getCurrentPassword((int) account.getUserId());
+		String currentPassword = memberMyPageService.getCurrentPassword(account.getUserId());
 		//account.getPassword()) (@AuthenticationPrincipal Account account의 최초 로그인시의 비밀번호 보관)를 사용시 로그아웃까지 이전비밀번호가 적용됨.
 		//위의 이유로 비밀번호 수정시에는 DB에서 비밀번호를 가져와서 체크하는 형태로 변경.
 
@@ -93,12 +93,12 @@ public final class MemberMyPageController {
 	@ResponseBody
 	public int updateToNewPassword(@AuthenticationPrincipal Account account, String inputCurrentPassword, String inputNewPassword) {
 		//DB에서 현 유저의 비밀번호를 가져옴.
-		String currentPassword = memberMyPageService.getCurrentPassword((int) account.getUserId());
+		String currentPassword = memberMyPageService.getCurrentPassword(account.getUserId());
 		//account.getPassword()) (@AuthenticationPrincipal Account account의 최초 로그인시의 비밀번호 보관)를 사용시 로그아웃까지 이전비밀번호가 적용됨.
 		//위의 이유로 비밀번호 수정시에는 DB에서 비밀번호를 가져와서 체크하는 형태로 변경.
 
 		if (passwordEncoder.matches(inputCurrentPassword, currentPassword)) { //현재 쓰이던 기존의 비밀번호가 일치하는지 확인
-			memberMyPageService.updateToNewPassword((int) account.getUserId(), inputNewPassword);
+			memberMyPageService.updateToNewPassword(account.getUserId(), inputNewPassword);
 			return 1;    //비밀번호 변경이 성공.
 		}
 
