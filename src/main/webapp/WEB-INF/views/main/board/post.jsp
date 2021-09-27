@@ -498,7 +498,7 @@
 					document.getElementById("targetUserNickname").innerHTML = targetUserNickname;
 				}
 
-				<%--2.신고할 사항들의 리스트
+				//2.신고할 사항들의 리스트
 				$(report_reason_list).html(""); <%--신고목록(라디오버튼)을 출력할 부분 초기화--%>
 				$(report_reason_textarea).html(""); <%--기타입력시 부분 초기화.--%>
 
@@ -545,12 +545,11 @@
 			var companyReviewId = $('#currentCompanyReviewId').val();
 			var replyId = $('#currentReplyId').val();
 
-			<%-- テストコード（send_reportをクリックして送信するでーたを確認。）
+			//テストコード（send_reportをクリックして送信するでーたを確認。）
 			//alert("send_reportType : " + reportType);
 			//alert("send_postId : " + postId);
 			//alert("send_currentCompanyReviewId : " + companyReviewId);
 			//alert("send_replyId : " + replyId);
-			-->
 
 			if (typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null) {
 				alert("通報する理由を選んでください。"); <%--선택된 신고사항이 없기에 선택을 요청--%>
