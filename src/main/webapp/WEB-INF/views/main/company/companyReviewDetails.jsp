@@ -40,6 +40,11 @@
 		z-index: 0;
 		padding: 0;
 	}
+
+	.right.aligned.column div.ui.dropdown.item {
+		background: none;
+	}
+
 </style>
 
 <%@ include file="/WEB-INF/views/main/company/companyMenu.jsp" %>
@@ -55,8 +60,8 @@
 					<i class="ellipsis horizontal icon" style="font-size: 1.2em;"></i></div>
 				<div class="ui flowing popup top left transition hidden">
 					<div class="column" data-position="bottom left">
-						<button class="report_modal_start"
-								onclick="reportModalStart(
+						<div class="reportModalStart item"
+							 onclick="reportModalStart(
 										'0008'
 										,0
 										,'${companyReviewLists[0].companyReviewId}'
@@ -64,14 +69,14 @@
 										,'${companyReviewLists[0].userNickname}'
 										,'${companyReviewLists[0].simpleComment}'
 										)">
-							<%-- 신고유형. 0008은 기업리뷰 신고(currentReportType) --%>
-							<%-- 신고할 기업리뷰의 id(currentCompanyReviewId) --%>
-							<%-- replyId. 여기서는 기업리뷰 신고인 관계로 없음 의미로 0을 입력. --%>
-							<%-- 신고할 기업리뷰의 id(currentCompanyReviewId) --%>
-							<%-- nickName(신고할 포스트의 닉네임) --%>
-							<%-- 신고할 포스트의 제목(simpleComment) --%>
-							申告する(企業レビュー)
-						</button>
+							<%-- 通報のタイプ。0008は企業レビューを意味。-->
+							<%-- postid。ここではするポストの通報ので’０’を入力して動作しないに設定する。--%>
+							<%-- replyId。ここではするポストの通報ので’０’を入力して動作しないに設定する。--%>
+							<%-- companyReviewId。（通報する企業レビューのID）　--%>
+							<%-- 通報するポストを作成したユーザのニックネーム。--%>
+							<%-- 通報するポストのタイトル。--%>
+							<i class="bullhorn icon"></i><span>通報する</span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -358,50 +363,57 @@
 		</div>
 	</div>
 
-	<%--신고하기(send_report)를 할 때 전송할 값을 줄 수 있도록 임시로 값을 저장. --%>
+	<%-- javascriptの'send_report'メソッドを通して送信するデータ（通報するポスト）を臨時セーブ。--%>
 	<input type="hidden" value="" id="currentReportType"/>
 	<input type="hidden" value="" id="currentPostId"/>
 	<input type="hidden" value="" id="currentCompanyReviewId"/>
 	<input type="hidden" value="" id="currentReplyId"/>
 
+	<div style="display: none">
+		<%--「通報する」のモーダルウィンドウ。--%>
+		<div id="report_modal" data-backdrop="static" data-keyboard="false"
+			 style="padding: 2%; background-color:#ffffff;">
+			 <div class="warp_report_modal">
+				<div class="inf_title">
+					<h2 style="display:inline;">通報する</h2>
+					<div style="float:right;" id="modal_close_btn"> X </div>
 
-	<%--신고 모달창--%>
-	<div id="report_modal" data-backdrop="static" data-keyboard="false">
-		<div class="warp_report_modal">
-			<div class="inf_title">
-				<h2 style="display:inline;">申告する</h2>
-				<div style="float:right;" id="modal_close_btn">X</div>
+					<div style="text-align:left; margin-top: 5%;">
+						<span>作成者</span>
+						<span id="targetUserNickname"><%-- 通報するポストのニックネームが入力される。--%></span>
+					</div>
 
-				<div align="left">
-					<span>作成者</span>
-					<span id="nickName"><%-- 신고할 포스트의 닉네임이 입력됩니다. --%></span>
+					<div style="text-align:left; margin-top: 5%;">
+						<span style="display: inline;">タイトル</span>
+						<span id="reportTitle"><%-- 通報するポストのタイトルが入力される。--%></span>
+					</div>
 				</div>
 
-				<div align="left">
-					<span style="display: inline;">タイトル</span>
-					<span id="reportTitle"><%-- 신고할 포스트의 제목이 입력됩니다. --%></span>
+				 <div class="ui inverted divider"></div>
+
+				<div id="report_reason_list">
+					<%-- タイプに対応する通報リスト出力する。 --%>
 				</div>
+
+				<div id="report_reason_textarea">
+					<%-- textarea를 로드 --%>
+				</div>
+
+				<button class="ui primary button" id="send_report"
+						style="width: 100%; height: 50px; text-align: center; margin-top: 20px;">
+					通報する
+				</button>
 			</div>
-
-			<div class="ui inverted divider"></div>
-
-			<div id="report_reason_list">
-				<%-- 유형에 해당하는 신고목록 출력합니다. --%>
-			</div>
-
-			<div id="report_reason_textarea">
-				<%-- textarea를 로드 --%>
-			</div>
-
-			<button class="ui primary button" id="send_report"
-					style="width: 100%; height: 50px; text-align: center; margin-top: 20px;">
-				申告する
-			</button>
 		</div>
 	</div>
-</div>
 
 <script>
+	function restoreMenuItem(item) {
+		setTimeout(function () {
+			item.className = "item";
+		}, 0);
+	}
+
 	<%--役立ちます(도움이 되었습니다/기업리뷰추천수)를 카운트 및 출력하는 기능.--%>
 	function helpfulSet(companyReviewId) {
 		fetch("company/review/recommend", {
@@ -431,7 +443,7 @@
 		});
 	}
 
-	<%--1.신고모달창을 팝업실시.--%>
+	<%--1.通報するモーダルウィンドウをポップアップする。--%>
 	function reportModalStart(reportType, postId, companyReviewId, replyId, targetUserNickname, targetTitle) {
 		<%--신고하기 전에 hidden에 미리 정보를 저장. send_report 함수를 실행때 사용할 수 있도록 저장.--%>
 		document.getElementById("currentReportType").value = reportType;
@@ -450,24 +462,24 @@
 				var selectedReportType = $('#currentReportType').val();
 
 				if (selectedReportType == "0006") {
-					<%--document.getElementById("reportTitle").innerHTML=$('#post_title').text();--%>
-					<%--document.getElementById("nickName").innerHTML=$('#post_nickname').text();--%>
+					document.getElementById("reportTitle").innerHTML =  targetTitle;
+					document.getElementById("targetUserNickname").innerHTML = targetUserNickname;
 				} else if (selectedReportType == "0008") {
-					document.getElementById("reportTitle").innerHTML = targetUserNickname;
-					document.getElementById("nickName").innerHTML = targetTitle;
+					document.getElementById("reportTitle").innerHTML =  targetTitle;
+					document.getElementById("targetUserNickname").innerHTML = targetUserNickname;
 				} else if (selectedReportType == "0012") {
-					<%--document.getElementById("reportTitle").innerHTML=$('#reply_title').text();--%>
-					<%--document.getElementById("nickName").innerHTML=$('#reply_nickname').text();--%>
+					document.getElementById("reportTitle").innerHTML =  targetTitle;
+					document.getElementById("targetUserNickname").innerHTML = targetUserNickname;
 				}
 
-				<%--2.신고할 사항들의 리스트
+				//2.신고할 사항들의 리스트
 				$(report_reason_list).html(""); <%--신고목록(라디오버튼)을 출력할 부분 초기화--%>
 				$(report_reason_textarea).html(""); <%--기타입력시 부분 초기화.--%>
 
 				<%--신고목록(라디오버튼)배치--%>
 				$.each(result, function (key, value) {
 					$(report_reason_list).append(
-						"<div align=\"left\"><input type=\"radio\" onclick=\"textOnOff();\" " +
+						"<div style=\"text-align:left; margin-bottom: 5%;\"><input type=\"radio\" onclick=\"textOnOff();\" " +
 						"name=\"report_post_reason\" id=\"" + value.reportReasonCode + "\" value=" +
 						value.reportReasonCode + ">" + value.reportReasonContents + "</div>"
 					);
@@ -507,13 +519,14 @@
 			var companyReviewId = $('#currentCompanyReviewId').val();
 			var replyId = $('#currentReplyId').val();
 
-			alert("send_reportType : " + reportType);
-			alert("send_postId : " + postId);
-			alert("send_currentCompanyReviewId : " + companyReviewId);
-			alert("send_replyId : " + replyId);
+			//テストコード（send_reportをクリックして送信するでーたを確認。）
+			//alert("send_reportType : " + reportType);
+			//alert("send_postId : " + postId);
+			//alert("send_currentCompanyReviewId : " + companyReviewId);
+			//alert("send_replyId : " + replyId);
 
 			if (typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null) {
-				alert("申告する理由を選んでください。"); <%--선택된 신고사항이 없기에 선택을 요청--%>
+				alert("通報する理由を選んでください。"); <%--선택된 신고사항이 없기에 선택을 요청--%>
 			} else {
 				$.ajax({
 					type: "POST",
@@ -529,7 +542,7 @@
 					dataType: "json",
 					success: function (result) {
 						if (result == 1) {
-							alert("申告の受付を完了しました。");
+							alert("通報の受付を完了しました。");
 							$('#report_modal').modal('hide');
 						} else if (result == 0) {
 							alert("システムのエラーです。管理者にお問い合わせください。");
