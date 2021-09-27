@@ -180,39 +180,41 @@
 <input type="hidden" value="" id="currentCompanyReviewId"/>
 <input type="hidden" value="" id="currentReplyId"/>
 
-<%--「通報する」のモーダルウィンドウ。--%>
-<div id="report_modal" data-backdrop="static" data-keyboard="false"
-     style="padding: 2%; background-color:#ffffff;">
-	<div class="warp_report_modal">
-		<div class="inf_title">
-			<h2 style="display:inline;">通報する</h2>
-			<div style="float:right;" id="modal_close_btn"> X </div>
+<div style="display: none">
+	<%--「通報する」のモーダルウィンドウ。--%>
+	<div id="report_modal" data-backdrop="static" data-keyboard="false"
+		 style="padding: 2%; background-color:#ffffff;">
+		<div class="warp_report_modal">
+			<div class="inf_title">
+				<h2 style="display:inline;">通報する</h2>
+				<div style="float:right;" id="modal_close_btn"> X </div>
 
-			<div style="text-align:left; margin-top: 5%;">
-				<span>作成者</span>
-				<span id="targetUserNickname"><%-- 通報するポストのニックネームが入力される。--%></span>
+				<div style="text-align:left; margin-top: 5%;">
+					<span>作成者</span>
+					<span id="targetUserNickname"><%-- 通報するポストのニックネームが入力される。--%></span>
+				</div>
+
+				<div style="text-align:left; margin-top: 5%;">
+					<span style="display: inline;">タイトル</span>
+					<span id="reportTitle"><%-- 通報するポストのタイトルが入力される。--%></span>
+				</div>
 			</div>
 
-			<div style="text-align:left; margin-top: 5%;">
-				<span style="display: inline;">タイトル</span>
-				<span id="reportTitle"><%-- 通報するポストのタイトルが入力される。--%></span>
+			<div class="ui inverted divider"></div>
+
+			<div id="report_reason_list">
+				<%-- タイプに対応する通報リスト出力する。 --%>
 			</div>
+
+			<div id="report_reason_textarea">
+				<%-- textarea를 로드 --%>
+			</div>
+
+			<button class="ui primary button" id="send_report"
+					style="width: 100%; height: 50px; text-align: center; margin-top: 20px;">
+				通報する
+			</button>
 		</div>
-
-		<div class="ui inverted divider"></div>
-
-		<div id="report_reason_list">
-			<%-- タイプに対応する通報リスト出力する。 --%>
-		</div>
-
-		<div id="report_reason_textarea">
-			<%-- textarea를 로드 --%>
-		</div>
-
-		<button class="ui primary button" id="send_report"
-				style="width: 100%; height: 50px; text-align: center; margin-top: 20px;">
-			通報する
-		</button>
 	</div>
 </div>
 
@@ -607,7 +609,4 @@
 	}
 
 	<%--신고하기 관련 AJAX 끝.--%>
-	<!-- -->
-
-
 </script>
