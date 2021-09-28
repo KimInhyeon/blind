@@ -9,6 +9,7 @@ import com.ksinfo.blind.company.vo.CompanyMenuVO;
 import com.ksinfo.blind.company.vo.CompanyReviewAverageVO;
 import com.ksinfo.blind.company.vo.CompanyReviewRecommendResultVO;
 import com.ksinfo.blind.company.vo.CompanyReviewVO;
+import com.ksinfo.blind.company.vo.CompanySearchVO;
 import com.ksinfo.blind.security.Account;
 import com.ksinfo.blind.util.PageNavigator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,13 @@ public class CompanyReviewController {
 	}
 
 	@GetMapping
-	public ModelAndView writeCompanyReview(@RequestParam long companyId) { // パラメータにcompanyIdが入ってくる理由が不明
+	public ModelAndView writeCompanyReview(@RequestParam(defaultValue = "0") long companyId) { // パラメータにcompanyIdが入ってくる理由が不明
 		ModelAndView modelAndView = new ModelAndView("main/company/companyReviewWrite");
-		modelAndView = modelAndView.addObject("companyId", companyId);
+		if (companyId > 0) {
+			String companyName = companyReviewService.getCompanyName(companyId);
+			modelAndView.addObject("companyId", companyId);
+			modelAndView.addObject("companyName", companyName);
+		}
 
 		return modelAndView;
 	}

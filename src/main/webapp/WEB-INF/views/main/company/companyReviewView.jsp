@@ -160,27 +160,65 @@
 							</div>
 						</div>
 					</td>
-					<td><h5>장점</h5></td>
+					<td>
+					<c:choose>
+						<c:when test="${empty company.advantages}">
+							<div id="writtenReview"><h5>장점</h5></div>
+						</c:when>
+						<c:otherwise>
+							<h5>장점</h5>
+						</c:otherwise>
+					</c:choose>
+					</td>
 				</tr>
 				<tr>
 					<td></td>
-					<td>${company.advantages}</td>
+					<td>
+					<c:choose>
+						<c:when test="${empty company.advantages}">
+							<div id="writtenReview"></div>
+						</c:when>
+						<c:otherwise>
+							${company.advantages}
+						</c:otherwise>
+					</c:choose>
+					</td>
 				</tr>
 				<tr>
 					<td></td>
-					<td><h5>단점</h5></td>
+					<td>
+					<c:choose>
+						<c:when test="${empty company.advantages}">
+							<div id="writtenReview"><h5>단점</h5></div>
+						</c:when>
+						<c:otherwise>
+							<h5>단점</h5>
+						</c:otherwise>
+					</c:choose>
+					</td>
 				</tr>
 				<tr>
 					<td></td>
-					<td>${company.disadvantages}</td>
+					<td>
+					<c:choose>
+						<c:when test="${empty company.advantages}">
+							<div id="writtenReview">${company.disadvantages}</div>
+						</c:when>
+						<c:otherwise>
+							${company.disadvantages}
+						</c:otherwise>
+					</c:choose>
+					</td>
 				</tr>
 				<tr>
 					<td>
+					<c:if test="${not empty company.advantages}">
 						<button data-id="${company.companyReviewId}" onclick="countUp(this);">
 							<div style="display: flex;<c:if test="${company.recommended}"> color: red</c:if>">
 								도움이 돼요(${company.helpfulCount})
 							</div>
 						</button>
+					</c:if>
 					</td>
 					<td></td>
 				<c:if test="${not company.recommended}">　<%-- おすすめしなかった時には表示しない理由は？ --%>
