@@ -104,7 +104,7 @@
 		SELECT SUM(helpful) AS helpfulCount, (
 			SELECT helpful
 			FROM blind.review_recommend_inf
-			WHERE company_review_id = rri.company_review_id
+			WHERE company_review_id = #{companyReviewId}
 				AND user_id = #{userId}
 			) AS helpful
 		FROM blind.review_recommend_inf AS rri

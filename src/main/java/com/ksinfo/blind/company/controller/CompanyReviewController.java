@@ -64,6 +64,8 @@ public class CompanyReviewController {
 		@AuthenticationPrincipal Account account,
 		@PathVariable long companyId, @RequestParam(defaultValue = "1") int page
 	) {
+
+
 		CompanyMenuVO companyMenu = companyCommonService.getCompanyMenu(companyId);
 		CompanyReviewAverageVO reviewAverage = companyReviewService.getReviewAveragePoint(companyId);
 		PageNavigator navi = companyReviewService.getNavigator(page, companyId);

@@ -6,6 +6,24 @@
 		padding-top: 10px;
 
 	}
+
+	#writtenReview{
+		color: transparent;
+		text-shadow: 0 0 5px #000;
+		transition: all 250ms ease-in;
+		-ms-user-select: none;
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		user-select: none;
+	}
+
+	.link-icon { position: relative; display: inline-block; width: auto;
+		font-size: 14px; font-weight: 500; color: #333; margin-right: 10px; padding-top: 50px; }
+	.link-icon.twitter { background-image: url(resources/images/icon-twitter.png); background-repeat: no-repeat; }
+	.link-icon.facebook { background-image: url(resources/images/icon-facebook.png); background-repeat: no-repeat; }
+
+
+
 </style>
 
 <%@ include file="/WEB-INF/views/main/company/companyMenu.jsp" %>
@@ -168,6 +186,11 @@
 				<c:if test="${not company.recommended}">　<%-- おすすめしなかった時には表示しない理由は？ --%>
 					<td style="float: right !important;">
 						<button onclick="copy()">COPY</button>
+
+						<a id="btnTwitter" class="link-icon twitter" href="javascript:shareTwitter();">트위터</a>
+						<a id="btnFacebook" class="link-icon facebook" href="javascript:shareFacebook();">페이스북</a>
+						<a id="btnKakao" class="link-icon kakao" href="javascript:shareKakao();">카카오톡</a>
+
 					</td>
 				</c:if>
 				</tr>
@@ -227,8 +250,18 @@
 		location.search = searchParams.toString();
 	}
 
+
+	function shareFacebook() {
+		var sendUrl = "https://devpad.tistory.com/53"; // 전달할 URL
+		window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
+	}
+	function shareTwitter() {
+		var sendUrl = "devpad.tistory.com/"; // 전달할 URL
+		window.open("https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl);
+	}
+
 	function countUp(button) {
-		fetch("company/review", {
+		fetch("company/review/recommend", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
