@@ -1,0 +1,41 @@
+		SELECT po.board_id AS boardId,
+			board_topic_name AS boardTopicName,
+			bm.post_id AS postId,
+			post_title AS postTitle,
+			post_contents AS postContents,
+			CASE WHEN us.logical_del_flag = '0' THEN company_id ELSE 0 END AS companyId,<--★必要？-->
+			CASE WHEN us.logical_del_flag = '0' THEN company_name END AS companyName,
+			CASE WHEN us.logical_del_flag = '0' THEN user_nickname ELSE '脱会した会員' END AS userNickname,
+			TO_CHAR(po.rec_create_date, 'MM.DD') AS postCreateDate,
+			post_count AS postCount,
+			EXISTS(
+				SELECT
+				FROM blind.post_recommend_inf
+				WHERE post_id = bm.post_id
+					AND user_id = 146 <-- ★削除（意味不明確。必要？）-->
+					AND post_recommend_flag = '1'
+			) AS recommended, (
+				SELECT COUNT(*)
+				FROM blind.post_recommend_inf
+				WHERE post_id = bm.post_id
+					AND post_recommend_flag = '1'
+			) AS postRecommendCount, (
+				SELECT COUNT(*)
+				FROM blind.reply_mgt
+				WHERE post_id = bm.post_id
+					AND logical_del_flag = '0'
+			) AS replyCount
+		FROM blind.bookmark_mgt AS bm
+			INNER JOIN blind.post_mgt AS po 
+				ON bm.post_id = po.post_id AND po.logical_del_flag = '0'
+			INNER JOIN blind.board_mgt AS bo 
+				ON po.board_id = bo.board_id AND closed_flag = '0' AND bo.logical_del_flag = '0'
+			INNER JOIN blind.post_count_inf AS pci <--★LEFT JOINすること。全体的にINNER JOINは両テーブルにレコードが常に存在することが確実な時以外は避けてほしい。-->
+				ON bm.post_id = pci.post_id
+			INNER JOIN blind.user_mgt AS us 
+				ON po.user_id = us.user_id AND last_generation_flag = '1'
+			INNER JOIN blind.company_mgt USING(company_id) 
+		WHERE bm.logical_del_flag = '0'
+			AND bm.user_id = 146 <--★削除（意味不明確。必要？）-->
+		ORDER BY bm.rec_create_date DESC
+		FETCH FIRST 30 ROWS ONLY;

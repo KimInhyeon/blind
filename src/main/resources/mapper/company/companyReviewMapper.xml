@@ -135,6 +135,15 @@
 		);
 	</insert>
 
+	<select id="getCompanyName" resultType="string">
+		SELECT company_name
+		FROM blind.company_mgt
+		WHERE company_id = #{companyId}
+			AND verify_flag = '1'
+			AND closing_flag = '0'
+			AND logical_del_flag = '0';
+	</select>
+
 
 	<select id="getCompanyName" resultType="string">
 		SELECT company_name
