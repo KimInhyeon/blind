@@ -35,7 +35,7 @@ public final class ReplyVO {
 		this.targetNickname = targetNickname;
 		this.replyContents = new ArrayList<>();
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0, length = replyContents.length() - 1; i < length; ++i) {
+		for (int i = 0, length = replyContents.length(); i < length; ++i) {
 			char c = replyContents.charAt(i);
 			switch (c) {
 				case '>':

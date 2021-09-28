@@ -155,4 +155,73 @@
 			FETCH FIRST 10 ROWS ONLY
 		</if>;
 	</select>
+
+	<insert id="writeReply" parameterType="com.ksinfo.blind.board.dto.ReplyDto">
+		INSERT INTO blind.reply_mgt (
+			post_id, target_reply_id, user_id, reply_file_url, reply_contents, reply_blind_flag,
+			rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			#{postId}, #{targetReplyId}, #{userId}, #{replyFileUrl}, #{replyContents}, #{replyBlindFlag},
+			#{userId}, NOW(), #{userId}, NOW(), '0'
+		);
+	</insert>
+
+	<select id="getLatestReplyId" parameterType="com.ksinfo.blind.board.dto.ReplyDto" resultType="_long">
+		SELECT MAX(reply_id)
+		FROM blind.reply_mgt
+		WHERE user_id = #{userId}
+			AND post_id = #{postId};
+	</select>
+
+	<update id="updateReply" parameterType="com.ksinfo.blind.board.dto.ReplyUpdateDto">
+		UPDATE blind.reply_mgt
+		SET reply_file_url = #{replyFileUrl},
+			reply_contents = #{replyContents},
+			rec_update_user_id = #{userId},
+			rec_update_date = NOW()
+		WHERE reply_id = #{replyId};
+	</update>
+
+	<update id="deleteReply">
+		UPDATE blind.reply_mgt
+		SET rec_update_user_id = #{userId},
+			rec_update_date = NOW(),
+			logical_del_flag = '1'
+		WHERE reply_id = #{replyId};
+	</update>
+
+	<select id="getReplyRecommendId" parameterType="com.ksinfo.blind.board.dto.ReplyRecommendDto" resultType="long">
+		SELECT reply_recommend_id
+		FROM blind.reply_recommend_inf
+		WHERE user_id = #{userId}
+			AND reply_id = #{replyId};
+	</select>
+
+	<insert id="recommendReply" parameterType="com.ksinfo.blind.board.dto.ReplyRecommendDto">
+		INSERT INTO blind.reply_recommend_inf (
+			reply_id, user_id, reply_recommend_date, reply_recommend_flag
+		) VALUES (
+			#{replyId}, #{userId}, NOW(), '1'
+		);
+	</insert>
+
+	<update id="updateReplyRecommend">
+		UPDATE blind.reply_recommend_inf
+		SET reply_recommend_date = NOW(),
+			reply_recommend_flag = CASE WHEN reply_recommend_flag = 1 THEN 0 ELSE 1 END
+		WHERE reply_recommend_id = #{replyRecommendId};
+	</update>
+
+	<select id="getReplyRecommendResult" resultType="com.ksinfo.blind.board.vo.ReplyRecommendVO">
+		SELECT SUM(reply_recommend_flag) AS replyRecommendCount,
+			EXISTS(
+				SELECT
+				FROM blind.reply_recommend_inf
+				WHERE reply_id = #{replyId}
+					AND user_id = #{userId}
+					AND reply_recommend_flag = 1
+			) AS recommended
+		FROM blind.reply_recommend_inf
+		WHERE reply_id = #{replyId}
+	</select>
 </mapper>

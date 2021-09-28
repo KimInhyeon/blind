@@ -3,8 +3,9 @@ package com.ksinfo.blind.board.service;
 import com.ksinfo.blind.board.dto.PostDto;
 import com.ksinfo.blind.board.dto.PostRecommendDto;
 import com.ksinfo.blind.board.dto.PostRequestDto;
+import com.ksinfo.blind.board.dto.PostUpdateDto;
 import com.ksinfo.blind.board.mapper.PostMapper;
-import com.ksinfo.blind.board.vo.PostRecommendResultVO;
+import com.ksinfo.blind.board.vo.PostRecommendVO;
 import com.ksinfo.blind.board.vo.PostVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,15 @@ public class PostService {
 		return postMapper.writePost(postDto);
 	}
 
+	public void updatePost(PostUpdateDto postUpdateDto) {
+		postUpdateDto.escapeDoubleQuote();
+		postMapper.updatePost(postUpdateDto);
+	}
+
+	public void deletePost(long userId, long postId) {
+		postMapper.deletePost(userId, postId);
+	}
+
 	@Transactional(isolation = Isolation.READ_UNCOMMITTED)
 	public void readPost(long postId) {
 		postMapper.readPost(postId);
@@ -35,7 +45,7 @@ public class PostService {
 		return postMapper.getPost(postRequest);
 	}
 
-	public PostRecommendResultVO recommendPost(PostRecommendDto postRecommendDto) {
+	public PostRecommendVO recommendPost(PostRecommendDto postRecommendDto) {
 		Long postRecommendId = postMapper.searchPostRecommend(postRecommendDto);
 		if (postRecommendId == null) {
 			postMapper.recommendPost(postRecommendDto);

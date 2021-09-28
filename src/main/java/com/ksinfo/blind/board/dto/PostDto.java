@@ -5,15 +5,15 @@ import java.util.List;
 public final class PostDto {
 	private long userId;
 	private final long boardId;
-	private final String title;
-	private final char blindFlag;
-	private final List<PostBlock> contents;
+	private final String postTitle;
+	private final char postBlindFlag;
+	private final List<PostBlock> postContents;
 
-	public PostDto(long boardId, String title, char blindFlag, List<PostBlock> contents) {
+	public PostDto(long boardId, String postTitle, char postBlindFlag, List<PostBlock> postContents) {
 		this.boardId = boardId;
-		this.title = title;
-		this.blindFlag = blindFlag;
-		this.contents = contents;
+		this.postTitle = postTitle;
+		this.postBlindFlag = postBlindFlag;
+		this.postContents = postContents;
 	}
 
 	public void setUserId(long userId) {
@@ -28,31 +28,31 @@ public final class PostDto {
 		return userId;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getPostTitle() {
+		return postTitle;
 	}
 
-	public char getBlindFlag() {
-		return blindFlag;
+	public char getPostBlindFlag() {
+		return postBlindFlag;
 	}
 
-	public String getContents() {
+	public String getPostContents() {
 		StringBuilder sb = new StringBuilder().append('[');
-		int size = contents.size();
+		int size = postContents.size();
 		if (size > 0) {
-			sb.append(contents.get(0));
+			sb.append(postContents.get(0));
 		} else {
 			return sb.append(']').toString();
 		}
 		for (int i = 1; i < size; ++i) {
-			sb.append(',').append(contents.get(i));
+			sb.append(',').append(postContents.get(i));
 		}
 		return sb.append(']').toString();
 	}
 
 	public void escapeDoubleQuote() {
-		for (int i = contents.size() - 1; i > -1; --i) {
-			PostBlock postBlock = contents.get(i);
+		for (int i = postContents.size() - 1; i > -1; --i) {
+			PostBlock postBlock = postContents.get(i);
 			if (postBlock instanceof ParagraphBlock) {
 				((ParagraphBlock.ParagraphData) postBlock.getData()).escapeDoubleQuote();
 			}
