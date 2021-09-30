@@ -233,7 +233,6 @@
 
 		document.querySelectorAll("i.thumbs.up.icon").forEach(function (icon) {
 			icon.addEventListener("click", function () {
-				console.log(this.dataset.id);
 				fetch("post/recommend", {
 					method: "POST",
 					headers: {
