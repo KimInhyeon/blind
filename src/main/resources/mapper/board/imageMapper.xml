@@ -52,4 +52,14 @@ $$ LANGUAGE plpgsql;
 		</choose>
 			= #{postFileId};
 	</update>
+
+	<select id="getPostFileList" resultType="com.ksinfo.blind.board.vo.PostEditFileVO">
+		SELECT post_file_id AS postFileId,
+			post_file_origin_name AS postFileOriginName,
+			post_file_size AS postFileSize
+		FROM blind.post_file_mgt
+		WHERE post_id = #{postId}
+			AND rec_create_user_id = #{userId}
+			AND logical_del_flag = '0';
+	</select>
 </mapper>

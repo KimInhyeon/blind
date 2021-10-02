@@ -43,6 +43,7 @@
 <script src="resources/js/editor/simple-image.js"></script>
 <script>
 	let editor;
+	let totalFileSize;
 
 	async function deleteFile(postFileId) {
 		return await fetch("image", {
@@ -109,6 +110,7 @@
 		const postModalTitle = document.getElementById("postModalTitle");
 		const postUploadFiles = document.getElementById("postUploadFiles");
 		document.getElementById("openPostModal").addEventListener("click", function () {
+			totalFileSize = 0;
 			postModal.dataset.id = "0";
 			$(postModal).modal("show");
 			if (editor === undefined) {
@@ -173,7 +175,6 @@
 		<%-- ファイルアップロード --%>
 		const fileSizeLimit = 10485760;
 		const totalLimit = 104857600;
-		let totalFileSize = 0;
 		const uploadingText = document.getElementById("uploadingText");
 		postUploadFiles.previousElementSibling.addEventListener("click", function () {
 			postUploadFiles.click();
@@ -290,37 +291,72 @@
 					editor.focus();
 					return;
 				}
-				if (confirm("ポストを作成しますか？")) {
-					const blockList = savedData.blocks;
-					for (let i = blockList.length - 1; i > -1; --i) {
-						delete blockList[i].id;
-					}
-					uploadingText.firstElementChild.innerText = "ポストをアップロードしています";
-					uploadingText.className = "ui active dimmer";
-					fetch("post", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json"
-						},
-						body: JSON.stringify({
-							title: postModalTitle.value,
-							boardId: postModalTopic.value,
-							blindFlag: "0", <%-- 確認必要 --%>
-							contents: savedData.blocks
-						})
-					}).then(function (response) {
-						if (response.ok) {
-							return response.json();
+				if (postModal.dataset.id === "0") {
+					if (confirm("ポストを作成しますか？")) {
+						const blockList = savedData.blocks;
+						for (let i = blockList.length - 1; i > -1; --i) {
+							delete blockList[i].id;
 						}
-						throw response.status;
-					}).then(function (postId) {
-						location.href = "post/" + postId;
-					}).catch(function (error) {
-						uploadingText.className = "ui disabled dimmer";
-						uploadingText.firstElementChild.innerText = "ファイルをアップロードしています";
-						alert("予期しないエラーが発生しました");
-						console.error(error);
-					});
+						uploadingText.firstElementChild.innerText = "ポストをアップロードしています";
+						uploadingText.className = "ui active dimmer";
+						fetch("post", {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify({
+								postTitle: postModalTitle.value,
+								boardId: postModalTopic.value,
+								postBlindFlag: "0", <%-- 確認必要 --%>
+								postContents: savedData.blocks
+							})
+						}).then(function (response) {
+							if (response.ok) {
+								return response.json();
+							}
+							throw response.status;
+						}).then(function (postId) {
+							location.href = "post/" + postId;
+						}).catch(function (error) {
+							uploadingText.className = "ui disabled dimmer";
+							uploadingText.firstElementChild.innerText = "ファイルをアップロードしています";
+							alert("予期しないエラーが発生しました");
+							console.error(error);
+						});
+					}
+				} else {
+					if (confirm("ポストを修正しますか？")) {
+						const blockList = savedData.blocks;
+						for (let i = blockList.length - 1; i > -1; --i) {
+							delete blockList[i].id;
+						}
+						uploadingText.firstElementChild.innerText = "ポストを修正しています";
+						uploadingText.className = "ui active dimmer";
+						fetch("post", {
+							method: "PUT",
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify({
+								postId: postModal.dataset.id,
+								postTitle: postModalTitle.value,
+								boardId: postModalTopic.value,
+								postBlindFlag: "0", <%-- 確認必要 --%>
+								postContents: savedData.blocks
+							})
+						}).then(function (response) {
+							if (!response.ok) {
+								throw response.status;
+							}
+						}).then(function () {
+							location.reload();
+						}).catch(function (error) {
+							uploadingText.className = "ui disabled dimmer";
+							uploadingText.firstElementChild.innerText = "ファイルをアップロードしています";
+							alert("予期しないエラーが発生しました");
+							console.error(error);
+						});
+					}
 				}
 			});
 		});

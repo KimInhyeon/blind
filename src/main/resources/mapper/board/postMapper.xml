@@ -32,8 +32,32 @@ $$ LANGUAGE plpgsql;
 -->
 	<select id="writePost" parameterType="com.ksinfo.blind.board.dto.PostDto"
 			resultType="_long" statementType="CALLABLE">
-		{CALL blind.write_post(#{boardId}, #{userId}, #{title}, #{blindFlag}, #{contents})}
+		{CALL blind.write_post(#{boardId}, #{userId}, #{postTitle}, #{postBlindFlag}, #{postContents})}
 	</select>
+
+	<update id="updatePost" parameterType="com.ksinfo.blind.board.dto.PostUpdateDto">
+		UPDATE blind.post_mgt
+		SET board_id = #{boardId},
+			post_title = #{postTitle},
+			post_blind_flag = #{postBlindFlag},
+			post_contents = #{postContents},
+			post_update_date = NOW(),
+			rec_update_user_id = #{userId},
+			rec_update_date = NOW()
+		WHERE post_id = #{postId}
+			AND user_id = #{userId}
+			AND logical_del_flag = '0';
+	</update>
+
+	<update id="deletePost">
+		UPDATE blind.post_mgt
+		SET rec_update_user_id = #{userId},
+			rec_update_date = NOW(),
+			logical_del_flag = '1'
+		WHERE post_id = #{postId}
+			AND user_id = #{userId}
+			AND logical_del_flag = '0';
+	</update>
 
 	<update id="readPost">
 		UPDATE blind.post_count_inf
@@ -136,14 +160,16 @@ $$ LANGUAGE plpgsql;
 	</update>
 
 	<select id="getPostRecommendResult" parameterType="com.ksinfo.blind.board.dto.PostRecommendDto"
-			resultType="com.ksinfo.blind.board.vo.PostRecommendResultVO">
-		SELECT COUNT(*) AS postRecommendCount, (
-				SELECT post_recommend_flag = '1'
+			resultType="com.ksinfo.blind.board.vo.PostRecommendVO">
+		SELECT COUNT(*) AS postRecommendCount,
+			EXISTS(
+				SELECT
 				FROM blind.post_recommend_inf
 				WHERE post_id = #{postId}
 					AND user_id = #{userId}
+					AND post_recommend_flag = '1'
 			) AS recommended
-		FROM blind.post_recommend_inf AS pri
+		FROM blind.post_recommend_inf
 		WHERE post_id = #{postId}
 			AND post_recommend_flag = '1';
 	</select>

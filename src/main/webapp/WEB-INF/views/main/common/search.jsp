@@ -249,7 +249,10 @@
 
 <script>
 	function bookmark(bookmark) {
-		<sec:authorize access="isAuthenticated()">
+	<sec:authorize access="isAnonymous()">
+		alert("ログインしていない");
+	</sec:authorize>
+	<sec:authorize access="isAuthenticated()">
 		fetch("bookmark", {
 			method: "POST",
 			headers: {
@@ -262,12 +265,12 @@
 			}
 			throw response.status;
 		}).then(function (result) {
-			bookmark.className = result ? "bookmark link icon" : "bookmark link icon outline";
+			bookmark.className = result ? "bookmark link icon red" : "bookmark link icon outline";
 		}).catch(function (error) {
 			alert("予期しないエラーが発生しました");
 			console.error(error);
 		});
-		</sec:authorize>
+	</sec:authorize>
 	}
 
 	addEventListener("DOMContentLoaded", function () {
@@ -292,10 +295,8 @@
 					post.postRecommendCount + "</span><span class=\"postInfo\"><i class=\"comment outline icon\"></i>" +
 					post.replyCount + "</span></div><div class=\"right aligned column\"><span>" + post.postCreateDate +
 					"</span><i class=\"bookmark link icon ";
-			if (!post.bookmarked) {
-				html += "outline ";
-			}
-			html += "data-id=\"" + post.postId + "\" onclick=\"bookmark(this);\"></i></div></div></article>";
+			html += post.bookmarked ? "red" : "outline";
+			html += "\" data-id=\"" + post.postId + "\" onclick=\"bookmark(this);\"></i></div></div></article>";
 
 			return html;
 		};
@@ -327,6 +328,7 @@
 					for (let i = 0; i < postListLength; ++i) {
 						html += getArticleHtml(newPostList[i]);
 					}
+					postList.className = "ui stackable two column grid";
 					if (Number(searchParams.get("postId"))) {
 						postList.innerHTML += html;
 					} else {
@@ -335,10 +337,14 @@
 					articleCount += postListLength;
 					postId = newPostList[postListLength - 1].postId;
 					addNewObserve();
-					searchParams.delete("ajax");
-					searchParams.delete("postId");
-					url.search = searchParams.toString();
+				} else {
+					postList.className = "ui one column grid";
+					postList.innerHTML =
+						"<div class=\"ui divider\"></div><div class=\"center aligned column\">データがありません</div>";
 				}
+				searchParams.delete("ajax");
+				searchParams.delete("postId");
+				url.search = searchParams.toString();
 			}).catch(function (error) {
 				alert("予期しないエラーが発生しました");
 				console.error(error);
@@ -368,7 +374,7 @@
 		};
 		addNewObserve();
 
-		document.getElementById("viewPostsSelectedTopic").addEventListener("change", function () {
+		document.getElementById("viewPostsSelectedTopic").addEventListener("change", async function () {
 			intersectionObserver.disconnect();
 			articleCount = postId = 0;
 			boardId = this.value;
@@ -377,7 +383,7 @@
 			} else {
 				searchParams.set("boardId", boardId);
 			}
-			getNewArticle();
+			await getNewArticle();
 			addNewObserve();
 			history.pushState({
 				title: document.title,
