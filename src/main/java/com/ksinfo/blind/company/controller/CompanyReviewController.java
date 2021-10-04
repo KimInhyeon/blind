@@ -41,7 +41,7 @@ public class CompanyReviewController {
 	}
 
 	@GetMapping
-	public ModelAndView writeCompanyReview(@RequestParam(defaultValue = "0") long companyId) { // パラメータにcompanyIdが入ってくる理由が不明
+	public ModelAndView writeCompanyReview(@RequestParam(defaultValue = "0") long companyId) {
 		ModelAndView modelAndView = new ModelAndView("main/company/companyReviewWrite");
 		if (companyId > 0) {
 			String companyName = companyReviewService.getCompanyName(companyId);

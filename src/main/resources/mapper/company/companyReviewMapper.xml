@@ -145,15 +145,6 @@
 	</select>
 
 
-	<select id="getCompanyName" resultType="string">
-		SELECT company_name
-		FROM blind.company_mgt
-		WHERE company_id = #{companyId}
-			AND verify_flag = '1'
-			AND closing_flag = '0'
-			AND logical_del_flag = '0';
-	</select>
-
 	<select id="getCompanyReviews" resultType="com.ksinfo.blind.company.vo.CompanyReviewVO">
 		SELECT DISTINCT crm.company_review_id AS companyReviewId <!-- 포스트들처럼 여러개의 기업리뷰글을 게시 및 링크하려면 필요. -->
 			, crm.all_point AS allPoint <!-- 기업리뷰1-별점(1)총 별점 -->

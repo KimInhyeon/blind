@@ -15,10 +15,11 @@
 		-moz-user-select: none;
 		-webkit-user-select: none;
 		user-select: none;
+		z-index: 9;
 	}
 
 	.link-icon { position: relative; display: inline-block; width: auto;
-		font-size: 14px; font-weight: 500; color: #333; margin-right: 10px; padding-top: 50px; }
+		font-size: 11px; font-weight: 200; color: #333; margin-right: 10px; padding-top: 50px; }
 	.link-icon.twitter { background-image: url(resources/images/icon-twitter.png); background-repeat: no-repeat; }
 	.link-icon.facebook { background-image: url(resources/images/icon-facebook.png); background-repeat: no-repeat; }
 
@@ -112,7 +113,7 @@
 						</div>
 						<div class="ui flowing popup top left transition hidden">
 							<div class="column" data-position="bottom left">
-								<div class="ui button" style="background: white;">신고</div>
+								<div class="ui button" style="background: white;">申告</div>
 							</div>
 						</div>
 					</td>
@@ -163,10 +164,11 @@
 					<td>
 					<c:choose>
 						<c:when test="${empty company.advantages}">
-							<div id="writtenReview"><h5>장점</h5></div>
+							<i class="lock icon" style="position: absolute;z-index: 1;font-size:40px;margin:0 auto;"></i>
+							<div id="writtenReview"><h5>長所</h5></div>
 						</c:when>
 						<c:otherwise>
-							<h5>장점</h5>
+							<h5>長所</h5>
 						</c:otherwise>
 					</c:choose>
 					</td>
@@ -176,7 +178,7 @@
 					<td>
 					<c:choose>
 						<c:when test="${empty company.advantages}">
-							<div id="writtenReview"></div>
+							<div id="writtenReview">DDDDDDDDDDDDDDDDDDDDDDDDDDDD</div>
 						</c:when>
 						<c:otherwise>
 							${company.advantages}
@@ -186,13 +188,16 @@
 				</tr>
 				<tr>
 					<td></td>
-					<td>
+					<td style="align:center;">
 					<c:choose>
 						<c:when test="${empty company.advantages}">
-							<div id="writtenReview"><h5>단점</h5></div>
+							<div id="writtenReview"><h5>短所</h5></div>
+
+							<button style="position: absolute;z-index: 1;left:30%;font-size:20px;display: inline-block;">レビューを書く</button>
+
 						</c:when>
 						<c:otherwise>
-							<h5>단점</h5>
+							<h5>短所</h5>
 						</c:otherwise>
 					</c:choose>
 					</td>
@@ -202,7 +207,7 @@
 					<td>
 					<c:choose>
 						<c:when test="${empty company.advantages}">
-							<div id="writtenReview">${company.disadvantages}</div>
+							<div id="writtenReview">DDDDDDDDDDDDDDDDDDDDDDDDDDDD</div>
 						</c:when>
 						<c:otherwise>
 							${company.disadvantages}
@@ -215,7 +220,7 @@
 					<c:if test="${not empty company.advantages}">
 						<button data-id="${company.companyReviewId}" onclick="countUp(this);">
 							<div style="display: flex;<c:if test="${company.recommended}"> color: red</c:if>">
-								도움이 돼요(${company.helpfulCount})
+								<i class="thumbs up outline icon"></i><span>いいね(${company.helpfulCount})</span>
 							</div>
 						</button>
 					</c:if>
@@ -223,12 +228,15 @@
 					<td></td>
 				<c:if test="${not company.recommended}">　<%-- おすすめしなかった時には表示しない理由は？ --%>
 					<td style="float: right !important;">
-						<button onclick="copy()">COPY</button>
 
-						<a id="btnTwitter" class="link-icon twitter" href="javascript:shareTwitter();">트위터</a>
-						<a id="btnFacebook" class="link-icon facebook" href="javascript:shareFacebook();">페이스북</a>
-						<a id="btnKakao" class="link-icon kakao" href="javascript:shareKakao();">카카오톡</a>
+						<div style="display: flex">
+						<i class="copy outline icon" onclick="copy()"></i>>
 
+						<a style="width:50px;" id=btnTwitter" class="link-icon twitter" href="javascript:shareTwitter();"></a>
+
+						<a style="width:50px;" id="btnFacebook" class="link-icon facebook" href="javascript:shareFacebook();"></a>
+
+						</div>
 					</td>
 				</c:if>
 				</tr>
@@ -315,11 +323,12 @@
 			if (responseBody.helpful) {
 				html += " color: red";
 			}
-			html += "\">도움이 돼요(" + responseBody.helpfulCount + ")</div>";
+			html += "\"><i class=\"thumbs up outline icon\"></i>" +
+					"<span>いいね(" + responseBody.helpfulCount + ")<span></div>";
 			button.innerHTML = html;
 		}).catch(function (error) {
 			console.error(error);
-			alert("에러");
+
 		});
 	}
 
@@ -333,7 +342,7 @@
 	}
 
 	function copy() {
-		copyToClipboard('company/review/${companyMenu.companyId}');
+		copyToClipboard('blind/company/review/${companyMenu.companyId}');
 	}
 
 	addEventListener("DOMContentLoaded", function () {
