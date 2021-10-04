@@ -230,11 +230,11 @@
 					<td style="float: right !important;">
 
 						<div style="display: flex">
-						<i class="copy outline icon" onclick="copy()"></i>>
+						<button class="circular ui icon button" class="link-icon copy" onclick="copy()" style="width:50px;"><i class="copy outline icon" onclick="copy()"></i></button>
 
 						<a style="width:50px;" id=btnTwitter" class="link-icon twitter" href="javascript:shareTwitter();"></a>
 
-						<a style="width:50px;" id="btnFacebook" class="link-icon facebook" href="javascript:shareFacebook();"></a>
+						<a style="width:50px;" id="btnFacebook" class="link-icon facebook" href="javascript:shareFacebook('http://localhost:8282/blind/company/review/${companyId}');"></a>
 
 						</div>
 					</td>
@@ -297,13 +297,14 @@
 	}
 
 
-	function shareFacebook() {
-		var sendUrl = "https://devpad.tistory.com/53"; // 전달할 URL
-		window.open("http://www.facebook.com/sharer/sharer.php?u=" + sendUrl);
+
+	function shareFacebook(url) {
+
+		window.open("http://www.facebook.com/sharer/sharer.php?u=" + url);
 	}
 	function shareTwitter() {
-		var sendUrl = "devpad.tistory.com/"; // 전달할 URL
-		window.open("https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl);
+		var sendUrl = "http://localhost:8282/blind/company/review/" +${companyId}; // 전달할 URL
+		window.open("https://twitter.com/intent/tweet?url=" + sendUrl);
 	}
 
 	function countUp(button) {
@@ -342,7 +343,7 @@
 	}
 
 	function copy() {
-		copyToClipboard('blind/company/review/${companyMenu.companyId}');
+		copyToClipboard('http://localhost:8282/blind/company/review/${companyMenu.companyId}');
 	}
 
 	addEventListener("DOMContentLoaded", function () {
