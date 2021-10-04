@@ -164,7 +164,7 @@
 					<td>
 					<c:choose>
 						<c:when test="${empty company.advantages}">
-							<i class="lock icon" style="position: absolute;z-index: 1;font-size:40px;margin:0 auto;"></i>
+							<i class="lock icon" style="position: absolute;z-index: 1;left:30%;font-size:80px;display: inline-block;"></i>
 							<div id="writtenReview"><h5>長所</h5></div>
 						</c:when>
 						<c:otherwise>
@@ -193,7 +193,7 @@
 						<c:when test="${empty company.advantages}">
 							<div id="writtenReview"><h5>短所</h5></div>
 
-							<button style="position: absolute;z-index: 1;left:30%;font-size:20px;display: inline-block;">レビューを書く</button>
+							<button style="position: absolute;z-index: 1;left:28%;font-size:20px;display: inline-block;">レビューを書く</button>
 
 						</c:when>
 						<c:otherwise>
