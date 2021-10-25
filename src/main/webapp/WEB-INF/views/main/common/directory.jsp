@@ -124,16 +124,17 @@
 			let html = "";
 			const companyList = directory.companyList;
 			for (let i = 0, companyListLength = companyList.length; i < companyListLength; ++i) {
-				html += "<a class=\"column item\" href=" + companyList[i].companyId +
-						"\"companyIntroduction?companyId=\">" + companyList[i].companyName + "　紹介</a>" +
-						"<a class=\"column item\" href=\"companyShowReview?companyId=" + companyList[i].companyId +
+				html += "<a class=\"column item\" href=\"company/introduction/" + companyList[i].companyId +
+						"\">" + companyList[i].companyName + "　紹介</a>" +
+						"<a class=\"column item\" href=\"company/review/" + companyList[i].companyId +
 						"\">" + companyList[i].companyName + "　レビュー</a>" +
-						"<a class=\"column item\">" + companyList[i].companyName + "　掲示板</a>" +
-						"<a class=\"column item\" href=\"companyShowReview?companyId=" + companyList[i].companyId +
+						"<a class=\"column item\" href=\"company/post/" + companyList[i].companyId +
+						"\">" + companyList[i].companyName + "　掲示板</a>" +
+						"<a class=\"column item\" href=\"company/annualIncome/" + companyList[i].companyId +
 						"\">" + companyList[i].companyName + "　年収</a>" +
 						"<a class=\"column item\">" + companyList[i].companyName + "　採用</a>" +
-						"<a class=\"column item\" href=" + companyList[i].companyName +
-						"\"companyNews\">" + companyList[i].companyName + "　ニュース</a>";
+						"<a class=\"column item\" href=\"company/news/" + companyList[i].companyId +
+						"\">" + companyList[i].companyName + "　ニュース</a>";
 			}
 			directoryLinkList.innerHTML = html;
 

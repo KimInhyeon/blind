@@ -1,10 +1,12 @@
 package com.ksinfo.blind.member.controller;
 
-import com.ksinfo.blind.security.Account;
 import com.ksinfo.blind.member.dto.RegisterMemberDto;
 import com.ksinfo.blind.member.service.MemberService;
+import com.ksinfo.blind.security.Account;
+import com.ksinfo.blind.util.MessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,15 +17,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("member")
 public final class MemberController {
 	private final MemberService memberService;
+	private final MessageUtils messageUtils;
 
 	@Autowired
-	public MemberController(MemberService memberService) {
+	public MemberController(MemberService memberService, MessageUtils messageUtils) {
 		this.memberService = memberService;
+		this.messageUtils = messageUtils;
 	}
 
 	@GetMapping("login")
@@ -94,14 +100,6 @@ public final class MemberController {
 	public boolean changeNickname(@RequestBody String newNickname, @AuthenticationPrincipal Account account) {
 		return memberService.changeNickname(newNickname, account);
 	}
-/*
-	private final MessageUtils messageUtils;
-
-	@Autowired
-	public MemberController(MemberService memberService, MessageUtils messageUtils) {
-		this.memberService = memberService;
-		this.messageUtils = messageUtils;
-	}
 
 	@ResponseBody
 	@PostMapping("/loginApp")
@@ -130,7 +128,9 @@ public final class MemberController {
 	@ResponseBody
 	@PostMapping("/registerMemberApp")
 	public Map<String, String> signInApp(RegisterMemberDto member) {
-		int result = memberService.registerNewMember(member);
+//		int result = memberService.registerNewMember(member);
+		int result = 1;
+		memberService.registerNewMember(member);
 
 		Map<String, String> response = new HashMap<>(1);
 		if (result > 0) {
@@ -141,5 +141,4 @@ public final class MemberController {
 
 		return response;
 	}
- */
 }

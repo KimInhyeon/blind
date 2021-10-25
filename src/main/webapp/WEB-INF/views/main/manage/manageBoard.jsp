@@ -293,6 +293,7 @@
 		checkClosedBoard(closedFlag);
 		const anonymousFlag = document.getElementById("anonymousFlag");
 		anonymousFlag.value = anonymousFlag.dataset.value = td[2].dataset.value;
+		anonymousFlag.disabled = true;
 		const topicName = document.getElementById("topicName");
 		topicName.value = topicName.dataset.value = td[3].innerText;
 		const boardSubmit = document.getElementById("boardSubmit");
@@ -306,7 +307,9 @@
 		closedFlag.value = closedFlag.dataset.value = "0";
 		closedFlag.disabled = true;
 		checkClosedBoard(closedFlag);
-		document.getElementById("anonymousFlag").options[0].selected = true;
+		const anonymousFlag = document.getElementById("anonymousFlag");
+		anonymousFlag.disabled = false;
+		anonymousFlag.options[0].selected = true;
 		document.getElementById("order").value = String(lastOrder + 1);
 		document.getElementById("topicName").value = "";
 		const boardSubmit = document.getElementById("boardSubmit");

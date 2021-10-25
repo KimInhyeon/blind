@@ -87,6 +87,10 @@ public final class Account implements UserDetails {
 		return authorities;
 	}
 
+	public String getUserAuth() {
+		return authorities.get(0).toString();
+	}
+
 	public void setUserAuth(String userAuth) {
 		List<GrantedAuthority> authorities = new ArrayList<>(1);
 		authorities.add(new SimpleGrantedAuthority(userAuth));
