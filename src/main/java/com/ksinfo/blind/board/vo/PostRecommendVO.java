@@ -1,10 +1,10 @@
 package com.ksinfo.blind.board.vo;
 
-public final class PostRecommendResultVO {
+public final class PostRecommendVO {
 	private final int postRecommendCount;
 	private final boolean recommended;
 
-	public PostRecommendResultVO(int postRecommendCount, boolean recommended) {
+	public PostRecommendVO(int postRecommendCount, boolean recommended) {
 		this.postRecommendCount = postRecommendCount;
 		this.recommended = recommended;
 	}

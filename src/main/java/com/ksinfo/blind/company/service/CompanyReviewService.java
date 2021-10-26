@@ -70,6 +70,10 @@ public class CompanyReviewService {
 		return companyReviewMapper.getReviewRecommendResult(reviewRecommendDto);
 	}
 
+	public String getCompanyName(long companyId) {
+		return companyReviewMapper.getCompanyName(companyId);
+	}
+
 
 	//BLIND_0016 企業レビュー詳細照会(2021-08-25)
 	public List<CompanyReviewVO> getCompanyReviews(long companyId){

@@ -39,9 +39,9 @@
 						post_id AS postId,
 						post_title AS postTitle,
 						user_id,
-						pm.rec_create_date
+						rm.rec_create_date
 					FROM pm
-						INNER JOIN blind.reply_mgt USING (post_id)
+						INNER JOIN blind.reply_mgt AS rm USING (post_id)
 					UNION ALL
 					SELECT 'いいね' AS type,
 						pm.post_id AS postId,

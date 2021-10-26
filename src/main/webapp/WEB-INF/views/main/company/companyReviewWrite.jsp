@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style>
 	.box1 {
 		padding: 10px 15px 10px 16px;
@@ -29,16 +30,26 @@
 	<div class="ui container" style="padding: 50px 0;">
 		<div class="ui segment">
 			<div style="padding: 40px;">
-				<form class="ui form" id="reviewForm" name="reviewForm" method="post" action="company/review/write"
+				<form class="ui form" id="reviewForm" name="reviewForm" method="post" action="company/review"
 						onsubmit="return check();">
 					<div>
 						<h2 id="title1" style="padding-bottom: 30px;">企業レビューを作成</h2>
-						<img class="ui tiny left floated image" src="resources/images/company/${companyId}.png"
-								Id="companyReviewImg" width="90" height="90">
+						<img class="ui tiny left floated image" Id="companyReviewImg" width="90" height="90"
+								src="resources/images/company/
+								<c:choose>
+									<c:when test="${empty companyId}">0</c:when>
+									<c:otherwise>${companyId}</c:otherwise>
+								</c:choose>.png">
 						<h4>会社名</h4>
 						<div class="ui fluid input">
-							<input type="hidden" name="companyId" id="companyId">
-							<input type="text" class="box1" placeholder="会社名前で検索してください" id="companyName">
+							<input type="hidden" name="companyId" id="companyId"
+								<c:if test="${not empty companyId}">
+									   value="${companyId}"
+								</c:if>>
+							<input type="text" class="box1" placeholder="会社名前で検索してください" id="companyName"
+								<c:if test="${not empty companyName}">
+									value="${companyName}"
+								</c:if>>
 							<div id="selectList" style="position: absolute; top: 50px;
 									left: 5px; width: 100%; border-radius: 50px;">
 							</div>
@@ -228,9 +239,7 @@
 						});
 						$('#selectList').append(resultHtml);
 					} else {
-						$('#companyImg').html("");
-						resultHtml += '<img src="resources/images/logo1.png" width="90" height="90">';
-						$('#companyImg').append(resultHtml);
+						document.getElementById("companyReviewImg").src = "resources/images/company/0.png";
 					}
 				},
 				error: function () {

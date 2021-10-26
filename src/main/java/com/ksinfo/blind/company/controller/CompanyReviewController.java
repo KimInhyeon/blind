@@ -34,15 +34,21 @@ public class CompanyReviewController {
 	private final CompanyReviewService companyReviewService;
 
 	@Autowired
-	public CompanyReviewController(CompanyCommonService companyCommonService, CompanyReviewService companyReviewService) {
+	public CompanyReviewController(
+		CompanyCommonService companyCommonService, CompanyReviewService companyReviewService
+	) {
 		this.companyCommonService = companyCommonService;
 		this.companyReviewService = companyReviewService;
 	}
 
 	@GetMapping
-	public ModelAndView writeCompanyReview(@RequestParam long companyId) { // パラメータにcompanyIdが入ってくる理由が不明
+	public ModelAndView writeCompanyReview(@RequestParam(defaultValue = "0") long companyId) {
 		ModelAndView modelAndView = new ModelAndView("main/company/companyReviewWrite");
-		modelAndView = modelAndView.addObject("companyId", companyId);
+		if (companyId > 0) {
+			String companyName = companyReviewService.getCompanyName(companyId);
+			modelAndView.addObject("companyId", companyId);
+			modelAndView.addObject("companyName", companyName);
+		}
 
 		return modelAndView;
 	}
