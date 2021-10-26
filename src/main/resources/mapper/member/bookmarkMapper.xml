@@ -16,7 +16,7 @@
 				SELECT
 				FROM blind.post_recommend_inf
 				WHERE post_id = bm.post_id
-					AND user_id = 146
+					AND user_id = #{userId}
 					AND post_recommend_flag = '1'
 			) AS recommended, (
 				SELECT COUNT(*)
@@ -40,7 +40,7 @@
 				ON po.user_id = us.user_id AND last_generation_flag = '1'
 			INNER JOIN blind.company_mgt USING(company_id)
 		WHERE bm.logical_del_flag = '0'
-			AND bm.user_id = 146
+			AND bm.user_id = #{userId}
 		ORDER BY bm.rec_create_date DESC
 		FETCH FIRST 30 ROWS ONLY;
 	</select>

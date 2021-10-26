@@ -3,18 +3,21 @@ package com.ksinfo.blind.board.controller;
 import com.ksinfo.blind.board.dto.PostDto;
 import com.ksinfo.blind.board.dto.PostRecommendDto;
 import com.ksinfo.blind.board.dto.PostRequestDto;
+import com.ksinfo.blind.board.dto.PostUpdateDto;
 import com.ksinfo.blind.board.service.PostService;
 import com.ksinfo.blind.board.service.ReplyService;
-import com.ksinfo.blind.board.vo.PostRecommendResultVO;
+import com.ksinfo.blind.board.vo.PostRecommendVO;
 import com.ksinfo.blind.board.vo.PostVO;
 import com.ksinfo.blind.board.vo.ReplyVO;
 import com.ksinfo.blind.security.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,6 +46,17 @@ public final class PostController {
 		return postService.writePost(postDto);
 	}
 
+	@PutMapping
+	public void updatePost(@AuthenticationPrincipal Account account, @RequestBody PostUpdateDto postUpdateDto) {
+		postUpdateDto.setUserId(account.getUserId());
+		postService.updatePost(postUpdateDto);
+	}
+
+	@DeleteMapping
+	public void deletePost(@AuthenticationPrincipal Account account, @RequestBody long postId) {
+		postService.deletePost(account.getUserId(), postId);
+	}
+
 	@GetMapping("{postId}")
 	public ModelAndView post(
 		@AuthenticationPrincipal Account account, @PathVariable long postId,
@@ -67,6 +81,9 @@ public final class PostController {
 		}
 		PostRequestDto postRequest = new PostRequestDto(account == null ? 0L : account.getUserId(), postId);
 		PostVO post = postService.getPost(postRequest);
+		if (post == null) {
+			throw new NullPointerException();
+		}
 		List<ReplyVO> replyList = replyService.getReplyList(postRequest);
 
 		ModelAndView modelAndView = new ModelAndView("main/board/post");
@@ -78,7 +95,7 @@ public final class PostController {
 
 	// 取り消しができるか仕様確認が必要
 	@PostMapping("recommend")
-	public PostRecommendResultVO recommendPost(@AuthenticationPrincipal Account account, @RequestBody long postId) {
+	public PostRecommendVO recommendPost(@AuthenticationPrincipal Account account, @RequestBody long postId) {
 		PostRecommendDto postRecommendDto = new PostRecommendDto(account.getUserId(), postId);
 
 		return postService.recommendPost(postRecommendDto);

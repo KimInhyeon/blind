@@ -2,12 +2,15 @@ package com.ksinfo.blind.board.service;
 
 import com.ksinfo.blind.board.dto.PostFileDto;
 import com.ksinfo.blind.board.mapper.ImageMapper;
+import com.ksinfo.blind.board.vo.PostEditFileVO;
 import com.ksinfo.blind.board.vo.PostFileVO;
 import com.ksinfo.blind.util.FileHashManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
 public class ImageService {
@@ -62,5 +65,9 @@ public class ImageService {
 
 	public boolean deleteUploadedFile(long userId, long postFileId) {
 		return imageMapper.deleteUploadedFile(userId, postFileId);
+	}
+
+	public List<PostEditFileVO> getPostFileList(long userId, long postId) {
+		return imageMapper.getPostFileList(userId, postId);
 	}
 }

@@ -35,7 +35,9 @@ public class CompanyReviewController {
 	private final CompanyReviewService companyReviewService;
 
 	@Autowired
-	public CompanyReviewController(CompanyCommonService companyCommonService, CompanyReviewService companyReviewService) {
+	public CompanyReviewController(
+		CompanyCommonService companyCommonService, CompanyReviewService companyReviewService
+	) {
 		this.companyCommonService = companyCommonService;
 		this.companyReviewService = companyReviewService;
 	}

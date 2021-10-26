@@ -30,7 +30,7 @@
 	<div class="ui container" style="padding: 50px 0;">
 		<div class="ui segment">
 			<div style="padding: 40px;">
-				<form class="ui form" id="reviewForm" name="reviewForm" method="post" action="company/review/write"
+				<form class="ui form" id="reviewForm" name="reviewForm" method="post" action="company/review"
 						onsubmit="return check();">
 					<div>
 						<h2 id="title1" style="padding-bottom: 30px;">企業レビューを作成</h2>

@@ -2,14 +2,18 @@ package com.ksinfo.blind.board.dto;
 
 import java.util.List;
 
-public final class PostDto {
+public final class PostUpdateDto {
 	private long userId;
+	private final long postId;
 	private final long boardId;
 	private final String postTitle;
 	private final char postBlindFlag;
 	private final List<PostBlock> postContents;
 
-	public PostDto(long boardId, String postTitle, char postBlindFlag, List<PostBlock> postContents) {
+	public PostUpdateDto(
+		long postId, long boardId, String postTitle, char postBlindFlag, List<PostBlock> postContents
+	) {
+		this.postId = postId;
 		this.boardId = boardId;
 		this.postTitle = postTitle;
 		this.postBlindFlag = postBlindFlag;
@@ -20,12 +24,16 @@ public final class PostDto {
 		this.userId = userId;
 	}
 
-	public long getBoardId() {
-		return boardId;
-	}
-
 	public long getUserId() {
 		return userId;
+	}
+
+	public long getPostId() {
+		return postId;
+	}
+
+	public long getBoardId() {
+		return boardId;
 	}
 
 	public String getPostTitle() {
