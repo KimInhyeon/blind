@@ -105,15 +105,15 @@
 					</div>
 				</a>
 				<div class="ui icon top right pointing dropdown" style="float: right;">
-					<i class="ellipsis horizontal icon" style="padding:0 20px 20px 0;"></i>
-					<div class="menu">
-						<div class="item">
-							<a href="javascript:goCRUpdate()">修正</a>
-						</div>
-						<div class="item">
-							<a href="javascript:goCRDelete()">削除</a>
-						</div>
-					</div>
+<%--					<i class="ellipsis horizontal icon" style="padding:0 20px 20px 0;"></i>--%>
+<%--					<div class="menu">--%>
+<%--						<div class="item">--%>
+<%--							<a href="javascript:goCRUpdate()">修正</a>--%>
+<%--						</div>--%>
+<%--						<div class="item">--%>
+<%--							<a href="javascript:goCRDelete()">削除</a>--%>
+<%--						</div>--%>
+<%--					</div>--%>
 					<form class="ui form" id="reviewForm" name="reviewForm" method="post" action="company/review/update">
 						<input type="hidden" name="comrevchange" value="${review.companyReviewId}"/>
 					</form>
