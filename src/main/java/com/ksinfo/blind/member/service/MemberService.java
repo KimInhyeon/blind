@@ -89,9 +89,8 @@ public class MemberService implements UserDetailsService {
 		}
 		return false;
 	}
-/*
+
 	public boolean checkPassword(String inputPassword, String targetPassword) {
 		return passwordEncoder.matches(inputPassword, targetPassword);
 	}
- */
 }

@@ -286,18 +286,18 @@
 <div style="display: none">
 	<%--「通報する」のモーダルウィンドウ。--%>
 	<div id="report_modal" data-backdrop="static" data-keyboard="false"
-		 style="padding: 2%; background-color:#ffffff;">
+			style="padding: 2%; background-color: #ffffff;">
 		<div class="warp_report_modal">
 			<div class="inf_title">
-				<h2 style="display:inline;">通報する</h2>
-				<div style="float:right;" id="modal_close_btn"> X </div>
+				<h2 style="display: inline;">通報する</h2>
+				<div style="float: right;" id="modal_close_btn"> X </div>
 
-				<div style="text-align:left; margin-top: 5%;">
+				<div style="text-align: left; margin-top: 5%;">
 					<span>作成者</span>
 					<span id="targetUserNickname"><%-- 通報するポストのニックネームが入力される。--%></span>
 				</div>
 
-				<div style="text-align:left; margin-top: 5%;">
+				<div style="text-align: left; margin-top: 5%;">
 					<span style="display: inline;">タイトル</span>
 					<span id="reportTitle"><%-- 通報するポストのタイトルが入力される。--%></span>
 				</div>
@@ -351,14 +351,14 @@
 					document.getElementById("targetUserNickname").innerHTML = targetUserNickname;
 				}
 
-				//2.신고할 사항들의 리스트
+				<%--2.신고할 사항들의 리스트--%>
 				$(report_reason_list).html(""); <%--신고목록(라디오버튼)을 출력할 부분 초기화--%>
 				$(report_reason_textarea).html(""); <%--기타입력시 부분 초기화.--%>
 
 				<%--신고목록(라디오버튼)배치--%>
 				$.each(result, function (key, value) {
 					$(report_reason_list).append(
-						"<div style=\"text-align:left; margin-bottom: 5%;\"><input type=\"radio\" onclick=\"textOnOff();\" " +
+						"<div style=\"text-align: left; margin-bottom: 5%;\"><input type=\"radio\" onclick=\"textOnOff();\" " +
 						"name=\"report_post_reason\" id=\"" + value.reportReasonCode + "\" value=" +
 						value.reportReasonCode + ">" + value.reportReasonContents + "</div>"
 					);
@@ -367,7 +367,7 @@
 				<%--textarea 배치--%>
 				$(report_reason_textarea).append(
 					"<textarea id=\"report_reason_content\" " +
-					"style=\"width:100%; height:150px; resize: none;\" disabled></textarea>"
+					"style=\"width: 100%; height: 150px; resize: none;\" disabled></textarea>"
 				);
 
 				$('#report_modal').modal({closable: false}); <%--모달밖을 클릭해도 닫히지 않도록 설정.--%>
@@ -407,13 +407,7 @@
 		</c:if>
 		setReplyReportEvent();
 	</sec:authorize>
-<%-- ここは？
-		$('.button').popup({
-			inline: true,
-			hoverable: true
-		});
-		$('.ui.rating').rating('disable');
---%>
+
 		<%--2.신고를 하는 코드--%>
 		$("#send_report").on("click", function () {
 			<%--신고정보들을 집계.--%>
@@ -426,11 +420,11 @@
 			var companyReviewId = $('#currentCompanyReviewId').val();
 			var replyId = $('#currentReplyId').val();
 
-			//テストコード（send_reportをクリックして送信するでーたを確認。）
-			//alert("send_reportType : " + reportType);
-			//alert("send_postId : " + postId);
-			//alert("send_currentCompanyReviewId : " + companyReviewId);
-			//alert("send_replyId : " + replyId);
+			<%--テストコード（send_reportをクリックして送信するでーたを確認。）--%>
+			<%--alert("send_reportType : " + reportType);--%>
+			<%--alert("send_postId : " + postId);--%>
+			<%--alert("send_currentCompanyReviewId : " + companyReviewId);--%>
+			<%--alert("send_replyId : " + replyId);--%>
 
 			if (typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null) {
 				alert("通報する理由を選んでください。"); <%--선택된 신고사항이 없기에 선택을 요청--%>
@@ -475,13 +469,13 @@
 			<%--その外 선택시 textarea 활성화--%>
 			$(report_reason_textarea).html(""); <%--초기화--%>
 			$(report_reason_textarea).append(
-				"<textarea id=\"report_reason_content\" style=\"width:100%; height:150px; resize: none;\"></textarea>"
+				"<textarea id=\"report_reason_content\" style=\"width: 100%; height: 150px; resize: none;\"></textarea>"
 			);
 		} else {
 			<%--その外가 아닌 다른 라디오버튼을 클릭시 textarea 비활성화--%>
 			$(report_reason_textarea).html(""); <%--초기화--%>
 			$(report_reason_textarea).append(
-				"<textarea id=\"report_reason_content\" style=\"width:100%; height:150px; " +
+				"<textarea id=\"report_reason_content\" style=\"width: 100%; height: 150px; " +
 				"resize: none;\" disabled></textarea>"
 			);
 		}

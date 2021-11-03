@@ -28,7 +28,7 @@
 			rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
 		) VALUES (
 			1, '1', #{userPassword}, #{userEmail}, #{userNickname},
-			NOW(), 0, #{userAuth}, 0, 1,
+			NOW(), 1, #{userAuth}, 0, 1,
 			NOW(), 0, NOW(), '0'
 		);
 	</insert>
@@ -75,7 +75,7 @@
 			#{userNickname}, NOW(), #{companyId}, #{userAuth}, #{reportedCount},
 			#{userId}, NOW(), #{userId}, NOW(), '0'
 		);
-		<selectKey keyProperty="nicknameChangeDate"	resultType="date" order="AFTER">
+		<selectKey keyProperty="nicknameChangeDate"	resultType="java.sql.Date" order="AFTER">
 			SELECT nickname_change_date
 			FROM blind.user_mgt
 			WHERE user_id = #{userId}

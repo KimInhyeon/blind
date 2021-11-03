@@ -65,6 +65,14 @@
 	th.filter {
 		width: 5%;
 	}
+
+	#closingFlag, #businessTypeCode {
+		font-weight: inherit;
+	}
+
+	#comInfo .two.wide.column {
+		font-size: small;
+	}
 </style>
 
 <div class="ui container">
@@ -132,7 +140,7 @@
 						<td class="businessType" data-value="${company.businessTypeCode}"></td>
 						<td>${company.companyAddress}</td>
 						<td class="center aligned">${company.foundingDate}</td>
-						<td class="right aligned">${company.workersCount}</td>
+						<td>${company.workersCount}</td>
 						<td>${company.companyDomain}</td>
 						<td>${company.userNickName}</td>
 						<td class="center aligned">${company.appDate}</td>
@@ -451,7 +459,7 @@
 						"<td class=\"businessType\" data-value=\"" + companyList[i].businessTypeCode + "\"></td>" +
 						"<td>" + companyList[i].companyAddress + "</td>" +
 						"<td class=\"center aligned\">" + companyList[i].foundingDate + "</td>" +
-						"<td class=\"right aligned\">" + companyList[i].workersCount + "</td>" +
+						"<td>" + companyList[i].workersCount + "</td>" +
 						"<td>" + companyList[i].companyDomain + "</td>" +
 						"<td>" + companyList[i].userNickName + "</td>" +
 						"<td class=\"center aligned\">" + companyList[i].appDate + "</td></tr>";
@@ -463,7 +471,7 @@
 				html += " style=\"visibility: hidden;\"><div class=\"item\">前へ</div></div>";
 			} else {
 				html += "><a class=\"item\" href=\"javascript:getCompanyListByPage(" + String(navi.startPage - 1) +
-					");\">前へ</a></div>";
+						");\">前へ</a></div>";
 			}
 			html += "<div class=\"ui pagination menu\">";
 			for (let page = navi.startPage; page <= navi.endPage; ++page) {
@@ -476,7 +484,7 @@
 			html += "</div><div class=\"ui pagination menu\"";
 			if (navi.endPage < navi.totalPage) {
 				html += "><a class=\"item\" href=\"javascript:getCompanyListByPage(" + String(navi.endPage + 1) +
-					");\">次へ</a></div>";
+						");\">次へ</a></div>";
 			} else {
 				html += " style=\"visibility: hidden;\"><div class=\"item\">次へ</div></div>";
 			}
@@ -493,6 +501,7 @@
 			}
 			searchParams.delete("ajax");
 			url.search = searchParams;
+			document.querySelector("input[type=checkbox]").checked = false;
 			history.pushState({
 				"tbody": tbody.innerHTML,
 				"pagination": pagination.innerHTML
@@ -722,14 +731,23 @@
 			foundingDate.focus();
 			return false;
 		}
+
 		const companyName = document.getElementById("companyName");
-		if (!companyName.value.trim().length) {
+		let length = companyName.value.trim().length;
+		if (!length) {
 			alert("企業名を入力してください");
 			companyName.focus();
 			return false;
 		}
+		if (length > 50) {
+			alert("企業名は５０文字以内にしてください");
+			companyName.focus();
+			return false;
+		}
+
 		const searchCompanyName = document.getElementById("searchCompanyName");
-		if (!searchCompanyName.value.trim().length) {
+		length = searchCompanyName.value.trim().length;
+		if (!length) {
 			alert("検索名を入力してください");
 			searchCompanyName.focus();
 			return false;
@@ -739,36 +757,77 @@
 			searchCompanyName.focus();
 			return false;
 		}
+		if (length > 50) {
+			alert("検索名は５０文字以内にしてください");
+			companyName.focus();
+			return false;
+		}
+
 		const workersCount = document.getElementById("workersCount");
-		if (!workersCount.value.trim().length) {
+		length = workersCount.value.trim().length;
+		if (!length) {
 			alert("従業員数を入力してください");
 			workersCount.focus();
 			return false;
 		}
+		if (length > 50) {
+			alert("従業員数は３０文字以内にしてください");
+			workersCount.focus();
+			return false;
+		}
+
 		const companyAddress = document.getElementById("companyAddress");
-		if (!companyAddress.value.trim().length) {
+		length = companyAddress.value.trim().length;
+		if (!length) {
 			alert("所在地を入力してください");
 			companyAddress.focus();
 			return false;
 		}
+		if (length > 200) {
+			alert("所在地は２００文字以内にしてください");
+			companyAddress.focus();
+			return false;
+		}
+
 		const companyDomain = document.getElementById("companyDomain");
-		if (!companyDomain.value.trim().length) {
+		length = companyDomain.value.trim().length;
+		if (!length) {
 			alert("ドメインを入力してください");
 			companyDomain.focus();
 			return false;
 		}
+		if (length > 50) {
+			alert("ドメインは５０文字以内にしてください");
+			companyDomain.focus();
+			return false;
+		}
+
 		const companyHomepage = document.getElementById("companyHomepage");
-		if (!companyHomepage.value.trim().length) {
+		length = companyHomepage.value.trim().length;
+		if (!length) {
 			alert("ホームページを入力してください");
 			companyHomepage.focus();
 			return false;
 		}
+		if (length > 50) {
+			alert("ホームページは５０文字以内にしてください");
+			companyHomepage.focus();
+			return false;
+		}
+
 		const companyExplain = document.getElementById("companyExplain");
-		if (!companyExplain.value.trim().length) {
+		length = companyExplain.value.trim().length;
+		if (!length) {
 			alert("詳細を入力してください");
 			companyExplain.focus();
 			return false;
 		}
+		if (length > 300) {
+			alert("詳細は６００文字以内にてください");
+			companyExplain.focus();
+			return false;
+		}
+
 		return true;
 	}
 

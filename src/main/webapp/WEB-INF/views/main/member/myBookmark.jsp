@@ -50,7 +50,7 @@
 <div class="ui container">
 	<h3 class="tit">ブックマーク</h3>
 	<div class="ui fitted divider" style="border-width: medium;"><%--fit 되는 얇은 선--%></div>
-	<div class="bookmarkcontent">
+	<div class="bookmarkcontent" id="bookmarkList">
 		<div class="ui internally celled grid">
 			<div class="row">
 			<c:forEach var="post" items="${postList}" varStatus="status">
@@ -253,5 +253,28 @@
 				});
 			});
 		});
+
+		const intersectionObserver = new IntersectionObserver(function (entries, observer) {
+			entries.forEach(async function (entry) {
+				if (entry.isIntersecting) {
+					observer.unobserve(entry.target);
+					await getNewArticle();
+					history.replaceState({
+						title: document.title,
+						boardId: boardId,
+						postId: postId,
+						postList: postList.innerHTML,
+						sort: sort
+					}, "");
+				}
+			});
+		});
+		const addNewObserve = function () {
+			<%-- 読み込むポストが15個の故 --%>
+			if (articleCount > 14) {
+				intersectionObserver.observe(postList.children[articleCount - 5]);
+			}
+		};
+		addNewObserve();
 	});
 </script>

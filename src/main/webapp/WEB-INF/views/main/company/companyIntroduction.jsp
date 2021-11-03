@@ -3,6 +3,7 @@
 	.tabtable tr td {
 		border: none;
 		padding-top: 10px;
+		font-weight: bold;
 	}
 </style>
 
@@ -15,8 +16,8 @@
 					<td>${companyIntroduction.companyName} 会社紹介</td>
 				</tr>
 				<tr>
-					<td> ホムページ</td>
-					<td style="width:300px;">${companyIntroduction.companyHomepage}</td>
+					<td style="width:25%;"> ホムページ</td>
+					<td style="width:35%;"><a target="_blank" href="${companyIntroduction.companyHomepage}">${companyIntroduction.companyHomepage}</a></td>
 					<td>業界</td>
 					<td>${companyIntroduction.businessTypeName}</td>
 				</tr>

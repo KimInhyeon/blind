@@ -4,6 +4,7 @@ import com.ksinfo.blind.member.dto.BookmarkDto;
 import com.ksinfo.blind.member.mapper.BookmarkMapper;
 import com.ksinfo.blind.member.vo.BookmarkPostVO;
 import com.ksinfo.blind.member.vo.BookmarkVO;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Service
 public class BookmarkService {
+	private static final int limit = 15;
 	private final BookmarkMapper bookmarkMapper;
 
 	@Autowired
@@ -30,7 +32,8 @@ public class BookmarkService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<BookmarkPostVO> getMyBookmarkList(long userId) {
-		return bookmarkMapper.getMyBookmarkList(userId);
+	public List<BookmarkPostVO> getMyBookmarkList(long userId, int offset) {
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return bookmarkMapper.getMyBookmarkList(userId, rowBounds);
 	}
 }
