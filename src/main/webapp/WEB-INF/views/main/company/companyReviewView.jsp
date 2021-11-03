@@ -1,5 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<head>
+	<meta property="og: title" content="blind">
+
+	<meta property="og: description" content="blind">
+
+
+
+
+</head>
 <style>
 	.tabtable tr td {
 		border: none;
@@ -17,13 +26,6 @@
 		user-select: none;
 		z-index: 9;
 	}
-
-	.link-icon { position: relative; display: inline-block; width: auto;
-		font-size: 11px; font-weight: 200; color: #333; margin-right: 10px; padding-top: 50px; }
-	.link-icon.twitter { background-image: url(resources/images/icon-twitter.png); background-repeat: no-repeat; }
-	.link-icon.facebook { background-image: url(resources/images/icon-facebook.png); background-repeat: no-repeat; }
-
-
 
 </style>
 
@@ -192,9 +194,14 @@
 					<c:choose>
 						<c:when test="${empty company.advantages}">
 							<div id="writtenReview"><h5>短所</h5></div>
-
-							<button style="position: absolute;z-index: 1;left:28%;font-size:20px;display: inline-block;">レビューを書く</button>
-
+							<button onclick="location.href=
+								<c:choose>
+									<c:when test="${companyId gt 0}">'company/review?companyId=${companyId}'</c:when>
+									<c:otherwise>'member/login'</c:otherwise>
+								</c:choose>"
+									style="position: absolute; z-index: 1; left:28%; font-size:20px; display: inline-block;">
+								レビューを書く
+							</button>
 						</c:when>
 						<c:otherwise>
 							<h5>短所</h5>
@@ -216,26 +223,26 @@
 					</td>
 				</tr>
 				<tr>
+				<c:if test="${not empty company.advantages}">
 					<td>
-					<c:if test="${not empty company.advantages}">
 						<button data-id="${company.companyReviewId}" onclick="countUp(this);">
 							<div style="display: flex;<c:if test="${company.recommended}"> color: red</c:if>">
 								<i class="thumbs up outline icon"></i><span>いいね(${company.helpfulCount})</span>
 							</div>
 						</button>
-					</c:if>
 					</td>
 					<td></td>
-				<c:if test="${not company.recommended}">　<%-- おすすめしなかった時には表示しない理由は？ --%>
 					<td style="float: right !important;">
-
 						<div style="display: flex">
-						<button class="circular ui icon button" class="link-icon copy" onclick="copy()" style="width:50px;"><i class="copy outline icon" onclick="copy()"></i></button>
-
-						<a style="width:50px;" id=btnTwitter" class="link-icon twitter" href="javascript:shareTwitter();"></a>
-
-						<a style="width:50px;" id="btnFacebook" class="link-icon facebook" href="javascript:shareFacebook('http://localhost:8282/blind/company/review/${companyId}');"></a>
-
+							<button class="circular ui icon button link-icon copy" onclick="copy();">
+								<i class="copy outline icon"></i>
+							</button>
+							<button class="ui circular facebook icon button" onclick="shareFacebook();">
+								<i class="facebook icon"></i>
+							</button>
+							<button class="ui circular twitter icon button" onclick="shareTwitter();">
+								<i class="twitter icon"></i>
+							</button>
 						</div>
 					</td>
 				</c:if>
@@ -296,10 +303,8 @@
 		location.search = searchParams.toString();
 	}
 
-
-
-	function shareFacebook(url) {
-
+	function shareFacebook() {
+		var url = "http://192.168.0.6:8282/blind/company/review/" +${companyId};
 		window.open("http://www.facebook.com/sharer/sharer.php?u=" + url);
 	}
 	function shareTwitter() {
