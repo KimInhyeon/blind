@@ -136,7 +136,7 @@
 			<div class="column"><%--회사--%>
 				<div class="ui segment">
 					<div style="display: inline-block;">
-						<img class="ui tiny left floated image" src="resources/images/company/${company.companyId}.png">
+						<img class="ui tiny left floated image" src="resources/images/company/${company.companyId}.png" >
 						<div style="display:inline-block;">
 							<a class="bestcompanyname" href="company/introduction/${company.companyId}"
 									style="display:inline-block;">${company.companyName}</a>

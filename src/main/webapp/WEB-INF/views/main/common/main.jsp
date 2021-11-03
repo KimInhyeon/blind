@@ -86,9 +86,9 @@
 			<c:forEach var="bestMainPost" items="${bestMainPostList}">
 				<div class="mainBest">
 					<div class="ui right floated horizontal list">
-						<i class="thumbs up outline icon item" style="position: absolute; right: 28.5%;"></i>
-						<span class="item" style="position: absolute; right: 27%;">${bestMainPost.postRecommendCount}</span>
-						<i class="comment outline icon item" style="position: absolute; right: 25%;"></i>
+						<i class="thumbs up outline icon item" style="position: absolute; right: 20%;"></i>
+						<span class="item" style="position: absolute; right: 17%;">${bestMainPost.postRecommendCount}</span>
+						<i class="comment outline icon item" style="position: absolute; right: 15%;"></i>
 						<span class="item">${bestMainPost.replyCount}</span>
 					</div>
 					<div class="ui horizontal list">

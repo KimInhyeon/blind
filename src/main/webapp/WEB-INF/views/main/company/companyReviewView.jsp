@@ -6,6 +6,17 @@
 		padding-top: 10px;
 
 	}
+
+	#writtenReview{
+		color: transparent;
+		text-shadow: 0 0 5px #000;
+		transition: all 250ms ease-in;
+		-ms-user-select: none;
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		user-select: none;
+		z-index: 9;
+	}
 </style>
 
 <%@ include file="/WEB-INF/views/main/company/companyMenu.jsp" %>
@@ -80,151 +91,207 @@
 				</tr>
 			</table>
 		</div>
-		<c:forEach var="company" items="${companyList}" begin="1" step="1" varStatus="status">
-			<div id="showCompanyList">
-				<table class="tabtable" border="1" style="width: 100%; margin: 15px auto; padding: 30px">
-						<%--마진은되도록 쓰지말자  --%>
-					<tr>
-						<td style="width: 20%;">${company.allPoint}</td>
-						<td style="width: 65%;"><h4>"${company.simpleComment}"</h4></td>
-						<td>${company.recCreateDate}</td>
-						<td style="width: 5%;">
+	<c:forEach var="company" items="${companyList}" begin="1" step="1" varStatus="status">
+		<div id="showCompanyList">
+			<table class="tabtable" border="1" style="width: 100%; margin: 15px auto; padding: 30px">
+					<%--마진은되도록 쓰지말자  --%>
+				<tr>
+					<td style="width: 20%;">${company.allPoint}</td>
+					<td style="width: 65%;"><h4>"${company.simpleComment}"</h4></td>
+					<td>${company.recCreateDate}</td>
+					<td style="width: 5%;">
+						<div class="ui button" style="background: white; margin: 0;" data-position="bottom center">
+							<i class="ellipsis horizontal icon"></i>
+						</div>
+						<div class="ui flowing popup top left transition hidden">
+							<div class="reportModalStart item"
+									onclick="reportModalStart(
+											'0008'
+											,0
+											,0
+											,'${companyList[status.count].companyReviewId}'
+											,'${companyList[status.count].userNickname}'
+											,'${companyList[status.count].simpleComment}'
+											)">
+									<%-- 通報のタイプ。0008は企業レビューを意味。-->
+									<%-- postid。ここではするポストの通報ので’０’を入力して動作しないに設定する。--%>
+									<%-- replyId。ここではするポストの通報ので’０’を入力して動作しないに設定する。--%>
+									<%-- companyReviewId。（通報する企業レビューのID）　--%>
+									<%-- 通報するポストを作成したユーザのニックネーム。--%>
+									<%-- 通報するポストのタイトル。--%>
+								<i class="bullhorn icon"></i><span>通報する</span>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_star">
+							<div class="ui star rating" data-rating="${company.allPoint}" data-max-rating="5"></div>
 							<div class="ui button" style="background: white; margin: 0;" data-position="bottom center">
-								<i class="ellipsis horizontal icon"></i>
+								<i class="angle down icon"></i>
 							</div>
 							<div class="ui flowing popup top left transition hidden">
-								<div class="reportModalStart item"
-									 onclick="reportModalStart(
-											 '0008'
-											 ,0
-											 ,0
-											 ,'${companyList[status.count].companyReviewId}'
-											 ,'${companyList[status.count].userNickname}'
-											 ,'${companyList[status.count].simpleComment}'
-											 )">
-										<%-- 通報のタイプ。0008は企業レビューを意味。-->
-                                        <%-- postid。ここではするポストの通報ので’０’を入力して動作しないに設定する。--%>
-										<%-- replyId。ここではするポストの通報ので’０’を入力して動作しないに設定する。--%>
-										<%-- companyReviewId。（通報する企業レビューのID）　--%>
-										<%-- 通報するポストを作成したユーザのニックネーム。--%>
-										<%-- 通報するポストのタイトル。--%>
-									<i class="bullhorn icon"></i><span>通報する</span>
-								</div>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="div_star">
-								<div class="ui star rating" data-rating="${company.allPoint}" data-max-rating="5"></div>
-								<div class="ui button" style="background: white; margin: 0;" data-position="bottom center">
-									<i class="angle down icon"></i>
-								</div>
-								<div class="ui flowing popup top left transition hidden">
-									<div class="column" data-position="bottom left">
-										<div class="div_star">
-											<div class="ui star rating" data-rating="${company.careerPoint}"
-												 data-max-rating="5" style="margin-right: 10px;">
-											</div>
-											<span style="margin-right: 10px;">キャリア向上</span>
+								<div class="column" data-position="bottom left">
+									<div class="div_star">
+										<div class="ui star rating" data-rating="${company.careerPoint}"
+												data-max-rating="5" style="margin-right: 10px;">
 										</div>
-										<div class="div_star">
-											<div class="ui star rating" data-rating="${company.workLifeBalancePoint}"
-												 data-max-rating="5" style="margin-right: 10px;">
-											</div>
-											<span style="margin-right: 10px;">ワークライフバランス</span>
+										<span style="margin-right: 10px;">キャリア向上</span>
+									</div>
+									<div class="div_star">
+										<div class="ui star rating" data-rating="${company.workLifeBalancePoint}"
+												data-max-rating="5" style="margin-right: 10px;">
 										</div>
-										<div class="div_star">
-											<div class="ui star rating" data-rating="${company.companyCulturePoint}"
-												 data-max-rating="5" style="float: left; margin-right: 10px;">
-											</div>
-											<span style="margin-right:10px;">社内文化</span>
+										<span style="margin-right: 10px;">ワークライフバランス</span>
+									</div>
+									<div class="div_star">
+										<div class="ui star rating" data-rating="${company.companyCulturePoint}"
+												data-max-rating="5" style="float: left; margin-right: 10px;">
 										</div>
-										<div class="div_star">
-											<div class="ui star rating" data-rating="${company.payPoint}"
-												 data-max-rating="5" style="float: left; margin-right: 10px;">
-											</div>
-											<span style="margin-right: 10px;">給料と福祉</span>
+										<span style="margin-right:10px;">社内文化</span>
+									</div>
+									<div class="div_star">
+										<div class="ui star rating" data-rating="${company.payPoint}"
+												data-max-rating="5" style="float: left; margin-right: 10px;">
 										</div>
-										<div class="div_star">
-											<div class="ui star rating" data-rating="${company.headPoint}"
-												 data-max-rating="5" style="float: left; margin-right: 10px;">
-											</div>
-											<span style="margin-right: 10px;">経営陣</span>
+										<span style="margin-right: 10px;">給料と福祉</span>
+									</div>
+									<div class="div_star">
+										<div class="ui star rating" data-rating="${company.headPoint}"
+												data-max-rating="5" style="float: left; margin-right: 10px;">
 										</div>
+										<span style="margin-right: 10px;">経営陣</span>
 									</div>
 								</div>
 							</div>
-						</td>
-						<td><h5>장점</h5></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>${company.advantages}</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td><h5>단점</h5></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>${company.disadvantages}</td>
-					</tr>
-					<tr>
-						<td>
-							<button data-id="${company.companyReviewId}" onclick="countUp(this);">
-								<div style="display: flex;<c:if test="${company.recommended}"> color: red</c:if>">
-									도움이 돼요(${company.helpfulCount})
-								</div>
+						</div>
+					</td>
+					<td>
+					<c:choose>
+						<c:when test="${empty company.advantages}">
+							<i style="position: absolute; z-index: 1; left: 30%; font-size: 80px; display: inline-block;"
+									class="lock icon">
+							</i>
+							<div id="writtenReview"><h5>長所</h5></div>
+						</c:when>
+						<c:otherwise>
+							<h5>長所</h5>
+						</c:otherwise>
+					</c:choose>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+					<c:choose>
+						<c:when test="${empty company.advantages}">
+							<div id="writtenReview">DDDDDDDDDDDDDDDDDDDDDDDDDDDD</div>
+						</c:when>
+						<c:otherwise>
+							${company.advantages}
+						</c:otherwise>
+					</c:choose>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="align:center;">
+					<c:choose>
+						<c:when test="${empty company.advantages}">
+							<div id="writtenReview"><h5>短所</h5></div>
+							<button onclick="location.href=
+								<c:choose>
+									<c:when test="${companyId gt 0}">'company/review?companyId=${companyId}'</c:when>
+									<c:otherwise>'member/login'</c:otherwise>
+								</c:choose>"
+									style="position: absolute; z-index: 1; left:28%; font-size:20px; display: inline-block;">
+								レビューを書く
 							</button>
-						</td>
-						<td></td>
-						<c:if test="${not company.recommended}">　<%-- おすすめしなかった時には表示しない理由は？ --%>
-							<td style="float: right !important;">
-								<button onclick="copy()">COPY</button>
-							</td>
-						</c:if>
-					</tr>
-				</table>
-			</div>
-		</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<h5>短所</h5>
+						</c:otherwise>
+					</c:choose>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+					<c:choose>
+						<c:when test="${empty company.advantages}">
+							<div id="writtenReview">DDDDDDDDDDDDDDDDDDDDDDDDDDDD</div>
+						</c:when>
+						<c:otherwise>
+							${company.disadvantages}
+						</c:otherwise>
+					</c:choose>
+					</td>
+				</tr>
+				<tr>
+				<c:if test="${not empty company.advantages}">
+					<td>
+						<button data-id="${company.companyReviewId}" onclick="countUp(this);">
+							<div style="display: flex;<c:if test="${company.recommended}"> color: red</c:if>">
+								<i class="thumbs up outline icon"></i><span>いいね(${company.helpfulCount})</span>
+							</div>
+						</button>
+					</td>
+					<td></td>
+					<td style="float: right !important;">
+						<div style="display: flex">
+							<button class="circular ui icon button link-icon copy" onclick="copy();">
+								<i class="copy outline icon"></i>
+							</button>
+							<button class="ui circular facebook icon button" onclick="shareFacebook();">
+								<i class="facebook icon"></i>
+							</button>
+							<button class="ui circular twitter icon button" onclick="shareTwitter();">
+								<i class="twitter icon"></i>
+							</button>
+						</div>
+					</td>
+				</c:if>
+				</tr>
+			</table>
+		</div>
+	</c:forEach>
 	</div>
 
 	<div class="ui grid">
 		<div class="center aligned column">
-			<c:choose>
-				<c:when test="${navi.startPage gt navi.pagination}">
-					<div class="ui pagination menu">
-						<a class="item"
-						   href="javascript:getReviewListByPage(${navi.startPage - navi.pagination})">前へ</a>
-					</div>
-				</c:when>
-				<c:otherwise>
-					<div class="ui pagination menu" style="visibility: hidden;"><a class="item">前へ</a></div>
-				</c:otherwise>
-			</c:choose>
-			<div class="ui pagination menu">
-				<c:forEach var="page" begin="${navi.startPage}" end="${navi.endPage}">
-					<c:choose>
-						<c:when test="${page eq navi.currentPage}">
-							<div class="active item">${page}</div>
-						</c:when>
-						<c:otherwise>
-							<a class="item" href="javascript:getReviewListByPage(${page})">${page}</a>
-						</c:otherwise>
-					</c:choose>
-				</c:forEach>
-			</div>
-			<c:choose>
-				<c:when test="${navi.totalPage gt navi.endPage}">
-					<div class="ui pagination menu">
-						<a class="item" href="javascript:getReviewListByPage(${navi.endPage + 1})">次へ</a>
-					</div>
-				</c:when>
-				<c:otherwise>
-					<div class="ui pagination menu" style="visibility: hidden;"><a class="item">次へ</a></div>
-				</c:otherwise>
-			</c:choose>
+		<c:choose>
+			<c:when test="${navi.startPage gt navi.pagination}">
+				<div class="ui pagination menu">
+					<a class="item" href="javascript:getReviewListByPage(${navi.startPage - navi.pagination})">前へ</a>
+				</div>
+			</c:when>
+			<c:otherwise>
+				<div class="ui pagination menu" style="visibility: hidden;"><a class="item">前へ</a></div>
+			</c:otherwise>
+		</c:choose>
+		<div class="ui pagination menu">
+			<c:forEach var="page" begin="${navi.startPage}" end="${navi.endPage}">
+				<c:choose>
+					<c:when test="${page eq navi.currentPage}">
+						<div class="active item">${page}</div>
+					</c:when>
+					<c:otherwise>
+						<a class="item" href="javascript:getReviewListByPage(${page})">${page}</a>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+		</div>
+		<c:choose>
+			<c:when test="${navi.totalPage gt navi.endPage}">
+				<div class="ui pagination menu">
+					<a class="item" href="javascript:getReviewListByPage(${navi.endPage + 1})">次へ</a>
+				</div>
+			</c:when>
+			<c:otherwise>
+				<div class="ui pagination menu" style="visibility: hidden;"><a class="item">次へ</a></div>
+			</c:otherwise>
+		</c:choose>
 		</div>
 	</div>
 
@@ -237,18 +304,18 @@
 	<div style="display: none">
 		<%--「通報する」のモーダルウィンドウ。--%>
 		<div id="report_modal" data-backdrop="static" data-keyboard="false"
-			 style="padding: 2%; background-color:#ffffff;">
+				style="padding: 2%; background-color: #ffffff;">
 			<div class="warp_report_modal">
 				<div class="inf_title">
-					<h2 style="display:inline;">通報する</h2>
-					<div style="float:right;" id="modal_close_btn"> X </div>
+					<h2 style="display: inline;">通報する</h2>
+					<div style="float: right;" id="modal_close_btn"> X </div>
 
-					<div style="text-align:left; margin-top: 5%;">
+					<div style="text-align: left; margin-top: 5%;">
 						<span>作成者</span>
 						<span id="targetUserNickname"><%-- 通報するポストのニックネームが入力される。--%></span>
 					</div>
 
-					<div style="text-align:left; margin-top: 5%;">
+					<div style="text-align: left; margin-top: 5%;">
 						<span style="display: inline;">タイトル</span>
 						<span id="reportTitle"><%-- 通報するポストのタイトルが入力される。--%></span>
 					</div>
@@ -286,8 +353,15 @@
 		location.search = searchParams.toString();
 	}
 
+	function shareFacebook() {
+		window.open("http://www.facebook.com/sharer/sharer.php?u=" + location.href);
+	}
+	function shareTwitter() {
+		window.open("https://twitter.com/intent/tweet?url=" + location.href);
+	}
+
 	function countUp(button) {
-		fetch("company/review", {
+		fetch("company/review/recommend", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
@@ -303,11 +377,11 @@
 			if (responseBody.helpful) {
 				html += " color: red";
 			}
-			html += "\">도움이 돼요(" + responseBody.helpfulCount + ")</div>";
+			html += "\"><i class=\"thumbs up outline icon\"></i>" +
+					"<span>いいね(" + responseBody.helpfulCount + ")<span></div>";
 			button.innerHTML = html;
 		}).catch(function (error) {
 			console.error(error);
-			alert("에러");
 		});
 	}
 
@@ -323,15 +397,6 @@
 	function copy() {
 		copyToClipboard('company/review/${companyMenu.companyId}');
 	}
-
-	addEventListener("DOMContentLoaded", function () {
-		$('.button').popup({
-			inline: true,
-			hoverable: true
-		});
-
-		$('.ui.rating').rating('disable');
-	});
 
 	function restoreMenuItem(item) {
 		setTimeout(function () {
@@ -352,11 +417,11 @@
 		document.getElementById("currentCompanyReviewId").value = companyReviewId;
 		document.getElementById("currentReplyId").value = replyId;
 
-		//テストコード（hiddenに臨時セーブしたデータを確認。）
-		//alert("currentReportType : " + $('#currentReportType').val() );
-		//alert("send_postId : " + $('#currentPostId').val() );
-		//alert("send_currentCompanyReviewId : " + $('#currentCompanyReviewId').val() );
-		//alert("send_replyId : " + $('#currentReplyId').val() );
+		<%--テストコード（hiddenに臨時セーブしたデータを確認。）--%>
+		<%--alert("currentReportType : " + $('#currentReportType').val() );--%>
+		<%--alert("send_postId : " + $('#currentPostId').val() );--%>
+		<%--alert("send_currentCompanyReviewId : " + $('#currentCompanyReviewId').val() );--%>
+		<%--alert("send_replyId : " + $('#currentReplyId').val() );--%>
 
 		<%--DB에서 신고유형(포스트/기업리뷰/댓글)에 따라 신고할 목록을 로드.--%>
 		$.ajax({
@@ -379,7 +444,7 @@
 					document.getElementById("targetUserNickname").innerHTML = targetUserNickname;
 				}
 
-				//2.신고할 사항들의 리스트
+				<%--2.신고할 사항들의 리스트--%>
 				$(report_reason_list).html(""); <%--신고목록(라디오버튼)을 출력할 부분 초기화--%>
 				$(report_reason_textarea).html(""); <%--기타입력시 부분 초기화.--%>
 
@@ -407,11 +472,32 @@
 		});
 	}
 
-	$(function () {
+	<%--report_reason_content(textarea)의 입력 활성화/비활성화 설정--%>
+	function textOnOff() {
+		var reportReasonCode = $('input[name=report_post_reason]:checked').val();
+		if (reportReasonCode == 20) {
+			<%--その外 선택시 textarea 활성화--%>
+			$(report_reason_textarea).html(""); <%--초기화--%>
+			$(report_reason_textarea).append(
+					"<textarea id=\"report_reason_content\" style=\"width:100%; height:150px; resize: none;\"></textarea>"
+			);
+		} else {
+			<%--その外가 아닌 다른 라디오버튼을 클릭시 textarea 비활성화--%>
+			$(report_reason_textarea).html(""); <%--초기화--%>
+			$(report_reason_textarea).append(
+					"<textarea id=\"report_reason_content\" style=\"width:100%; height:150px; " +
+					"resize: none;\" disabled></textarea>"
+			);
+		}
+	}
+	<%--신고하기 관련 AJAX 끝.--%>
+
+	addEventListener("DOMContentLoaded", function () {
 		$('.button').popup({
 			inline: true,
 			hoverable: true
 		});
+
 		$('.ui.rating').rating('disable');
 
 		<%--2.신고를 하는 코드--%>
@@ -426,11 +512,11 @@
 			var companyReviewId = $('#currentCompanyReviewId').val();
 			var replyId = $('#currentReplyId').val();
 
-			//テストコード（send_reportをクリックして送信するでーたを確認。）
-			//alert("send_reportType : " + reportType);
-			//alert("send_postId : " + postId);
-			//alert("send_currentCompanyReviewId : " + companyReviewId);
-			//alert("send_replyId : " + replyId);
+			<%--テストコード（send_reportをクリックして送信するでーたを確認。）--%>
+			<%--alert("send_reportType : " + reportType);--%>
+			<%--alert("send_postId : " + postId);--%>
+			<%--alert("send_currentCompanyReviewId : " + companyReviewId);--%>
+			<%--alert("send_replyId : " + replyId);--%>
 
 			if (typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null) {
 				alert("通報する理由を選んでください。"); <%--선택된 신고사항이 없기에 선택을 요청--%>
@@ -465,27 +551,5 @@
 		$("#modal_close_btn").on("click", function () { <%--신고되면 모달창을 닫도록 함.--%>
 			$('#report_modal').modal('hide');
 		});
-
 	});
-
-	<%--report_reason_content(textarea)의 입력 활성화/비활성화 설정--%>
-	function textOnOff() {
-		var reportReasonCode = $('input[name=report_post_reason]:checked').val();
-		if (reportReasonCode == 20) {
-			<%--その外 선택시 textarea 활성화--%>
-			$(report_reason_textarea).html(""); <%--초기화--%>
-			$(report_reason_textarea).append(
-					"<textarea id=\"report_reason_content\" style=\"width:100%; height:150px; resize: none;\"></textarea>"
-			);
-		} else {
-			<%--その外가 아닌 다른 라디오버튼을 클릭시 textarea 비활성화--%>
-			$(report_reason_textarea).html(""); <%--초기화--%>
-			$(report_reason_textarea).append(
-					"<textarea id=\"report_reason_content\" style=\"width:100%; height:150px; " +
-					"resize: none;\" disabled></textarea>"
-			);
-		}
-	}
-	<%--신고하기 관련 AJAX 끝.--%>
-
 </script>
