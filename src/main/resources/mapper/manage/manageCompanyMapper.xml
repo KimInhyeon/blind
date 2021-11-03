@@ -49,7 +49,7 @@
 		<if test="searchTarget eq 'businessTypeName'">
 			INNER JOIN blind.business_type_mst USING(business_type_code)
 		</if>
-			INNER JOIN blind.user_mgt AS us
+			LEFT JOIN blind.user_mgt AS us
 				ON co.user_id = us.user_id AND last_generation_flag = '1'
 		WHERE co.logical_del_flag = '0'
 		<if test="verifyFlag neq '3'">
