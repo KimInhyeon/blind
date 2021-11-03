@@ -3,13 +3,12 @@ package com.ksinfo.blind.company.controller;
 import com.ksinfo.blind.company.dto.CompanyReviewRecommendDto;
 import com.ksinfo.blind.company.dto.CompanyReviewSearchDto;
 import com.ksinfo.blind.company.dto.CompanyReviewWriteDto;
-import com.ksinfo.blind.company.service.CompanyReviewService;
 import com.ksinfo.blind.company.service.CompanyCommonService;
+import com.ksinfo.blind.company.service.CompanyReviewService;
 import com.ksinfo.blind.company.vo.CompanyMenuVO;
 import com.ksinfo.blind.company.vo.CompanyReviewAverageVO;
 import com.ksinfo.blind.company.vo.CompanyReviewRecommendResultVO;
 import com.ksinfo.blind.company.vo.CompanyReviewVO;
-import com.ksinfo.blind.company.vo.CompanySearchVO;
 import com.ksinfo.blind.security.Account;
 import com.ksinfo.blind.util.PageNavigator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +70,6 @@ public class CompanyReviewController {
 		@AuthenticationPrincipal Account account,
 		@PathVariable long companyId, @RequestParam(defaultValue = "1") int page
 	) {
-
-
 		CompanyMenuVO companyMenu = companyCommonService.getCompanyMenu(companyId);
 		CompanyReviewAverageVO reviewAverage = companyReviewService.getReviewAveragePoint(companyId);
 		PageNavigator navi = companyReviewService.getNavigator(page, companyId);

@@ -41,7 +41,7 @@
 	<select id="getCompanyMenu" resultType="com.ksinfo.blind.company.vo.CompanyMenuVO">
 		SELECT co.company_id AS companyId,
 			company_name As compnayName,
-			COALESCE(AVG(all_point), 0) AS allPointAvg,
+			COALESCE(ROUND(AVG(all_point), 1), 0) AS allPointAvg,
 			COUNT(company_review_id) AS reviewCount
 		FROM blind.company_mgt AS co
 			LEFT JOIN blind.company_review_mgt AS cr

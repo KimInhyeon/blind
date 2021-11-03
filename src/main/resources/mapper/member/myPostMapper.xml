@@ -18,7 +18,6 @@
 					INNER JOIN blind.board_mgt AS bm
 						ON pm.board_id = bm.board_id AND bm.logical_del_flag = '0'
 				WHERE user_id = #{userId}
-
 			)
 			SELECT 'ポスト' AS type,
 				post_id AS postId,

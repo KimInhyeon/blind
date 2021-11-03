@@ -1,9 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<head>
-	<meta property="og: title" content="blind">
-	<meta property="og: description" content="blind">
-</head>
 <style>
 	.tabtable tr td {
 		border: none;
@@ -174,7 +170,9 @@
 					<td>
 					<c:choose>
 						<c:when test="${empty company.advantages}">
-							<i class="lock icon" style="position: absolute;z-index: 1;left:30%;font-size:80px;display: inline-block;"></i>
+							<i style="position: absolute; z-index: 1; left: 30%; font-size: 80px; display: inline-block;"
+									class="lock icon">
+							</i>
 							<div id="writtenReview"><h5>長所</h5></div>
 						</c:when>
 						<c:otherwise>
@@ -265,8 +263,7 @@
 		<c:choose>
 			<c:when test="${navi.startPage gt navi.pagination}">
 				<div class="ui pagination menu">
-					<a class="item"
-					   href="javascript:getReviewListByPage(${navi.startPage - navi.pagination})">前へ</a>
+					<a class="item" href="javascript:getReviewListByPage(${navi.startPage - navi.pagination})">前へ</a>
 				</div>
 			</c:when>
 			<c:otherwise>
@@ -307,18 +304,18 @@
 	<div style="display: none">
 		<%--「通報する」のモーダルウィンドウ。--%>
 		<div id="report_modal" data-backdrop="static" data-keyboard="false"
-			 style="padding: 2%; background-color:#ffffff;">
+				style="padding: 2%; background-color: #ffffff;">
 			<div class="warp_report_modal">
 				<div class="inf_title">
-					<h2 style="display:inline;">通報する</h2>
-					<div style="float:right;" id="modal_close_btn"> X </div>
+					<h2 style="display: inline;">通報する</h2>
+					<div style="float: right;" id="modal_close_btn"> X </div>
 
-					<div style="text-align:left; margin-top: 5%;">
+					<div style="text-align: left; margin-top: 5%;">
 						<span>作成者</span>
 						<span id="targetUserNickname"><%-- 通報するポストのニックネームが入力される。--%></span>
 					</div>
 
-					<div style="text-align:left; margin-top: 5%;">
+					<div style="text-align: left; margin-top: 5%;">
 						<span style="display: inline;">タイトル</span>
 						<span id="reportTitle"><%-- 通報するポストのタイトルが入力される。--%></span>
 					</div>
@@ -357,12 +354,10 @@
 	}
 
 	function shareFacebook() {
-		var url = "http://192.168.0.6:8282/blind/company/review/" +${companyId};
-		window.open("http://www.facebook.com/sharer/sharer.php?u=" + url);
+		window.open("http://www.facebook.com/sharer/sharer.php?u=" + location.href);
 	}
 	function shareTwitter() {
-		var sendUrl = "http://localhost:8282/blind/company/review/" +${companyId}; // 전달할 URL
-		window.open("https://twitter.com/intent/tweet?url=" + sendUrl);
+		window.open("https://twitter.com/intent/tweet?url=" + location.href);
 	}
 
 	function countUp(button) {
@@ -422,11 +417,11 @@
 		document.getElementById("currentCompanyReviewId").value = companyReviewId;
 		document.getElementById("currentReplyId").value = replyId;
 
-		//テストコード（hiddenに臨時セーブしたデータを確認。）
-		//alert("currentReportType : " + $('#currentReportType').val() );
-		//alert("send_postId : " + $('#currentPostId').val() );
-		//alert("send_currentCompanyReviewId : " + $('#currentCompanyReviewId').val() );
-		//alert("send_replyId : " + $('#currentReplyId').val() );
+		<%--テストコード（hiddenに臨時セーブしたデータを確認。）--%>
+		<%--alert("currentReportType : " + $('#currentReportType').val() );--%>
+		<%--alert("send_postId : " + $('#currentPostId').val() );--%>
+		<%--alert("send_currentCompanyReviewId : " + $('#currentCompanyReviewId').val() );--%>
+		<%--alert("send_replyId : " + $('#currentReplyId').val() );--%>
 
 		<%--DB에서 신고유형(포스트/기업리뷰/댓글)에 따라 신고할 목록을 로드.--%>
 		$.ajax({
@@ -449,7 +444,7 @@
 					document.getElementById("targetUserNickname").innerHTML = targetUserNickname;
 				}
 
-				//2.신고할 사항들의 리스트
+				<%--2.신고할 사항들의 리스트--%>
 				$(report_reason_list).html(""); <%--신고목록(라디오버튼)을 출력할 부분 초기화--%>
 				$(report_reason_textarea).html(""); <%--기타입력시 부분 초기화.--%>
 
@@ -517,11 +512,11 @@
 			var companyReviewId = $('#currentCompanyReviewId').val();
 			var replyId = $('#currentReplyId').val();
 
-			//テストコード（send_reportをクリックして送信するでーたを確認。）
-			//alert("send_reportType : " + reportType);
-			//alert("send_postId : " + postId);
-			//alert("send_currentCompanyReviewId : " + companyReviewId);
-			//alert("send_replyId : " + replyId);
+			<%--テストコード（send_reportをクリックして送信するでーたを確認。）--%>
+			<%--alert("send_reportType : " + reportType);--%>
+			<%--alert("send_postId : " + postId);--%>
+			<%--alert("send_currentCompanyReviewId : " + companyReviewId);--%>
+			<%--alert("send_replyId : " + replyId);--%>
 
 			if (typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null) {
 				alert("通報する理由を選んでください。"); <%--선택된 신고사항이 없기에 선택을 요청--%>

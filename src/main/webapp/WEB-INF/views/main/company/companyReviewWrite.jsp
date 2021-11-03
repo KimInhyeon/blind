@@ -270,35 +270,39 @@
 	}
 
 	function check() {
-
-
-
 		var companyFlag = $('#hdnCompanyFlag').val();
 		if (companyFlag == -1 || companyFlag == "") {
 			alert("会社名を入力してください");
 			return false;
 		}
+
 		if ($("#hdnCareerPoint").val() == -1) {
 			alert("キャリア向上の点数を入力してください");
 			return false;
 		}
+
 		if ($("#hdnWorkLifeBalancePoint").val() == -1) {
 			alert("ワークライフバランスの点数を入力してください");
 			return false;
 		}
+
 		if ($("#hdnPayPoint").val() == -1) {
 			alert("給料と福祉の点数を入力してください");
 			return false;
 		}
+
 		if ($("#hdnCompanyCulturePoint").val() == -1) {
 			alert("社内文化の点数を入力してください");
 			return false;
 		}
+
 		if ($("#hdnHeadPoint").val() == -1) {
 			alert("経営陣の点数を入力してください");
 			return false;
 		}
-		if (oneWriteReview.length == '' || oneWriteReview.length == 0 || $.trim($("#oneWriteReview").val()) == '') {
+
+		const oneWriteReview = document.getElementById("oneWriteReview");
+		if (!oneWriteReview.value.trim()) {
 			alert("簡単なコメントを入力してください");
 			return false;
 		}
@@ -308,14 +312,14 @@
 		}
 		oneWriteReview.value = oneWriteReview.value.trim();
 
-
 		var strongPoint = document.getElementById("strongPoint");
-
 		if (strongPoint.value.trim().length == 0) {
 			alert("長所を入力してください");
 			return false;
 		}
-		if (weakPoint.length == '' || weakPoint.length == 0 || $.trim($("#weakPoint").val()) == '') {
+
+		const weakPoint = document.getElementById("weakPoint");
+		if (!weakPoint.value.trim()) {
 			alert("短所を入力してください");
 			return false;
 		}
@@ -326,7 +330,7 @@
 		weakPoint.value = weakPoint.value.trim();
 
 		var resignReason = document.getElementById("resignReason");
-		if (resignReason.value.trim().length == 0) {
+		if (!resignReason.value.trim()) {
 			alert("転職理由を入力してください");
 			return false;
 		}
@@ -340,10 +344,12 @@
 			alert("勤務開始日をチェックしてください");
 			return false;
 		}
+
 		if ($("#hdnFinishDate").val() == -1) {
 			alert("終業日をチェックしてください");
 			return false;
 		}
+
 		var workArea = document.getElementById("workArea");
 		if (workArea.value.trim().length == 0) {
 			alert("勤務先を入力してください");
