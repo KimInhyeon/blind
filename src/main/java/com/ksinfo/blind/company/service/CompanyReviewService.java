@@ -7,6 +7,7 @@ import com.ksinfo.blind.company.mapper.CompanyReviewMapper;
 import com.ksinfo.blind.company.vo.CompanyReviewAverageVO;
 import com.ksinfo.blind.company.vo.CompanyReviewRecommendResultVO;
 import com.ksinfo.blind.company.vo.CompanyReviewVO;
+import com.ksinfo.blind.company.vo.CompanySearchVO;
 import com.ksinfo.blind.util.PageNavigator;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,4 +80,6 @@ public class CompanyReviewService {
 	public List<CompanyReviewVO> getCompanyReviews(long companyId){
 		return companyReviewMapper.getCompanyReviews(companyId);
 	}
+
+
 }

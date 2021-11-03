@@ -42,6 +42,11 @@
 								</c:choose>.png">
 						<h4>会社名</h4>
 						<div class="ui fluid input">
+						<input type="hidden" id="hdnCompanyFlag" value="
+							<c:choose>
+								<c:when test="${empty companyId}">-1</c:when>
+								<c:otherwise>1</c:otherwise>
+							</c:choose>">
 							<input type="hidden" name="companyId" id="companyId"
 								<c:if test="${not empty companyId}">
 									   value="${companyId}"
@@ -265,11 +270,9 @@
 	}
 
 	function check() {
-		var oneWriteReview = document.getElementById("oneWriteReview").value;
-		var strongPoint = document.getElementById("strongPoint").value;
-		var weakPoint = document.getElementById("weakPoint").value;
-		var resignReason = document.getElementById("resignReason").value;
-		var workArea = document.getElementById("workArea").value;
+
+
+
 		var companyFlag = $('#hdnCompanyFlag').val();
 		if (companyFlag == -1 || companyFlag == "") {
 			alert("会社名を入力してください");
@@ -299,7 +302,16 @@
 			alert("簡単なコメントを入力してください");
 			return false;
 		}
-		if (strongPoint.length == '' || strongPoint.length == 0 || $.trim($("#strongPoint").val()) == '') {
+		if (oneWriteReview.value.trim().length > 60) {
+			alert("簡単なコメントは６０文字以内にしてください");
+			return false;
+		}
+		oneWriteReview.value = oneWriteReview.value.trim();
+
+
+		var strongPoint = document.getElementById("strongPoint");
+
+		if (strongPoint.value.trim().length == 0) {
 			alert("長所を入力してください");
 			return false;
 		}
@@ -307,10 +319,23 @@
 			alert("短所を入力してください");
 			return false;
 		}
-		if (resignReason.length == '' || resignReason.length == 0 || $.trim($("#resignReason").val()) == '') {
+		if (weakPoint.value.trim().length > 400) {
+			alert("短所は400文字以内にてください");
+			return false;
+		}
+		weakPoint.value = weakPoint.value.trim();
+
+		var resignReason = document.getElementById("resignReason");
+		if (resignReason.value.trim().length == 0) {
 			alert("転職理由を入力してください");
 			return false;
 		}
+		if (resignReason.value.trim().length > 100) {
+			alert("転職理由は100文字以内にてください");
+			return false;
+		}
+		resignReason.value = resignReason.value.trim();
+
 		if ($("#hdnStartDate").val() == -1) {
 			alert("勤務開始日をチェックしてください");
 			return false;
@@ -319,10 +344,16 @@
 			alert("終業日をチェックしてください");
 			return false;
 		}
-		if (workArea.length == '' || workArea.length == 0 || $.trim($("#workArea").val()) == '') {
+		var workArea = document.getElementById("workArea");
+		if (workArea.value.trim().length == 0) {
 			alert("勤務先を入力してください");
 			return false;
 		}
+		if (workArea.value.trim().length > 50) {
+			alert("勤務先は100文字以内にてください");
+			return false;
+		}
+		workArea.value = workArea.value.trim();
 
 		return true;
 	}

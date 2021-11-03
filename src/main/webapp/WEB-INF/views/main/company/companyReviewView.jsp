@@ -1,5 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<head>
+	<meta property="og: title" content="blind">
+
+	<meta property="og: description" content="blind">
+
+
+
+
+</head>
 <style>
 	.tabtable tr td {
 		border: none;
@@ -15,7 +24,9 @@
 		-moz-user-select: none;
 		-webkit-user-select: none;
 		user-select: none;
+		z-index: 9;
 	}
+
 </style>
 
 <%@ include file="/WEB-INF/views/main/company/companyMenu.jsp" %>
@@ -104,7 +115,7 @@
 						</div>
 						<div class="ui flowing popup top left transition hidden">
 							<div class="column" data-position="bottom left">
-								<div class="ui button" style="background: white;">신고</div>
+								<div class="ui button" style="background: white;">申告</div>
 							</div>
 						</div>
 					</td>
@@ -155,10 +166,11 @@
 					<td>
 					<c:choose>
 						<c:when test="${empty company.advantages}">
-							<div id="writtenReview"><h5>장점</h5></div>
+							<i class="lock icon" style="position: absolute;z-index: 1;left:30%;font-size:80px;display: inline-block;"></i>
+							<div id="writtenReview"><h5>長所</h5></div>
 						</c:when>
 						<c:otherwise>
-							<h5>장점</h5>
+							<h5>長所</h5>
 						</c:otherwise>
 					</c:choose>
 					</td>
@@ -168,7 +180,7 @@
 					<td>
 					<c:choose>
 						<c:when test="${empty company.advantages}">
-							<div id="writtenReview"></div>
+							<div id="writtenReview">DDDDDDDDDDDDDDDDDDDDDDDDDDDD</div>
 						</c:when>
 						<c:otherwise>
 							${company.advantages}
@@ -178,13 +190,21 @@
 				</tr>
 				<tr>
 					<td></td>
-					<td>
+					<td style="align:center;">
 					<c:choose>
 						<c:when test="${empty company.advantages}">
-							<div id="writtenReview"><h5>단점</h5></div>
+							<div id="writtenReview"><h5>短所</h5></div>
+							<button onclick="location.href=
+								<c:choose>
+									<c:when test="${companyId gt 0}">'company/review?companyId=${companyId}'</c:when>
+									<c:otherwise>'member/login'</c:otherwise>
+								</c:choose>"
+									style="position: absolute; z-index: 1; left:28%; font-size:20px; display: inline-block;">
+								レビューを書く
+							</button>
 						</c:when>
 						<c:otherwise>
-							<h5>단점</h5>
+							<h5>短所</h5>
 						</c:otherwise>
 					</c:choose>
 					</td>
@@ -194,7 +214,7 @@
 					<td>
 					<c:choose>
 						<c:when test="${empty company.advantages}">
-							<div id="writtenReview">${company.disadvantages}</div>
+							<div id="writtenReview">DDDDDDDDDDDDDDDDDDDDDDDDDDDD</div>
 						</c:when>
 						<c:otherwise>
 							${company.disadvantages}
@@ -203,19 +223,27 @@
 					</td>
 				</tr>
 				<tr>
+				<c:if test="${not empty company.advantages}">
 					<td>
-					<c:if test="${not empty company.advantages}">
 						<button data-id="${company.companyReviewId}" onclick="countUp(this);">
 							<div style="display: flex;<c:if test="${company.recommended}"> color: red</c:if>">
-								도움이 돼요(${company.helpfulCount})
+								<i class="thumbs up outline icon"></i><span>いいね(${company.helpfulCount})</span>
 							</div>
 						</button>
-					</c:if>
 					</td>
 					<td></td>
-				<c:if test="${not company.recommended}">　<%-- おすすめしなかった時には表示しない理由は？ --%>
 					<td style="float: right !important;">
-						<button onclick="copy()">COPY</button>
+						<div style="display: flex">
+							<button class="circular ui icon button link-icon copy" onclick="copy();">
+								<i class="copy outline icon"></i>
+							</button>
+							<button class="ui circular facebook icon button" onclick="shareFacebook();">
+								<i class="facebook icon"></i>
+							</button>
+							<button class="ui circular twitter icon button" onclick="shareTwitter();">
+								<i class="twitter icon"></i>
+							</button>
+						</div>
 					</td>
 				</c:if>
 				</tr>
@@ -275,6 +303,15 @@
 		location.search = searchParams.toString();
 	}
 
+	function shareFacebook() {
+		var url = "http://192.168.0.6:8282/blind/company/review/" +${companyId};
+		window.open("http://www.facebook.com/sharer/sharer.php?u=" + url);
+	}
+	function shareTwitter() {
+		var sendUrl = "http://localhost:8282/blind/company/review/" +${companyId}; // 전달할 URL
+		window.open("https://twitter.com/intent/tweet?url=" + sendUrl);
+	}
+
 	function countUp(button) {
 		fetch("company/review/recommend", {
 			method: "POST",
@@ -292,11 +329,12 @@
 			if (responseBody.helpful) {
 				html += " color: red";
 			}
-			html += "\">도움이 돼요(" + responseBody.helpfulCount + ")</div>";
+			html += "\"><i class=\"thumbs up outline icon\"></i>" +
+					"<span>いいね(" + responseBody.helpfulCount + ")<span></div>";
 			button.innerHTML = html;
 		}).catch(function (error) {
 			console.error(error);
-			alert("에러");
+
 		});
 	}
 
@@ -310,7 +348,7 @@
 	}
 
 	function copy() {
-		copyToClipboard('company/review/${companyMenu.companyId}');
+		copyToClipboard('http://localhost:8282/blind/company/review/${companyMenu.companyId}');
 	}
 
 	addEventListener("DOMContentLoaded", function () {
