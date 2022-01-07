@@ -161,7 +161,7 @@
 		var inputCurrentPassword;
 		var inputNewPassword;
 
-		<%--1.현재의 비밀번호를 입력. 본인이 맞는지를 확인.--%>
+		<%--1.現在のパスワードを入力。--%>
 		$("#inputCurrentPassword").on('keyup', function () {
 			inputCurrentPassword = $("#inputCurrentPassword").val();
 			<%--alert("inputNowPassword:"+inputNowPassword);--%>
@@ -172,7 +172,7 @@
 				data: {inputCurrentPassword},
 				dataType: "json",
 				success: function (result) {
-					<%--입력 텍스트 창 밑에 결과(일치여부) 출력.--%>
+					<%--入力テキストウィンドウの下に結果（一致するか、一致しないのか）を出力。--%>
 					if (result == 1) {
 						$(check1_current_password).html(""); <%--초기화(기존내용 삭제)--%>
 						$(check1_current_password).append("<span style=\"color: blue;\">パスワードが一致します。</span>");
