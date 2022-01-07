@@ -24,7 +24,7 @@
 		<th>情報2</th>
 		<th>文のタイトル</th>
 		<th>作成者のニックネーム</th>
-		<th>申告する ボタン</th>
+		<th>通報する ボタン</th>
 	</tr>
 	</thead>
 	<tbody>
@@ -43,7 +43,7 @@
 			</div>
 		</td>
 		<td data-label="report_button">
-			<button class="report_modal_start" onclick="reportModalStart(this.value)" value="0006">申告する（ポスト）</button>
+			<button class="report_modal_start" onclick="reportModalStart(this.value)" value="0006">通報する（ポスト）</button>
 		</td>
 	</tr>
 	<tr>
@@ -61,7 +61,7 @@
 			</div>
 		</td>
 		<td data-label="report_button">
-			<button class="report_modal_start" onclick="reportModalStart(this.value)" value="0008">申告する(企業レビュー)</button>
+			<button class="report_modal_start" onclick="reportModalStart(this.value)" value="0008">通報する(企業レビュー)</button>
 		</td>
 	</tr>
 	<tr>
@@ -79,7 +79,7 @@
 			</div>
 		</td>
 		<td data-label="report_button">
-			<button class="report_modal_start" onclick="reportModalStart(this.value)" value="0012">申告する(コメント)</button>
+			<button class="report_modal_start" onclick="reportModalStart(this.value)" value="0012">通報する(コメント)</button>
 		</td>
 	</tr>
 	</tbody>
@@ -89,7 +89,7 @@
 <div id="report_modal" data-backdrop="static" data-keyboard="false">
 	<div class="warp_report_modal">
 		<div class="inf_title">
-			<h2 style="display: inline;">申告する</h2>
+			<h2 style="display: inline;">通報する</h2>
 			<div style="float: right;" id="modal_close_btn">X</div>
 
 			<div align='left'>
@@ -115,7 +115,7 @@
 
 		<button class="ui primary button" id="send_report"
 				style="width: 100%; height: 50px; text-align: center; margin-top: 20px;">
-			申告する
+			通報する
 		</button>
 	</div>
 </div>
