@@ -19,19 +19,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/resources/**");
 	}
-
+	//안드로이드 테스트위해 시큐리티(보안, 로그인)제한을 해제.
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-			.antMatchers("/manage/**").hasRole("SV")
-			.antMatchers("/image", "/reply", "/post/recommend", "/board").hasAnyRole("SV", "RM")
-			.antMatchers("/member/register", "/member/login", "/member/loginError").anonymous()
-			.antMatchers("/member/registerMemberApp", "/member/loginApp").anonymous()
-			.antMatchers("/", "/main", "/directory", "/search", "/test", "/testAndroidAccess").permitAll()
-			.antMatchers("/post/*", "/company", "/company/search", "/company/annualIncome/*").permitAll()
-			.antMatchers("/company/introduction/*", "/company/news/*", "/company/post/*").permitAll()
-			.antMatchers("/company/review/*", "/company/review/*/*").permitAll()
-			.anyRequest().authenticated()
+//			.antMatchers("/manage/**").hasRole("SV")
+//			.antMatchers("/image", "/reply", "/post/recommend", "/board").hasAnyRole("SV", "RM")
+//			.antMatchers("/member/register", "/member/login", "/member/loginError").anonymous()
+//			.antMatchers("/member/registerMemberApp", "/member/loginApp").anonymous()
+//			.antMatchers("/", "/main", "/directory", "/search", "/test", "/testAndroidAccess").permitAll()
+//			.antMatchers("/post/*", "/company", "/company/search", "/company/annualIncome/*").permitAll()
+//			.antMatchers("/company/introduction/*", "/company/news/*", "/company/post/*").permitAll()
+//			.antMatchers("/company/review/*", "/company/review/*/*").permitAll()
+//			.anyRequest().authenticated()
+			.anyRequest().permitAll()
 			.and().csrf().disable()
 		.formLogin()
 			.loginPage("/member/login")
