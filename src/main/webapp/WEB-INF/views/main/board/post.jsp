@@ -367,6 +367,7 @@
 				<%--textarea 배치--%>
 				$(report_reason_textarea).append(
 					"<textarea id=\"report_reason_content\" " +
+                    <%--"onKeyup=\"checkInputTextByte('その他',document.getElementById('report_reason_content').value ,5)\" "+　--%>
 					"style=\"width: 100%; height: 150px; resize: none;\" disabled></textarea>"
 				);
 
@@ -391,6 +392,17 @@
 		})
 	}
 </sec:authorize>
+
+    <%--ユーザーが入力したテキストのbyteをチェック。maxsize以上ならストップ。 --%>
+    function checkInputTextByte(typeName,inputText,maxSize) {
+        if(inputText.length>maxSize) {
+            alert(typeName+"の入力は"+maxSize+"字まで入力できます。");
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
 
 	$(function () {
 	<sec:authorize access="isAuthenticated()">
@@ -420,15 +432,29 @@
 			var companyReviewId = $('#currentCompanyReviewId').val();
 			var replyId = $('#currentReplyId').val();
 
+            <%--2.3. その他を選んだ時、確認するため使う情報。--%>
+            var reportReasonContent = $('#report_reason_content').val();
+
 			<%--テストコード（send_reportをクリックして送信するでーたを確認。）--%>
 			<%--alert("send_reportType : " + reportType);--%>
 			<%--alert("send_postId : " + postId);--%>
 			<%--alert("send_currentCompanyReviewId : " + companyReviewId);--%>
 			<%--alert("send_replyId : " + replyId);--%>
-
-			if (typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null) {
-				alert("通報する理由を選んでください。"); <%--선택된 신고사항이 없기에 선택을 요청--%>
-			} else {
+			<%--alert("reportReasonContent : " + reportReasonContent);--%>
+            if (typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null) {
+                alert("通報する理由を選んでください。"); <%--선택된 신고사항이 없기에 선택을 요청--%>
+                return false;
+			}
+			if (reportReasonCode == 20 &&  reportReasonContent == "") {
+				alert("その他の理由をテキストに入力してください。"); <%--선택된 신고사항이 없기에 선택을 요청--%>
+				return false;
+			}
+            if (reportReasonCode ==20 && !(checkInputTextByte('その他',reportReasonContent ,200)) ) {
+				<%--入力が400byteが最大。そして200字に制限（１字＝2byte）。--%>
+                <%--案内文（alert）はcheckInputTextByteで出力。--%>
+                return false;
+            }
+            else {
 				$.ajax({
 					type: "POST",
 					url: "report",
