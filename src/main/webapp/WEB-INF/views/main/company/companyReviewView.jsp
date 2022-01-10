@@ -409,7 +409,6 @@
 	}
 
 	<%--1.通報するモーダルウィンドウをポップアップする。--%>
-	<%--1.通報するモーダルウィンドウをポップアップする。--%>
 	function reportModalStart(reportType, postId, companyReviewId, replyId, targetUserNickname, targetTitle) {
 		<%--신고하기 전에 hidden에 미리 정보를 저장. send_report 함수를 실행때 사용할 수 있도록 저장.--%>
 		document.getElementById("currentReportType").value = reportType;
@@ -490,7 +489,17 @@
 			);
 		}
 	}
-	<%--신고하기 관련 AJAX 끝.--%>
+
+	<%--ユーザーが入力したテキストのbyteをチェック。maxsize以上ならストップ。 --%>
+	function checkInputTextByte(typeName,inputText,maxSize) {
+		if(inputText.length>maxSize) {
+			alert(typeName+"の入力は"+maxSize+"字まで入力できます。");
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
 
 	addEventListener("DOMContentLoaded", function () {
 		$('.button').popup({
@@ -512,6 +521,9 @@
 			var companyReviewId = $('#currentCompanyReviewId').val();
 			var replyId = $('#currentReplyId').val();
 
+			<%--2.3. その他を選んだ時、確認するため使う情報。--%>
+			var reportReasonContent = $('#report_reason_content').val();
+
 			<%--テストコード（send_reportをクリックして送信するでーたを確認。）--%>
 			<%--alert("send_reportType : " + reportType);--%>
 			<%--alert("send_postId : " + postId);--%>
@@ -520,7 +532,18 @@
 
 			if (typeof reportReasonCode == "undefined" || reportReasonCode == "" || reportReasonCode == null) {
 				alert("通報する理由を選んでください。"); <%--선택된 신고사항이 없기에 선택을 요청--%>
-			} else {
+				return false;
+			}
+			if (reportReasonCode == 20 &&  reportReasonContent == "") {
+				alert("その他の理由をテキストに入力してください。"); <%--선택된 신고사항이 없기에 선택을 요청--%>
+				return false;
+			}
+			if (reportReasonCode ==20 && !(checkInputTextByte('その他',reportReasonContent ,200)) ) {
+				<%--入力が400byteが最大。そして200字に制限（１字＝2byte）。--%>
+				<%--案内文（alert）はcheckInputTextByteで出力。--%>
+				return false;
+			}
+			else {
 				$.ajax({
 					type: "POST",
 					url: "report",
