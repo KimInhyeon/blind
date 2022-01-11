@@ -28,4 +28,9 @@ public class CompanyAnnualIncomeService {
 	public CompanyAnnualIncomeVO getAnnualIncome(CompanyAnnualIncomeSearchDto search) {
 		return companyAnnualIncomeMapper.getAnnualIncome(search);
 	}
+
+	@Transactional(readOnly = true)
+	public List<CompanyJobGroupVO> getJobGroupListAll(){
+		return companyAnnualIncomeMapper.getJobGroupListAll();
+	}
 }

@@ -12,4 +12,7 @@ public interface CompanyAnnualIncomeMapper {
 	List<CompanyJobGroupVO> getJobGroupListInCompany(long companyId);
 
 	CompanyAnnualIncomeVO getAnnualIncome(CompanyAnnualIncomeSearchDto search);
+
+	List<CompanyJobGroupVO> getJobGroupListAll();
+
 }
