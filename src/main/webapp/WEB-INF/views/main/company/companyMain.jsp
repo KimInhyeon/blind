@@ -175,14 +175,14 @@
 			<div style="margin-top: 5%; width: 80%;">
 				<p align="left">企業名</p>
 				<div class="ui input" style="width: 100%;">
-					<input type="text" placeholder="企業名を入力してください。" id="request_compnay_name" maxlength="50"
-						   onKeyup="checkInputTextByte('企業名',document.getElementById('request_compnay_name').value ,50)">
+					<input type="text" placeholder="企業名を入力してください。" id="request_compnay_name" maxlength="25"
+						   onKeyup="checkInputTextByte('企業名',document.getElementById('request_compnay_name').value ,25)">
 				</div>
 
 				<p align="left">企業のメール</p>
 				<div class="ui input" style="width: 100%;">
-					<input type="text" placeholder="企業のメールを入力してください。" id="request_compnay_email" maxlength="50"
-						   onKeyup="checkInputTextByte('企業のメール',document.getElementById('request_compnay_email').value ,50)">
+					<input type="text" placeholder="企業のメールを入力してください。" id="request_compnay_email" maxlength="25"
+						   onKeyup="checkInputTextByte('企業のメール',document.getElementById('request_compnay_email').value ,25)">
 				</div>
 
 				<button class="ui primary button" id="send_request_company_register"
@@ -230,15 +230,8 @@
 	<%--企業登録申請（BLIND_0013_企業登録申請）モーダルウィンドウのためのajax機能。--%>
 	<%--ユーザーが入力したテキストのbyteをチェック。maxsize以上ならストップ。 --%>
 	function checkInputTextByte(typeName,inputText,maxSize) {
-		str = new String(inputText);
-		var strLen = str.length;
-		var strByte = 0;
-		for (var i=0; i<strLen; i++) {
-			tmp = new String(str.charCodeAt(i));
-			strByte++;
-		}
-		if(strByte>=maxSize) {
-			alert(typeName+"の入力は"+maxSize+"byteまでできます。");
+		if(inputText.length>maxSize) {
+			alert(typeName+"の入力は"+maxSize+"字まで入力できます。");
 			return false;
 		}
 		else{
@@ -293,9 +286,11 @@
 			if(!companyName) {
 				<%--ユーザーが会社名を入力しなかったら、入力案内文出力と企業登録申請をストップ。--%>
 				alert("企業名を入力してください。"); <%--通報内容（選んだラジオボタン）無い時の案内。--%>
+				return false;
 			}
-			if( !checkEmailType(companyDomain) ) {　<%--선택된 신고사항이 없기에 선택을 요청--%>
+			if( !checkEmailType(companyDomain) && !(companyDomain == "") ) {　<%--선택된 신고사항이 없기에 선택을 요청--%>
 				alert("企業メールを形式に合わせて再入力してください");
+				return false;
 			}
 			else {
 				fetch("company", {
