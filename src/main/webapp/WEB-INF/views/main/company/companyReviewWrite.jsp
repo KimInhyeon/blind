@@ -301,7 +301,7 @@
 			return false;
 		}
 
-		const oneWriteReview = document.getElementById("oneWriteReview");
+		var oneWriteReview = document.getElementById("oneWriteReview");
 		if (!oneWriteReview.value.trim()) {
 			alert("簡単なコメントを入力してください");
 			return false;
@@ -314,17 +314,18 @@
 
 		var strongPoint = document.getElementById("strongPoint");
 		if (strongPoint.value.trim().length == 0) {
-			alert("長所を入力してください");
+			alert("長所は１６０文字以内にしてください");
 			return false;
 		}
+		strongPoint.value = strongPoint.value.trim();
 
-		const weakPoint = document.getElementById("weakPoint");
+		var weakPoint = document.getElementById("weakPoint");
 		if (!weakPoint.value.trim()) {
 			alert("短所を入力してください");
 			return false;
 		}
 		if (weakPoint.value.trim().length > 400) {
-			alert("短所は400文字以内にてください");
+			alert("短所は４００文字以内にてください");
 			return false;
 		}
 		weakPoint.value = weakPoint.value.trim();
@@ -335,7 +336,7 @@
 			return false;
 		}
 		if (resignReason.value.trim().length > 100) {
-			alert("転職理由は100文字以内にてください");
+			alert("転職理由は１００文字以内にてください");
 			return false;
 		}
 		resignReason.value = resignReason.value.trim();
@@ -356,7 +357,7 @@
 			return false;
 		}
 		if (workArea.value.trim().length > 50) {
-			alert("勤務先は100文字以内にてください");
+			alert("勤務先は１００文字以内にてください");
 			return false;
 		}
 		workArea.value = workArea.value.trim();

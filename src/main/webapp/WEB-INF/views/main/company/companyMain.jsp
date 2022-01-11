@@ -5,40 +5,32 @@
 		padding: 60px;
 		align: center;
 	}
-
 	.companysearchbox p {
 		font-size: 17px;
 	}
-
 	#searchKeyword {
 		border-radius: 50px;
 		border-color: black;
 	}
-
 	#searchKeyword::placeholder {
 		font-size: 15px;
 		padding-left: 15px;
 	}
-
 	#box {
 		width: 65%;
 		padding: 30px 0;
 	}
-
 	.companyapplymain a {
 		color: black;
 	}
-
 	#apply {
 		text-decoration: underline;
 	}
-
 	#companybackground {
 		background-color: #ebf7fa;
 		height: 270px;
 		margin-top: 30px;
 	}
-
 	#imagetextback {
 		background: url(resources/images/companymainjp.png) 0 0 no-repeat;
 		height: 320px;
@@ -47,38 +39,30 @@
 		background-size: 618px 320px;
 		position: relative;
 	}
-
 	#searchicon {
 		padding-left: 70px;
 	}
-
 	.bestcompanyname {
 		font-size: 15px;
 		font-weight: 700;
 		color: black;
 	}
-
 	.div_star {
 		padding-top: 6px;
 	}
-
 	.div_tab {
 		padding-top: 8px;
 	}
-
 	.div_tab a {
 		font-size: 13px;
 		padding-left: 11px;
 	}
-
 	.div_tab a:first-child {
 		padding-left: 0px;
 	}
-
 	#bestcompanygrid .column:last-child {
 		margin-bottom: 100px;
 	}
-
 	<%-- 기업등록신청(BLIND_0013_企業登録申請) 모달창 css --%>
 	#request_company_register_modal { <%--기업등록 신청 모달창의 크기등을 설정.--%>
 		display: none;
@@ -88,7 +72,6 @@
 		background-color: #ffffff;
 		border-radius: 3px;
 	}
-
 	#request_company_register_modal div { <%--request_company_register_modal 내의 모든 div 옵션--%>
 		list-style: none;
 		margin-bottom: 15px;
@@ -175,14 +158,14 @@
 			<div style="margin-top: 5%; width: 80%;">
 				<p align="left">企業名</p>
 				<div class="ui input" style="width: 100%;">
-					<input type="text" placeholder="企業名を入力してください。" id="request_compnay_name" maxlength="25"
-						   onKeyup="checkInputTextByte('企業名',document.getElementById('request_compnay_name').value ,25)">
+					<input type="text" placeholder="企業名を入力してください。" id="request_compnay_name" maxlength="50"
+						   onKeyup="checkInputTextByte('企業名',document.getElementById('request_compnay_name').value ,50)">
 				</div>
 
 				<p align="left">企業のメール</p>
 				<div class="ui input" style="width: 100%;">
-					<input type="text" placeholder="企業のメールを入力してください。" id="request_compnay_email" maxlength="25"
-						   onKeyup="checkInputTextByte('企業のメール',document.getElementById('request_compnay_email').value ,25)">
+					<input type="text" placeholder="企業のメールを入力してください。" id="request_compnay_email" maxlength="50"
+						   onKeyup="checkInputTextByte('企業のメール',document.getElementById('request_compnay_email').value ,50)">
 				</div>
 
 				<button class="ui primary button" id="send_request_company_register"
@@ -226,19 +209,24 @@
 			});
 		}
 	}
-
 	<%--企業登録申請（BLIND_0013_企業登録申請）モーダルウィンドウのためのajax機能。--%>
 	<%--ユーザーが入力したテキストのbyteをチェック。maxsize以上ならストップ。 --%>
 	function checkInputTextByte(typeName,inputText,maxSize) {
-		if(inputText.length>maxSize) {
-			alert(typeName+"の入力は"+maxSize+"字まで入力できます。");
+		str = new String(inputText);
+		var strLen = str.length;
+		var strByte = 0;
+		for (var i=0; i<strLen; i++) {
+			tmp = new String(str.charCodeAt(i));
+			strByte++;
+		}
+		if(strByte>=maxSize) {
+			alert(typeName+"の入力は"+maxSize+"byteまでできます。");
 			return false;
 		}
 		else{
 			return true;
 		}
 	}
-
 	function checkEmailType(inputTextEmail) {
 		var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 		/*
@@ -250,47 +238,36 @@
 		}
 		*/
 		return regEmail.test(inputTextEmail); // 形式に合うならば、trueをreturn。
-
 	}
-
 	<%--1.기업등록신청 모달(request_company_register_modal)-팝업실시.--%>
 	function requestCompanyRegisterModalStart() {
 		$('#request_company_register_modal').modal({closable: false}); <%--모달밖을 클릭해도 닫히지 않도록 설정.--%>
 		$('#request_company_register_modal').modal('show');
 	}
-
 	$(function () {
 		const $searchKeyword = $("#searchKeyword");
-
 		$searchKeyword.focus(function () {
 			$(this).css("border-color", "black");
 			$(this).css("border-width", "1px");
 		});
-
 		$searchKeyword.blur(function () {
 			$(this).css("border-color", "");
 			$(this).css("border-width", "");
 		});
 		$('.ui.rating').rating('disable');
-
 		$searchKeyword.html("会社の名前を入力してください。");
-
 		document.getElementById("send_request_company_register").addEventListener("click", function () {
 			const companyName = document.getElementById("request_compnay_name").value.trim();
 			const companyDomain = document.getElementById("request_compnay_email").value.trim();
-
 			<%--alert("request_compnay_name :" + request_compnay_name);--%>
 			<%--alert("request_compnay_email :" + request_compnay_email);--%>
-
 			<%----%>
 			if(!companyName) {
 				<%--ユーザーが会社名を入力しなかったら、入力案内文出力と企業登録申請をストップ。--%>
 				alert("企業名を入力してください。"); <%--通報内容（選んだラジオボタン）無い時の案内。--%>
-				return false;
 			}
-			if( !checkEmailType(companyDomain) && !(companyDomain == "") ) {　<%--선택된 신고사항이 없기에 선택을 요청--%>
+			if( !checkEmailType(companyDomain) ) {　<%--선택된 신고사항이 없기에 선택을 요청--%>
 				alert("企業メールを形式に合わせて再入力してください");
-				return false;
 			}
 			else {
 				fetch("company", {
@@ -322,10 +299,8 @@
 				});
 			}
 		});
-
 		$("#modal_close_btn").on("click", function () { <%--신고되면 모달창을 닫도록 함.--%>
 			$('#request_company_register_modal').modal('hide');
 		});
-
 	});
 </script>

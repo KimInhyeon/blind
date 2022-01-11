@@ -84,6 +84,7 @@ public class CompanyReviewController {
 		modelAndView.addObject("reviewAverage", reviewAverage);
 		modelAndView.addObject("navi", navi);
 		modelAndView.addObject("companyList", companyList);
+		modelAndView.addObject("companyId", userId > 0 ? account.getUserId() : 0);
 
 		return modelAndView;
 	}
