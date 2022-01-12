@@ -1,6 +1,20 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style>
+	#report_modal {
+		display: none;
+		width: 400px;
+		height: auto;
+		padding: 20px 20px;
+		background-color: #ffffff;
+		border-radius: 3px;
+	}
+
+	#report_modal div {
+		list-style: none;
+		margin-bottom: 15px;
+	}
+
 	<%--모든 div들은 공통적으로 아래의 간격으로 거리를 띄우도록 설정.--%>
 	div {
 		margin: 1.2%;

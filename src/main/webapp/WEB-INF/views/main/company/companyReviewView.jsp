@@ -1,6 +1,20 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style>
+	#report_modal {
+		display: none;
+		width: 400px;
+		height: auto;
+		padding: 20px 20px;
+		background-color: #ffffff;
+		border-radius: 3px;
+	}
+
+	#report_modal div {
+		list-style: none;
+		margin-bottom: 15px;
+	}
+
 	.tabtable tr td {
 		border: none;
 		padding-top: 10px;

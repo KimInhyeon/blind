@@ -2,6 +2,20 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <style>
+    #report_modal {
+        display: none;
+        width: 400px;
+        height: auto;
+        padding: 20px 20px;
+        background-color: #ffffff;
+        border-radius: 3px;
+    }
+
+    #report_modal div {
+        list-style: none;
+        margin-bottom: 15px;
+    }
+
 	#post:first-child .row {
 		padding-top: 1%;
 		padding-bottom: 1%;
