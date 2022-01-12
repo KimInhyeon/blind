@@ -91,7 +91,7 @@
 				</tr>
 			</table>
 		</div>
-	<c:forEach var="company" items="${companyList}" begin="1" step="1" varStatus="status">
+	<c:forEach var="company" items="${companyList}" begin="0" step="1" varStatus="status">
 		<div id="showCompanyList">
 			<table class="tabtable" border="1" style="width: 100%; margin: 15px auto; padding: 30px">
 					<%--마진은되도록 쓰지말자  --%>

@@ -66,35 +66,35 @@
 						<div style="padding-left: 40px;">
 							<div class="field0" style="float: left; width: 120px;"><label>キャリア向上</label></div>
 							<div class="div_star">
-								<input type="hidden" name="careerPoint">
+								<input type="hidden" value="0" name="careerPoint" id="careerPoint">
 								<div class="ui massive star rating" data-rating="0" data-max-rating="5" id="stars1">
 								</div>
 							</div>
 
 							<div class="field0" style="float: left; width: 120px;"><label>ワークバランス</label></div>
 							<div class="div_star">
-								<input type="hidden" name="workLifeBalancePoint">
+								<input type="hidden" value="0" name="workLifeBalancePoint" id="workLifeBalancePoint">
 								<div class="ui massive star rating" data-rating="0" data-max-rating="5" id="stars2">
 								</div>
 							</div>
 
 							<div class="field0" style="float: left; width: 120px;"><label>給料と福祉</label></div>
 							<div class="div_star">
-								<input type="hidden" name="payPoint">
+								<input type="hidden" value="0" name="payPoint" id="payPoint">
 								<div class="ui massive star rating" data-rating="0" data-max-rating="5" id="stars3">
 								</div>
 							</div>
 
 							<div class="field0" style="float: left; width: 120px;"><label>社内文化</label></div>
 							<div class="div_star">
-								<input type="hidden" name="companyCulturePoint">
+								<input type="hidden" value="0" name="companyCulturePoint" id="companyCulturePoint">
 								<div class="ui massive star rating" data-rating="0" data-max-rating="5" id="stars4">
 								</div>
 							</div>
 
 							<div class="field0" style="float: left; width: 120px;"><label>経営陣</label></div>
 							<div class="div_star">
-								<input type="hidden" name="headPoint">
+								<input type="hidden" value="0" name="headPoint" id="headPoint" >
 								<div class="ui massive star rating" data-rating="0" data-max-rating="5" id="stars5">
 								</div>
 							</div>
@@ -270,33 +270,41 @@
 	}
 
 	function check() {
+
+
+
+
+
+
+
+
 		var companyFlag = $('#hdnCompanyFlag').val();
 		if (companyFlag == -1 || companyFlag == "") {
 			alert("会社名を入力してください");
 			return false;
 		}
-
-		if ($("#hdnCareerPoint").val() == -1) {
+		var careerPoint=$('#careerPoint').val();
+		if ($("#careerPoint").val() == 0) {
 			alert("キャリア向上の点数を入力してください");
 			return false;
 		}
-
-		if ($("#hdnWorkLifeBalancePoint").val() == -1) {
+		var workLifeBalancePoint =$('#workLifeBalancePoint').val();
+		if ($("#workLifeBalancePoint").val() == 0) {
 			alert("ワークライフバランスの点数を入力してください");
 			return false;
 		}
-
-		if ($("#hdnPayPoint").val() == -1) {
+		var payPoint =$('#payPoint').val();
+		if ($('#payPoint').val() == 0) {
 			alert("給料と福祉の点数を入力してください");
 			return false;
 		}
-
-		if ($("#hdnCompanyCulturePoint").val() == -1) {
+		var companyCulturePoint = $('#companyCulturePoint').val();
+		if ($('#companyCulturePoint').val() == 0) {
 			alert("社内文化の点数を入力してください");
 			return false;
 		}
-
-		if ($("#hdnHeadPoint").val() == -1) {
+		var headPoint = $('#headPoint').val();
+		if ($('#headPoint').val() == 0) {
 			alert("経営陣の点数を入力してください");
 			return false;
 		}
