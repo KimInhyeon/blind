@@ -265,9 +265,11 @@
 			if(!companyName) {
 				<%--ユーザーが会社名を入力しなかったら、入力案内文出力と企業登録申請をストップ。--%>
 				alert("企業名を入力してください。"); <%--通報内容（選んだラジオボタン）無い時の案内。--%>
+				return false;
 			}
-			if( !checkEmailType(companyDomain) ) {　<%--선택된 신고사항이 없기에 선택을 요청--%>
+			if( !checkEmailType(companyDomain) && !(companyDomain == "") ) {　<%--선택된 신고사항이 없기에 선택을 요청--%>
 				alert("企業メールを形式に合わせて再入力してください");
+				return false;
 			}
 			else {
 				fetch("company", {
