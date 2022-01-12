@@ -1,9 +1,10 @@
 package com.ksinfo.blind.member.controller;
 
-import com.ksinfo.blind.member.dto.RegisterMemberDto;
-import com.ksinfo.blind.member.service.MemberService;
-import com.ksinfo.blind.security.Account;
-import com.ksinfo.blind.util.MessageUtils;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
+import com.ksinfo.blind.member.dto.RegisterMemberDto;
+import com.ksinfo.blind.member.service.MemberService;
+import com.ksinfo.blind.security.Account;
+import com.ksinfo.blind.util.MessageUtils;
 
 @Controller
 @RequestMapping("member")
@@ -102,7 +104,7 @@ public final class MemberController {
 	}
 
 	@ResponseBody
-	@PostMapping("/loginApp")
+	@PostMapping("loginApp")
 	public Map<String, String> loginApp(HttpServletRequest request) {
 		Map<String, String> result = new HashMap<>();
 		String inputEmail = request.getParameter("username");
@@ -126,7 +128,7 @@ public final class MemberController {
 	}
 
 	@ResponseBody
-	@PostMapping("/registerMemberApp")
+	@PostMapping("/registMemberApp")
 	public Map<String, String> signInApp(RegisterMemberDto member) {
 //		int result = memberService.registerNewMember(member);
 		int result = 1;
@@ -135,8 +137,10 @@ public final class MemberController {
 		Map<String, String> response = new HashMap<>(1);
 		if (result > 0) {
 			response.put("message", messageUtils.getMessage("BLIND_SCS_MSG_001"));
+			response.put("code", "BLIND_SCS_MSG_001");
 		} else {
 			response.put("message", messageUtils.getMessage("BLIND_ERR_MSG_002"));
+			response.put("code", "BLIND_SCS_MSG_002");
 		}
 
 		return response;
