@@ -36,4 +36,12 @@
 			AND job_group_code = #{jobGroupCode}
 		</if>
 	</select>
+
+	<select id="getJobGroupListAll" resultType="com.ksinfo.blind.company.vo.CompanyJobGroupVO">
+		SELECT job_group_code AS jobGroupCode,
+			   job_group_name AS jobGroupName
+		FROM blind.job_group_mst
+		WHERE logical_del_flag = '0'
+	</select>
+
 </mapper>

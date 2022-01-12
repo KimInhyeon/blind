@@ -35,6 +35,7 @@ public final class MainController {
 
 	@GetMapping("board")
 	public List<BoardVO> getBoardList() {
+		System.out.println("connect by androidTest"); //androidがintelliJに接続したことを教えるlog役割のテキスト。
 		return mainService.getBoardList();
 	}
 }

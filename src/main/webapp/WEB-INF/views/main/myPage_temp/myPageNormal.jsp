@@ -302,7 +302,7 @@
 
 						<div class="mypage_button_style_wrap"
 							 onclick="location.href='member/report';">
-							<div class="mypage_button_style_button_name">申告した内容/申告された内容を確認</div>
+							<div class="mypage_button_style_button_name">通報した内容/通報された内容を確認</div>
 							<div class="mypage_button_style_button_icon">
 								<i class="chevron right icon"></i>
 							</div>
