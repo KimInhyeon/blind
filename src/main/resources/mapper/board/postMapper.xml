@@ -114,12 +114,12 @@ $$ LANGUAGE plpgsql;
 		</choose>
 			(SELECT COUNT(*) FROM blind.reply_mgt WHERE post_id = po.post_id AND logical_del_flag = '0') AS replyCount
 		FROM blind.post_mgt AS po
-			INNER JOIN blind.board_mgt AS bo
+			LEFT JOIN blind.board_mgt AS bo
 				ON po.board_id = bo.board_id AND bo.logical_del_flag = '0'
-			INNER JOIN blind.user_mgt AS us
+			LEFT JOIN blind.user_mgt AS us
 				ON po.user_id = us.user_id AND us.last_generation_flag = '1'
-			INNER JOIN blind.company_mgt USING(company_id)
-			INNER JOIN blind.post_count_inf USING(post_id)
+			LEFT JOIN blind.company_mgt USING(company_id)
+			LEFT JOIN blind.post_count_inf USING(post_id)
 		<if test="userId gt 0">
 			INNER JOIN LATERAL (
 				WITH pri AS (
