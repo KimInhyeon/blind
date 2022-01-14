@@ -81,4 +81,9 @@ public final class SearchController {
 
 		return searchService.getPostList(search);
 	}
+
+	@GetMapping("board")
+	public List<BoardVO> getBoardSliderList() {
+		return searchService.getBoardSliderList();
+	}
 }

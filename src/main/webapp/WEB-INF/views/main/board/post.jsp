@@ -86,7 +86,7 @@
 					<a class="ui small header" href="search?boardId=${post.boardId}">${post.boardTopicName}</a>
 				</div>
 				<div class="row">
-					<h2 class="ui header">${post.postTitle}</h2>
+					<h2 class="ui header"><c:out value="${post.postTitle}" escapeXml="true" /></h2>
 				</div>
 				<div class="row">
 				<c:if test="${not empty post.companyName}">

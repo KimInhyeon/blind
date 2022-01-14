@@ -43,16 +43,4 @@ public final class ReplyDto {
 	public char getReplyBlindFlag() {
 		return replyBlindFlag;
 	}
-
-	@Override
-	public String toString() {
-		return "ReplyDto{" +
-				"userId=" + userId +
-				", postId=" + postId +
-				", targetReplyId=" + targetReplyId +
-				", replyFileUrl='" + replyFileUrl + '\'' +
-				", replyContents='" + replyContents + '\'' +
-				", replyBlindFlag=" + replyBlindFlag +
-				'}';
-	}
 }

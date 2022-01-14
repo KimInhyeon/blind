@@ -51,7 +51,7 @@
 			<article class="column" data-id="${post.postId}">
 				<a class="ui grid row" href="post/${post.postId}" target="_blank">
 					<div class="thirteen wide column">
-						<h3 class="ui header row">${post.postTitle}</h3>
+						<h3 class="ui header row"><c:out value="${post.postTitle}" escapeXml="true" /></h3>
 						<div class="row">
 						<c:forEach var="postBlock" items="${post.postContents}">
 							<p>${postBlock.data.text}</p>
