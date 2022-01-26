@@ -73,4 +73,20 @@ public final class CompanyAnnualIncomeController {
 		//System.out.println("annualIncomeCalculator :"+companyAnnualIncomeService.getJobGroupListAll());
 		return companyAnnualIncomeService.getJobGroupListAll();
 	}
+/*
+	// Android-年俸計算機の職種_post_test
+	@GetMapping("annualIncomeCalculator2")
+	public List<CompanyJobGroupVO> requestSample() {
+		System.out.println("android send test post");
+	}
+*/
+	// Android-年俸計算機の職種_post_test
+	@GetMapping("annualIncomeCalculator999")
+	public void requestSample999(String string) {
+		System.out.println("receive text : "+string);
+	}
+
+
+
+
 }
