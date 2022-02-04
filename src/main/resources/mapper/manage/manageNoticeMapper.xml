@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksinfo.blind.manage.mapper.ManageNoticeMapper">
+
+	<select id="getNoticeList" resultType="com.ksinfo.blind.manage.vo.NoticeVO">
+		SELECT
+				notice_id AS noticeId,
+		        notice_title AS noticeTitle,
+				ntm.notice_type_name AS noticeTypeName,
+				um.user_nickname AS userNickname,
+				notice_blind_flag AS noticeBlindFlag,
+				notice_contents AS noticeContents,
+
+				notice_website_url AS noticeWebsiteUrl,
+				post_file_id AS postFileId,
+				notice_create_date  AS noticeCreateDate,
+				notice_update_date AS noticeUpdateDate
+
+		FROM blind.notice_mgt as nm
+
+		LEFT Join blind.notice_type_mst as ntm
+		ON nm.notice_type_code = ntm.notice_type_code
+
+		LEFT Join blind.user_mgt as um
+		ON nm.user_id = um.user_id
+
+		WHERE ntm.logical_del_flag = '0'
+		<if test="anonymousFlag neq '2'">
+			AND anonymous_flag = #{anonymousFlag}
+		</if>
+		ORDER BY notice_id;
+	</select>
+
+
+	<!--
+	<select id="getBoardList" resultType="com.ksinfo.blind.manage.vo.ManageBoardVO">
+		SELECT board_id AS boardId,
+			board_topic_name AS boardTopicName,
+			board_order AS boardOrder,
+			closed_flag AS closedFlag,
+			anonymous_flag AS anonymousFlag
+		FROM blind.board_mgt
+		WHERE logical_del_flag = '0'
+			AND closed_flag = #{closedFlag}
+		<if test="anonymousFlag neq '2'">
+			AND anonymous_flag = #{anonymousFlag}
+		</if>
+		ORDER BY board_order;
+	</select>
+
+	<select id="getLastOrder" resultType="_int">
+		SELECT COUNT(*) FROM blind.board_mgt WHERE logical_del_flag = '0' AND closed_flag = '0';
+	</select>
+	<select id="createBoard" parameterType="com.ksinfo.blind.manage.dto.BoardCreateDto" resultType="_long"
+			statementType="CALLABLE">
+		{CALL blind.create_board(
+			#{boardTopicName}, #{boardOrder}, #{anonymousFlag}, #{userId}
+		)}
+	</select>
+
+	<update id="updateBoard" parameterType="com.ksinfo.blind.manage.dto.BoardUpdateDto" statementType="CALLABLE">
+		CALL blind.update_board(
+			#{boardId}, #{boardTopicName}, #{boardOrder}, #{closedFlag}, #{anonymousFlag}, #{userId}
+		);
+	</update>
+	-->
+</mapper>
