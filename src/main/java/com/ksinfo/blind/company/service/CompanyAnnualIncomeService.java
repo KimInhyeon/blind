@@ -4,6 +4,7 @@ import com.ksinfo.blind.company.dto.CompanyAnnualIncomeSearchDto;
 import com.ksinfo.blind.company.vo.CompanyAnnualIncomeVO;
 import com.ksinfo.blind.company.mapper.CompanyAnnualIncomeMapper;
 import com.ksinfo.blind.company.vo.CompanyJobGroupVO;
+import com.ksinfo.blind.company.vo.CompanyWorkTypeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,4 +34,11 @@ public class CompanyAnnualIncomeService {
 	public List<CompanyJobGroupVO> getJobGroupListAll(){
 		return companyAnnualIncomeMapper.getJobGroupListAll();
 	}
+
+	@Transactional(readOnly = true)
+	public List<CompanyWorkTypeVO> getWorkTypeAll(){
+		return companyAnnualIncomeMapper.getWorkTypeAll();
+	}
+
+
 }

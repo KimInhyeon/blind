@@ -3,6 +3,7 @@ package com.ksinfo.blind.company.mapper;
 import com.ksinfo.blind.company.dto.CompanyAnnualIncomeSearchDto;
 import com.ksinfo.blind.company.vo.CompanyAnnualIncomeVO;
 import com.ksinfo.blind.company.vo.CompanyJobGroupVO;
+import com.ksinfo.blind.company.vo.CompanyWorkTypeVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,5 +15,7 @@ public interface CompanyAnnualIncomeMapper {
 	CompanyAnnualIncomeVO getAnnualIncome(CompanyAnnualIncomeSearchDto search);
 
 	List<CompanyJobGroupVO> getJobGroupListAll();
+
+	List<CompanyWorkTypeVO> getWorkTypeAll();
 
 }

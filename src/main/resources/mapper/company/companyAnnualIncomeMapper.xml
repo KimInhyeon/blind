@@ -44,4 +44,10 @@
 		WHERE logical_del_flag = '0'
 	</select>
 
+	<select id="getWorkTypeAll" resultType="com.ksinfo.blind.company.vo.CompanyWorkTypeVO">
+		SELECT work_type_name AS workTypeName
+		FROM blind.work_type_mst
+		WHERE logical_del_flag = '0'
+	</select>
+
 </mapper>

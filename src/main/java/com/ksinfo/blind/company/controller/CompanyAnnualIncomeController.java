@@ -6,6 +6,7 @@ import com.ksinfo.blind.company.service.CompanyCommonService;
 import com.ksinfo.blind.company.vo.CompanyAnnualIncomeVO;
 import com.ksinfo.blind.company.vo.CompanyJobGroupVO;
 import com.ksinfo.blind.company.vo.CompanyMenuVO;
+import com.ksinfo.blind.company.vo.CompanyWorkTypeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -70,16 +71,17 @@ public final class CompanyAnnualIncomeController {
 	@GetMapping("annualIncomeCalculator")
 	public List<CompanyJobGroupVO> getJobGroupListAll() {
 		System.out.println("android access annualIncomeCalculator");
-		//System.out.println("annualIncomeCalculator :"+companyAnnualIncomeService.getJobGroupListAll());
 		return companyAnnualIncomeService.getJobGroupListAll();
 	}
-/*
-	// Android-年俸計算機の職種_post_test
+
+	// Android-年俸計算機の勤務タイプをreturn
 	@GetMapping("annualIncomeCalculator2")
-	public List<CompanyJobGroupVO> requestSample() {
-		System.out.println("android send test post");
+	public List<CompanyWorkTypeVO> getWorkTypeAll() {
+		System.out.println("android access getWorkTypeAll");
+		return companyAnnualIncomeService.getWorkTypeAll();
 	}
-*/
+
+
 	// Android-年俸計算機の職種_post_test
 	@GetMapping("annualIncomeCalculator999")
 	public void requestSample999(String string) {
