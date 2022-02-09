@@ -88,7 +88,17 @@ public final class CompanyAnnualIncomeController {
 		System.out.println("receive text : "+string);
 	}
 
+	@GetMapping("saveAnnualData")
+	public void saveAnnualData( Integer annualIncome, String selectJob, Integer selectWorkPeriod, Integer selectWorkType, Long userId )
+	{
+		System.out.println("receive annualIncome : "	 + annualIncome);
+		System.out.println("receive selectJob : " 		 + selectJob);
+		System.out.println("receive selectWorkPeriod : " + selectWorkPeriod);
+		System.out.println("receive selectWorkType : "	 + selectWorkType);
+		System.out.println("receive userId : "	 + userId);
 
+		companyAnnualIncomeService.setAnnualData(annualIncome, selectJob, selectWorkPeriod, selectWorkType, userId);
+	}
 
 
 }

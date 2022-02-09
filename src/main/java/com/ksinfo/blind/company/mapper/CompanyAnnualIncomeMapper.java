@@ -18,4 +18,5 @@ public interface CompanyAnnualIncomeMapper {
 
 	List<CompanyWorkTypeVO> getWorkTypeAll();
 
+	void setAnnualData(java.util.Map<String, Object> paramMap);
 }
