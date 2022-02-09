@@ -10,8 +10,8 @@
 
                 notice_website_url AS noticeWebsiteUrl,
                 post_file_id AS postFileId,
-                notice_create_date  AS noticeCreateDate,
-                notice_update_date AS noticeUpdateDate
+                to_char(notice_create_date,'YYYY-MM-DD')  AS noticeCreateDate,
+                to_char(notice_update_date,'YYYY-MM-DD')  AS noticeUpdateDate
 
         FROM blind.notice_mgt as nm
 
