@@ -2,6 +2,7 @@ package com.ksinfo.blind.board.vo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public final class ReplyVO {
 	private final long replyId;
@@ -33,27 +34,11 @@ public final class ReplyVO {
 		this.userNickname = userNickname;
 		this.targetReplyId = targetReplyId;
 		this.targetNickname = targetNickname;
+		StringTokenizer st = new StringTokenizer(replyContents, "\n", false);
 		this.replyContents = new ArrayList<>();
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0, length = replyContents.length(); i < length; ++i) {
-			char c = replyContents.charAt(i);
-			switch (c) {
-				case '>':
-					sb.append("&gt;");
-					break;
-				case '<':
-					sb.append("&lt;");
-					break;
-				case '\n':
-					this.replyContents.add(sb.toString());
-					sb.setLength(0);
-					break;
-				default:
-					sb.append(c);
-					break;
-			}
+		while (st.hasMoreTokens()) {
+			this.replyContents.add(st.nextToken());
 		}
-		this.replyContents.add(sb.toString());
 		this.replyBlindFlag = replyBlindFlag;
 		this.recCreateDate = recCreateDate;
 		this.visible = visible;

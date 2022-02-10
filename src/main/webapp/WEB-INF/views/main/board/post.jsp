@@ -189,7 +189,7 @@
 							<img class="ui image" src="${reply.replyFileUrl}" onclick="enlargeImage(this.src);">
 						</c:if>
 						<c:forEach var="replyLine" items="${reply.replyContents}">
-							<p class="replyLine">${replyLine}</p><br>
+							<p class="replyLine"><c:out value="${replyLine}" escapeXml="true" /></p><br>
 						</c:forEach>
 						</div>
 					</div>
@@ -414,7 +414,7 @@
 				<%-- companyReviewId。ここではするポストの通報ので’０’を入力して動作しないに設定する。--%>
 				<%-- 通報するポストを作成したユーザのニックネーム。--%>
 				<%-- 通報するポストのタイトル。--%>
-				reportModalStart("0006", ${post.postId}, 0, 0, "${post.userNickname}", "${post.postTitle}");
+				reportModalStart("0006", ${post.postId}, 0, 0, "${post.userNickname}", "<c:out value="${post.postTitle}" escapeXml="true" />");
 			});
 		</c:if>
 		setReplyReportEvent();

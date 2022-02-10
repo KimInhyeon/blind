@@ -6,6 +6,7 @@ import com.ksinfo.blind.board.dto.PostRequestDto;
 import com.ksinfo.blind.board.dto.PostUpdateDto;
 import com.ksinfo.blind.board.service.PostService;
 import com.ksinfo.blind.board.service.ReplyService;
+import com.ksinfo.blind.board.vo.PostAndReplyVO;
 import com.ksinfo.blind.board.vo.PostRecommendVO;
 import com.ksinfo.blind.board.vo.PostVO;
 import com.ksinfo.blind.board.vo.ReplyVO;
@@ -79,6 +80,7 @@ public final class PostController {
 				postService.readPost(postId);
 			}
 		}
+
 		PostRequestDto postRequest = new PostRequestDto(account == null ? 0L : account.getUserId(), postId);
 		PostVO post = postService.getPost(postRequest);
 		if (post == null) {
@@ -93,7 +95,40 @@ public final class PostController {
 		return modelAndView;
 	}
 
-	// 取り消しができるか仕様確認が必要
+	// Android
+	@GetMapping(value = "{postId}", params = "ajax=true")
+	public PostAndReplyVO getPost(
+		@AuthenticationPrincipal Account account, @PathVariable long postId,
+		@CookieValue(name = "readPost", required = false) Cookie cookie, HttpServletResponse httpServletResponse
+	) {
+		if (cookie == null) {
+			cookie = new Cookie("readPost", Long.toString(postId));
+			httpServletResponse.addCookie(cookie);
+			postService.readPost(postId);
+		} else {
+			String history = cookie.getValue();
+			StringTokenizer st = new StringTokenizer(history, "\\|", false);
+			boolean isReadPost;
+			do {
+				isReadPost = postId == Long.parseLong(st.nextToken());
+			} while (!isReadPost && st.hasMoreTokens());
+			if (!isReadPost) {
+				cookie.setValue(history + '|' + postId);
+				httpServletResponse.addCookie(cookie);
+				postService.readPost(postId);
+			}
+		}
+
+		PostRequestDto postRequest = new PostRequestDto(account == null ? 0L : account.getUserId(), postId);
+		PostVO post = postService.getPost(postRequest);
+		if (post == null) {
+			throw new NullPointerException();
+		}
+		List<ReplyVO> replyList = replyService.getReplyList(postRequest);
+
+		return new PostAndReplyVO(post, replyList);
+	}
+
 	@PostMapping("recommend")
 	public PostRecommendVO recommendPost(@AuthenticationPrincipal Account account, @RequestBody long postId) {
 		PostRecommendDto postRecommendDto = new PostRecommendDto(account.getUserId(), postId);
