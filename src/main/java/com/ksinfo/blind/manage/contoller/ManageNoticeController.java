@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("manage/notice")
+@RequestMapping("manage/notices")
 public final class ManageNoticeController {
     private final ManageNoticeService manageNoticeService;
 
@@ -28,10 +28,11 @@ public final class ManageNoticeController {
     ) {
         List<NoticeVO> noticeList = manageNoticeService.getNoticeList(closedFlag, anonymousFlag);
 
-        ModelAndView modelAndView = new ModelAndView("main/manage/manageNotice");
+        ModelAndView modelAndView = new ModelAndView("main/manage/manageNotices");
         modelAndView.addObject("noticeList", noticeList);
-
         if (closedFlag == '0' && anonymousFlag == '2') {
+            //closedFlag :
+            //anonymousFlag :
             modelAndView.addObject("lastOrder", noticeList.size());
         }
         /*
