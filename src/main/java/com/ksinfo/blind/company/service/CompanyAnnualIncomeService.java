@@ -1,10 +1,8 @@
 package com.ksinfo.blind.company.service;
 
 import com.ksinfo.blind.company.dto.CompanyAnnualIncomeSearchDto;
-import com.ksinfo.blind.company.vo.CompanyAnnualIncomeVO;
+import com.ksinfo.blind.company.vo.*;
 import com.ksinfo.blind.company.mapper.CompanyAnnualIncomeMapper;
-import com.ksinfo.blind.company.vo.CompanyJobGroupVO;
-import com.ksinfo.blind.company.vo.CompanyWorkTypeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,5 +59,31 @@ public class CompanyAnnualIncomeService {
 		*/
 		companyAnnualIncomeMapper.setAnnualData(paramMap);
 	}
+
+	@Transactional(readOnly = true)
+	public List<CompanyBusinessTypeVO> getBusinessTypeNameList() {
+		return companyAnnualIncomeMapper.getBusinessTypeNameList();
+	}
+
+
+	@Transactional(readOnly = true)
+	public CompanyAnnualIncomeForAndroidVO getAnnualIncomeFristPage( long userId) {
+		return companyAnnualIncomeMapper.getAnnualIncomeFristPage(userId);
+	}
+
+	@Transactional(readOnly = true)
+	public CompanyAnnualIncomeForAndroidVO getAnnualIncomeUpdateToSelectedSpinner( Integer selectBusinessType, Integer selectJobGroup, Integer selectWorkPeriod,Long userId ){
+		java.util.Map<String, Object> paramMap = new HashMap<String, Object>();
+
+		//메모 String :키값, object : 밸류값
+		paramMap.put("selectBusinessType", selectBusinessType);
+		paramMap.put("selectJobGroup", selectJobGroup);
+		paramMap.put("selectWorkPeriod", selectWorkPeriod);
+		paramMap.put("userId", userId);
+
+		return companyAnnualIncomeMapper.getAnnualIncomeUpdateToSelectedSpinner(paramMap);
+		//return companyAnnualIncomeMapper.getAnnualIncomeForAndroid(paramMap);
+	}
+
 
 }

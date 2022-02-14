@@ -1,10 +1,9 @@
 package com.ksinfo.blind.company.mapper;
 
 import com.ksinfo.blind.company.dto.CompanyAnnualIncomeSearchDto;
-import com.ksinfo.blind.company.vo.CompanyAnnualIncomeVO;
-import com.ksinfo.blind.company.vo.CompanyJobGroupVO;
-import com.ksinfo.blind.company.vo.CompanyWorkTypeVO;
+import com.ksinfo.blind.company.vo.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,4 +18,11 @@ public interface CompanyAnnualIncomeMapper {
 	List<CompanyWorkTypeVO> getWorkTypeAll();
 
 	void setAnnualData(java.util.Map<String, Object> paramMap);
+
+	List<CompanyBusinessTypeVO> getBusinessTypeNameList();
+
+	CompanyAnnualIncomeForAndroidVO getAnnualIncomeFristPage(Long userId);
+
+	CompanyAnnualIncomeForAndroidVO getAnnualIncomeUpdateToSelectedSpinner(java.util.Map<String, Object> paramMap);
+
 }

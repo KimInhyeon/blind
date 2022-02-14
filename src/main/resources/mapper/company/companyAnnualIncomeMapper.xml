@@ -21,8 +21,8 @@
 	<select id="getAnnualIncome" parameterType="com.ksinfo.blind.company.dto.CompanyAnnualIncomeSearchDto"
 			resultType="com.ksinfo.blind.company.vo.CompanyAnnualIncomeVO">
 		SELECT MIN(salary) AS minAnnualIncome,
-			ROUND(AVG(salary), 0) AS avgAnnualIncome,
-			MAX("blind".salary_rank_mgt.salary) AS maxAnnualIncome
+			   ROUND(AVG(salary), 0) AS avgAnnualIncome,
+			   MAX("blind".salary_rank_mgt.salary) AS maxAnnualIncome
 		FROM blind.salary_rank_mgt
 			INNER JOIN (
 				SELECT user_id, MAX(user_generation)
@@ -50,7 +50,6 @@
 		WHERE logical_del_flag = '0'
 	</select>
 
-
 	<insert id="setAnnualData" parameterType="java.util.Map">
 		insert INTO blind.salary_rank_mgt(
 			user_id,
@@ -69,5 +68,71 @@
 		);
 	</insert>
 
+	<select id="getBusinessTypeNameList" resultType="com.ksinfo.blind.company.vo.CompanyBusinessTypeVO">
+		select btm.business_type_name AS businessTypeName
+		from blind.business_type_mst as btm
+	</select>
+
+	<select id="getAnnualIncomeFristPage" parameterType="Long"
+			resultType="com.ksinfo.blind.company.vo.CompanyAnnualIncomeForAndroidVO">
+		SELECT (SELECT SRM.salary AS userAnnualIncome
+					FROM blind.salary_rank_mgt as SRM
+				 	WHERE logical_del_flag = '0'
+					 	AND SRM.user_id = 1),
+				MIN(SRM.salary) AS minAnnualIncome,
+				ROUND(AVG(SRM.salary), 0) AS avgAnnualIncome,
+				MAX(SRM.salary) AS maxAnnualIncome,
+				count(SRM.salary) AS countOfParticipant,
+				(SELECT ROUND((CAST(rank.salaryranking AS DECIMAL) / (SELECT COUNT(*) FROM blind.salary_rank_mgt) * 100), 1)
+					FROM BLIND.salary_rank_mgt AS target
+					INNER JOIN (SELECT user_id, RANK() OVER(ORDER BY salary DESC) AS salaryranking
+						FROM blind.salary_rank_mgt) AS rank USING(user_id)
+					WHERE target.user_id = #{userId} ) as userRank
+			FROM blind.salary_rank_mgt as SRM
+			WHERE logical_del_flag = '0'
+				AND SRM.job_group_code =(SELECT SRM.job_group_code
+											FROM blind.salary_rank_mgt as SRM
+											WHERE SRM.user_id = #{userId}  )
+	<!--
+		SELECT (SELECT SRM.salary AS userAnnualIncome
+				FROM blind.salary_rank_mgt as SRM
+				WHERE logical_del_flag = '0'
+				  AND SRM.user_id = #{userId} ),
+			   MIN(SRM.salary) AS minAnnualIncome,
+			   ROUND(AVG(SRM.salary), 0) AS avgAnnualIncome,
+			   MAX(SRM.salary) AS maxAnnualIncome,
+			   count(SRM.salary) AS countOfParticipant
+		FROM blind.salary_rank_mgt as SRM
+		WHERE logical_del_flag = '0'
+		  AND SRM.job_group_code
+			  =(SELECT SRM.job_group_code
+			    FROM blind.salary_rank_mgt as SRM
+			    WHERE SRM.user_id = #{userId} )
+	-->
+	</select>
+
+	<select id="getAnnualIncomeUpdateToSelectedSpinner" parameterType="java.util.Map"
+			resultType="com.ksinfo.blind.company.vo.CompanyAnnualIncomeForAndroidVO">
+		SELECT	MIN(SRM.salary) AS minAnnualIncome,
+				  ROUND(AVG(SRM.salary), 0) AS avgAnnualIncome,
+				  MAX(SRM.salary) AS maxAnnualIncome,
+				  count(SRM.salary) AS countOfParticipant
+		FROM blind.salary_rank_mgt as SRM
+		WHERE logical_del_flag = '0'
+			-- AND SRM.job_group_code = #{selectBusinessType} <!-- [메모] 업계를 필터링하는 조건  -->
+			AND SRM.job_group_code = #{selectJobGroup} <!-- [메모] 직군를 필터링하는 조건  -->
+			<!-- [메모] 근무년수를 필터링하는 조건  -->
+			<choose>
+				<when test="#{countOfParticipant} eq 32"> <!-- 메모 32 : '근무년수 전체'  -->
+					<!-- 메모 조건이 없으면 자동으로 전체를 대상으로 하게 된다.-->
+				</when>
+				<when test="#{countOfParticipant} eq 31"> <!-- 메모 31 : '30년 이상' -->
+					AND SRM.years_of_service >=30
+				</when>
+				<otherwise>
+					AND SRM.years_of_service = #{countOfParticipant}
+				</otherwise>
+			</choose>
+	</select>
 
 </mapper>

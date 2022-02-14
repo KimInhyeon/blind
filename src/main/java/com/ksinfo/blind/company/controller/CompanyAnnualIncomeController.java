@@ -3,10 +3,7 @@ package com.ksinfo.blind.company.controller;
 import com.ksinfo.blind.company.dto.CompanyAnnualIncomeSearchDto;
 import com.ksinfo.blind.company.service.CompanyAnnualIncomeService;
 import com.ksinfo.blind.company.service.CompanyCommonService;
-import com.ksinfo.blind.company.vo.CompanyAnnualIncomeVO;
-import com.ksinfo.blind.company.vo.CompanyJobGroupVO;
-import com.ksinfo.blind.company.vo.CompanyMenuVO;
-import com.ksinfo.blind.company.vo.CompanyWorkTypeVO;
+import com.ksinfo.blind.company.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,6 +64,8 @@ public final class CompanyAnnualIncomeController {
 		return companyAnnualIncomeService.getAnnualIncome(search);
 	}
 
+	//下のコードはAndroidに関連のコード。
+
 	// Android-年俸計算機の職種return
 	@GetMapping("annualIncomeCalculator")
 	public List<CompanyJobGroupVO> getJobGroupListAll() {
@@ -79,6 +78,13 @@ public final class CompanyAnnualIncomeController {
 	public List<CompanyWorkTypeVO> getWorkTypeAll() {
 		System.out.println("android access getWorkTypeAll");
 		return companyAnnualIncomeService.getWorkTypeAll();
+	}
+
+	// Android-業界(businessType)をreturn
+	@GetMapping("getBusinessTypeNameList")
+	public List<CompanyBusinessTypeVO> getBusinessTypeNameList() {
+		System.out.println("android access getBusinessTypeNameList");
+		return companyAnnualIncomeService.getBusinessTypeNameList();
 	}
 
 
@@ -100,5 +106,23 @@ public final class CompanyAnnualIncomeController {
 		companyAnnualIncomeService.setAnnualData(annualIncome, selectJob, selectWorkPeriod, selectWorkType, userId);
 	}
 
+	//Androidに接続しているuserIdを確認、ユーザーの年俸をreturnする。（Webには使わない。）
+	@GetMapping("getAnnualIncomeFristPage")
+	public CompanyAnnualIncomeForAndroidVO getAnnualIncomeFristPage( Long userId )
+	{
+		System.out.println("receive userId : " + userId);
+		return companyAnnualIncomeService.getAnnualIncomeFristPage(userId);
+	}
+
+	@GetMapping("getAnnualIncomeUpdateToSelectedSpinner")
+	public CompanyAnnualIncomeForAndroidVO  getAnnualIncomeUpdateToSelectedSpinner( Integer selectBusinessType, Integer selectJobGroup, Integer selectWorkPeriod, Long userId)
+	{
+		System.out.println("receive selectBusinessType : " + selectBusinessType);
+		System.out.println("receive selectJobGroup : " 	   + selectJobGroup);
+		System.out.println("receive selectWorkPeriod : "   + selectWorkPeriod);
+		System.out.println("receive userId : " + userId);
+
+		return companyAnnualIncomeService.getAnnualIncomeUpdateToSelectedSpinner(selectBusinessType, selectJobGroup, selectWorkPeriod, userId );
+	}
 
 }
