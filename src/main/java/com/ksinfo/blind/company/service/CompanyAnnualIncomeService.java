@@ -39,6 +39,13 @@ public class CompanyAnnualIncomeService {
 		return companyAnnualIncomeMapper.getWorkTypeAll();
 	}
 
+	/*
+	@Transactional(readOnly = true)
+	public List<CompanyBusinessTypeVO> getBusinessTypeNameList() {
+		return companyAnnualIncomeMapper.getBusinessTypeNameList();
+	}
+	*/
+
 	public void setAnnualData(Integer annualIncome, String selectJob, Integer selectWorkPeriod, Integer selectWorkType, Long userId){
 		java.util.Map<String, Object> paramMap = new HashMap<String, Object>();
 
@@ -61,18 +68,31 @@ public class CompanyAnnualIncomeService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<CompanyBusinessTypeVO> getBusinessTypeNameList() {
-		return companyAnnualIncomeMapper.getBusinessTypeNameList();
-	}
-
-
-	@Transactional(readOnly = true)
-	public CompanyAnnualIncomeForAndroidVO getAnnualIncomeFristPage( long userId) {
-		return companyAnnualIncomeMapper.getAnnualIncomeFristPage(userId);
+	public List<CompanyBusinessTypeVO> getBusinessTypeListExistAIData()
+	{
+		return companyAnnualIncomeMapper.getBusinessTypeListExistAIData();
 	}
 
 	@Transactional(readOnly = true)
-	public CompanyAnnualIncomeForAndroidVO getAnnualIncomeUpdateToSelectedSpinner( Integer selectBusinessType, Integer selectJobGroup, Integer selectWorkPeriod,Long userId ){
+	public List<CompanyJobGroupVO> getJobGroupListExistAIData()
+	{
+		return companyAnnualIncomeMapper.getJobGroupListExistAIData();
+	}
+
+	@Transactional(readOnly = true)
+	public CompanyBusinessTypeVO getUserBusinessTypeCode(Long userId)
+	{
+		return companyAnnualIncomeMapper.getUserBusinessTypeCode(userId);
+	}
+
+	@Transactional(readOnly = true)
+	public CompanyJobGroupVO getUserJobGroupCode(Long userId)
+	{
+		return companyAnnualIncomeMapper.getUserJobGroupCode( userId );
+	}
+
+	@Transactional(readOnly = true)
+	public AnnualIncomeRankVO getAnnualIncomeAndRank( Integer selectBusinessType, Integer selectJobGroup, Integer selectWorkPeriod,Long userId ){
 		java.util.Map<String, Object> paramMap = new HashMap<String, Object>();
 
 		//메모 String :키값, object : 밸류값
@@ -81,8 +101,7 @@ public class CompanyAnnualIncomeService {
 		paramMap.put("selectWorkPeriod", selectWorkPeriod);
 		paramMap.put("userId", userId);
 
-		return companyAnnualIncomeMapper.getAnnualIncomeUpdateToSelectedSpinner(paramMap);
-		//return companyAnnualIncomeMapper.getAnnualIncomeForAndroid(paramMap);
+		return companyAnnualIncomeMapper.getAnnualIncomeAndRank(paramMap);
 	}
 
 

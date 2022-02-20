@@ -69,7 +69,7 @@ public final class CompanyAnnualIncomeController {
 	// Android-年俸計算機の職種return
 	@GetMapping("annualIncomeCalculator")
 	public List<CompanyJobGroupVO> getJobGroupListAll() {
-		System.out.println("android access annualIncomeCalculator");
+		System.out.println("android access getJobGroupListAll");
 		return companyAnnualIncomeService.getJobGroupListAll();
 	}
 
@@ -79,20 +79,18 @@ public final class CompanyAnnualIncomeController {
 		System.out.println("android access getWorkTypeAll");
 		return companyAnnualIncomeService.getWorkTypeAll();
 	}
-
+	/*
 	// Android-業界(businessType)をreturn
 	@GetMapping("getBusinessTypeNameList")
 	public List<CompanyBusinessTypeVO> getBusinessTypeNameList() {
 		System.out.println("android access getBusinessTypeNameList");
 		return companyAnnualIncomeService.getBusinessTypeNameList();
 	}
-
+	*/
 
 	// Android-年俸計算機の職種_post_test
-	@GetMapping("annualIncomeCalculator999")
-	public void requestSample999(String string) {
-		System.out.println("receive text : "+string);
-	}
+	//@GetMapping("annualIncomeCalculator999")
+	//public void requestSample999(String string) { System.out.println("receive text : "+string); }
 
 	@GetMapping("saveAnnualData")
 	public void saveAnnualData( Integer annualIncome, String selectJob, Integer selectWorkPeriod, Integer selectWorkType, Long userId )
@@ -106,23 +104,54 @@ public final class CompanyAnnualIncomeController {
 		companyAnnualIncomeService.setAnnualData(annualIncome, selectJob, selectWorkPeriod, selectWorkType, userId);
 	}
 
-	//Androidに接続しているuserIdを確認、ユーザーの年俸をreturnする。（Webには使わない。）
-	@GetMapping("getAnnualIncomeFristPage")
-	public CompanyAnnualIncomeForAndroidVO getAnnualIncomeFristPage( Long userId )
-	{
-		System.out.println("receive userId : " + userId);
-		return companyAnnualIncomeService.getAnnualIncomeFristPage(userId);
+
+
+	//Android - RankPage
+	// Android-業界(businessType)をreturn.
+	//[메모] 4.Rank페이지에서 spinner의 item을 구성할 업계들을 리턴.
+	@GetMapping("getBusinessTypeListExistAIData")
+	public List<CompanyBusinessTypeVO> getBusinessTypeListExistAIData() {
+		System.out.println("android access getBusinessTypeListExistAIData");
+		return companyAnnualIncomeService.getBusinessTypeListExistAIData();
 	}
 
-	@GetMapping("getAnnualIncomeUpdateToSelectedSpinner")
-	public CompanyAnnualIncomeForAndroidVO  getAnnualIncomeUpdateToSelectedSpinner( Integer selectBusinessType, Integer selectJobGroup, Integer selectWorkPeriod, Long userId)
+	// Android-業界(businessType)をreturn.
+	//[메모] 5.Rank페이지에서 spinner의 item을 구성할 직군들을 리턴.
+	@GetMapping("getJobGroupListExistAIData")
+	public List<CompanyJobGroupVO> getJobGroupListExistAIData() {
+		System.out.println("android access getJobGroupListExistAIData");
+		return companyAnnualIncomeService.getJobGroupListExistAIData();
+	}
+
+	//[메모] 1.Rank 페이지의 최초출력(유저랭크)을 위해 '유저가 일하는 회사의 업계코드'를 리턴.
+	@GetMapping("getUserBusinessTypeCode")
+	public CompanyBusinessTypeVO getUserBusinessTypeCode(Long userId)
 	{
+		System.out.println("access getAnnualIncomeUpdateBySelectedSpinner");
+		System.out.println("receive userId : " + userId);
+		return companyAnnualIncomeService.getUserBusinessTypeCode(userId );
+	}
+
+	//[메모] 2.Rank 페이지의 최초출력(유저랭크)을 위해 '유저의 직군코드' 리턴.
+	@GetMapping("getUserJobGroupCode")
+	public CompanyJobGroupVO getUserJobGroupCode(Long userId)
+	{
+		System.out.println("access getAnnualIncomeUpdateBySelectedSpinner");
+		System.out.println("receive userId : " + userId);
+		return companyAnnualIncomeService.getUserJobGroupCode( userId );
+	}
+
+	//[메모] 3.Rank 페이지의 최초출력(유저랭크)을 위해 '유저의 직군코드' 리턴.
+	@GetMapping("getAnnualIncomeAndRank")
+	public AnnualIncomeRankVO  getAnnualIncomeAndRank( Integer selectBusinessType, Integer selectJobGroup, Integer selectWorkPeriod, Long userId)
+	{
+		System.out.println("access getAnnualIncomeUpdateBySelectedSpinner");
 		System.out.println("receive selectBusinessType : " + selectBusinessType);
 		System.out.println("receive selectJobGroup : " 	   + selectJobGroup);
 		System.out.println("receive selectWorkPeriod : "   + selectWorkPeriod);
 		System.out.println("receive userId : " + userId);
 
-		return companyAnnualIncomeService.getAnnualIncomeUpdateToSelectedSpinner(selectBusinessType, selectJobGroup, selectWorkPeriod, userId );
+		return companyAnnualIncomeService.getAnnualIncomeAndRank(selectBusinessType, selectJobGroup, selectWorkPeriod, userId );
 	}
 
 }

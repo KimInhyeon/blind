@@ -19,10 +19,16 @@ public interface CompanyAnnualIncomeMapper {
 
 	void setAnnualData(java.util.Map<String, Object> paramMap);
 
-	List<CompanyBusinessTypeVO> getBusinessTypeNameList();
+	//List<CompanyBusinessTypeVO> getBusinessTypeNameList();
 
-	CompanyAnnualIncomeForAndroidVO getAnnualIncomeFristPage(Long userId);
+	List<CompanyBusinessTypeVO> getBusinessTypeListExistAIData();
 
-	CompanyAnnualIncomeForAndroidVO getAnnualIncomeUpdateToSelectedSpinner(java.util.Map<String, Object> paramMap);
+	List<CompanyJobGroupVO> getJobGroupListExistAIData();
+
+	CompanyBusinessTypeVO  getUserBusinessTypeCode(Long userId);
+
+	CompanyJobGroupVO getUserJobGroupCode(Long userId);
+
+	AnnualIncomeRankVO getAnnualIncomeAndRank(java.util.Map<String, Object> paramMap);
 
 }

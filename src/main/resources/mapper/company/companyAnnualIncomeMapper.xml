@@ -67,59 +67,61 @@
 			#{userId}, now(), #{userId}, now(), '0'
 		);
 	</insert>
-
+	<!--
 	<select id="getBusinessTypeNameList" resultType="com.ksinfo.blind.company.vo.CompanyBusinessTypeVO">
 		select btm.business_type_name AS businessTypeName
 		from blind.business_type_mst as btm
 	</select>
-
-	<select id="getAnnualIncomeFristPage" parameterType="Long"
-			resultType="com.ksinfo.blind.company.vo.CompanyAnnualIncomeForAndroidVO">
-		SELECT (SELECT SRM.salary AS userAnnualIncome
-					FROM blind.salary_rank_mgt as SRM
-				 	WHERE logical_del_flag = '0'
-					 	AND SRM.user_id = 1),
-				MIN(SRM.salary) AS minAnnualIncome,
-				ROUND(AVG(SRM.salary), 0) AS avgAnnualIncome,
-				MAX(SRM.salary) AS maxAnnualIncome,
-				count(SRM.salary) AS countOfParticipant,
-				(SELECT ROUND((CAST(rank.salaryranking AS DECIMAL) / (SELECT COUNT(*) FROM blind.salary_rank_mgt) * 100), 1)
-					FROM BLIND.salary_rank_mgt AS target
-					INNER JOIN (SELECT user_id, RANK() OVER(ORDER BY salary DESC) AS salaryranking
-						FROM blind.salary_rank_mgt) AS rank USING(user_id)
-					WHERE target.user_id = #{userId} ) as userRank
-			FROM blind.salary_rank_mgt as SRM
-			WHERE logical_del_flag = '0'
-				AND SRM.job_group_code =(SELECT SRM.job_group_code
-											FROM blind.salary_rank_mgt as SRM
-											WHERE SRM.user_id = #{userId}  )
-	<!--
-		SELECT (SELECT SRM.salary AS userAnnualIncome
-				FROM blind.salary_rank_mgt as SRM
-				WHERE logical_del_flag = '0'
-				  AND SRM.user_id = #{userId} ),
-			   MIN(SRM.salary) AS minAnnualIncome,
-			   ROUND(AVG(SRM.salary), 0) AS avgAnnualIncome,
-			   MAX(SRM.salary) AS maxAnnualIncome,
-			   count(SRM.salary) AS countOfParticipant
-		FROM blind.salary_rank_mgt as SRM
-		WHERE logical_del_flag = '0'
-		  AND SRM.job_group_code
-			  =(SELECT SRM.job_group_code
-			    FROM blind.salary_rank_mgt as SRM
-			    WHERE SRM.user_id = #{userId} )
 	-->
+
+	<select id="getBusinessTypeListExistAIData" resultType="com.ksinfo.blind.company.vo.CompanyBusinessTypeVO">
+		select DISTINCT
+			btm.business_type_code AS businessTypeCode,
+		    btm.business_type_name AS businessTypeName
+		from blind.business_type_mst as btm
+		Inner Join blind.company_mgt as cm
+			on cm.business_type_code = btm.business_type_code
+		Inner Join blind.user_mgt as um
+			on um.company_id = cm.company_id
+		Inner Join blind.salary_rank_mgt as srm
+			on srm.user_id = um.user_id
+		WHERE btm.logical_del_flag = '0'
 	</select>
 
-	<select id="getAnnualIncomeUpdateToSelectedSpinner" parameterType="java.util.Map"
-			resultType="com.ksinfo.blind.company.vo.CompanyAnnualIncomeForAndroidVO">
+	<select id="getJobGroupListExistAIData" resultType="com.ksinfo.blind.company.vo.CompanyJobGroupVO">
+		select DISTINCT
+			jgm.job_group_code AS jobGroupCode,
+			jgm.job_group_name AS jobGroupName
+		from blind.job_group_mst as jgm
+			Inner Join blind.salary_rank_mgt as srm
+				on srm.job_group_code = jgm.job_group_code
+		WHERE jgm.logical_del_flag = '0'
+	</select>
+
+	<select id="getUserBusinessTypeCode" parameterType="long"
+			resultType="com.ksinfo.blind.company.vo.CompanyBusinessTypeVO">
+		select  cm.business_type_code AS businessTypeCode
+		from blind.company_mgt AS cm
+		where cm.user_id = #{userId};
+	</select>
+
+	<select id="getUserJobGroupCode" parameterType="long"
+			resultType="com.ksinfo.blind.company.vo.CompanyJobGroupVO">
+		select  srm.job_group_code AS jobGroupCode
+		from blind.salary_rank_mgt AS srm
+		where srm.user_id = #{userId};
+	</select>
+
+
+	<select id="getAnnualIncomeAndRank" parameterType="java.util.Map"
+			resultType="com.ksinfo.blind.company.vo.AnnualIncomeRankVO">
 		SELECT	MIN(SRM.salary) AS minAnnualIncome,
-				  ROUND(AVG(SRM.salary), 0) AS avgAnnualIncome,
-				  MAX(SRM.salary) AS maxAnnualIncome,
-				  count(SRM.salary) AS countOfParticipant
+				ROUND(AVG(SRM.salary), 0) AS avgAnnualIncome,
+				MAX(SRM.salary) AS maxAnnualIncome,
+				count(SRM.salary) AS countOfParticipant
 		FROM blind.salary_rank_mgt as SRM
 		WHERE logical_del_flag = '0'
-			-- AND SRM.job_group_code = #{selectBusinessType} <!-- [메모] 업계를 필터링하는 조건  -->
+			AND SRM.job_group_code = #{selectBusinessType} <!-- [메모] 업계를 필터링하는 조건  -->
 			AND SRM.job_group_code = #{selectJobGroup} <!-- [메모] 직군를 필터링하는 조건  -->
 			<!-- [메모] 근무년수를 필터링하는 조건  -->
 			<choose>
