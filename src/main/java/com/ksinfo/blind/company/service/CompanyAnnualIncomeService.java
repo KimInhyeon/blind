@@ -39,13 +39,6 @@ public class CompanyAnnualIncomeService {
 		return companyAnnualIncomeMapper.getWorkTypeAll();
 	}
 
-	/*
-	@Transactional(readOnly = true)
-	public List<CompanyBusinessTypeVO> getBusinessTypeNameList() {
-		return companyAnnualIncomeMapper.getBusinessTypeNameList();
-	}
-	*/
-
 	public void setAnnualData(Integer annualIncome, String selectJob, Integer selectWorkPeriod, Integer selectWorkType, Long userId){
 		java.util.Map<String, Object> paramMap = new HashMap<String, Object>();
 
@@ -80,26 +73,28 @@ public class CompanyAnnualIncomeService {
 	}
 
 	@Transactional(readOnly = true)
-	public CompanyBusinessTypeVO getUserBusinessTypeCode(Long userId)
+	public String getUserBusinessTypeCode(Long userId)
 	{
 		return companyAnnualIncomeMapper.getUserBusinessTypeCode(userId);
 	}
 
 	@Transactional(readOnly = true)
-	public CompanyJobGroupVO getUserJobGroupCode(Long userId)
+	public String	 getUserJobGroupCode(Long userId)
 	{
 		return companyAnnualIncomeMapper.getUserJobGroupCode( userId );
 	}
 
 	@Transactional(readOnly = true)
-	public AnnualIncomeRankVO getAnnualIncomeAndRank( Integer selectBusinessType, Integer selectJobGroup, Integer selectWorkPeriod,Long userId ){
+	public AnnualIncomeRankVO getAnnualIncomeAndRank( String selectBusinessTypeCode, String selectJobGroupCode, Long userId ){
 		java.util.Map<String, Object> paramMap = new HashMap<String, Object>();
 
 		//메모 String :키값, object : 밸류값
-		paramMap.put("selectBusinessType", selectBusinessType);
-		paramMap.put("selectJobGroup", selectJobGroup);
-		paramMap.put("selectWorkPeriod", selectWorkPeriod);
+		paramMap.put("selectBusinessTypeCode",  selectBusinessTypeCode );	//메모 SQL에서 char형이기에 그에 맞춰 char형으로 변환.
+		paramMap.put("selectJobGroupCode", selectJobGroupCode );			//메모 SQL에서 char형이기에 그에 맞춰 char형으로 변환.
 		paramMap.put("userId", userId);
+
+		System.out.println("selectBusinessTypeCode Of paramMap : " + paramMap.get("selectBusinessTypeCode") );
+		System.out.println("selectJobGroupCode Of paramMap : "  + paramMap.get("selectJobGroupCode") );
 
 		return companyAnnualIncomeMapper.getAnnualIncomeAndRank(paramMap);
 	}

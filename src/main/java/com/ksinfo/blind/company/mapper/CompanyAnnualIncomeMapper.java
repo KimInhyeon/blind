@@ -5,6 +5,7 @@ import com.ksinfo.blind.company.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Mapper
@@ -19,15 +20,13 @@ public interface CompanyAnnualIncomeMapper {
 
 	void setAnnualData(java.util.Map<String, Object> paramMap);
 
-	//List<CompanyBusinessTypeVO> getBusinessTypeNameList();
-
 	List<CompanyBusinessTypeVO> getBusinessTypeListExistAIData();
 
 	List<CompanyJobGroupVO> getJobGroupListExistAIData();
 
-	CompanyBusinessTypeVO  getUserBusinessTypeCode(Long userId);
+	String getUserBusinessTypeCode(Long userId);
 
-	CompanyJobGroupVO getUserJobGroupCode(Long userId);
+	String  getUserJobGroupCode(Long userId);
 
 	AnnualIncomeRankVO getAnnualIncomeAndRank(java.util.Map<String, Object> paramMap);
 

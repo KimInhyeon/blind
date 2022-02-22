@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -123,35 +124,63 @@ public final class CompanyAnnualIncomeController {
 		return companyAnnualIncomeService.getJobGroupListExistAIData();
 	}
 
-	//[메모] 1.Rank 페이지의 최초출력(유저랭크)을 위해 '유저가 일하는 회사의 업계코드'를 리턴.
 	@GetMapping("getUserBusinessTypeCode")
-	public CompanyBusinessTypeVO getUserBusinessTypeCode(Long userId)
+	public HashMap<String, String> getUserBusinessTypeCode(Long userId)
 	{
-		System.out.println("access getAnnualIncomeUpdateBySelectedSpinner");
-		System.out.println("receive userId : " + userId);
-		return companyAnnualIncomeService.getUserBusinessTypeCode(userId );
+		System.out.println("android access getUserBusinessTypeCode");
+		System.out.println("receive userId of getUserBusinessTypeCode : " + userId);
+		System.out.println("return getUserBusinessTypeCode : " + companyAnnualIncomeService.getUserBusinessTypeCode( userId )  );
+
+		HashMap<String, String> tempBTC = new HashMap<>();
+		tempBTC.put("userBTC",companyAnnualIncomeService.getUserBusinessTypeCode(userId)); //userBTC : getUserBusinessTypeCode
+		return tempBTC;
 	}
 
-	//[메모] 2.Rank 페이지의 최초출력(유저랭크)을 위해 '유저의 직군코드' 리턴.
 	@GetMapping("getUserJobGroupCode")
-	public CompanyJobGroupVO getUserJobGroupCode(Long userId)
+	public HashMap<String, String>  getUserJobGroupCode(Long userId)
 	{
-		System.out.println("access getAnnualIncomeUpdateBySelectedSpinner");
-		System.out.println("receive userId : " + userId);
-		return companyAnnualIncomeService.getUserJobGroupCode( userId );
+		System.out.println("android access getUserJobGroupCode");
+		System.out.println("receive userId of getUserJobGroupCode : " + userId);
+		System.out.println("return getUserJobGroupCode : " + companyAnnualIncomeService.getUserJobGroupCode( userId )  );
+
+		HashMap<String, String> tempJGC = new HashMap<>();
+		tempJGC.put("userJGC",companyAnnualIncomeService.getUserJobGroupCode( userId )); //userJGC : userJobGroupCode
+		return tempJGC;
 	}
 
 	//[메모] 3.Rank 페이지의 최초출력(유저랭크)을 위해 '유저의 직군코드' 리턴.
 	@GetMapping("getAnnualIncomeAndRank")
-	public AnnualIncomeRankVO  getAnnualIncomeAndRank( Integer selectBusinessType, Integer selectJobGroup, Integer selectWorkPeriod, Long userId)
+	public AnnualIncomeRankVO  getAnnualIncomeAndRank(String selectBusinessTypeCode, String selectJobGroupCode, Long userId)
 	{
-		System.out.println("access getAnnualIncomeUpdateBySelectedSpinner");
-		System.out.println("receive selectBusinessType : " + selectBusinessType);
-		System.out.println("receive selectJobGroup : " 	   + selectJobGroup);
-		System.out.println("receive selectWorkPeriod : "   + selectWorkPeriod);
-		System.out.println("receive userId : " + userId);
+		System.out.println("android access getAnnualIncomeAndRank");
+		System.out.println("receive selectBusinessTypeCode of getAnnualIncomeAndRank : " + selectBusinessTypeCode);
+		System.out.println("receive selectJobGroup of getAnnualIncomeAndRank : " 	   + selectJobGroupCode);
+		System.out.println("receive userId of getAnnualIncomeAndRank :" + userId);
 
-		return companyAnnualIncomeService.getAnnualIncomeAndRank(selectBusinessType, selectJobGroup, selectWorkPeriod, userId );
+
+		AnnualIncomeRankVO checkResult
+				= companyAnnualIncomeService.getAnnualIncomeAndRank(selectBusinessTypeCode, selectJobGroupCode, userId );
+
+		/*
+		AnnualIncomeRankVO checkResult
+				= companyAnnualIncomeService.getAnnualIncomeAndRank(
+						Integer.parseInt(selectBusinessTypeCode),
+						Integer.parseInt(selectJobGroupCode), userId );
+		*/
+		System.out.println("return minAnnualIncome : " + checkResult.getMinAnnualIncome());
+		System.out.println("return avgAnnualIncome : " + checkResult.getAvgAnnualIncome());
+		System.out.println("return maxAnnualIncome : " + checkResult.getMaxAnnualIncome());
+		System.out.println("return userAnnualIncome : " + checkResult.getUserAnnualIncome());
+		System.out.println("return countOfParticipant : " + checkResult.getCountOfParticipant());
+		System.out.println("return userRank : " + checkResult.getUserRank());
+
+		return companyAnnualIncomeService.getAnnualIncomeAndRank(selectBusinessTypeCode, selectJobGroupCode, userId );
+
+		/*
+		return companyAnnualIncomeService.getAnnualIncomeAndRank( Integer.parseInt(selectBusinessTypeCode),
+																  Integer.parseInt(selectJobGroupCode),
+				 												  userId );
+		*/
 	}
 
 }
