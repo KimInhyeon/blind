@@ -39,7 +39,12 @@ public class CompanyCommonController {
 
 		return modelAndView;
 	}
+	@GetMapping(params = "a=true")
+	public List<CompanyMainVO> getPopularCompanyList() {
 
+		return companyCommonService.getPopularCompanyList();
+
+	}
 	@PostMapping
 	public boolean requestCompany(@RequestBody CompanyRequestDto request, @AuthenticationPrincipal Account account) {
 		request.setUserId(account == null ? 0L : account.getUserId());
