@@ -77,7 +77,7 @@
 						<th class="sequence">順序</th>
 
 						<!-- ２．公知の可否 -->
-						<th id="closedFilter">
+						<th id="noticeStatusFilter">
 							<select class="ui compact selection dropdown fluid" onchange="getNoticeList()">
 								<option value="0">公知の可否</option>
 								<option value="1">公知中</option>
@@ -86,7 +86,7 @@
 						</th>
 
 						<!-- ３．作成者 -->
-						<th id="anonymousFilter">
+						<th id="wirteManagerFilter">
 							<select class="ui compact selection dropdown fluid" onchange="getNoticeList()">
 								<option value="0">作成者</option>
 							</select>
@@ -156,13 +156,13 @@
         <!--　新規（新しい公知事項作成）ボタン　-->
 		<div class="row">
 			<div class="three wide column right floated right aligned">
-				<button class="ui grey button" onclick="openNoticeModal();">新規</button>
+				<button class="ui grey button" onclick="openCreateNoticeModal();">新規</button>
 			</div>
 		</div>
 
         <!--　公知事項を管理（新規/編集）するmodal。（新規/編集ボタンを押すと出力する。）-->
         <!--　まだ未完成。「ポスト作成」を参考してUIの統一なるようにする。-->
-		<div class="ui tiny modal" id="boardInfo">
+		<div class="ui tiny modal" id="noticeModal">
 			<i class="close cancel icon"></i>
 			<div class="content">
 				<div class="ui grid">
@@ -222,78 +222,76 @@
 </div>
 
 <script>
-
-	//메모 표헤더에서 드롭박스 선택시마다 값을 리턴해주기 위한 관련 코드들 <시작>
-	//[part1]
-	//[part1.1]
-	let lastOrder = ${lastOrder};
-	// lastOrder : noticeListのsize。rowを出力する時に関連して使うそうだ。
+	//[part1] 메모 표헤더에서 드롭박스 선택시마다 값을 리턴해주기 위한 관련 코드들
+	//[part1.1]메모 변수 선언
+	let noticeListSize = ${noticeListSize}; // noticeListSize : noticeListのsize。rowを出力する時に関連して使うそうだ。
+	//[메모]let : 블록 스코프의 범위를 가지는 지역 변수를 선언하며, 선언과 동시에 임의의 값으로 초기화할 수도 있습니다.
 
 	//[part1.2]
-	//메모 getClosedFlagName(closedFlag)와
-	//메모 getAnonymousFlagName(anonymousFlag)에서 받은 플래그값을 통하여 URL을 변환, 출력내용이 변환하게 된다.
-	/*
-	function getClosedFlagName(closedFlag) {
-		switch (closedFlag) {
-			case "0":
-				return "正常"; // http://localhost:8282/blind/manage/board?anonymousFlag=0
+	//메모 getClosedFlagName(closedFlag)와 getAnonymousFlagName(anonymousFlag)에서 받은 플래그값을 통하여 URL을 변환, 출력내용이 변환하게 된다.
+	//메모 function getClosedFlagName(closedFlag) {..} 참고
+	function getNoticeStatusSelect(selectedNoticeBlindFlag) {
+		switch (selectedNoticeBlindFlag) {
 			case "1":
-				return "閉鎖"; // http://localhost:8282/blind/manage/board?closedFlag=1&anonymousFlag=0
+				return "公知中"; // http://localhost:8282/blind/manage/board?anonymousFlag=0
+			case "2":
+				return "非知中"; // http://localhost:8282/blind/manage/board?closedFlag=1&anonymousFlag=0
 			default:
 				return "ERROR";
 		}
 	}
-
 	//[part1.3]
-	function getAnonymousFlagName(anonymousFlag) {
-		switch (anonymousFlag) {
-			case "0":
-				return "一般"; // http://localhost:8282/blind/manage/board?anonymousFlag=0
+	//메모 function getAnonymousFlagName(anonymousFlag) {..} 참고
+	function getWirteManagerSelect(selectedWirteManager) {
+		switch (selectedWirteManager) {
 			case "1":
+				return "一般"; // http://localhost:8282/blind/manage/board?anonymousFlag=0
+			case "2":
 				return "マスキング"; // http://localhost:8282/blind/manage/board?anonymousFlag=1
 			default:
 				return "ERROR";
 		}
 	}
-	*/
 
 	//function getBoardList()參考してコード作成。（function getBoardList()はmanageBoard.jspに位置）
-	//function getNoticeListForSelectedColumn()：(메모) 테이블헤더에서 선택한 칼럼에 해당하는 정보들만 출력하난 코드입니다.
+	//function getNoticeListForSelectedColumn()：(메모) 테이블헤더에서 선택한 칼럼에 해당하는 정보들만 출력하는 코드입니다.
 
 	//[part1.4]
 	function getNoticeListForSelectedColumn() {
 		//[part1.4] 1단계 : 변수/상수 선언 및 값 설정.
-		const url = new URL(location.href);			//[메모]const : 상수값(변함없는 값)을 저장시 사용하는 선언자.
-		const closedFlag = document.querySelector("#closedFilter > select").value;			//[메모].querySelector() : CSS 선택자로 요소를 선택하게 해줍니다.
-		const anonymousFlag = document.querySelector("#anonymousFilter > select").value;	//[메모].querySelector() : 주의할 점은 선택자에 해당하는 첫번째 요소만 선택한다는 것입니다.
+		const url = new URL(location.href);															//[메모]const : 상수값(변함없는 값)을 저장시 사용하는 선언자.
+		const noticeStatusSelect = document.querySelector("#noticeStatusFilter > select").value; //closedFilter		//[메모].querySelector() : CSS 선택자로 요소를 선택하게 해줍니다.
+		const wirteManagerSelect = document.querySelector("#wirteManagerFilter > select").value;	//anonymousFilter	//[메모].querySelector() : 주의할 점은 선택자에 해당하는 첫번째 요소만 선택한다는 것입니다.
 
-		const searchParam = new URLSearchParams();	//[메모]URLSearchParams : javascript 에서 url 의 쿼리 파라미터들을 읽거나 수정할떄 사용.
-		searchParam.set("closedFlag", closedFlag);
-		searchParam.set("anonymousFlag", anonymousFlag);
+		const searchParam = new URLSearchParams();
+		//[메모]URLSearchParams : javascript 에서 url 의 쿼리 파라미터들을 읽거나 수정할 때 사용.
+		searchParam.set("noticeStatusSelect", noticeStatusSelect);
+		searchParam.set("wirteManagerSelect", wirteManagerSelect);
 		searchParam.set("ajax", "true");
 		url.search = searchParam;
 
 		//[part1.4] 2단계 : fetch API를 활용하여 
 		fetch(url.href, {method: "GET"})
-			.then(function (response) { //[메모] 서버 요청에 대한 응답이 왔을경우 실행.
-				if (response.ok) {return response.json();}  //[메모] json 데이터로 변경실시(서버에게 받은 데이터는 데이터타입 문자열이기 때문.)
-				else { throw response.status; }})			//[메모] 에러가 날 경우 대비용?????
-			.then(function (noticeList) {
-				const tbody = document.querySelector("tbody");
-				history.replaceState(tbody.innerHTML, "");
-				const noticeListLength = noticeList.length;
-				if (noticeListLength < 1) {
+			.then(function (response) { 						//[메모] 서버 요청에 대한 응답이 왔을경우 실행.
+				if (response.ok) {return response.json();} 	 	//[메모] json 데이터로 변경실시(서버에게 받은 데이터는 데이터타입 문자열이기 때문.)
+				else { throw response.status; }})				//[메모] 에러가 날 경우 대비용?????
+			.then(function (noticeList) {						//[메모] noticeList가 리턴온 경우로 추정된다.
+				const tbody = document.querySelector("tbody");	//[메모] tbody(List를 출력하는 테이블)선택.
+				history.replaceState(tbody.innerHTML, "");		//[메모] 기존의 리스트들을 초기화.
+				const noticeListLength = noticeList.length;		//[메모] 새롭게 출력할 리스트들의 갯수를 알린다.
+
+				if (noticeListLength < 1) {						//[메모] noticeList에 내용물이 없는 경우.
 					document.querySelector("tbody").innerHTML =
 						"<tr><td class=\"center aligned\" colspan=\"5\">データが存在しません</td></tr>";
 				}
-				else {
+				else {	//[메모] noticeList에 내용물이 n개 있는 경우.
 					let html = "";
 					for (let i = 0; i < noticeListLength; ++i) {
 						html += "<tr><td class=\"right aligned\">" +
-								noticeList[i].boardOrder + "</td><td class=\"center aligned\" data-value=\"" +
-								noticeList[i].closedFlag + "\">" + getClosedFlagName(noticeList[i].closedFlag) +
-								"</td><td class=\"center aligned\" data-value=\"" +	noticeList[i].anonymousFlag +
-								"\">" + getAnonymousFlagName(noticeList[i].anonymousFlag) + "</td><td>" +
+								noticeList[i].noticeStatusSelect + "</td><td class=\"center aligned\" data-value=\"" +
+								noticeList[i].noticeStatusSelect + "\">" + getNoticeStatusSelect(noticeList[i].noticeStatusSelect)
+								"</td><td class=\"center aligned\" data-value=\"" +	noticeList[i].wirteManagerSelect +
+								"\">" + getWirteManagerSelect(noticeList[i].wirteManagerSelect) + "</td><td>" +
 								noticeList[i].boardTopicName + "</td><td class=\"center aligned\"><button class=\"" +
 								"ui yellow button\" onclick=\"openEditNoticeModal(this);\">編集</button></td></tr>";
 					}
@@ -302,7 +300,7 @@
 			if (closedFlag === "0") {
 				searchParam.delete("closedFlag");
 			}
-			if (anonymousFlag === "2") {
+			if (anonymousFlag === "0") {
 				searchParam.delete("anonymousFlag");
 			}
 			searchParam.delete("ajax");
@@ -317,8 +315,8 @@
 	//메모 표헤더에서 드롭박스 선택시마다 값을 리턴해주기 위한 관련 코드들 <끝>-------------------------------
 
 
-	//function checkClosedBoard(closedFlag) 참고
-	//메모 현재  checkClosedBoard(closedFlag) 용도는 불명.
+	//function checkClosedBoard(closedFlag) 참고.
+	//[메모] 현재  checkClosedBoard(closedFlag) 용도는 불명.
 	/*function checkClosedBoard(closedFlag) {
 		const order = document.getElementById("order");
 		const topicName = document.getElementById("topicName");
@@ -370,7 +368,7 @@
 	}
 
 	//function openCreateBoardModal() 참고
-	/*function openCreateBoardModal() {
+	function openCreateNoticeModal() {
 		const closedFlag = document.getElementById("closedFlag");
 		closedFlag.value = closedFlag.dataset.value = "0";
 		closedFlag.disabled = true;
@@ -385,7 +383,6 @@
 		boardSubmit.innerText = "作成";
 		$("#boardInfo").modal("show");
 	}
-	 */
 
 	// async function boardSubmit(method, board) 참고
 	/*

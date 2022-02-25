@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<div class="ui modal" id="postModal">
+<div class="ui modal" id="noticeModal">
 	<div class="header">
 		<div class="ui grid middle aligned">
 			<div class="two wide column left aligned">
