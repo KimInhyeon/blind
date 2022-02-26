@@ -7,5 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface NoticeMapper {
-    List<NoticeVO> getNoticeList();
+    List<NoticeVO> getNoticeListForUsers();
 }

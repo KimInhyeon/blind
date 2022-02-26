@@ -26,7 +26,7 @@ public final class NoticeController {
     @GetMapping("noticeAndroid")
     public List<NoticeVO> getNoticeList(){
         System.out.println("android access noticeAndroid");
-        List<NoticeVO>  noticeList = noticeService.getNoticeList();
+        List<NoticeVO>  noticeList = noticeService.getNoticeListForUsers();
         System.out.println("noticeList : "+noticeList);
         return noticeList;
     }

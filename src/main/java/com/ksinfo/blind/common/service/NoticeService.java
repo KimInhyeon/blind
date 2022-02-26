@@ -19,8 +19,8 @@ public class NoticeService {
     }
 
     @Transactional(readOnly = true)
-    public List<NoticeVO> getNoticeList() {
-        return noticeMapper.getNoticeList();
+    public List<NoticeVO> getNoticeListForUsers() {
+        return noticeMapper.getNoticeListForUsers();
     }
 
 
