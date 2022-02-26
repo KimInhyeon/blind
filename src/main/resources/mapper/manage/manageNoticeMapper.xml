@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ksinfo.blind.manage.mapper.ManageNoticeMapper">
+	<!--[메모] [주의]본 NoticeMapper는 관리자(Manager)만 대상으로 합니다. -->
+	<!--[메모] [주의]유저용 NoticeMapper는 "com.ksinfo.blind.common.mapper.NoticeMapper"를 봐주십시오.  -->
 
-	<select id="getNoticeList" resultType="com.ksinfo.blind.manage.vo.NoticeVO">
+	<!--메모 notice_blind_flag 0 : 전체(공지+비공지)출력 / 1:공지확정만 출력. / 2:비공지만 출력.-->
+	<select id="getNoticeListForManager" parameterType="java.util.Map"
+			resultType="com.ksinfo.blind.manage.vo.NoticeVO">
 		SELECT
 				notice_id AS noticeId,
 		        notice_title AS noticeTitle,
@@ -25,9 +29,17 @@
 		ON nm.user_id = um.user_id
 
 		WHERE ntm.logical_del_flag = '0'
-		<if test="anonymousFlag neq '2'">
-			AND anonymous_flag = #{anonymousFlag}
-		</if>
+		<choose>
+			<when test="selectedNoticeBlindFlag eq '0' ">
+				AND nm.notice_blind_flag = '0'
+			</when>
+			<when test="selectedNoticeBlindFlag eq '1' ">
+				AND nm.notice_blind_flag = '1'
+			</when>
+		  	<otherwise>
+				<!--메모 전체(공지&비공지)모두 출력. -->
+			</otherwise>
+		</choose>
 		ORDER BY notice_id;
 	</select>
 

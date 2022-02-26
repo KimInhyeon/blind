@@ -23,13 +23,15 @@ public final class ManageNoticeController {
 
     @GetMapping
     public ModelAndView manageNotice(
-            @RequestParam(name = "selectedNoticeBlindFlag", defaultValue = "0") char selectedNoticeBlindFlag, //closedFlag
-            @RequestParam(name = "selectedWirteManager", defaultValue = "0") char selectedWirteManager    //anonymousFlag
+            @RequestParam(name = "selectedNoticeBlindFlag", defaultValue = "2") char selectedNoticeBlindFlag, //closedFlag
+            @RequestParam(name = "selectedWirteManager", defaultValue = "0") Integer selectedWirteManager    //anonymousFlag
     ) {
-        //noticeStatusSelect : [메모] 공지여부(공지중/공지않음)를 골라보기 위한 선택값. (0:전체출력 / 1:공지중 / 2:비공지)
-        //wirteManagerSelect : [메모] 작성한 관리자를 골라보기 위한 선택값.(0:전체출력 / 1:관리자A / 2:관리자B ..(n명만큼 반복)... )
-        //                     [메모] 관리자값은 1,2,3,... 가 아니라 userid로 하게 될거 같다.
-        List<NoticeVO> noticeList = manageNoticeService.getNoticeList(selectedNoticeBlindFlag, selectedWirteManager);
+        //selectedNoticeBlindFlag : [메모] 공지여부(공지중/공지않음)를 골라보기 위한 선택값. (0:공지중만 출력 / 1:비공지만 출력 / 2:전체출력(관리자) )
+        //                          [메모] 2는 관리자용 페이지에서 모든 공지들을 출력하기 위해 사용합니다.
+        //selectedWirteManager    : [메모] 작성한 관리자를 골라보기 위한 선택값.(0:전체출력 / 1:관리자A / 2:관리자B ..(n명만큼 반복)... )
+        //                          [메모] 관리자값은 1,2,3,... 가 아니라 userid로 하게 될거 같다.
+        List<NoticeVO> noticeList = manageNoticeService.getNoticeListForManager(selectedNoticeBlindFlag, selectedWirteManager);
+
 
         ModelAndView modelAndView = new ModelAndView("main/manage/manageNotices");
         modelAndView.addObject("noticeList", noticeList);
@@ -47,7 +49,7 @@ public final class ManageNoticeController {
     }
 
 
-
+    /*
     @GetMapping(params = "ajax=true")
     public List<NoticeVO> getNoticeList(
             @RequestParam(name = "closedFlag", defaultValue = "0") char closedFlag,
@@ -55,6 +57,7 @@ public final class ManageNoticeController {
     ) {
          return manageNoticeService.getNoticeList(closedFlag, anonymousFlag);
     }
+    */
 
     /*
     @PostMapping

@@ -8,6 +8,6 @@ import java.util.List;
 @Mapper
 public interface ManageNoticeMapper {
 
-    List<NoticeVO> getNoticeList(char closedFlag, char anonymousFlag);
+    List<NoticeVO> getNoticeListForManager(java.util.Map<String, Object> paramMap);
 
 }

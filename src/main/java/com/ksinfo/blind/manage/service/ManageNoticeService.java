@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -20,8 +21,10 @@ public class ManageNoticeService {
     }
 
     @Transactional(readOnly = true)
-    public List<NoticeVO> getNoticeList(char closedFlag, char anonymousFlag) {
-        return manageNoticeMapper.getNoticeList(closedFlag, anonymousFlag);
+    public List<NoticeVO> getNoticeListForManager(char selectedNoticeBlindFlag, Integer selectedWirteManager) {
+        java.util.Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("selectedNoticeBlindFlag", selectedNoticeBlindFlag);
+        paramMap.put("selectedWirteManager", selectedWirteManager);
+        return manageNoticeMapper.getNoticeListForManager(paramMap);
     }
-
 }
