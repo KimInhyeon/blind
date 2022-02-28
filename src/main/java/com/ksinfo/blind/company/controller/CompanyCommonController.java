@@ -69,8 +69,8 @@ public class CompanyCommonController {
 		@AuthenticationPrincipal Account account, long companyId, int companyVoteValue
 	) {
 		//로그인한 유저인지 체크(로그인 않은 유저의 경우에는 로그인 페이지로 이동하는 등의 조처를 하도록 작성예정.
-		long userId = account.getUserId();
-
+		//long userId = account.getUserId();
+		long userId = 153;
 		// companyRecommendValue : 기업추천여부를 갖는 값.( 1:기업추천 / 0:기업 비추천)
 		companyCommonService.setCompanyRecommendVote(userId, companyId, companyVoteValue);
 
