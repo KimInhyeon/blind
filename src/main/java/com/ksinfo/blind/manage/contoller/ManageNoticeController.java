@@ -21,43 +21,35 @@ public final class ManageNoticeController {
         this.manageNoticeService = manageNoticeService;
     }
 
+    //最初に公知事項管理ページを出力する時に使うコード。
+    //메모 관리자가 표헤더필터를 통해 선택한 컬럼(옵션)들로 출력하는 코드는 getNoticeListForManagerSelectedColumn(){...}를 참고해주십시오.
     @GetMapping
     public ModelAndView manageNotice(
-            @RequestParam(name = "selectedNoticeBlindFlag", defaultValue = "2") char selectedNoticeBlindFlag, //closedFlag
-            @RequestParam(name = "selectedWirteManager", defaultValue = "0") Integer selectedWirteManager    //anonymousFlag
-    ) {
-        //selectedNoticeBlindFlag : [메모] 공지여부(공지중/공지않음)를 골라보기 위한 선택값. (0:공지중만 출력 / 1:비공지만 출력 / 2:전체출력(관리자) )
-        //                          [메모] 2는 관리자용 페이지에서 모든 공지들을 출력하기 위해 사용합니다.
+        @RequestParam(name = "selectedNoticeType", defaultValue = "0") char selectedNoticeType,
+        @RequestParam(name = "selectedNoticeBlindFlag", defaultValue = "2") char selectedNoticeBlindFlag,
+        @RequestParam(name = "selectedWirteManager", defaultValue = "0") Integer selectedWirteManager)
+    {
+        //selectedNoticeBlindFlag：公知文のタイプを選んで出力する。(0：公知中 / 1： 非知中  / 2：公知文全体 )
         //selectedWirteManager    : [메모] 작성한 관리자를 골라보기 위한 선택값.(0:전체출력 / 1:관리자A / 2:관리자B ..(n명만큼 반복)... )
         //                          [메모] 관리자값은 1,2,3,... 가 아니라 userid로 하게 될거 같다.
-        List<NoticeVO> noticeList = manageNoticeService.getNoticeListForManager(selectedNoticeBlindFlag, selectedWirteManager);
-
 
         ModelAndView modelAndView = new ModelAndView("main/manage/manageNotices");
+
+        List<NoticeVO> noticeList = manageNoticeService.getNoticeListForManager(selectedNoticeType, selectedNoticeBlindFlag, selectedWirteManager);
         modelAndView.addObject("noticeList", noticeList);
-        if (selectedNoticeBlindFlag == '0' && selectedWirteManager == '0') {
-            //[메모] 모든 공시글들을 리턴한다.(모든 공시글을 출력하도록.)
-            modelAndView.addObject("noticeListSize", noticeList.size());
-        }
-        /*
-        else {
-            //[메모] 입력된 공시모드(noticeStatusSelect)와 공시글작성자(wirteManagerSelect)의 값에 따라 검색하여 결과재출력.
-            modelAndView.addObject("noticeListSize", manageNoticeService.getLastOrder());
-        }
-        */
+        modelAndView.addObject("noticeListSize", noticeList.size());
         return modelAndView;
     }
 
-
-    /*
+    //메모 관리자가 표의 헤더필터에서 선택한 옵션에 따라 공지목록을 새로 Select하여 JSP에게 리턴하여 새로 출력하는 메소드.
     @GetMapping(params = "ajax=true")
-    public List<NoticeVO> getNoticeList(
-            @RequestParam(name = "closedFlag", defaultValue = "0") char closedFlag,
-            @RequestParam(name = "anonymousFlag", defaultValue = "2") char anonymousFlag
-    ) {
-         return manageNoticeService.getNoticeList(closedFlag, anonymousFlag);
+    public List<NoticeVO> getNoticeListForManagerSelectedColumn(
+        @RequestParam(name = "selectedNoticeType", defaultValue = "0") char selectedNoticeType,
+        @RequestParam(name = "selectedNoticeBlindFlag", defaultValue = "2") char selectedNoticeBlindFlag,
+        @RequestParam(name = "selectedWirteManager", defaultValue = "0") Integer selectedWirteManager)
+    {
+         return manageNoticeService.getNoticeListForManagerSelectedColumn(selectedNoticeType, selectedNoticeBlindFlag, selectedWirteManager);
     }
-    */
 
     /*
     @PostMapping

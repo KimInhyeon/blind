@@ -20,11 +20,28 @@ public class ManageNoticeService {
         this.manageNoticeMapper = manageNoticeMapper;
     }
 
+    //
     @Transactional(readOnly = true)
-    public List<NoticeVO> getNoticeListForManager(char selectedNoticeBlindFlag, Integer selectedWirteManager) {
+    public List<NoticeVO> getNoticeListForManager(char selectedNoticeType, char selectedNoticeBlindFlag,
+                                                  Integer selectedWirteManager)
+    {
         java.util.Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("selectedNoticeType", selectedNoticeType);
         paramMap.put("selectedNoticeBlindFlag", selectedNoticeBlindFlag);
         paramMap.put("selectedWirteManager", selectedWirteManager);
         return manageNoticeMapper.getNoticeListForManager(paramMap);
     }
+
+    @Transactional(readOnly = true)
+    public List<NoticeVO> getNoticeListForManagerSelectedColumn(char selectedNoticeType,
+                                                                char selectedNoticeBlindFlag,
+                                                                Integer selectedWirteManager)
+    {
+        java.util.Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("selectedNoticeType", selectedNoticeType);
+        paramMap.put("selectedNoticeBlindFlag", selectedNoticeBlindFlag);
+        paramMap.put("selectedWirteManager", selectedWirteManager);
+        return manageNoticeMapper.getNoticeListForManagerSelectedColumn(paramMap);
+    }
+
 }

@@ -2,8 +2,8 @@ package com.ksinfo.blind.manage.vo;
 
 public final class NoticeVO {
     private final String noticeId;
-
     private final String noticeTitle;
+    private final String noticeTypeCode;
     private final String noticeTypeName;
     private final String noticeBlindFlag;
     private final String userNickname;
@@ -14,12 +14,13 @@ public final class NoticeVO {
     private final String noticeCreateDate;
     private final String noticeUpdateDate;
 
-    public NoticeVO(String noticeId,String noticeTitle, String noticeTypeName, String noticeBlindFlag,
-                    String noticeContents, String userNickname, String noticeWebsiteUrl,
+    public NoticeVO(String noticeId, String noticeTitle, String noticeTypeCode, String noticeTypeName,
+                    String noticeBlindFlag, String noticeContents, String userNickname, String noticeWebsiteUrl,
                     long postFileId, String noticeCreateDate, String noticeUpdateDate){
         this.noticeId = noticeId;
 
         this.noticeTitle = noticeTitle;
+        this.noticeTypeCode = noticeTypeCode;
         this.noticeTypeName = noticeTypeName;
         this.noticeBlindFlag = noticeBlindFlag;
         this.userNickname = userNickname;
@@ -30,11 +31,13 @@ public final class NoticeVO {
         this.noticeCreateDate = noticeCreateDate;
         this.noticeUpdateDate = noticeUpdateDate;
     }
+
     public String getNoticeId(){ return noticeId;}
 
     public String getNoticeTitle(){
         return noticeTitle;
     }
+    public String getNoticeTypeCode(){ return noticeTypeCode; }
     public String getNoticeTypeName(){
         return noticeTypeName;
     }

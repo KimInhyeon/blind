@@ -9,5 +9,6 @@ import java.util.List;
 public interface ManageNoticeMapper {
 
     List<NoticeVO> getNoticeListForManager(java.util.Map<String, Object> paramMap);
+    List<NoticeVO> getNoticeListForManagerSelectedColumn(java.util.Map<String, Object> paramMap);
 
 }
