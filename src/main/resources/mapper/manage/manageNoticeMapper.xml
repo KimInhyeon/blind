@@ -82,7 +82,7 @@
 		<!--２．公知のタイプ -->
 		<choose>
 			<when test="selectedNoticeType neq '0' ">
-				AND nm.notice_type_code = CAST('#{selectedNoticeType}' AS CHAR)
+				AND nm.notice_type_code = CAST(#{selectedNoticeType} AS CHAR)
 			</when>
 			<otherwise>
 				<!--公知のタイプ全部出力。 -->

@@ -286,45 +286,37 @@
 					}
 					else { //[메모] noticeList에 내용물이 n개 있는 경우.
 						let html = "";
+
 						for (let i = 0; i < noticeListLength; ++i) {
 							html += "<tr>"
-									+ "<td class=\"right aligned\">"
-									+ '1순번'
-									+ "</td>"
+						/*１．順序 */		+ "<td class=\"right aligned\" >"
+											+ (i+1)
+										+ "</td>"
 
-									+ "<td class=\"center aligned\">"
-									+ '2공지여부'
-									+ "</td>"
+					/*２．公知のタイプ */	+ "<td class=\"center aligned\" >"
+											+ noticeList[i].noticeTypeName
+										+ "</td>"
 
-									+ "<td class=\"center aligned\">"
-									+ '3작성자'
-									+ "\">"
+					/*３．公知の可否 */	+ "<td class=\"center aligned\" >"
+											+ noticeList[i].noticeBlindFlag
+										+  "</td>"
 
-									+ "<td class=\"center aligned\">"
-									+ '4'
-									+ "</td>"
+						/*４．作成者 */	+ "<td class=\"center aligned\" >"
+											+ noticeList[i].userNickname
+										+ "</td>"
 
-									+ "<td class=\"center aligned\">"
-									+ '5'
-									+ "\">"
+				/*５．公知事項のタイトル */	+ "<td class=\"center aligned\">"
+											+ noticeList[i].noticeTitle
+										+ "</td>"
 
-									+ "<td class=\"center aligned\">"
-									+ "<button class=\"" +  "ui yellow button\" onclick=\"openEditNoticeModal(this);\">'5.編集'</button>"
-									+ "</td>"
+					/*６．編集ボタン */	+ "<td class=\"center aligned\">"
+											+ "<button class=\"" +  "ui yellow button\" onclick=\"openEditNoticeModal(this);\">編集</button>"
+										+ "</td>"
 
-									+ "<td class=\"center aligned\">"
-									+ "<button class=\"" +  "ui yellow button\" onclick=\"openDeleteNoticeModal(this);\">'6.삭제'</button>"
-									+ "</td>"
+					/*７．削除ボタン */	+ "<td class=\"center aligned\">"
+											+ "<button class=\"" +  "ui gray button\" onclick=\"openDeleteNoticeModal(this);\">削除</button>"
+										+ "</td>"
 									+ "</tr>";
-							/*                html += "<tr>
-                                                       <td class=\"right aligned\">" +
-                                                          noticeList[i].noticeStatusSelect + "</td>
-                                                    <td class=\"center aligned\" data-value=\"" +
-                                                    noticeList[i].noticeStatusSelect + "\">" + getNoticeStatusSelect(noticeList[i].noticeStatusSelect)
-                                                    "</td><td class=\"center aligned\" data-value=\"" +    noticeList[i].wirteManagerSelect +
-                                                    "\">" + getWirteManagerSelect(noticeList[i].wirteManagerSelect) + "</td><td>" +
-                                                    noticeList[i].boardTopicName + "</td><td class=\"center aligned\"><button class=\"" +
-                                                    "ui yellow button\" onclick=\"openEditNoticeModal(this);\">編集</button></td></tr>";*/
 						}
 						tbody.innerHTML = html;
 					}
