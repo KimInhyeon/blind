@@ -10,16 +10,20 @@ public final class CompanyVoteResultDto {
 		if (voteCountOfGood > 0 || voteCountOfBad > 0) {
 			this.voteCountOfGood = Math.round(voteCountOfGood / (voteCountOfGood + voteCountOfBad) * 100);
 			this.voteCountOfBad = 100 - this.voteCountOfGood;
+			System.out.println("this.voteCountOfGood:" + this.voteCountOfGood);
+			System.out.println("this.voteCountOfBad:" + this.voteCountOfBad);
 		} else {
 			this.voteCountOfGood = this.voteCountOfBad = 0;
 		}
 	}
 
 	public int getVoteCountOfGood() {
+		System.out.println("calledGetGood:" + voteCountOfGood);
 		return voteCountOfGood;
 	}
 
 	public int getVoteCountOfBad() {
+		System.out.println("calledGetBad:" + voteCountOfBad);
 		return voteCountOfBad;
 	}
 }

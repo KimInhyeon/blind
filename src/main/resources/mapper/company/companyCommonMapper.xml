@@ -67,6 +67,15 @@
 		);
 	</insert>
 
+	<select id="wasCompanyRecommendVoted" resultType="_boolean">
+		SELECT EXISTS(
+			SELECT
+			FROM blind.company_recommend_inf
+			WHERE company_id = #{companyId}
+				AND user_id = #{userId}
+		);
+	</select>
+
 	<!--  기업의 good/bad투표수 리턴.(기업추천 투표한 유저에게 기업선호도 출력위함) -->
 	<select id="getCompanyRecommendVoteResult" resultType="com.ksinfo.blind.company.vo.CompanyVoteResultDto">
 		SELECT SUM(good) AS voteCountOfGood,

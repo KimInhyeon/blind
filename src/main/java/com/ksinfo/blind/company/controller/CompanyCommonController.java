@@ -10,6 +10,7 @@ import com.ksinfo.blind.security.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,12 +40,14 @@ public class CompanyCommonController {
 
 		return modelAndView;
 	}
+
 	@GetMapping(params = "a=true")
 	public List<CompanyMainVO> getPopularCompanyList() {
 
 		return companyCommonService.getPopularCompanyList();
 
 	}
+
 	@PostMapping
 	public boolean requestCompany(@RequestBody CompanyRequestDto request, @AuthenticationPrincipal Account account) {
 		request.setUserId(account == null ? 0L : account.getUserId());
@@ -74,6 +77,18 @@ public class CompanyCommonController {
 		// companyRecommendValue : 기업추천여부를 갖는 값.( 1:기업추천 / 0:기업 비추천)
 		companyCommonService.setCompanyRecommendVote(userId, companyId, companyVoteValue);
 
-		return companyCommonService.getCompanyRecommendVoteResult(companyId); //투표에 참여한 유저에게 기업의 선호도를 출력하기 위한 값들을 리턴.
+		return companyCommonService.getCompanyRecommendVoteResult(userId, companyId); //투표에 참여한 유저에게 기업의 선호도를 출력하기 위한 값들을 리턴.
+	}
+
+	@GetMapping("{companyId}/recommend")
+	public CompanyVoteResultDto getCompanyRecommendVoteResult(
+		@AuthenticationPrincipal Account account, @PathVariable long companyId
+	) {
+		//return companyCommonService.getCompanyRecommendVoteResult(account.getUserId(), companyId);
+
+		CompanyVoteResultDto companyVoteResultDto= companyCommonService.getCompanyRecommendVoteResult(153, companyId);
+		System.out.println("getVoteCountOfGood:" + companyVoteResultDto.getVoteCountOfGood());
+		System.out.println("getVoteCountOfBad:" + companyVoteResultDto.getVoteCountOfBad());
+		return companyVoteResultDto;
 	}
 }

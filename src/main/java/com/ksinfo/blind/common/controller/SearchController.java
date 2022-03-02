@@ -67,10 +67,15 @@ public final class SearchController {
 		modelAndView.addObject("title", searchKeyword);
 //		modelAndView.addObject("companyList", companyList); // search.jspでリストを出力するように変更が必要
 		if (!companyList.isEmpty()) {
-			modelAndView.addObject("company", companyList.get(0)); // search.jspでリストを出力するように変更が必要
+			SearchCompanyVO company = companyList.get(0);
+			CompanyVoteResultDto companyVoteResult =
+				companyCommonService.getCompanyRecommendVoteResult(userId, company.getCompanyId());
+			modelAndView.addObject("company", company); // search.jspでリストを出力するように変更が必要
+			modelAndView.addObject("companyVoteResult", companyVoteResult);
 		}
 		modelAndView.addObject("boardList", boardList);
 		modelAndView.addObject("postList", postList);
+
 
 		return modelAndView;
 	}
