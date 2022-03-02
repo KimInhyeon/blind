@@ -110,7 +110,7 @@
 					<th class="edit">編集</th>
 
 					<!--７．削除ボタン -->
-					<th class="edit">削除</th>
+					<th class="delete">削除</th>
 				</tr>
 				</thead>
 
@@ -151,12 +151,16 @@
 
 						<!--６．編集ボタン -->
 						<td class="center aligned">
-							<button class="ui yellow button" onclick="openEditNoticeModal(this);">編集</button>
+							<button class="ui yellow button"
+									onclick="openNoticeModal(${notice.noticeId},${notice.noticeTypeCode},${notice.noticeBlindFlag},
+															'${notice.noticeTitle}','${notice.noticeContents}' );">
+								編集
+							</button>
 						</td>
 
 						<!--７．削除ボタン -->
 						<td class="center aligned">
-							<button class="ui gray button" onclick="openDeleteNoticeModal(this);">削除</button>
+							<button class="ui gray button" onclick="openDeleteNoticeModal( ${notice.noticeId} );">削除</button>
 						</td>
 
 					</tr>
@@ -179,9 +183,13 @@
 		<!--　新規（新しい公知事項作成）ボタン　-->
 		<div class="row">
 			<div class="three wide column right floated right aligned">
-				<button class="ui grey button" onclick="openCreateNoticeModal();">新規</button>
+				<button class="ui grey button"
+						onclick="openNoticeModal(0,0,1,'','');">
+					新規
+				</button>
 			</div>
 		</div>
+
 		<!--　本文ページは終わり。下はmodalのレイアウト。-->
 
 		<!--　公知事項を管理（新規/編集）するmodal。（新規/編集ボタンを押すと出力する。）-->
@@ -196,7 +204,7 @@
 					</div>
 					<div class="twelve wide column center aligned">公知事項作成</div>
 					<div class="two wide column right aligned">
-						<button class="ui positive button" id="postSubmit">登録</button>
+						<button class="ui positive button" id="noticeSubmit">登録</button>
 					</div>
 				</div>
 			</div>
@@ -205,20 +213,26 @@
 				<div class="ui big form">
 					<div class="field">
 						<!--登録する公知事項のタイプ選択　-->
-						<div class="ui selection dropdown">
-							<input type="hidden" id="postModalTopic">
-							<i class="dropdown icon"></i>
-							<div class="default text">登録する公知事項のタイプを選んでください</div>
-							<div class="menu"></div>
-						</div>
+						<select class="ui compact selection dropdown fluid"
+								id="noticeTypeCodeOfmodal" style="width:100%;">
+							<option value="0">公知タイプ全体</option>
+							<option value="1">システム点検（定期）</option>
+							<option value="2">システム点検（緊急）</option>
+							<option value="3">イベント案内</option>
+							<option value="4">新規機能案内</option>
+							<option value="5">運営規則公知</option>
+						</select>
 					</div>
 					<!--公知事項のタイトル作成ができる。　-->
 					<div class="field">
-						<input type="text" placeholder="登録する公知事項のタイトルを入力してください" id="postModalTitle">
+						<input type="text" placeholder="登録する公知事項のタイトルを入力してください" id="noticeTitleOfmodal">
 					</div>
+
+					<!-- タイトルのテキストバクスと、本文のテキストバクスを区分するための区分線。　-->
 					<div class="ui divider"></div>
+
 					<!--知事項の本文の作成ができる。　-->
-					<div id="postModalContents"></div>
+					<div id="noticeContentsOfModal"></div>
 				</div>
 			</div>
 			<!--登録する公知事項のアップロードするファイルを選択。　-->
@@ -230,7 +244,12 @@
 			<div class="ui disabled dimmer" id="uploadingText">
 				<div class="ui indeterminate text loader">ファイルをアップロードしています</div>
 			</div>
+			<div>
+				<input type="hidden" value="" id="hiddenNoticeId"/>
+				<input type="hidden" value="" id="hiddenNoticeBlindFlag"/>
+			</div>
 		</div>
+
 	</div>
 </div>
 
@@ -246,15 +265,13 @@
 	//[메모]let : 블록 스코프의 범위를 가지는 지역 변수를 선언하며, 선언과 동시에 임의의 값으로 초기화할 수도 있습니다.
 
 	//function getBoardList()參考してコード作成。（function getBoardList()はmanageBoard.jspに位置）
-	//function getNoticeListForSelectedColumn()：(메모) 테이블헤더에서 선택한 칼럼에 해당하는 정보들만 출력하는 코드입니다.
-
-	//[part1.4]
+	//テーブルのヘッドを通して選んだオプションに当たるカラムを出力するコードです。
 	function getNoticeListForManagerSelectedColumn() {
 		//[part1.4] 1단계 : 변수/상수 선언 및 값 설정.
-		const url = new URL(location.href);                                              //[메모]const : 상수값(변함없는 값)을 저장시 사용하는 선언자.
-		const noticeTypeSelect = document.querySelector("#noticeTypeFilter > select").value; //closedFilter       //[메모].querySelector() : CSS 선택자로 요소를 선택하게 해줍니다.
+		const url = new URL(location.href);                                          		    　//[메모]const : 상수값(변함없는 값)을 저장시 사용하는 선언자.
+		const noticeTypeSelect = document.querySelector("#noticeTypeFilter > select").value; 	　//closedFilter       //[메모].querySelector() : CSS 선택자로 요소를 선택하게 해줍니다.
 		const noticeStatusSelect = document.querySelector("#noticeStatusFilter > select").value; //closedFilter       //[메모].querySelector() : CSS 선택자로 요소를 선택하게 해줍니다.
-		const wirteManagerSelect = document.querySelector("#wirteManagerFilter > select").value;   //anonymousFilter  //[메모].querySelector() : 주의할 점은 선택자에 해당하는 첫번째 요소만 선택한다는 것입니다.
+		const wirteManagerSelect = document.querySelector("#wirteManagerFilter > select").value; //anonymousFilter  //[메모].querySelector() : 주의할 점은 선택자에 해당하는 첫번째 요소만 선택한다는 것입니다.
 
 		//alert("getNoticeListForSelectedColumn-noticeTypeSelect : " + noticeTypeSelect);
 		//alert("getNoticeListForSelectedColumn-noticeStatusSelect : " + noticeStatusSelect);
@@ -267,7 +284,7 @@
 		searchParam.set("selectedWirteManager", wirteManagerSelect);
 		searchParam.set("ajax", "true");
 		url.search = searchParam;
-		alert("getNoticeListForSelectedColumn-url.search : " + url.search );
+		//alert("getNoticeListForSelectedColumn-url.search : " + url.search );
 
 		//메모 [part1.4] 2단계 : fetch API를 활용하여 선택한 옵션대로 웹페이지 이동.
 		//메모 (예) getNoticeListForSelectedColumn-url.search : ?noticeStatusSelect=1&wirteManagerSelect=0&ajax=true
@@ -310,7 +327,7 @@
 										+ "</td>"
 
 					/*６．編集ボタン */	+ "<td class=\"center aligned\">"
-											+ "<button class=\"" +  "ui yellow button\" onclick=\"openEditNoticeModal(this);\">編集</button>"
+											+ "<button class=\"" +  "ui yellow button\" onclick=\"openNoticeModal(noticeList[i].noticeId);\">編集</button>"
 										+ "</td>"
 
 					/*７．削除ボタン */	+ "<td class=\"center aligned\">"
@@ -359,335 +376,128 @@
 	}
 
 	//메모 표헤더에서 드롭박스 선택시마다 값을 리턴해주기 위한 관련 코드들 <끝>-------------------------------
+	//------------------------------------------------------------------------------------------------------------
+
 
 	//------------------------------------------------------------------------------------------------------------
 	//modal関連のコード。
 
+	let editor;
+	let totalFileSize;
+
 	//modal show.
-	function openEditNoticeModal(button) {
+	//메모 기존글 수정/신규등록 모두 동일한 포맷을 사용.
+	function openNoticeModal(targetNoticeId,targetNoticeTypeCode,targetNoticeBlindFlag,
+							 targetNoticeTitle,targetNoticeContents ) {
+
+		//메모 위의 파라미터를 통헤 기존 공지글의 정보를 넣도록 한다.
+		//메모 targetNoticeBlindFlag는 현재 사용용도 미정. 나중에 없애거나 활용하는 것으로 설정 예정.
+		$("#noticeTypeCodeOfmodal").val(targetNoticeTypeCode);
+		$("#noticeTitleOfmodal").val(targetNoticeTitle);
+		$("#noticeContentsOfModal").val(targetNoticeContents);
+
+		//메모 noticeId는 hidden에 저장시켜서 유저들에게 노출되지 않도록 설정.
+		$("#hiddenNoticeId").val(targetNoticeId);
+		$("#hiddenNoticeBlindFlag").val(targetNoticeBlindFlag);
+
 		$("#noticeModal").modal("show");
+		editor = new EditorJS({
+			holder: "noticeContentsOfModal",
+
+			tools: {
+				underline: Underline,
+				marker: Marker,
+				image: SimpleImage
+			}
+		});
 	}
+
 	//modal close.
 	document.getElementById("closeNoticeModal").addEventListener("click", function () {
 		$(noticeModal).modal("hide");
 	});
 
-	let editor;
-	let totalFileSize;
+	//메모 modal submit(신규공지글 등록/기존글 수정 정보 전송)
+	//메모 전송(submit)전 유효성체크(전송 전에 정상적으로 정보를 입력했는지 확인)
+	document.getElementById("noticeSubmit").addEventListener("click", function () {
 
-	async function deleteFile(postFileId) {
-		return await fetch("image", {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json"
+		// 메모 유효성체크1 : 공지유형 선택않은 경우.
+		if (noticeTypeCodeOfmodal.value == 0) {
+			alert("公知タイプを選択してください");
+			return;
+		}
+		// 메모 유효성체크2-1 : 공지제목의 기입않은 경우
+		if (noticeTitleOfmodal.value.length == 0) {
+			alert("公知タイトルを入力してください");
+			return;
+		}
+		// 메모 유효성체크2-2 : 공지제목 최대글자수 제한
+		if (noticeTitleOfmodal.value.length > 90) {
+			alert("公知タイトルは90文字以内にしてください");
+			return;
+		}
+
+		//메모 앞의 유효성체크를 통과했다면 전송할 데이터를 준비한다.
+		var sendNoticeId =  $('#hiddenNoticeId').val();
+		var sendNoticeTypeCode = $('#noticeTypeCodeOfmodal').val();
+		var sendNoticeTitle = $('#noticeTitleOfmodal').val();
+		var sendNoticeContents = $('#noticeContentsOfModal').val();
+		var sendNoticeBlindFlag = $('#hiddenNoticeBlindFlag').val();
+
+		//[메모]	noticeId가 0일 경우 신규글으로 파악.
+		$.ajax({
+			type: "POST",
+			url: "manage/notices/testConnect",
+			success: function () {
+				alert("testConnect success");
 			},
-			body: postFileId
-		}).then(function (response) {
-			if (response.ok) {
-				return response.json();
+			error: function () {
+				alert("testConnect error");
 			}
-			throw response.status;
 		});
-	}
-
-	function cancelUpload(icon) {
-		const fileName = icon.closest("span").innerText;
-		if (confirm(fileName + "のアップロードをキャンセルしますか？")) {
-			const postFileId = icon.dataset.id;
-			deleteFile(postFileId).then(function (isDeleted) {
-				if (isDeleted) {
-					const caption = document.querySelectorAll(".cdx-input.cdx-simple-image__caption");
-					for (let i = caption.length - 1; i > -1; --i) {
-						if (caption[i].innerText === postFileId) {
-							caption[i].closest("div.ce-block").remove();
-							break;
-						}
-					}
-					icon.closest("span").remove();
-				} else {
-					alert("ファイルの削除に失敗しました");
+		/*
+		if (sendNoticeId.value == 0 ) {
+			$.ajax({
+				type: "POST",
+				url: "/insertNewNotice",
+				data: {
+					sendNoticeId
+					, sendNoticeTypeCode
+					, sendNoticeTitle
+					, sendNoticeContents
+					, sendNoticeBlindFlag
+				},
+				dataType: "json",
+				success: function (result) {
+					alert("通報の受付を完了しました。");
+				},
+				error: function () {
+					alert("システムのエラーです。管理者にお問い合わせください。");
 				}
-			}).catch(function (error) {
-				alert("予期しないエラーが発生しました");
-				console.error(error);
 			});
 		}
-	}
-
-	async function getFileHash(file) {
-		return await file.arrayBuffer().then(function (arrayBuffer) {
-			const byteArray = new Int8Array(arrayBuffer);
-			return crypto.subtle.digest("SHA-256", byteArray);
-		}).then(function (digest) {
-			const hashArray = Array.from(new Uint8Array(digest));
-			let fileHash = "";
-			for (let j = 0, arrayLength = hashArray.length; j < arrayLength; ++j) {
-				fileHash += hashArray[j].toString(16).padStart(2, "0");
-			}
-			return fileHash;
-		});
-	}
-
-	addEventListener("DOMContentLoaded", function () {
-		<%-- モーダル --%>
-		const postModal = document.getElementById("postModal");
-		$(postModal).modal({
-			duration: 100,
-			closable: false,
-			autofocus: false
-		});
-		const postModalTopic = document.getElementById("postModalTopic");
-		const postModalTitle = document.getElementById("postModalTitle");
-		const postUploadFiles = document.getElementById("postUploadFiles");
-		document.getElementById("openPostModal").addEventListener("click", function () {
-			totalFileSize = 0;
-			postModal.dataset.id = "0";
-			$(postModal).modal("show");
-			if (editor === undefined) {
-				fetch("board", {
-					method: "GET"
-				}).then(function (response) {
-					if (response.ok) {
-						return response.json();
-					}
-					throw response.status;
-				}).then(function (topicList) {
-					let topicOptionList = "";
-					for (let i = 0, length = topicList.length; i < length; ++i) {
-						topicOptionList += "<div class=\"item\" data-value=\"" + topicList[i].boardId + "\">" +
-								topicList[i].boardTopicName + "</div>";
-					}
-					document.querySelector(".ui.selection.dropdown > .menu").innerHTML = topicOptionList;
-					$(postModalTopic).closest("div").dropdown();
-				}).catch(function (error) {
-					alert("予期しないエラーが発生しました");
-					$(postModal).modal("hide");
-					console.error(error);
-				});
-				editor = new EditorJS({
-					holder: "postModalContents",
-					tools: {
-						underline: Underline,
-						marker: Marker,
-						image: SimpleImage
-					}
-				});
-			} else {
-				$(postModalTopic).closest("div").dropdown("restore defaults");
-				postModalTitle.value = postUploadFiles.value = "";
-				editor.blocks.clear();
-				document.querySelectorAll("#postModal > .actions > span").forEach(function (span) {
-					span.remove();
-				});
-				deleteFile(postModal.dataset.id).catch(function (error) {
-					alert("予期しないエラーが発生しました");
-					$(postModal).modal("hide");
-					console.error(error);
-				});
-			}
-		});
-
-		postModalTitle.addEventListener("input", function () {
-			const title = this.value.trim();
-			if (title.length > 200) {
-				alert("タイトルは２００文字以内にしてください");
-				this.value = title.substring(0, 200);
-			}
-		});
-		addEventListener("keydown", function (event) {
-			if (event.key === "Escape") {
-				$(".ui.modal").modal("hide");
-			}
-		});
-
-		<%-- ファイルアップロード --%>
-		const fileSizeLimit = 10485760;
-		const totalLimit = 104857600;
-		const uploadingText = document.getElementById("uploadingText");
-		postUploadFiles.previousElementSibling.addEventListener("click", function () {
-			postUploadFiles.click();
-		});
-		postUploadFiles.addEventListener("change", async function () {
-			let size = 0;
-			const filesLength = this.files.length;
-			for (let i = 0; i < filesLength; ++i) {
-				if (this.files[i].size > fileSizeLimit) {
-					alert("10MB以上のファイルはアップロードできません");
-					this.value = "";
-					return;
-				}
-				size += this.files[i].size;
-			}
-			if (totalFileSize + size > totalLimit) {
-				alert("ファイルサイズの合計は100MB以下にしてください");
-				this.value = "";
-				return;
-			}
-
-			const postId = postModal.dataset.id;
-			const searchParams = new URLSearchParams();
-			searchParams.append("postId", postId);
-			const type = "image";
-			const config = SimpleImage;
-			const needToFocus = false;
-			uploadingText.className = "ui active dimmer";
-			for (let i = 0; i < filesLength; ++i) {
-				const file = this.files[i];
-				const fileHash = await getFileHash(file);
-
-				searchParams.set("fileHash", fileHash);
-				searchParams.set("originName", file.name);
-
-				let postFile = await fetch("image?" + searchParams.toString(), {
-					method: "GET"
-				}).then(function (response) {
-					if (response.ok) {
-						return response.text();
-					}
-					throw response.status;
-				}).then(function (responseBody) {
-					console.log(responseBody);
-					if (responseBody) {
-						return JSON.parse(responseBody);
-					}
-					return null;
-				}).catch(function (error) {
-					alert("予期しないエラーが発生しました");
-					console.error(error);
-					postUploadFiles.value = "";
-					uploadingText.className = "ui disabled dimmer";
-				});
-
-				if (postFile === null) {
-					const formData = new FormData();
-					formData.append("postId", postId);
-					formData.append("file", file);
-					postFile = await fetch("image", {
-						method: "POST",
-						body: formData
-					}).then(function (response) {
-						if (response.ok) {
-							return response.json();
-						}
-						throw response.status;
-					}).catch(function (error) {
-						alert("予期しないエラーが発生しました");
-						console.error(error);
-						postUploadFiles.value = "";
-						uploadingText.className = "ui disabled dimmer";
-					});
-				}
-
-				const data = {
-					"url": postFile.postFileUrl,
-					"caption": postFile.postFileId,
-					"withBorder": false,
-					"withBackground": false,
-					"stretched": false
-				};
-				const index = editor.blocks.getBlocksCount();
-				editor.blocks.insert(type, data, config, index, needToFocus);
-				const html = "<span>" +  file.name + "<i class=\"window close outline link icon\" " +
-						"onclick=\"cancelUpload(this);\" data-id=\"" + data.caption + "\"></i></span>";
-				this.closest("div").insertAdjacentHTML("beforeend", html);
-				totalFileSize += file.size;
-			}
-			this.value = "";
-			uploadingText.className = "ui disabled dimmer";
-		});
-
-		document.getElementById("postSubmit").addEventListener("click", function () {
-			if (!postModalTopic.value.length) {
-				alert("トピックを選択してください");
-				postModalTopic.closest("div").focus();
-				return;
-			}
-			postModalTitle.value = postModalTitle.value.trim();
-			if (!postModalTitle.value.length) {
-				alert("タイトルを入力してください");
-				postModalTitle.focus();
-				return;
-			}
-			if (postModalTitle.value.length > 200) {
-				alert("タイトルは２００文字以内にしてください");
-				postModalTitle.focus();
-				return;
-			}
-			editor.save().then(function (savedData) {
-				if (!savedData.blocks.length) {
-					alert("内容を入力してください");
-					editor.focus();
-					return;
-				}
-				if (postModal.dataset.id === "0") {
-					if (confirm("ポストを作成しますか？")) {
-						const blockList = savedData.blocks;
-						for (let i = blockList.length - 1; i > -1; --i) {
-							delete blockList[i].id;
-						}
-						uploadingText.firstElementChild.innerText = "ポストをアップロードしています";
-						uploadingText.className = "ui active dimmer";
-						fetch("post", {
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json"
-							},
-							body: JSON.stringify({
-								postTitle: postModalTitle.value,
-								boardId: postModalTopic.value,
-								postBlindFlag: "0", <%-- 確認必要 --%>
-								postContents: savedData.blocks
-							})
-						}).then(function (response) {
-							if (response.ok) {
-								return response.json();
-							}
-							throw response.status;
-						}).then(function (postId) {
-							location.href = "post/" + postId;
-						}).catch(function (error) {
-							uploadingText.className = "ui disabled dimmer";
-							uploadingText.firstElementChild.innerText = "ファイルをアップロードしています";
-							alert("予期しないエラーが発生しました");
-							console.error(error);
-						});
-					}
-				} else {
-					if (confirm("ポストを修正しますか？")) {
-						const blockList = savedData.blocks;
-						for (let i = blockList.length - 1; i > -1; --i) {
-							delete blockList[i].id;
-						}
-						uploadingText.firstElementChild.innerText = "ポストを修正しています";
-						uploadingText.className = "ui active dimmer";
-						fetch("post", {
-							method: "PUT",
-							headers: {
-								"Content-Type": "application/json"
-							},
-							body: JSON.stringify({
-								postId: postModal.dataset.id,
-								postTitle: postModalTitle.value,
-								boardId: postModalTopic.value,
-								postBlindFlag: "0", <%-- 確認必要 --%>
-								postContents: savedData.blocks
-							})
-						}).then(function (response) {
-							if (!response.ok) {
-								throw response.status;
-							}
-						}).then(function () {
-							location.reload();
-						}).catch(function (error) {
-							uploadingText.className = "ui disabled dimmer";
-							uploadingText.firstElementChild.innerText = "ファイルをアップロードしています";
-							alert("予期しないエラーが発生しました");
-							console.error(error);
-						});
-					}
+		//메모 0이외의 고유의 noticeId를 보유한 경우에는 수정메소드로 전송,
+		else {
+			$.ajax({
+				type: "POST",
+				url: "manage/notices/updateOriginalNotice",
+				data: {
+					sendNoticeId
+					, sendNoticeTypeCode
+					, sendNoticeTitle
+					, sendNoticeContents
+					, sendNoticeBlindFlag
+				},
+				dataType: "json",
+				success: function (result) {
+					alert("通報の受付を完了しました。");
+				},
+				error: function () {
+					alert("システムのエラーです。管理者にお問い合わせください。");
 				}
 			});
-		});
+		}	*/
 	});
+
 	//------------------------------------------------------------------------------------------------------------
 </script>

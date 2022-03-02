@@ -327,7 +327,7 @@
 		const length = checkboxList.length;
 		if (length < 1) {
 			alert("1つ以上の通報を選択してください。");
-			return;
+
 		} else if (confirm(isAccept ? "承認しますか？" : "却下しますか？")) {
 			let reason;
 			if (isCustomMessage) {

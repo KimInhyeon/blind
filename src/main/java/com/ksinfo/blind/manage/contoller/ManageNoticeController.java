@@ -51,6 +51,34 @@ public final class ManageNoticeController {
          return manageNoticeService.getNoticeListForManagerSelectedColumn(selectedNoticeType, selectedNoticeBlindFlag, selectedWirteManager);
     }
 
+    @RequestMapping(value = "manage/notices/insertNewNotice", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public void insertNewNotice(String sendNoticeId, String sendNoticeTypeCode, String sendNoticeTitle,
+                                          String sendNoticeContents, String sendNoticeBlindFlag)
+    {
+        System.out.println("Access manage/notices/insertNewNotice");
+       // return manageNoticeService.getNoticeListForManagerSelectedColumn(selectedNoticeType, selectedNoticeBlindFlag, selectedWirteManager);
+    }
+
+//    @RequestMapping(value = "manage/notices/updateOriginalNotice", method = RequestMethod.POST, produces = "application/json")
+//    @ResponseBody
+    @ResponseBody
+    @PostMapping("manage/notices/updateOriginalNotice")
+    public void updateOriginalNotice(String sendNoticeId, String sendNoticeTypeCode, String sendNoticeTitle,
+                                     String sendNoticeContents, String sendNoticeBlindFlag)
+    {
+        System.out.println("Access manage/notices/updateOriginalNotice");
+        // return manageNoticeService.getNoticeListForManagerSelectedColumn(selectedNoticeType, selectedNoticeBlindFlag, selectedWirteManager);
+    }
+
+
+    @RequestMapping(value = "/testConnect", method = RequestMethod.POST)
+    @ResponseBody
+    public void testConnect()
+    {
+        System.out.println("Access manage/notices/testConnect");
+    }
+
     /*
     @PostMapping
     public long createNotice(@RequestBody BoardCreateDto board, @AuthenticationPrincipal Account account) {
