@@ -71,6 +71,7 @@ public class CompanyCommonService {
 			CompanyVoteResultDto companyVoteResultDto = companyCommonMapper.getCompanyRecommendVoteResult(companyId);
 			companyVoteResultDto = new CompanyVoteResultDto(companyVoteResultDto.getVoteCountOfGood(),companyVoteResultDto.getVoteCountOfBad());
 
+
 			return companyVoteResultDto;
 		}
 
