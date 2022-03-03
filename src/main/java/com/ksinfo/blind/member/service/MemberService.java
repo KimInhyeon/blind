@@ -1,5 +1,7 @@
 package com.ksinfo.blind.member.service;
 
+import com.ksinfo.blind.member.dto.MemberDto;
+import com.ksinfo.blind.member.vo.MemberVO;
 import com.ksinfo.blind.security.Account;
 import com.ksinfo.blind.member.dto.RegisterMemberDto;
 import com.ksinfo.blind.member.mapper.MemberMapper;
@@ -15,7 +17,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Member;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Service
 public class MemberService implements UserDetailsService {
@@ -61,6 +67,8 @@ public class MemberService implements UserDetailsService {
 		memberMapper.registerNewMember(member);
 	}
 
+
+
 	@Transactional(readOnly = true)
 	public boolean checkNickname(String newNickname) {
 		return badWordsUtil.isContainsBadWord(newNickname) || memberMapper.isDuplicatedNickname(newNickname);
@@ -90,7 +98,40 @@ public class MemberService implements UserDetailsService {
 		return false;
 	}
 
+	@Transactional(isolation = Isolation.SERIALIZABLE)
+	public boolean changeNicknameApp(String newNickname, MemberVO memberVO) {
+		if (newNickname.length() > 0 && !badWordsUtil.isContainsBadWord(newNickname)) {
+			System.out.println(newNickname);
+			LocalDate possibleDate = memberVO.getNicknameChangeDate().toInstant()
+			.atZone(ZoneId.systemDefault())
+					.toLocalDate().plusMonths(3);
+			if (LocalDate.now().compareTo(possibleDate) > -1 && !memberMapper.isDuplicatedNickname(newNickname)) {
+				String userNickname = memberVO.getUserNickname();
+				int userGeneration = memberVO.getUserGeneration();
+				try {
+					if (memberMapper.invalidateOldNicknameApp(memberVO) > 0) {
+						memberVO.setUserNickname(newNickname);
+						memberVO.setUserGeneration(userGeneration + 1);
+						memberMapper.validateNewNicknameApp(memberVO);
+						return true;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					memberVO.setUserNickname(userNickname);
+					memberVO.setUserGeneration(userGeneration);
+				}
+			}
+		}
+		return false;
+	}
+
+
+
 	public boolean checkPassword(String inputPassword, String targetPassword) {
 		return passwordEncoder.matches(inputPassword, targetPassword);
+	}
+
+	public MemberVO getmodifyProfileApp(long userId){
+		return memberMapper.getmodifyProfileApp(userId);
 	}
 }

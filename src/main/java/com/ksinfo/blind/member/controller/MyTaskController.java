@@ -9,6 +9,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public final class MyTaskController {
 		this.myTaskService = myTaskService;
 	}
 
+
 	@GetMapping
 	public ModelAndView myTaskView(@AuthenticationPrincipal Account account) {
 		List<MyCompanyReviewVO> companyReviewList = myTaskService.getMyCompanyReviewList(account.getUserId());
@@ -36,5 +39,23 @@ public final class MyTaskController {
 		modelAndView.addObject("reportList", reportList);
 
 		return modelAndView;
+	}
+
+	@ResponseBody
+	@GetMapping(value = "mytaskApi")
+	public List<MyCompanyReviewVO> myTaskViewApi(@RequestParam("userId") String userId) {
+
+		List<MyCompanyReviewVO> mycompanyreviewList = myTaskService.getMyCompanyReviewList(Long.valueOf(userId));
+
+		return mycompanyreviewList;
+	}
+
+	@ResponseBody
+	@GetMapping(value = "mytaskReportApi")
+	public List<MyReportVO> myTaskReportViewApi(@RequestParam("userId") String userId) {
+
+		List<MyReportVO> reportList = myTaskService.getMyReportList(Long.valueOf(userId));
+
+		return reportList;
 	}
 }

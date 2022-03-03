@@ -49,4 +49,5 @@ public final class RegisterMemberDto {
 	public String getUserAuth() {
 		return userAuth;
 	}
+
 }

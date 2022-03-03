@@ -21,6 +21,7 @@ public final class Account implements UserDetails {
 	private List<GrantedAuthority> authorities;
 	private int reportedCount;
 
+
 	public long getUserId() {
 		return userId;
 	}
