@@ -4,7 +4,9 @@ import com.ksinfo.blind.company.vo.CompanyJobGroupVO;
 import com.ksinfo.blind.manage.service.ManageNoticeService;
 
 import com.ksinfo.blind.manage.vo.NoticeVO;
+import com.ksinfo.blind.security.Account;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -51,27 +53,7 @@ public final class ManageNoticeController {
          return manageNoticeService.getNoticeListForManagerSelectedColumn(selectedNoticeType, selectedNoticeBlindFlag, selectedWirteManager);
     }
 
-    @RequestMapping(value = "manage/notices/insertNewNotice", method = RequestMethod.POST, produces = "application/json")
-    @ResponseBody
-    public void insertNewNotice(String sendNoticeId, String sendNoticeTypeCode, String sendNoticeTitle,
-                                          String sendNoticeContents, String sendNoticeBlindFlag)
-    {
-        System.out.println("Access manage/notices/insertNewNotice");
-       // return manageNoticeService.getNoticeListForManagerSelectedColumn(selectedNoticeType, selectedNoticeBlindFlag, selectedWirteManager);
-    }
-
-//    @RequestMapping(value = "manage/notices/updateOriginalNotice", method = RequestMethod.POST, produces = "application/json")
-//    @ResponseBody
-    @ResponseBody
-    @PostMapping("manage/notices/updateOriginalNotice")
-    public void updateOriginalNotice(String sendNoticeId, String sendNoticeTypeCode, String sendNoticeTitle,
-                                     String sendNoticeContents, String sendNoticeBlindFlag)
-    {
-        System.out.println("Access manage/notices/updateOriginalNotice");
-        // return manageNoticeService.getNoticeListForManagerSelectedColumn(selectedNoticeType, selectedNoticeBlindFlag, selectedWirteManager);
-    }
-
-
+    //메모 ajax통신을 체크하기 위한 코드.
     @RequestMapping(value = "/testConnect", method = RequestMethod.POST)
     @ResponseBody
     public void testConnect()
@@ -79,12 +61,31 @@ public final class ManageNoticeController {
         System.out.println("Access manage/notices/testConnect");
     }
 
-    /*
-    @PostMapping
-    public long createNotice(@RequestBody BoardCreateDto board, @AuthenticationPrincipal Account account) {
-        board.setUserId(account.getUserId());
-        return manageBoardService.createBoard(board);
+    @RequestMapping(value = "/insertNewNotice", method = RequestMethod.POST)
+    @ResponseBody
+    public List<NoticeVO> insertNewNotice(@AuthenticationPrincipal Account account,
+                                          String sendNoticeTypeCode, String sendNoticeTitle,
+                                          String sendNoticeContents, String sendNoticeBlindFlag)
+    {
+        System.out.println("Access manage/notices/insertNewNotice");
+        long userId = account.getUserId();
+        manageNoticeService.insertNewNotice(userId, sendNoticeTypeCode, sendNoticeTitle,
+                                            sendNoticeContents, sendNoticeBlindFlag );
+        return manageNoticeService.getNoticeListForManagerSelectedColumn('0', '2', 0);
     }
-    */
+
+    @RequestMapping(value = "/updateOriginalNotice", method = RequestMethod.POST)
+    @ResponseBody
+    public List<NoticeVO> updateOriginalNotice(@AuthenticationPrincipal Account account,
+                                               String sendNoticeId, String sendNoticeTypeCode, String sendNoticeTitle,
+                                               String sendNoticeContents, String sendNoticeBlindFlag)
+    {
+        System.out.println("Access manage/notices/updateOriginalNotice");
+        long userId = account.getUserId();
+        manageNoticeService.updateOriginalNotice(userId, sendNoticeId, sendNoticeTypeCode,
+                                                 sendNoticeTitle,sendNoticeContents, sendNoticeBlindFlag);
+        return manageNoticeService.getNoticeListForManagerSelectedColumn('0', '2', 0);
+    }
+
 
 }

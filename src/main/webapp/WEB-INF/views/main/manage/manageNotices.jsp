@@ -97,10 +97,14 @@
 					</th>
 
 					<!--４．作成者 -->
+
 					<th id="wirteManagerFilter">
+						作成者
+						<!--
 						<select class="ui compact selection dropdown fluid" onchange="getNoticeListForManagerSelectedColumn()">
 							<option value="0">作成者</option>
 						</select>
+						-->
 					</th>
 
 					<!--５．公知事項のタイトル -->
@@ -444,7 +448,7 @@
 		var sendNoticeContents = $('#noticeContentsOfModal').val();
 		var sendNoticeBlindFlag = $('#hiddenNoticeBlindFlag').val();
 
-		//[메모]	noticeId가 0일 경우 신규글으로 파악.
+		/*
 		$.ajax({
 			type: "POST",
 			url: "manage/notices/testConnect",
@@ -455,14 +459,15 @@
 				alert("testConnect error");
 			}
 		});
-		/*
-		if (sendNoticeId.value == 0 ) {
+		*/
+
+		//[메모]	noticeId가 0일 경우 신규글으로 파악.
+		if (sendNoticeId === '0' ) {
 			$.ajax({
 				type: "POST",
-				url: "/insertNewNotice",
+				url: "manage/notices/insertNewNotice",
 				data: {
-					sendNoticeId
-					, sendNoticeTypeCode
+					sendNoticeTypeCode
 					, sendNoticeTitle
 					, sendNoticeContents
 					, sendNoticeBlindFlag
@@ -470,6 +475,8 @@
 				dataType: "json",
 				success: function (result) {
 					alert("通報の受付を完了しました。");
+					//메모 화면 재구성하도록 refresh 실시.
+					location.reload();
 				},
 				error: function () {
 					alert("システムのエラーです。管理者にお問い合わせください。");
@@ -496,7 +503,7 @@
 					alert("システムのエラーです。管理者にお問い合わせください。");
 				}
 			});
-		}	*/
+		}
 	});
 
 	//------------------------------------------------------------------------------------------------------------
