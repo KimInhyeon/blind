@@ -47,10 +47,11 @@ public final class ManageNoticeController {
     @GetMapping(params = "ajax=true")
     public List<NoticeVO> getNoticeListForManagerSelectedColumn(
         @RequestParam(name = "selectedNoticeType", defaultValue = "0") char selectedNoticeType,
-        @RequestParam(name = "selectedNoticeBlindFlag", defaultValue = "2") char selectedNoticeBlindFlag,
-        @RequestParam(name = "selectedWirteManager", defaultValue = "0") Integer selectedWirteManager)
+        @RequestParam(name = "selectedNoticeBlindFlag", defaultValue = "2") char selectedNoticeBlindFlag)
+        //@RequestParam(name = "selectedWirteManager", defaultValue = "0") Integer selectedWirteManager)
     {
-         return manageNoticeService.getNoticeListForManagerSelectedColumn(selectedNoticeType, selectedNoticeBlindFlag, selectedWirteManager);
+        //return manageNoticeService.getNoticeListForManagerSelectedColumn(selectedNoticeType, selectedNoticeBlindFlag, selectedWirteManager);
+        return manageNoticeService.getNoticeListForManagerSelectedColumn(selectedNoticeType, selectedNoticeBlindFlag);
     }
 
     //메모 ajax통신을 체크하기 위한 코드.
@@ -71,7 +72,7 @@ public final class ManageNoticeController {
         long userId = account.getUserId();
         manageNoticeService.insertNewNotice(userId, sendNoticeTypeCode, sendNoticeTitle,
                                             sendNoticeContents, sendNoticeBlindFlag );
-        return manageNoticeService.getNoticeListForManagerSelectedColumn('0', '2', 0);
+        return manageNoticeService.getNoticeListForManagerSelectedColumn('0', '2');
     }
 
     @RequestMapping(value = "/updateOriginalNotice", method = RequestMethod.POST)
@@ -82,9 +83,17 @@ public final class ManageNoticeController {
     {
         System.out.println("Access manage/notices/updateOriginalNotice");
         long userId = account.getUserId();
+
+        System.out.println("userId : " + userId );
+        System.out.println("sendNoticeId : " + sendNoticeId );
+        System.out.println("sendNoticeTypeCode : " + sendNoticeTypeCode );
+        System.out.println("sendNoticeTitle : " + sendNoticeTitle );
+        System.out.println("sendNoticeContents : " + sendNoticeContents );
+        System.out.println("sendNoticeBlindFlag : " + sendNoticeBlindFlag );
+
         manageNoticeService.updateOriginalNotice(userId, sendNoticeId, sendNoticeTypeCode,
                                                  sendNoticeTitle,sendNoticeContents, sendNoticeBlindFlag);
-        return manageNoticeService.getNoticeListForManagerSelectedColumn('0', '2', 0);
+        return manageNoticeService.getNoticeListForManagerSelectedColumn('0', '2');
     }
 
 

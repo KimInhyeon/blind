@@ -12,7 +12,7 @@ public interface ManageNoticeMapper {
 
     List<NoticeVO> getNoticeListForManager(java.util.Map<String, Object> paramMap);
     List<NoticeVO> getNoticeListForManagerSelectedColumn(java.util.Map<String, Object> paramMap);
-    void insertNewNotice(java.util.Map<String, Object> paramMap);
+    void      insertNewNotice(java.util.Map<String, Object> paramMap);
     void updateOriginalNotice(java.util.Map<String, Object> paramMap);
 
 }

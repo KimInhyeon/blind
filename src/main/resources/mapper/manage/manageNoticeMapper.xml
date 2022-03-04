@@ -122,48 +122,35 @@
 			logical_del_flag     --CHARACTER(1) NOT NULL,
 		)values(
 			#{userId},		   		-- user_id,   			--BIGINT NOT NULL,
-			#{sendNoticeTitle},		-- notice_title,         --CHARACTER VARYING(200) NOT NULL,
-			#{sendNoticeTypeCode},	-- notice_type_code,         --CHARACTER(1) NOT NULL,
-			#{sendNoticeBlindFlag},	-- notice_blind_flag,     --CHARACTER(1) NOT NULL,
+			#{sendNoticeTitle},		-- notice_title,        --CHARACTER VARYING(200) NOT NULL,
+			#{sendNoticeTypeCode},	-- notice_type_code,    --CHARACTER(1) NOT NULL,
+			#{sendNoticeBlindFlag},	-- notice_blind_flag,   --CHARACTER(1) NOT NULL,
 
 			#{sendNoticeContents},	-- notice_contents,     --TEXT NOT NULL,
-			'',			   			-- notice_website_url,     --CHARACTER VARYING(2000),
-			0,			   			-- post_file_id,         -- BIGINT,
-			now(),			  	 	-- notice_create_date,     --TIMESTAMP NOT NULL,
-			now(),			   		-- notice_update_date,     --TIMESTAMP NOT NULL,
+			'',			   			-- notice_website_url,  --CHARACTER VARYING(2000),
+			0,			   			-- post_file_id,        -- BIGINT,
+			now(),			  	 	-- notice_create_date,  --TIMESTAMP NOT NULL,
+			now(),			   		-- notice_update_date,  --TIMESTAMP NOT NULL,
 
-			#{userId},	   			-- rec_create_user_id,     --BIGINT NOT NULL,
+			#{userId},	   			-- rec_create_user_id,  --BIGINT NOT NULL,
 			now(),		   			-- rec_create_date,     --TIMESTAMP NOT NULL,
-			#{userId},	   			-- rec_update_user_id,     --BIGINT NOT NULL,
+			#{userId},	   			-- rec_update_user_id,  --BIGINT NOT NULL,
 			now(),		   			-- rec_update_date,     --TIMESTAMP NOT NULL,
 			'0'			   			-- logical_del_flag     --CHARACTER(1) NOT NULL,
-			)
+			);
 	</insert>
 
 	<!--메모 현재의 수정은 원 작성자가 아니어도 수정이 가능한 상태입니다. -->
 	<update id="updateOriginalNotice" parameterType="java.util.Map">
 		UPDATE blind.NOTICE_MGT
-		SET notice_title 		= #{sendNoticeTitle},		-- notice_title,
-			notice_type_code 	= #{sendNoticeTypeCode},	-- notice_type_code,
-			notice_blind_flag 	= #{sendNoticeBlindFlag},	-- notice_blind_flag,
-			notice_contents 		= #{sendNoticeContents},	-- notice_contents,
-			notice_update_date 	= now(),				 			  	-- notice_update_date,
-			rec_update_user_id 	= #{userId} 	 	   	-- BIGINT NOT NULL,
-		WHERE notice_id = #{sendNoticeId}
-			AND logical_del_flag = '0';
+		SET notice_title 		= CAST(#{sendNoticeTitle} AS varchar), 		-- notice_title,
+			notice_type_code 	= CAST(#{sendNoticeTypeCode} AS CHAR),	-- notice_type_code,
+			notice_blind_flag 	= CAST(#{sendNoticeBlindFlag} AS CHAR),	-- notice_blind_flag,
+			notice_contents 	= CAST(#{sendNoticeContents} AS varchar),	-- notice_contents,
+			notice_update_date 	= now(),								   	-- notice_update_date,
+			rec_update_user_id 	= CAST(#{userId} AS DECIMAL)	 		   	-- BIGINT NOT NULL,
+		WHERE notice_id = CAST(#{sendNoticeId} AS DECIMAL)
+		  AND logical_del_flag = '0';
 	</update>
 
-	<!--
-	<update id="updateOriginalNotice" parameterType="java.util.Map">
-		UPDATE blind.NOTICE_MGT AS NM
-		SET NM.notice_title 		= CAST(#{sendNoticeTitle} AS int),		-- notice_title,
-			NM.notice_type_code 	= CAST(#{sendNoticeTypeCode} AS CHAR),	-- notice_type_code,
-			NM.notice_blind_flag 	= CAST(#{sendNoticeBlindFlag} AS CHAR),	-- notice_blind_flag,
-			NM.notice_contents 		= CAST(#{sendNoticeContents} AS CHAR),	-- notice_contents,
-			NM.notice_update_date 	= now(),				 			  	-- notice_update_date,
-			NM.rec_update_user_id 	= CAST(#{userId} AS int)	 	   	-- BIGINT NOT NULL,
-		WHERE NM.notice_id = CAST(#{sendNoticeId} AS int)
-			AND NM.logical_del_flag = '0';
-	</update>
-	-->
 </mapper>

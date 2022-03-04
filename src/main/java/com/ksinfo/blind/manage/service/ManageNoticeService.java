@@ -37,13 +37,12 @@ public class ManageNoticeService {
 
     @Transactional(readOnly = true)
     public List<NoticeVO> getNoticeListForManagerSelectedColumn(char selectedNoticeType,
-                                                                char selectedNoticeBlindFlag,
-                                                                Integer selectedWirteManager)
+                                                                char selectedNoticeBlindFlag)
     {
         java.util.Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("selectedNoticeType", selectedNoticeType);
         paramMap.put("selectedNoticeBlindFlag", selectedNoticeBlindFlag);
-        paramMap.put("selectedWirteManager", selectedWirteManager);
+        //paramMap.put("selectedWirteManager", selectedWirteManager);
         return manageNoticeMapper.getNoticeListForManagerSelectedColumn(paramMap);
     }
 
@@ -59,11 +58,11 @@ public class ManageNoticeService {
         paramMap.put("sendNoticeBlindFlag", sendNoticeBlindFlag);
 
         /*
-            System.out.println("paramMap userId : " + paramMap.get("userId"));
-            System.out.println("paramMap sendNoticeTypeCode : " + paramMap.get("sendNoticeTypeCode"));
-            System.out.println("paramMap sendNoticeTitle : " + paramMap.get("sendNoticeTitle"));
-            System.out.println("paramMap sendNoticeContents : " + paramMap.get("sendNoticeContents"));
-            System.out.println("paramMap sendNoticeBlindFlag : " + paramMap.get("sendNoticeBlindFlag"));
+        System.out.println("paramMap userId : " + paramMap.get("userId"));
+        System.out.println("paramMap sendNoticeTypeCode : " + paramMap.get("sendNoticeTypeCode"));
+        System.out.println("paramMap sendNoticeTitle : " + paramMap.get("sendNoticeTitle"));
+        System.out.println("paramMap sendNoticeContents : " + paramMap.get("sendNoticeContents"));
+        System.out.println("paramMap sendNoticeBlindFlag : " + paramMap.get("sendNoticeBlindFlag"));
         */
         manageNoticeMapper.insertNewNotice(paramMap);
     }
@@ -78,16 +77,14 @@ public class ManageNoticeService {
         paramMap.put("sendNoticeTitle", sendNoticeTitle);
         paramMap.put("sendNoticeContents", sendNoticeContents);
         paramMap.put("sendNoticeBlindFlag", sendNoticeBlindFlag);
-
         /*
-            System.out.println("paramMap userId : " + paramMap.get("userId"));
-            System.out.println("paramMap sendNoticeId : " + paramMap.get("sendNoticeId"));
-            System.out.println("paramMap sendNoticeTypeCode : " + paramMap.get("sendNoticeTypeCode"));
-            System.out.println("paramMap sendNoticeTitle : " + paramMap.get("sendNoticeTitle"));
-            System.out.println("paramMap sendNoticeContents : " + paramMap.get("sendNoticeContents"));
-            System.out.println("paramMap sendNoticeBlindFlag : " + paramMap.get("sendNoticeBlindFlag"));
+        System.out.println("paramMap userId : " + paramMap.get("userId"));
+        System.out.println("paramMap sendNoticeId : " + paramMap.get("sendNoticeId"));
+        System.out.println("paramMap sendNoticeTypeCode : " + paramMap.get("sendNoticeTypeCode"));
+        System.out.println("paramMap sendNoticeTitle : " + paramMap.get("sendNoticeTitle"));
+        System.out.println("paramMap sendNoticeContents : " + paramMap.get("sendNoticeContents"));
+        System.out.println("paramMap sendNoticeBlindFlag : " + paramMap.get("sendNoticeBlindFlag"));
         */
-
         manageNoticeMapper.updateOriginalNotice(paramMap);
     }
 }

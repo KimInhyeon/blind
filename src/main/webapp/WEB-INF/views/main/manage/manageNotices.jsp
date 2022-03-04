@@ -156,8 +156,7 @@
 						<!--６．編集ボタン -->
 						<td class="center aligned">
 							<button class="ui yellow button"
-									onclick="openNoticeModal(${notice.noticeId},${notice.noticeTypeCode},${notice.noticeBlindFlag},
-															'${notice.noticeTitle}','${notice.noticeContents}' );">
+									onclick="openNoticeModal(${notice.noticeId},${notice.noticeTypeCode},${notice.noticeBlindFlag},'${notice.noticeTitle}','${notice.noticeContents}' );">
 								編集
 							</button>
 						</td>
@@ -236,7 +235,11 @@
 					<div class="ui divider"></div>
 
 					<!--知事項の本文の作成ができる。　-->
-					<div id="noticeContentsOfModal"></div>
+					<div>
+						<textarea id="noticeContentsOfModal">
+						</textarea>
+					</div>
+
 				</div>
 			</div>
 			<!--登録する公知事項のアップロードするファイルを選択。　-->
@@ -257,11 +260,6 @@
 	</div>
 </div>
 
-<script src="resources/js/editor/editor.js"></script>
-<script src="resources/js/editor/underline.js"></script>
-<script src="resources/js/editor/marker.js"></script>
-<script src="resources/js/editor/simple-image.js"></script>
-
 <script>
 	//[part1] 메모 표헤더에서 드롭박스 선택시마다 값을 리턴해주기 위한 관련 코드들이다.
 	//[part1.1]메모 변수 선언
@@ -275,7 +273,7 @@
 		const url = new URL(location.href);                                          		    　//[메모]const : 상수값(변함없는 값)을 저장시 사용하는 선언자.
 		const noticeTypeSelect = document.querySelector("#noticeTypeFilter > select").value; 	　//closedFilter       //[메모].querySelector() : CSS 선택자로 요소를 선택하게 해줍니다.
 		const noticeStatusSelect = document.querySelector("#noticeStatusFilter > select").value; //closedFilter       //[메모].querySelector() : CSS 선택자로 요소를 선택하게 해줍니다.
-		const wirteManagerSelect = document.querySelector("#wirteManagerFilter > select").value; //anonymousFilter  //[메모].querySelector() : 주의할 점은 선택자에 해당하는 첫번째 요소만 선택한다는 것입니다.
+		//const wirteManagerSelect = document.querySelector("#wirteManagerFilter > select").value; //anonymousFilter  //[메모].querySelector() : 주의할 점은 선택자에 해당하는 첫번째 요소만 선택한다는 것입니다.
 
 		//alert("getNoticeListForSelectedColumn-noticeTypeSelect : " + noticeTypeSelect);
 		//alert("getNoticeListForSelectedColumn-noticeStatusSelect : " + noticeStatusSelect);
@@ -285,7 +283,7 @@
 		//[메모]URLSearchParams : javascript 에서 url 의 쿼리 파라미터들을 읽거나 수정할 때 사용.
 		searchParam.set("selectedNoticeType", noticeTypeSelect);
 		searchParam.set("selectedNoticeBlindFlag", noticeStatusSelect);
-		searchParam.set("selectedWirteManager", wirteManagerSelect);
+		//searchParam.set("selectedWirteManager", wirteManagerSelect);
 		searchParam.set("ajax", "true");
 		url.search = searchParam;
 		//alert("getNoticeListForSelectedColumn-url.search : " + url.search );
@@ -365,35 +363,18 @@
 				return "ERROR";
 		}
 	}
-
-	//[part1.3]
-	//메모 function getAnonymousFlagName(anonymousFlag) {..} 참고
-	function getWirteManagerSelect(selectedWirteManager) {
-		switch (selectedWirteManager) {
-			case "1":
-				return "一般"; // http://localhost:8282/blind/manage/board?anonymousFlag=0
-			case "2":
-				return "マスキング"; // http://localhost:8282/blind/manage/board?anonymousFlag=1
-			default:
-				return "ERROR";
-		}
-	}
-
 	//메모 표헤더에서 드롭박스 선택시마다 값을 리턴해주기 위한 관련 코드들 <끝>-------------------------------
-	//------------------------------------------------------------------------------------------------------------
-
 
 	//------------------------------------------------------------------------------------------------------------
 	//modal関連のコード。
 
-	let editor;
-	let totalFileSize;
+	//let editor;
+	//let totalFileSize;
 
 	//modal show.
 	//메모 기존글 수정/신규등록 모두 동일한 포맷을 사용.
 	function openNoticeModal(targetNoticeId,targetNoticeTypeCode,targetNoticeBlindFlag,
 							 targetNoticeTitle,targetNoticeContents ) {
-
 		//메모 위의 파라미터를 통헤 기존 공지글의 정보를 넣도록 한다.
 		//메모 targetNoticeBlindFlag는 현재 사용용도 미정. 나중에 없애거나 활용하는 것으로 설정 예정.
 		$("#noticeTypeCodeOfmodal").val(targetNoticeTypeCode);
@@ -405,16 +386,8 @@
 		$("#hiddenNoticeBlindFlag").val(targetNoticeBlindFlag);
 
 		$("#noticeModal").modal("show");
-		editor = new EditorJS({
-			holder: "noticeContentsOfModal",
 
-			tools: {
-				underline: Underline,
-				marker: Marker,
-				image: SimpleImage
-			}
-		});
-	}
+	};
 
 	//modal close.
 	document.getElementById("closeNoticeModal").addEventListener("click", function () {
@@ -448,18 +421,6 @@
 		var sendNoticeContents = $('#noticeContentsOfModal').val();
 		var sendNoticeBlindFlag = $('#hiddenNoticeBlindFlag').val();
 
-		/*
-		$.ajax({
-			type: "POST",
-			url: "manage/notices/testConnect",
-			success: function () {
-				alert("testConnect success");
-			},
-			error: function () {
-				alert("testConnect error");
-			}
-		});
-		*/
 
 		//[메모]	noticeId가 0일 경우 신규글으로 파악.
 		if (sendNoticeId === '0' ) {
@@ -498,13 +459,28 @@
 				dataType: "json",
 				success: function (result) {
 					alert("通報の受付を完了しました。");
+					location.reload();
 				},
 				error: function () {
 					alert("システムのエラーです。管理者にお問い合わせください。");
 				}
 			});
 		}
-	});
 
+		/*
+		//메모 ajax 통신체크용 코드
+		$.ajax({
+			type: "POST",
+			url: "manage/notices/testConnect",
+			success: function () {
+				alert("testConnect success");
+			},
+			error: function () {
+				alert("testConnect error");
+			}
+		});
+		*/
+
+	});//test of editJS live , addEventListener("DOMContentLoaded"
 	//------------------------------------------------------------------------------------------------------------
 </script>
