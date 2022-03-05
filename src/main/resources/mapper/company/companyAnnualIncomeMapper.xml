@@ -21,8 +21,8 @@
 	<select id="getAnnualIncome" parameterType="com.ksinfo.blind.company.dto.CompanyAnnualIncomeSearchDto"
 			resultType="com.ksinfo.blind.company.vo.CompanyAnnualIncomeVO">
 		SELECT MIN(salary) AS minAnnualIncome,
-			ROUND(AVG(salary), 0) AS avgAnnualIncome,
-			MAX("blind".salary_rank_mgt.salary) AS maxAnnualIncome
+			   ROUND(AVG(salary), 0) AS avgAnnualIncome,
+			   MAX("blind".salary_rank_mgt.salary) AS maxAnnualIncome
 		FROM blind.salary_rank_mgt
 			INNER JOIN (
 				SELECT user_id, MAX(user_generation)
@@ -42,6 +42,96 @@
 			   job_group_name AS jobGroupName
 		FROM blind.job_group_mst
 		WHERE logical_del_flag = '0'
+	</select>
+
+	<select id="getWorkTypeAll" resultType="com.ksinfo.blind.company.vo.CompanyWorkTypeVO">
+		SELECT work_type_name AS workTypeName
+		FROM blind.work_type_mst
+		WHERE logical_del_flag = '0'
+	</select>
+
+	<insert id="setAnnualData" parameterType="java.util.Map">
+		insert INTO blind.salary_rank_mgt(
+			user_id,
+			salary,
+			job_group_code,
+			years_of_service,
+			work_type_code,
+			rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			#{userId},
+			#{annualIncome},
+			#{selectJob},
+			#{selectWorkPeriod},
+			#{selectWorkType},
+			#{userId}, now(), #{userId}, now(), '0'
+		);
+	</insert>
+
+	<select id="getBusinessTypeListExistAIData" resultType="com.ksinfo.blind.company.vo.CompanyBusinessTypeVO">
+		select DISTINCT
+			btm.business_type_code AS businessTypeCode,
+		    btm.business_type_name AS businessTypeName
+		from blind.business_type_mst as btm
+		Inner Join blind.company_mgt as cm
+			on cm.business_type_code = btm.business_type_code
+		Inner Join blind.user_mgt as um
+			on um.company_id = cm.company_id
+		Inner Join blind.salary_rank_mgt as srm
+			on srm.user_id = um.user_id
+		WHERE btm.logical_del_flag = '0'
+	</select>
+
+	<select id="getJobGroupListExistAIData" resultType="com.ksinfo.blind.company.vo.CompanyJobGroupVO">
+		select DISTINCT
+			jgm.job_group_code AS jobGroupCode,
+			jgm.job_group_name AS jobGroupName
+		from blind.job_group_mst as jgm
+			Inner Join blind.salary_rank_mgt as srm
+				on srm.job_group_code = jgm.job_group_code
+		WHERE jgm.logical_del_flag = '0'
+	</select>
+
+	<select id="getUserBusinessTypeCode"
+			resultType="String">
+		select cm.business_type_code AS businessTypeCode
+		from blind.company_mgt AS cm
+		where cm.company_id = (select um.company_id
+							   from blind.user_mgt AS um
+							   where um.user_id = #{userId});
+	</select>
+
+	<select id="getUserJobGroupCode"
+			resultType="String">
+		select srm.job_group_code AS jobGroupCode
+		from blind.salary_rank_mgt AS srm
+		where srm.user_id = #{userId};
+	</select>
+
+	<select id="getAnnualIncomeAndRank"  parameterType="java.util.Map"
+			resultType="com.ksinfo.blind.company.vo.AnnualIncomeRankVO">
+		SELECT
+			MIN(SRM.salary) 									AS minAnnualIncome,
+			ROUND(AVG(SRM.salary), 0) 							AS avgAnnualIncome,
+			MAX(SRM.salary) 									AS maxAnnualIncome,
+			count(SRM.salary) 									AS countOfParticipant,
+			(select SRM.salary
+			 FROM blind.salary_rank_mgt as SRM
+			 where SRM.user_id = #{userId}) 					AS userAnnualIncome,
+			(SELECT ROUND((CAST(rank.salaryranking AS DECIMAL)
+						    /(SELECT COUNT(*) FROM blind.salary_rank_mgt) * 100), 1)
+			FROM BLIND.salary_rank_mgt AS target
+				INNER JOIN (SELECT user_id, RANK() OVER(ORDER BY salary DESC) AS salaryranking
+							FROM blind.salary_rank_mgt
+			 	) AS rank USING(user_id)
+			WHERE target.user_id = #{userId})				AS userRank
+		FROM blind.salary_rank_mgt as SRM
+				 inner join blind.user_mgt as um
+							on um.user_id = SRM.user_id
+				 inner join blind.company_mgt as cm
+							on cm.company_id = um.company_id
+		where cm.business_type_code =  #{selectBusinessTypeCode}
+		  AND SRM.job_group_code	=  #{selectJobGroupCode}
 	</select>
 
 </mapper>

@@ -34,7 +34,7 @@
 				rrm.rec_create_date,
 				CASE
 					WHEN rrm.verify_flag = '0' AND rrm.complete_flag = '0' THEN '待機'
-					WHEN rrm.verify_flag = '1' AND rrm.complete_flag = '1' THEN '承認'
+					WHEN rrm.verify_flag = '1' AND rrm.complete_flag = '1' THEN '承認完了'
 					ELSE '却下'
 				END AS status
 			FROM blind.review_report_mgt AS rrm
@@ -51,7 +51,7 @@
 				prm.rec_create_date,
 				CASE
 					WHEN verify_flag = '0' AND complete_flag = '0' THEN '待機'
-					WHEN verify_flag = '1' AND complete_flag = '1' THEN '承認'
+					WHEN verify_flag = '1' AND complete_flag = '1' THEN '承認完了'
 					ELSE '却下'
 				END AS status
 			FROM blind.post_report_mgt AS prm

@@ -1,17 +1,20 @@
 package com.ksinfo.blind.member.controller;
 
-import com.ksinfo.blind.member.service.MyTaskService;
-import com.ksinfo.blind.member.vo.MyCompanyReviewVO;
-import com.ksinfo.blind.member.vo.MyReportVO;
-import com.ksinfo.blind.security.Account;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
+import com.ksinfo.blind.member.service.MyTaskService;
+import com.ksinfo.blind.member.vo.MyCompanyReviewVO;
+import com.ksinfo.blind.member.vo.MyReportVO;
+import com.ksinfo.blind.security.Account;
 
 @Controller
 @RequestMapping("member/task")
@@ -36,5 +39,23 @@ public final class MyTaskController {
 		modelAndView.addObject("reportList", reportList);
 
 		return modelAndView;
+	}
+
+	@ResponseBody
+	@GetMapping(value = "mytaskApi")
+	public List<MyCompanyReviewVO> myTaskViewApi(@RequestParam("userId") String userId) {
+
+		List<MyCompanyReviewVO> mycompanyreviewList = myTaskService.getMyCompanyReviewList(Long.valueOf(userId));
+
+		return mycompanyreviewList;
+	}
+
+	@ResponseBody
+	@GetMapping(value = "mytaskReportApi")
+	public List<MyReportVO> myTaskReportViewApi(@RequestParam("userId") String userId) {
+
+		List<MyReportVO> reportList = myTaskService.getMyReportList(Long.valueOf(userId));
+
+		return reportList;
 	}
 }

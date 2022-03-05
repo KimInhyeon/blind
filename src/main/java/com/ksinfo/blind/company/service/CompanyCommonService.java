@@ -19,6 +19,7 @@ import java.util.Map;
 public class CompanyCommonService {
 	private final CompanyCommonMapper companyCommonMapper;
 
+
 	@Autowired
 	public CompanyCommonService(CompanyCommonMapper companyCommonMapper) {
 		this.companyCommonMapper = companyCommonMapper;
@@ -65,7 +66,14 @@ public class CompanyCommonService {
 
 	//기업선호도 투표한 유저에게 결과(기업선호도)를 출력하기 위해 리턴.
 	@Transactional(readOnly = true)
-	public CompanyVoteResultDto getCompanyRecommendVoteResult(long companyId) {
-		return companyCommonMapper.getCompanyRecommendVoteResult(companyId);
+	public CompanyVoteResultDto getCompanyRecommendVoteResult(long userId, long companyId) {
+		if (companyCommonMapper.wasCompanyRecommendVoted(userId, companyId)) {
+			CompanyVoteResultDto companyVoteResultDto = companyCommonMapper.getCompanyRecommendVoteResult(companyId);
+			companyVoteResultDto = new CompanyVoteResultDto(companyVoteResultDto.getVoteCountOfGood(),companyVoteResultDto.getVoteCountOfBad());
+
+			return companyVoteResultDto;
+		}
+
+		return null;
 	}
 }

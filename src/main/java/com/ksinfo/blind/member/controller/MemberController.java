@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ksinfo.blind.member.dto.RegisterMemberDto;
 import com.ksinfo.blind.member.service.MemberService;
+import com.ksinfo.blind.member.vo.MemberVO;
 import com.ksinfo.blind.security.Account;
 import com.ksinfo.blind.util.MessageUtils;
 
@@ -144,5 +146,43 @@ public final class MemberController {
 		}
 
 		return response;
+	}
+	
+
+	@ResponseBody
+	@GetMapping(value = "modifyProfileApp")
+	public MemberVO modifyProfileApp(@RequestParam("userId") String userId) {
+		MemberVO memberVO = memberService.getmodifyProfileApp(Long.valueOf(userId));
+		return memberVO;
+	}
+
+	@ResponseBody
+	@PostMapping("checkUpdateProfileApp")
+	public Map<String, String> checkUpdateProfileApp(HttpServletRequest request) {
+
+		Map<String, String> response = new HashMap<>();
+		String userId = request.getParameter("userId");
+		String newNickname = request.getParameter("newNickname");
+
+		boolean result = memberService.checkNickname(newNickname);
+		if(result){
+			response.put("message", "Bad words");
+			response.put("result", "1");
+			System.out.println("bad words");
+		}else{
+			MemberVO vo = memberService.getmodifyProfileApp(Long.valueOf(userId));
+			changeNicknameApp(newNickname, vo);
+
+		}
+
+		return response;
+	}
+
+	@ResponseBody
+	@PostMapping("changeNicknameApp")
+	public boolean changeNicknameApp(String newNickname, MemberVO memberVO) {
+		System.out.println(memberVO.toString());
+		System.out.println(newNickname);
+		return memberService.changeNicknameApp(newNickname, memberVO);
 	}
 }

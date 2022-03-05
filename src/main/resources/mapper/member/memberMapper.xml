@@ -64,6 +64,21 @@
 				AND user_generation = #{userGeneration};
 		</selectKey>
 	</update>
+	
+	<update id="invalidateOldNicknameApp" parameterType="com.ksinfo.blind.member.vo.MemberVO">
+		UPDATE blind.user_mgt
+		SET last_generation_flag = '0',
+		rec_update_user_id = #{userId},
+		rec_update_date = NOW()
+		WHERE user_id = #{userId}
+		AND user_generation = #{userGeneration};
+		<selectKey keyProperty="reportedCount" resultType="_int" order="AFTER">
+			SELECT reported_count
+			FROM blind.user_mgt
+			WHERE user_id = #{userId}
+			AND user_generation = #{userGeneration};
+		</selectKey>
+	</update>
 
 	<insert id="validateNewNickname" parameterType="com.ksinfo.blind.security.Account">
 		INSERT INTO blind.user_mgt (
@@ -82,4 +97,33 @@
 				AND user_generation = #{userGeneration};
 		</selectKey>
 	</insert>
+	
+	<insert id="validateNewNicknameApp" parameterType="com.ksinfo.blind.member.vo.MemberVO">
+		INSERT INTO blind.user_mgt (
+			user_id, user_generation, last_generation_flag, user_password, user_email,
+			user_nickname, nickname_change_date, company_id, user_auth, reported_count,
+			rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+			#{userId}, #{userGeneration}, '1', #{userPassword}, #{userEmail},
+			#{userNickname}, NOW(), #{companyId}, #{userAuth}, #{reportedCount},
+			#{userId}, NOW(), #{userId}, NOW(), '0'
+		);
+		<selectKey keyProperty="nicknameChangeDate"	resultType="java.sql.Date" order="AFTER">
+			SELECT nickname_change_date
+			FROM blind.user_mgt
+			WHERE user_id = #{userId}
+				AND user_generation = #{userGeneration};
+		</selectKey>
+	</insert>
+
+	<select id="getmodifyProfileApp" resultType="com.ksinfo.blind.member.vo.MemberVO">
+		SELECT user_id AS userId,
+			   user_generation AS userGeneration,
+			   user_nickname AS userNickname,
+			   nickname_change_date AS nicknameChangeDate
+		FROM blind.user_mgt
+		WHERE user_id = #{userId}
+		AND last_generation_flag = '1'
+		AND logical_del_flag = '0';
+	</select>
 </mapper>
