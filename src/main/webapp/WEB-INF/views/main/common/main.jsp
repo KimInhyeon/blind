@@ -93,21 +93,21 @@
 				<c:forEach var="bestMainPost" items="${bestMainPostList}">
 					<div class="mainBest">
 						<div class="mainBestDiv">
-						<div class="ui horizontal list">
-							<a class="item" href="search?boardId=${bestMainPost.boardId}">
-								<div class="ui mini horizontal label">${bestMainPost.boardTopicName}</div>
-							</a>
-							<a class="item" href="post/${bestMainPost.postId}">
-								<span style="color: black; margin-left: -5px;">${bestMainPost.postTitle}</span>
-							</a>
-							<br>
-						</div>
-						<div class="ui right floated horizontal list" style="width: 150px; display:flex; justify-content: space-evenly;">
-									<i class="thumbs up outline icon item" style="display:block; display:flex; justify-content: space-between;"><span class="item" style="display:block; padding:0 5px;">${bestMainPost.postRecommendCount}</span></i>
+							<div class="ui horizontal list">
+								<a class="item" href="search?boardId=${bestMainPost.boardId}">
+									<div class="ui mini horizontal label">${bestMainPost.boardTopicName}</div>
+								</a>
+								<a class="item" href="post/${bestMainPost.postId}">
+									<span style="color: black; margin-left: -5px;"><c:out value="${bestMainPost.postTitle}" escapeXml="true" /></span>
+								</a>
+								<br>
+							</div>
+							<div class="ui right floated horizontal list" style="width: 150px; display:flex; justify-content: space-evenly;">
+								<i class="thumbs up outline icon item" style="display:block; display:flex; justify-content: space-between;"><span class="item" style="display:block; padding:0 5px;">${bestMainPost.postRecommendCount}</span></i>
 
-									<i class="comment outline icon item" style="display:block; display:flex;"><span class="item" style="display:block; padding:0 5px;">${bestMainPost.replyCount}</span></i>
+								<i class="comment outline icon item" style="display:block; display:flex;"><span class="item" style="display:block; padding:0 5px;">${bestMainPost.replyCount}</span></i>
 
-						</div>
+							</div>
 						</div>
 					</div>
 				</c:forEach>
@@ -133,8 +133,8 @@
 			</c:if>
 			<div class="mainBest">
 				<div class="ui horizontal list" style="padding-left: 10px;">
-					<a class="item" href="post/${subMainPost.postId}">
-						<span style="color: black; margin-left: -5px;">${subMainPost.postTitle}</span>
+					<a class="item"<c:if test="${subMainPost.postId gt 0}"> href="post/${subMainPost.postId}"</c:if>>
+						<span style="color: black; margin-left: -5px;"><c:out value="${subMainPost.postTitle}" escapeXml="true" /></span>
 					</a>
 					<br>
 				</div>

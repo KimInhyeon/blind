@@ -1,7 +1,10 @@
 package com.ksinfo.blind.member.dto;
 
 import java.time.LocalDate;
+<<<<<<< HEAD
 import java.util.Date;
+=======
+>>>>>>> origin/master
 
 public class MemberDto {
 	private long userId;

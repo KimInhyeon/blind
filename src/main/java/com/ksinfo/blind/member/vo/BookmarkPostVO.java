@@ -1,14 +1,14 @@
 package com.ksinfo.blind.member.vo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ksinfo.blind.board.dto.ImageBlock;
 import com.ksinfo.blind.board.dto.ParagraphBlock;
 import com.ksinfo.blind.board.dto.PostBlock;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class BookmarkPostVO {
 	private final long boardId;

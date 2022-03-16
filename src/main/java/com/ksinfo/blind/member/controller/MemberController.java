@@ -1,13 +1,10 @@
 package com.ksinfo.blind.member.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ksinfo.blind.member.vo.MemberVO;
-import com.ksinfo.blind.member.vo.MyReportVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ksinfo.blind.member.dto.RegisterMemberDto;
 import com.ksinfo.blind.member.service.MemberService;
+import com.ksinfo.blind.member.vo.MemberVO;
 import com.ksinfo.blind.security.Account;
 import com.ksinfo.blind.util.MessageUtils;
 
@@ -149,6 +147,7 @@ public final class MemberController {
 
 		return response;
 	}
+	
 
 	@ResponseBody
 	@GetMapping(value = "modifyProfileApp")

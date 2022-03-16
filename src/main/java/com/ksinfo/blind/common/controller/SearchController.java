@@ -6,6 +6,8 @@ import com.ksinfo.blind.common.service.SearchService;
 import com.ksinfo.blind.common.vo.SearchBoardVO;
 import com.ksinfo.blind.common.vo.SearchCompanyVO;
 import com.ksinfo.blind.common.vo.SearchPostVO;
+import com.ksinfo.blind.company.service.CompanyCommonService;
+import com.ksinfo.blind.company.vo.CompanyVoteResultDto;
 import com.ksinfo.blind.security.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,10 +24,12 @@ import java.util.List;
 public final class SearchController {
 //	private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 	private final SearchService searchService;
+	private final CompanyCommonService companyCommonService;
 
 	@Autowired
-	public SearchController(SearchService searchService) {
+	public SearchController(SearchService searchService, CompanyCommonService companyCommonService) {
 		this.searchService = searchService;
+		this.companyCommonService = companyCommonService;
 	}
 
 	@GetMapping
@@ -63,10 +67,15 @@ public final class SearchController {
 		modelAndView.addObject("title", searchKeyword);
 //		modelAndView.addObject("companyList", companyList); // search.jspでリストを出力するように変更が必要
 		if (!companyList.isEmpty()) {
-			modelAndView.addObject("company", companyList.get(0)); // search.jspでリストを出力するように変更が必要
+			SearchCompanyVO company = companyList.get(0);
+			CompanyVoteResultDto companyVoteResult =
+				companyCommonService.getCompanyRecommendVoteResult(userId, company.getCompanyId());
+			modelAndView.addObject("company", company); // search.jspでリストを出力するように変更が必要
+			modelAndView.addObject("companyVoteResult", companyVoteResult);
 		}
 		modelAndView.addObject("boardList", boardList);
 		modelAndView.addObject("postList", postList);
+
 
 		return modelAndView;
 	}

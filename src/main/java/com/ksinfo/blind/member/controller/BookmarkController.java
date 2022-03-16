@@ -52,4 +52,21 @@ public final class BookmarkController {
 
 		return bookmarkService.getMyBookmarkList(account.getUserId(), offset);
 	}
+
+	/*
+	@GetMapping(value = "getMyPostListAndroid", params = "offset")
+	public List<BookmarkPostVO> getMyPostList(Long userId, @RequestParam int offset) {
+		System.out.println("Android Access getMyPostList");
+		System.out.println("getMyPostList-userId : "+userId);
+		System.out.println("getMyPostList-offset : "+offset);
+		return bookmarkService.getMyBookmarkList(userId, offset);
+	}
+	*/
+
+	@GetMapping(value = "getMyPostListAndroid")
+	public List<BookmarkPostVO> getMyPostList(Long userId) {
+		System.out.println("Android Access getMyPostList");
+		System.out.println("getMyPostList-userId : "+userId);
+		return bookmarkService.getMyBookmarkList(userId, 0);
+	}
 }
