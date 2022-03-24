@@ -3,23 +3,24 @@
 <mapper namespace="com.ksinfo.blind.member.mapper.MemberMapper">
 	<sql id="getMember">
 		SELECT user_id AS userId,
-			user_generation AS userGeneration,
-			user_password AS userPassword,
-			user_email AS userEmail,
-			user_nickname AS userNickname,
-			nickname_change_date AS nicknameChangeDate,
-			company_id AS companyId,
-			user_auth AS userAuth,
-			reported_count AS reportedCount
+			   user_generation AS userGeneration,
+			   user_password AS userPassword,
+			   user_email AS userEmail,
+			   user_nickname AS userNickname,
+			   nickname_change_date AS nicknameChangeDate,
+			   company_id AS companyId,
+			   user_auth AS userAuth,
+			   reported_count AS reportedCount
 		FROM blind.user_mgt
 	</sql>
 
 	<select id="loadUserByUsername" resultType="com.ksinfo.blind.security.Account">
 		<include refid="getMember"/>
 		WHERE user_email = #{inputEmail}
-			AND last_generation_flag = '1'
-			AND logical_del_flag = '0';
+		AND last_generation_flag = '1'
+		AND logical_del_flag = '0';
 	</select>
+
 
 	<insert id="registerNewMember" parameterType="com.ksinfo.blind.member.dto.RegisterMemberDto">
 		INSERT INTO blind.user_mgt (
@@ -27,59 +28,129 @@
 			nickname_change_date, company_id, user_auth, reported_count, rec_create_user_id,
 			rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
 		) VALUES (
-			1, '1', #{userPassword}, #{userEmail}, #{userNickname},
-			NOW(), 1, #{userAuth}, 0, 1,
-			NOW(), 0, NOW(), '0'
-		);
+					 1, '1', #{userPassword}, #{userEmail}, #{userNickname},
+					 NOW(), 1, #{userAuth}, 0, 1,
+					 NOW(), 0, NOW(), '0'
+				 );
 	</insert>
 
 	<select id="getLatestMemberInformation" parameterType="com.ksinfo.blind.security.Account"
 			resultType="com.ksinfo.blind.security.Account">
 		<include refid="getMember"/>
 		WHERE user_id = #{userId}
-			AND user_generation = #{userGeneration};
+		AND user_generation = #{userGeneration};
 	</select>
 
 	<select id="isDuplicatedNickname" resultType="_boolean">
 		SELECT EXISTS(
-			SELECT
-			FROM blind.user_mgt
-			WHERE user_nickname = #{nickname}
-				AND last_generation_flag = '1'
-				AND logical_del_flag = '0'
-		);
+					   SELECT
+					   FROM blind.user_mgt
+					   WHERE user_nickname = #{nickname}
+						 AND last_generation_flag = '1'
+						 AND logical_del_flag = '0'
+				   );
 	</select>
 
 	<update id="invalidateOldNickname" parameterType="com.ksinfo.blind.security.Account">
 		UPDATE blind.user_mgt
 		SET last_generation_flag = '0',
-			rec_update_user_id = #{userId},
-			rec_update_date = NOW()
+		rec_update_user_id = #{userId},
+		rec_update_date = NOW()
 		WHERE user_id = #{userId}
-			AND user_generation = #{userGeneration};
+		AND user_generation = #{userGeneration};
 		<selectKey keyProperty="reportedCount" resultType="_int" order="AFTER">
 			SELECT reported_count
 			FROM blind.user_mgt
 			WHERE user_id = #{userId}
-				AND user_generation = #{userGeneration};
+			AND user_generation = #{userGeneration};
+		</selectKey>
+	</update>
+
+	<update id="invalidateOldNicknameApp" parameterType="com.ksinfo.blind.member.vo.MemberVO">
+		UPDATE blind.user_mgt
+		SET last_generation_flag = '0',
+		rec_update_user_id = #{userId},
+		rec_update_date = NOW()
+		WHERE user_id = #{userId}
+		AND user_generation = #{userGeneration};
+		<selectKey keyProperty="reportedCount" resultType="_int" order="AFTER">
+			SELECT reported_count
+			FROM blind.user_mgt
+			WHERE user_id = #{userId}
+			AND user_generation = #{userGeneration};
 		</selectKey>
 	</update>
 
 	<insert id="validateNewNickname" parameterType="com.ksinfo.blind.security.Account">
 		INSERT INTO blind.user_mgt (
-			user_id, user_generation, last_generation_flag, user_password, user_email,
-			user_nickname, nickname_change_date, company_id, user_auth, reported_count,
-			rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		user_id, user_generation, last_generation_flag, user_password, user_email,
+		user_nickname, nickname_change_date, company_id, user_auth, reported_count,
+		rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
 		) VALUES (
-			#{userId}, #{userGeneration}, '1', #{userPassword}, #{userEmail},
-			#{userNickname}, NOW(), #{companyId}, #{userAuth}, #{reportedCount},
-			#{userId}, NOW(), #{userId}, NOW(), '0'
+		#{userId}, #{userGeneration}, '1', #{userPassword}, #{userEmail},
+		#{userNickname}, NOW(), #{companyId}, #{userAuth}, #{reportedCount},
+		#{userId}, NOW(), #{userId}, NOW(), '0'
 		);
 		<selectKey keyProperty="nicknameChangeDate"	resultType="java.sql.Date" order="AFTER">
 			SELECT nickname_change_date
 			FROM blind.user_mgt
 			WHERE user_id = #{userId}
-				AND user_generation = #{userGeneration};
+			AND user_generation = #{userGeneration};
 		</selectKey>
 	</insert>
+
+	<insert id="validateNewNicknameApp" parameterType="com.ksinfo.blind.member.vo.MemberVO">
+		INSERT INTO blind.user_mgt (
+		user_id, user_generation, last_generation_flag, user_password, user_email,
+		user_nickname, nickname_change_date, company_id, user_auth, reported_count,
+		rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
+		) VALUES (
+		#{userId}, #{userGeneration}, '1', #{userPassword}, #{userEmail},
+		#{userNickname}, NOW(), #{companyId}, #{userAuth}, #{reportedCount},
+		#{userId}, NOW(), #{userId}, NOW(), '0'
+		);
+		<selectKey keyProperty="nicknameChangeDate"	resultType="java.sql.Date" order="AFTER">
+			SELECT nickname_change_date
+			FROM blind.user_mgt
+			WHERE user_id = #{userId}
+			AND user_generation = #{userGeneration};
+		</selectKey>
+	</insert>
+
+	<select id="getmodifyProfileApp" resultType="com.ksinfo.blind.member.vo.MemberVO">
+		SELECT um.user_id AS userId,
+			   um.user_generation AS userGeneration,
+			   um.user_password AS userPassword,
+			   um.user_email AS userEmail,
+			   um.user_nickname AS userNickname,
+			   um.nickname_change_date AS nicknameChangeDate,
+			   um.company_id AS companyId,
+			   um.user_auth AS userAuth,
+			   um.reported_count AS reportedCount,
+			   CASE WHEN cm.company_name IS NULL THEN '会社名無し'
+					ELSE cm.company_name
+				   END AS companyName
+		FROM blind.user_mgt AS um INNER JOIN blind.company_mgt AS cm ON um.company_id = cm.company_id AND cm.logical_del_flag = '0'
+		WHERE um.user_id = #{userId}
+		  AND um.last_generation_flag = '1'
+		  AND um.logical_del_flag = '0';
+	</select>
+
+	<select id="getUserPassword" resultType="String">
+		SELECT user_password
+		FROM blind.user_mgt
+		WHERE user_id = #{userId}
+		  AND last_generation_flag = '1'
+		  AND logical_del_flag = '0';
+	</select>
+
+	<update id="modifyPassword" parameterType="com.ksinfo.blind.member.vo.MemberVO">
+		UPDATE blind.user_mgt
+		SET user_password = #{userPassword},
+		rec_update_user_id = #{userId},
+		rec_update_date = NOW()
+		WHERE user_id = #{userId}
+		AND last_generation_flag = '1'
+		AND logical_del_flag = '0';
+	</update>
 </mapper>

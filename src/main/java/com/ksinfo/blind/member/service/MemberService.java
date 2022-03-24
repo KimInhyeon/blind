@@ -1,5 +1,7 @@
 package com.ksinfo.blind.member.service;
 
+import com.ksinfo.blind.member.dto.MemberDto;
+import com.ksinfo.blind.member.vo.MemberVO;
 import com.ksinfo.blind.security.Account;
 import com.ksinfo.blind.member.dto.RegisterMemberDto;
 import com.ksinfo.blind.member.mapper.MemberMapper;
@@ -15,7 +17,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Member;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class MemberService implements UserDetailsService {
@@ -27,8 +35,8 @@ public class MemberService implements UserDetailsService {
 
 	@Autowired
 	public MemberService(
-		BadWordsUtil badWordsUtil, SecurityUtil securityUtil, PasswordEncoder passwordEncoder,
-		MessageUtils messages, MemberMapper memberMapper
+			BadWordsUtil badWordsUtil, SecurityUtil securityUtil, PasswordEncoder passwordEncoder,
+			MessageUtils messages, MemberMapper memberMapper
 	) {
 		this.badWordsUtil = badWordsUtil;
 		this.securityUtil = securityUtil;
@@ -61,6 +69,8 @@ public class MemberService implements UserDetailsService {
 		memberMapper.registerNewMember(member);
 	}
 
+
+
 	@Transactional(readOnly = true)
 	public boolean checkNickname(String newNickname) {
 		return badWordsUtil.isContainsBadWord(newNickname) || memberMapper.isDuplicatedNickname(newNickname);
@@ -90,7 +100,65 @@ public class MemberService implements UserDetailsService {
 		return false;
 	}
 
+	@Transactional(isolation = Isolation.SERIALIZABLE)
+	public boolean changeNicknameApp(String newNickname, MemberVO memberVO) {
+		if (newNickname.length() > 0 && !badWordsUtil.isContainsBadWord(newNickname)) {
+			LocalDate possibleDate = memberVO.getNicknameChangeDate().toInstant()
+					.atZone(ZoneId.systemDefault())
+					.toLocalDate().plusMonths(3);
+
+			if (LocalDate.now().compareTo(possibleDate) > -1 && !memberMapper.isDuplicatedNickname(newNickname)) {
+				String userNickname = memberVO.getUserNickname();
+				int userGeneration = memberVO.getUserGeneration();
+				try {
+					if (memberMapper.invalidateOldNicknameApp(memberVO) > 0) {
+						memberVO.setUserNickname(newNickname);
+						memberVO.setUserGeneration(userGeneration + 1);
+						memberMapper.validateNewNicknameApp(memberVO);
+						return true;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					memberVO.setUserNickname(userNickname);
+					memberVO.setUserGeneration(userGeneration);
+				}
+			}
+		}
+		return false;
+	}
+
+	@Transactional(isolation = Isolation.SERIALIZABLE)
+	public int checkNickNameApp(String newNickname, MemberVO memberVO) {
+		int result=0;
+		if (newNickname.length() > 0 && !badWordsUtil.isContainsBadWord(newNickname)) {
+			LocalDate possibleDate = memberVO.getNicknameChangeDate().toInstant()
+					.atZone(ZoneId.systemDefault())
+					.toLocalDate().plusMonths(3);
+			if (!(LocalDate.now().compareTo(possibleDate) > -1)) {
+				result = 1;
+			}else if(memberMapper.isDuplicatedNickname(newNickname)){
+				result = 2;
+			}
+		}
+		return result;
+	}
+
+
 	public boolean checkPassword(String inputPassword, String targetPassword) {
 		return passwordEncoder.matches(inputPassword, targetPassword);
 	}
+
+	public MemberVO getmodifyProfileApp(long userId){
+		return memberMapper.getmodifyProfileApp(userId);
+	}
+
+	public String getUserPassword(long userId){
+		return memberMapper.getUserPassword(userId);
+	}
+
+	public int modifyPassword(MemberVO memberVO){
+		memberVO.setUserPassword(passwordEncoder.encode(memberVO.getUserPassword()));
+		return memberMapper.modifyPassword(memberVO);
+	}
+
 }

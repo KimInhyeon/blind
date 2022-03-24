@@ -1,15 +1,9 @@
 package com.ksinfo.blind.member.vo;
 
-<<<<<<< HEAD
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.ArrayList;
+
 import java.util.Date;
-import java.util.List;
-=======
-import java.util.Date;
->>>>>>> origin/master
+
 
 public final class MemberVO {
 	private long userId;
@@ -21,6 +15,7 @@ public final class MemberVO {
 	private String userEmail;
 	private long companyId;
 	private String userAuth;
+	private String companyName;
 
 
 	public long getUserId() {
@@ -93,5 +88,13 @@ public final class MemberVO {
 
 	public void setUserAuth(String userAuth) {
 		this.userAuth = userAuth;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 }

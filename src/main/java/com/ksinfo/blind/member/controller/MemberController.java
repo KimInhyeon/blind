@@ -1,10 +1,14 @@
 package com.ksinfo.blind.member.controller;
 
+import java.lang.reflect.Member;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ksinfo.blind.member.vo.MemberVO;
+import com.ksinfo.blind.member.vo.MyReportVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ksinfo.blind.member.dto.RegisterMemberDto;
 import com.ksinfo.blind.member.service.MemberService;
-import com.ksinfo.blind.member.vo.MemberVO;
 import com.ksinfo.blind.security.Account;
 import com.ksinfo.blind.util.MessageUtils;
 
@@ -147,7 +150,6 @@ public final class MemberController {
 
 		return response;
 	}
-	
 
 	@ResponseBody
 	@GetMapping(value = "modifyProfileApp")
@@ -159,7 +161,6 @@ public final class MemberController {
 	@ResponseBody
 	@PostMapping("checkUpdateProfileApp")
 	public Map<String, String> checkUpdateProfileApp(HttpServletRequest request) {
-
 		Map<String, String> response = new HashMap<>();
 		String userId = request.getParameter("userId");
 		String newNickname = request.getParameter("newNickname");
@@ -167,13 +168,63 @@ public final class MemberController {
 		boolean result = memberService.checkNickname(newNickname);
 		if(result){
 			response.put("message", "Bad words");
-			response.put("result", "1");
+			response.put("result", "2");
 			System.out.println("bad words");
 		}else{
 			MemberVO vo = memberService.getmodifyProfileApp(Long.valueOf(userId));
-			changeNicknameApp(newNickname, vo);
+			if(changeNicknameApp(newNickname, vo)){
+				response.put("message", "successful");
+				response.put("result", "3");
+			}else{
+				response.put("message", "3 months");
+				response.put("result", "4");
+				System.out.println("3 months");
+			}
 
 		}
+
+		return response;
+	}
+
+
+	@ResponseBody
+	@PostMapping("checkNickNameApp")
+	public Map<String, String> checkNickNameApp(HttpServletRequest request){
+		Map<String, String> response = new HashMap<>();
+		String userId = request.getParameter("userId");
+		String newNickname = request.getParameter("newNickname");
+		boolean result = memberService.checkNickname(newNickname);
+
+		MemberVO vo = memberService.getmodifyProfileApp(Long.valueOf(userId));
+		int check = memberService.checkNickNameApp(newNickname, vo);
+		if(check == 1){
+			response.put("code", "2");
+			response.put("guide", "ニックネームは3か月ごとに変更できます。");
+		}else{
+			if(result){
+				response.put("code", "1");
+				response.put("guide", "存在するニックネームです。変えられません。");
+			}else if(check == 2){
+				response.put("code", "1");
+				response.put("guide", "このニックネームは使えません。");
+			}else{
+				response.put("code", "3");
+				response.put("guide", "このニックネームに変更できます。");
+			}
+		}
+
+		if(check == 1){
+			response.put("code", "2");
+			response.put("guide", "ニックネームは3か月ごとに変更できます。");
+
+		}else if(check == 2){
+			response.put("code", "1");
+			response.put("guide", "このニックネームは使えません。");
+		}else{
+			response.put("code", "3");
+			response.put("guide", "このニックネームに変更できます。");
+		}
+
 
 		return response;
 	}
@@ -184,5 +235,37 @@ public final class MemberController {
 		System.out.println(memberVO.toString());
 		System.out.println(newNickname);
 		return memberService.changeNicknameApp(newNickname, memberVO);
+	}
+
+	@ResponseBody
+	@PostMapping("checkChangePasswordApp")
+	public Map<String, String> checkChangePasswordApp(HttpServletRequest request){
+		Map<String, String> response = new HashMap<>();
+		String userId = request.getParameter("userId");
+		String userPassword = request.getParameter("originalPassword");
+		String oldPassword = memberService.getUserPassword(Long.valueOf(userId));
+		String newPassword = request.getParameter("newPassword");
+		System.out.println(oldPassword);
+
+		boolean result = memberService.checkPassword(userPassword, oldPassword);
+		System.out.println(result);
+		if(result == false){
+			response.put("code", "false");
+			response.put("guide", "パスワードが一致しません。");
+		}else if(result == true){
+			MemberVO memberVO = new MemberVO();
+			memberVO.setUserPassword(newPassword);
+			memberVO.setUserId(Long.valueOf(userId));
+			int modifyPasswordResult = memberService.modifyPassword(memberVO);
+			if(modifyPasswordResult == 1){
+			response.put("code", "true");
+			response.put("guide", "パスワードが変更されました。");
+			}else{
+				response.put("code", "error");
+				response.put("guide", "エラーが発生しました。");
+			}
+		}
+
+		return response;
 	}
 }
