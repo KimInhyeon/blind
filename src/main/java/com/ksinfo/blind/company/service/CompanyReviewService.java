@@ -49,8 +49,8 @@ public class CompanyReviewService {
 		RowBounds rowBounds = new RowBounds(offset, recordLimit);
 		List<CompanyReviewVO> companyList = companyReviewMapper.getCompanyReviewList(search, rowBounds);
 		// ログインしていないユーザーに仮想のユーザーIDを付与し、一行目のレビューを再度読み込む
-		if (page == 1 && search.getUserId() == 0L && !companyList.isEmpty()) {
-			search.setUserId(Long.MAX_VALUE);
+		if (page == 1 && !companyList.isEmpty() && !companyReviewMapper.isWritten(search.getUserId())) {
+			search.setUserId(companyReviewMapper.getReviewWrittenUserId());
 			rowBounds = new RowBounds(0, 1);
 			List<CompanyReviewVO> company = companyReviewMapper.getCompanyReviewList(search, rowBounds);
 			companyList.set(0, company.get(0));

@@ -32,6 +32,12 @@ public interface CompanyReviewMapper {
 	String getCompanyName(long companyId);
 
 
+
 	//BLIND_0016 企業レビュー詳細照会(2021-08-25)
 	List<CompanyReviewVO> getCompanyReviews(long companyId);
+
+	long getReviewWrittenUserId();
+
+	boolean isWritten(long userId);
+
 }

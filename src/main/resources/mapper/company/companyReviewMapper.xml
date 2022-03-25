@@ -26,38 +26,38 @@
 	<select id="getCompanyReviewList" parameterType="com.ksinfo.blind.company.dto.CompanyReviewSearchDto"
 			resultType="com.ksinfo.blind.company.vo.CompanyReviewVO">
 		SELECT company_review_id AS companyReviewId,
-			all_point AS allPoint,
-			career_point AS careerPoint,
-			work_life_balance_point As workLifeBalancePoint,
-			company_culture_point AS companyCulturePoint,
-			pay_point AS payPoint,
-			head_point AS headPoint,
-			simple_comment AS simpleComment,
-			cr.company_id = us.company_id AS working,
-			user_nickname AS userNickname,
-			job_group_name AS jobGroupName,
-			TO_CHAR(cr.rec_create_date, 'YYYY.MM.DD') AS recCreateDate,
+		all_point AS allPoint,
+		career_point AS careerPoint,
+		work_life_balance_point As workLifeBalancePoint,
+		company_culture_point AS companyCulturePoint,
+		pay_point AS payPoint,
+		head_point AS headPoint,
+		simple_comment AS simpleComment,
+		cr.company_id = us.company_id AS working,
+		user_nickname AS userNickname,
+		job_group_name AS jobGroupName,
+		TO_CHAR(cr.rec_create_date, 'YYYY.MM.DD') AS recCreateDate,
 		<choose>
 			<when test="userId gt 0">
 				CASE WHEN EXISTS(
-					SELECT
-					FROM blind.company_review_mgt
-					WHERE user_id = #{userId}
-						AND logical_del_flag = '0'
+				SELECT
+				FROM blind.company_review_mgt
+				WHERE user_id = #{userId}
+				AND logical_del_flag = '0'
 				) THEN advantages END AS advantages,
 				CASE WHEN EXISTS(
-					SELECT
-					FROM blind.company_review_mgt
-					WHERE user_id = #{userId}
-						AND logical_del_flag = '0'
+				SELECT
+				FROM blind.company_review_mgt
+				WHERE user_id = #{userId}
+				AND logical_del_flag = '0'
 				) THEN disadvantages END AS disadvantages, (
 				SELECT EXISTS(
-					SELECT
-					FROM blind.review_recommend_inf
-					WHERE company_review_id = cr.company_review_id
-						AND user_id = #{userId}
-						AND helpful = 1
-					)
+				SELECT
+				FROM blind.review_recommend_inf
+				WHERE company_review_id = cr.company_review_id
+				AND user_id = #{userId}
+				AND helpful = 1
+				)
 				) AS recommended,
 			</when>
 			<otherwise>
@@ -66,18 +66,18 @@
 				FALSE AS recommended,
 			</otherwise>
 		</choose>
-			COALESCE((
-				SELECT SUM(helpful)
-				FROM blind.review_recommend_inf
-				WHERE company_review_id = cr.company_review_id
-			), 0) AS helpfulCount
+		COALESCE((
+		SELECT SUM(helpful)
+		FROM blind.review_recommend_inf
+		WHERE company_review_id = cr.company_review_id
+		), 0) AS helpfulCount
 		FROM blind.company_review_mgt AS cr
-			INNER JOIN blind.job_group_mst USING(job_group_code)
-			INNER JOIN blind.user_mgt AS us
-				ON cr.user_id = us.user_id AND last_generation_flag = '1'
+		INNER JOIN blind.job_group_mst USING(job_group_code)
+		INNER JOIN blind.user_mgt AS us
+		ON cr.user_id = us.user_id AND last_generation_flag = '1'
 		WHERE cr.company_id = #{companyId}
-			AND cr.logical_del_flag = '0'
-			AND verify_flag = '1'
+		AND cr.logical_del_flag = '0'
+		AND verify_flag = '1'
 		ORDER BY helpfulCount DESC, company_review_id DESC;
 	</select>
 
@@ -91,15 +91,15 @@
 
 	<insert id="recommendReview" parameterType="com.ksinfo.blind.company.dto.CompanyReviewRecommendDto">
 		INSERT INTO blind.review_recommend_inf (
-			company_review_id,
-			company_id, <!-- なぜ必要？ -->
-			user_id,
-			helpful
+		company_review_id,
+		company_id, <!-- なぜ必要？ -->
+		user_id,
+		helpful
 		) VALUES (
-			#{companyReviewId},
-			(SELECT company_id FROM blind.company_review_mgt WHERE company_review_id = #{companyReviewId}),
-			#{userId},
-			1
+		#{companyReviewId},
+		(SELECT company_id FROM blind.company_review_mgt WHERE company_review_id = #{companyReviewId}),
+		#{userId},
+		1
 		);
 	</insert>
 
@@ -111,11 +111,12 @@
 
 	<select id="getReviewRecommendResult" parameterType="com.ksinfo.blind.company.dto.CompanyReviewRecommendDto"
 			resultType="com.ksinfo.blind.company.vo.CompanyReviewRecommendResultVO">
-		SELECT SUM(helpful) AS helpfulCount, (
-			SELECT helpful
-			FROM blind.review_recommend_inf
-			WHERE company_review_id = #{companyReviewId}
-				AND user_id = #{userId}
+		SELECT SUM(helpful) AS helpfulCount,
+			(
+				SELECT helpful
+				FROM blind.review_recommend_inf
+				WHERE company_review_id = #{companyReviewId}
+					AND user_id = #{userId}
 			) AS helpful
 		FROM blind.review_recommend_inf AS rri
 		WHERE company_review_id = #{companyReviewId};
@@ -127,7 +128,8 @@
 			pay_point, company_culture_point, head_point, work_start_date, work_end_date, simple_comment,
 			resign_reason, work_area, advantages, disadvantages, verify_flag, complete_flag,
 			rec_create_user_id, rec_create_date, rec_update_user_id, rec_update_date, logical_del_flag
-		) VALUES (
+		)
+		VALUES (
 			#{userId}, #{companyId}, #{jobGroupCode}, #{allPoint}, #{careerPoint}, #{workLifeBalancePoint},
 			#{payPoint}, #{companyCulturePoint}, #{headPoint}, #{workStartDate}, #{workEndDate}, #{simpleComment},
 			#{resignReason}, #{workArea}, #{advantages}, #{disadvantages}, '0', '0',
@@ -147,45 +149,60 @@
 
 	<select id="getCompanyReviews" resultType="com.ksinfo.blind.company.vo.CompanyReviewVO">
 		SELECT DISTINCT crm.company_review_id AS companyReviewId <!-- 포스트들처럼 여러개의 기업리뷰글을 게시 및 링크하려면 필요. -->
-			, crm.all_point AS allPoint <!-- 기업리뷰1-별점(1)총 별점 -->
-			, crm.career_point AS careerPoint <!-- 기업리뷰2-별점(2)경력점수 -->
-			, crm.work_life_balance_point AS workLifeBalancePoint <!-- 기업리뷰3-별점(3)워라밸점수 -->
-			, crm.company_culture_point AS companyCulturePoint <!-- 기업리뷰5-별점(5)기업문화점수 -->
-			, crm.pay_point AS payPoint <!-- 기업리뷰4-별점(4)급료점수 -->
-			, crm.head_point AS headPoint <!-- 기업리뷰6-별점(6)임원점수(경영진평가) -->
-			, crm.simple_comment AS simpleComment <!-- 기업리뷰7-한줄평, 제목역할 -->
-			, FALSE AS working <!-- マッピングエラー回避用の臨時フィールド -->
-			, um.user_nickname AS userNickname <!-- 기업리뷰8-작성자 닉네임 -->
-			, jgm.job_group_name	AS jobGroupName <!-- 작성자 직군(대기/현재 user_job_code컬럼 추가승인 대기중.) -->
-			, crm.rec_create_date AS recCreateDate <!-- 기업리뷰9-작성일(나중에 create_date 추가필요.) -->
-			, crm.advantages AS advantages <!-- 기업리뷰8-장점, -->
-			, crm.disadvantages AS disadvantages <!-- 기업리뷰9-단점, -->
-			, FALSE AS recommended　<!-- マッピングエラー回避用の臨時フィールド -->
-			, (
-				SELECT COUNT(rri.helpful)
-				FROM blind.review_recommend_inf AS rri
-				WHERE rri.company_id = #{companyId}
-					AND rri.company_review_id = crm.company_review_id
-			) AS helpfulCount <!-- 도움이 되었어요는 해당기업의 id에 맞는 것들만 카운트. -->
+		, crm.all_point AS allPoint <!-- 기업리뷰1-별점(1)총 별점 -->
+		, crm.career_point AS careerPoint <!-- 기업리뷰2-별점(2)경력점수 -->
+		, crm.work_life_balance_point AS workLifeBalancePoint <!-- 기업리뷰3-별점(3)워라밸점수 -->
+		, crm.company_culture_point AS companyCulturePoint <!-- 기업리뷰5-별점(5)기업문화점수 -->
+		, crm.pay_point AS payPoint <!-- 기업리뷰4-별점(4)급료점수 -->
+		, crm.head_point AS headPoint <!-- 기업리뷰6-별점(6)임원점수(경영진평가) -->
+		, crm.simple_comment AS simpleComment <!-- 기업리뷰7-한줄평, 제목역할 -->
+		, FALSE AS working <!-- マッピングエラー回避用の臨時フィールド -->
+		, um.user_nickname AS userNickname <!-- 기업리뷰8-작성자 닉네임 -->
+		, jgm.job_group_name AS jobGroupName <!-- 작성자 직군(대기/현재 user_job_code컬럼 추가승인 대기중.) -->
+		, crm.rec_create_date AS recCreateDate <!-- 기업리뷰9-작성일(나중에 create_date 추가필요.) -->
+		, crm.advantages AS advantages <!-- 기업리뷰8-장점, -->
+		, crm.disadvantages AS disadvantages <!-- 기업리뷰9-단점, -->
+		, FALSE AS recommended　<!-- マッピングエラー回避用の臨時フィールド -->
+		, (
+		SELECT COUNT(rri.helpful)
+		FROM blind.review_recommend_inf AS rri
+		WHERE rri.company_id = #{companyId}
+		AND rri.company_review_id = crm.company_review_id
+		) AS helpfulCount <!-- 도움이 되었어요는 해당기업의 id에 맞는 것들만 카운트. -->
 
 		FROM blind.company_review_mgt AS crm
 
 		<!-- left조인 1. USER_MGT (유저의 닉네임 로드) -->
-			LEFT JOIN blind.user_mgt AS um
-				ON crm.user_id = um.user_id
+		LEFT JOIN blind.user_mgt AS um
+		ON crm.user_id = um.user_id
 
 		<!-- left조인 1. USER_MGT (기업리뷰 작성자의 직종명 출력용) -->
-			LEFT JOIN blind.job_group_mst AS jgm
-				ON crm.user_id = um.user_id
+		LEFT JOIN blind.job_group_mst AS jgm
+		ON crm.user_id = um.user_id
 
 		<!-- left조인 3. review_recommend_id (기업리뷰의 '도움이 되었습니다(helpful)' 가져오기) -->
-			LEFT JOIN blind.review_recommend_inf AS rri
-				ON rri.company_id = crm.company_id
+		LEFT JOIN blind.review_recommend_inf AS rri
+		ON rri.company_id = crm.company_id
 
 		WHERE crm.company_id = #{companyId}
-			AND crm.logical_del_flag = '0'
-			AND crm.verify_flag = '1' <!-- verify_flag:기업리뷰승인여부(0:미승인, 1:승인) -->
+		AND crm.logical_del_flag = '0'
+		AND crm.verify_flag = '1' <!-- verify_flag:기업리뷰승인여부(0:미승인, 1:승인) -->
 
 		ORDER BY helpfulCount DESC; <!-- 정렬기준 : '도움이 됬어요'버튼의 갯수가 많을수록 가장먼저 출력된다. -->
+	</select>
+
+
+	<select id="getReviewWrittenUserId" resultType="_long">
+		SELECT user_id
+		FROM blind.company_review_mgt
+		WHERE logical_del_flag = '0'
+		FETCH FIRST ROW ONLY
+
+	</select>
+	<select id="isWritten" resultType="_boolean">
+		SELECT EXISTS(
+		    SELECT  FROM blind.company_review_mgt
+		    WHERE user_id= #{userId} and logical_del_flag='0'
+			)
 	</select>
 </mapper>

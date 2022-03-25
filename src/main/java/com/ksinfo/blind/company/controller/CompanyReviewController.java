@@ -11,6 +11,7 @@ import com.ksinfo.blind.company.vo.CompanyReviewRecommendResultVO;
 import com.ksinfo.blind.company.vo.CompanyReviewVO;
 import com.ksinfo.blind.security.Account;
 import com.ksinfo.blind.util.PageNavigator;
+import org.apache.juli.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -97,7 +98,7 @@ public class CompanyReviewController {
 	@GetMapping(value = "{companyId}",params = "averageStar")
 	public CompanyReviewAverageVO getCompanyAverage(@AuthenticationPrincipal Account account,@PathVariable long companyId){
 		CompanyReviewAverageVO reviewAverage = companyReviewService.getReviewAveragePoint(companyId);
-		System.out.println("찍혀라");
+
 		return reviewAverage;
 		}
 
@@ -113,7 +114,9 @@ public class CompanyReviewController {
 //		CompanyMenuVO companyMenu = companyCommonService.getCompanyMenu(companyId);
 //		CompanyReviewAverageVO reviewAverage = companyReviewService.getReviewAveragePoint(companyId);
 		PageNavigator navi = companyReviewService.getNavigator(page, companyId);
-		long userId = account == null ? 0L : account.getUserId();
+		//long userId = account == null ? 0L : account.getUserId();
+		long userId = 153;
+
 		CompanyReviewSearchDto search = new CompanyReviewSearchDto(userId, companyId);
 		List<CompanyReviewVO> companyList = companyReviewService.getCompanyReviewList(search, navi.getCurrentPage());
 
@@ -126,9 +129,11 @@ public class CompanyReviewController {
 	public CompanyReviewRecommendResultVO recommendCompanyReview(
 			@AuthenticationPrincipal Account account, @RequestBody long companyReviewId
 	) {
+		long userId = 153;//하드코인
+//		CompanyReviewRecommendDto reviewRecommendDto =
+//				new CompanyReviewRecommendDto(account.getUserId(), companyReviewId);
 		CompanyReviewRecommendDto reviewRecommendDto =
-				new CompanyReviewRecommendDto(account.getUserId(), companyReviewId);
-
+				new CompanyReviewRecommendDto(userId, companyReviewId);
 		return companyReviewService.recommendReview(reviewRecommendDto);
 	}
 
